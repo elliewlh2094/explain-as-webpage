@@ -1,0 +1,233 @@
+<!doctype html>
+<!-- explain-as-webpage template. Copy this file, replace every block marked FILL, delete the demo content.
+     Set lang to the reader's language (e.g. zh-Hant). Keep the page a single self-contained file: no external URLs. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FILL: Topic title</title>
+<style>
+:root {
+  --text: #404040; --muted: #6a6a6a; --link: #2980b9; --link-visited: #9b59b6;
+  --bg: #fcfcfc; --side-bg: #343131; --side-head: #2980b9; --side-text: #d9d9d9;
+  --rule: #e1e4e5; --code-bg: #f8f8f8; --row-alt: #f3f6f6;
+  --blue: #2980b9; --blue-bg: #e7f2fa; --red: #c0392b; --red-bg: #fdf3f2;
+  --green: #16a085; --green-bg: #dbfaf4; --orange: #e67e22; --orange-bg: #ffedcc; --grey-bg: #f0f0f0;
+  --font: -apple-system, "Segoe UI", Roboto, "Noto Sans CJK TC", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+  --mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, "Noto Sans Mono CJK TC", monospace;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { font: 16px/1.7 var(--font); color: var(--text); background: var(--bg); }
+
+/* Sidebar (RTD wy-nav-side) */
+.side { position: fixed; top: 0; bottom: 0; left: 0; width: 300px; overflow-y: auto; background: var(--side-bg); }
+.side-head { background: var(--side-head); color: #fff; padding: 16px 18px; }
+.side-head .title { font-size: 1.1rem; font-weight: 700; display: block; }
+.side-head .meta { font-size: .8rem; opacity: .85; }
+.toc a { display: block; color: var(--side-text); text-decoration: none; padding: 6px 18px; font-size: .9rem; line-height: 1.4; }
+.toc a:hover { background: #4e4a4a; }
+.toc a.h3 { padding-left: 34px; font-size: .85rem; color: #b3b3b3; }
+
+/* Content (RTD wy-nav-content) */
+.main { margin-left: 300px; background: var(--bg); min-height: 100vh; }
+.content { max-width: 820px; padding: 24px 36px 64px; }
+.crumbs { font-size: .85rem; color: var(--muted); border-bottom: 1px solid var(--rule); padding-bottom: 8px; margin-bottom: 24px; }
+h1, h2, h3 { color: #2c2c2c; line-height: 1.3; font-weight: 700; }
+h1 { font-size: 1.9rem; margin: 0 0 16px; }
+h2 { font-size: 1.45rem; margin: 40px 0 12px; padding-top: 8px; border-top: 1px solid var(--rule); }
+h3 { font-size: 1.15rem; margin: 28px 0 8px; }
+a { color: var(--link); } a:visited { color: var(--link-visited); }
+p, ul, ol { margin: 0 0 16px; }
+li { margin-bottom: 4px; }
+code { font: .88em var(--mono); color: #e74c3c; background: #fff; border: 1px solid var(--rule); padding: 0 4px; overflow-wrap: anywhere; }
+pre { font: .85rem/1.5 var(--mono); background: var(--code-bg); border: 1px solid var(--rule); padding: 12px; overflow-x: auto; }
+pre code { color: inherit; border: 0; padding: 0; background: none; }
+table { border-collapse: collapse; margin: 0 0 20px; width: 100%; font-size: .92rem; display: block; overflow-x: auto; }
+th, td { border: 1px solid var(--rule); padding: 6px 12px; text-align: left; vertical-align: top; }
+th { background: #eee; } tr:nth-child(even) td { background: var(--row-alt); }
+.src { font-size: .8rem; color: var(--muted); }
+
+/* Admonitions: note / tip / warning / danger */
+.admonition { margin: 0 0 20px; background: var(--blue-bg); }
+.admonition > .admonition-title { margin: 0; padding: 6px 12px; font-weight: 700; color: #fff; background: #6ab0de; }
+.admonition > :not(.admonition-title) { margin: 0; padding: 10px 12px; }
+.admonition.tip { background: var(--green-bg); } .admonition.tip > .admonition-title { background: #1abc9c; }
+.admonition.warning { background: var(--orange-bg); } .admonition.warning > .admonition-title { background: #f0b37e; }
+.admonition.danger { background: var(--red-bg); } .admonition.danger > .admonition-title { background: #f29f97; }
+
+/* Figures. SVG keeps a readable minimum width; the figure scrolls sideways on phones, never the page. */
+figure { margin: 8px 0 24px; overflow-x: auto; }
+figure svg { display: block; width: 100%; min-width: 540px; height: auto; margin: 0 auto; }
+figcaption { font-size: .9rem; color: var(--muted); margin-top: 6px; }
+details { border: 1px solid var(--rule); padding: 8px 12px; margin: 0 0 20px; background: #fff; }
+details > summary { cursor: pointer; font-weight: 700; }
+
+/* Shared SVG vocabulary (see references/svg-recipes.md) */
+svg text { font-family: var(--font); font-size: 14px; fill: var(--text); }
+svg .sm { font-size: 12px; fill: var(--muted); }
+svg .b { font-weight: 700; }
+svg text.bad { fill: var(--red); } svg text.good { fill: var(--green); }
+svg .box { fill: var(--blue-bg); stroke: var(--blue); stroke-width: 1.5; }
+svg .box.bad { fill: var(--red-bg); stroke: var(--red); }
+svg .box.good { fill: var(--green-bg); stroke: var(--green); }
+svg .box.warn { fill: var(--orange-bg); stroke: var(--orange); }
+svg .box.muted { fill: var(--grey-bg); stroke: #999; }
+svg .line { stroke: var(--text); stroke-width: 1.5; fill: none; }
+svg .line.bad { stroke: var(--red); } svg .line.good { stroke: var(--green); }
+svg .dash { stroke-dasharray: 5 4; }
+svg .dot { fill: var(--blue); } svg .dot.bad { fill: var(--red); } svg .dot.good { fill: var(--green); }
+
+/* Stepper (L2): controls are injected by the script below */
+.stepper-bar { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+.stepper-bar button { font: inherit; padding: 2px 12px; border: 1px solid var(--rule); background: #fff; cursor: pointer; }
+.stepper-bar .count { font-size: .85rem; color: var(--muted); min-width: 3.5em; text-align: center; }
+.stepper-caption { margin: 6px 0 0; padding: 6px 10px; background: var(--blue-bg); font-size: .92rem; }
+
+/* Narrow screens: sidebar becomes a collapsible top bar */
+.topbar { display: none; }
+@media (max-width: 768px) {
+  .topbar { display: flex; align-items: center; gap: 12px; position: sticky; top: 0; z-index: 2; background: var(--side-head); color: #fff; padding: 8px 16px; }
+  .topbar button { font-size: 1.2rem; background: none; border: 0; color: #fff; cursor: pointer; }
+  .side { display: none; position: fixed; top: 44px; width: 100%; z-index: 2; }
+  body.nav-open .side { display: block; }
+  .main { margin-left: 0; }
+  .content { padding: 16px 16px 48px; }
+}
+@media print {
+  .side, .topbar, .stepper-bar { display: none !important; }
+  .main { margin-left: 0; }
+}
+</style>
+</head>
+<body>
+<!-- Arrow markers shared by every SVG on the page: marker-end="url(#arr)" / url(#arr-bad) / url(#arr-good) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#404040"/></marker>
+  <marker id="arr-bad" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#c0392b"/></marker>
+  <marker id="arr-good" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#16a085"/></marker>
+</defs></svg>
+
+<div class="topbar"><button type="button" aria-label="Menu" onclick="document.body.classList.toggle('nav-open')">☰</button><span>FILL: Topic title</span></div>
+<nav class="side">
+  <div class="side-head"><span class="title">FILL: Topic title</span><span class="meta">FILL: project name · YYYY-MM-DD</span></div>
+  <div class="toc" id="toc"><!-- built from h2/h3 by the script --></div>
+</nav>
+
+<div class="main"><main class="content">
+<div class="crumbs">FILL: project name » FILL: topic</div>
+<h1>FILL: Topic title</h1>
+
+<!-- 1. Conclusion first: one admonition, 2-4 sentences, answers "why does my project need this?" -->
+<div class="admonition tip"><p class="admonition-title">FILL: Conclusion</p>
+<p>FILL: The one-paragraph answer. Readers who stop here must already have the main point.</p></div>
+
+<!-- 2. Causal chain figure: the spine of the page. Each later section expands one node. -->
+<h2 id="chain">FILL: The causal chain</h2>
+<p>FILL: One or two sentences that tell the reader what to look at in <a href="#fig-1">Figure 1</a>.</p>
+<figure id="fig-1">
+<svg viewBox="0 0 720 120" role="img" aria-label="FILL: text equivalent of the chain">
+  <rect class="box bad" x="10" y="30" width="150" height="60" rx="6"/>
+  <text x="85" y="56" text-anchor="middle" class="b">Cause</text><text x="85" y="76" text-anchor="middle" class="sm">measured fact</text>
+  <line class="line" x1="160" y1="60" x2="190" y2="60" marker-end="url(#arr)"/>
+  <rect class="box" x="190" y="30" width="150" height="60" rx="6"/>
+  <text x="265" y="56" text-anchor="middle" class="b">Mechanism</text><text x="265" y="76" text-anchor="middle" class="sm">why it happens</text>
+  <line class="line" x1="340" y1="60" x2="370" y2="60" marker-end="url(#arr)"/>
+  <rect class="box warn" x="370" y="30" width="150" height="60" rx="6"/>
+  <text x="445" y="56" text-anchor="middle" class="b">Consequence</text><text x="445" y="76" text-anchor="middle" class="sm">what goes wrong</text>
+  <line class="line good" x1="520" y1="60" x2="550" y2="60" marker-end="url(#arr-good)"/>
+  <rect class="box good" x="550" y="30" width="160" height="60" rx="6"/>
+  <text x="630" y="56" text-anchor="middle" class="b">Fix → result</text><text x="630" y="76" text-anchor="middle" class="sm">measured improvement</text>
+</svg>
+<figcaption>Figure 1. FILL: what the reader should notice.</figcaption>
+</figure>
+
+<!-- 3. One h2 per core question. The heading IS the question. -->
+<h2 id="q1">FILL: Question 1, phrased as the reader would ask it?</h2>
+<p>FILL: Short answer first. Then the explanation, referring to <a href="#fig-2">Figure 2</a> step by step.</p>
+
+<!-- L2 stepper demo. Each <g data-step> is one frame. "n" = only at step n; "n+" = from step n on.
+     data-caption is shown under the figure for that step. Elements without data-step are always visible. -->
+<figure id="fig-2" class="stepper">
+<svg viewBox="0 0 720 200" role="img" aria-label="FILL: text equivalent of all steps">
+  <rect class="box muted" x="10" y="20" width="700" height="160" rx="6"/>
+  <g data-step="1+" data-caption="Step 1: FILL — the starting state.">
+    <circle class="dot" cx="120" cy="100" r="8"/><text x="120" y="130" text-anchor="middle" class="sm">A</text>
+  </g>
+  <g data-step="2+" data-caption="Step 2: FILL — something is added.">
+    <line class="line" x1="130" y1="100" x2="340" y2="100" marker-end="url(#arr)"/>
+    <circle class="dot" cx="360" cy="100" r="8"/><text x="360" y="130" text-anchor="middle" class="sm">B</text>
+  </g>
+  <g data-step="3" data-caption="Step 3: FILL — only this frame shows the bad case.">
+    <line class="line bad dash" x1="370" y1="100" x2="580" y2="60" marker-end="url(#arr-bad)"/>
+    <circle class="dot bad" cx="600" cy="56" r="8"/><text x="600" y="40" text-anchor="middle" class="sm">rejected</text>
+  </g>
+</svg>
+<figcaption>Figure 2. FILL: what the whole sequence shows.</figcaption>
+</figure>
+
+<!-- 4. Counterfactual: the same project case without and with the technique, real numbers, with sources. -->
+<h2 id="q2">FILL: What changes if we do not use it?</h2>
+<table>
+<tr><th>Case</th><th>Without</th><th>With</th></tr>
+<tr><td>FILL: metric</td><td>FILL</td><td>FILL</td></tr>
+</table>
+<p class="src">Source: <code>FILL/path/to/report.md</code> §FILL</p>
+
+<div class="admonition warning"><p class="admonition-title">Inference</p>
+<p>FILL: anything that is the author's inference, not a measured fact, goes in a box like this.</p></div>
+
+<details><summary>FILL: Optional depth (L1)</summary>
+<p>FILL: Detail most readers can skip.</p></details>
+
+<h2 id="terms">Terms</h2>
+<table>
+<tr><th>Term</th><th>Meaning in this project</th></tr>
+<tr><td>FILL</td><td>FILL (≤ 5 terms)</td></tr>
+</table>
+
+<h2 id="sources">Sources</h2>
+<ul><li><code>FILL/path</code> — FILL: what was taken from it</li></ul>
+</main></div>
+
+<script>
+// Sidebar table of contents from h2/h3.
+document.querySelectorAll('.content h2, .content h3').forEach(function (h, i) {
+  if (!h.id) h.id = 'sec-' + i;
+  var a = document.createElement('a');
+  a.href = '#' + h.id; a.textContent = h.textContent; a.className = h.tagName.toLowerCase();
+  a.onclick = function () { document.body.classList.remove('nav-open'); };
+  document.getElementById('toc').appendChild(a);
+});
+// Stepper: <figure class="stepper"> with <g data-step="n"> or <g data-step="n+">.
+document.querySelectorAll('figure.stepper').forEach(function (fig) {
+  var frames = fig.querySelectorAll('[data-step]'), max = 0, cur = 1, timer = null;
+  frames.forEach(function (g) { max = Math.max(max, parseInt(g.dataset.step, 10)); });
+  var bar = document.createElement('div'); bar.className = 'stepper-bar';
+  bar.innerHTML = '<button type="button">◀</button><span class="count"></span><button type="button">▶</button><button type="button">▷</button>';
+  var cap = document.createElement('p'); cap.className = 'stepper-caption';
+  var btn = bar.querySelectorAll('button'), count = bar.querySelector('.count');
+  fig.querySelector('svg').after(bar, cap);
+  function show(n) {
+    cur = Math.min(Math.max(n, 1), max); cap.textContent = '';
+    frames.forEach(function (g) {
+      var s = parseInt(g.dataset.step, 10), on = /\+$/.test(g.dataset.step) ? cur >= s : cur === s;
+      g.style.display = on ? '' : 'none';
+      if (s === cur && g.dataset.caption) cap.textContent = g.dataset.caption;
+    });
+    count.textContent = cur + ' / ' + max;
+  }
+  function stop() { clearInterval(timer); timer = null; btn[2].textContent = '▷'; }
+  btn[0].onclick = function () { stop(); show(cur - 1); };
+  btn[1].onclick = function () { stop(); show(cur + 1); };
+  btn[2].onclick = function () {
+    if (timer) return stop();
+    if (cur === max) show(1);
+    btn[2].textContent = '||';
+    timer = setInterval(function () { cur < max ? show(cur + 1) : stop(); }, 1800);
+  };
+  show(1);
+});
+</script>
+</body>
+</html>
