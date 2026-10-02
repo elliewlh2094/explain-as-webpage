@@ -16,6 +16,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `references/extending-pages.md`：依追問延伸頁面的落點判準（`<details>`／子頁／修訂主頁）、兩層頁面樹、子頁命名 `<hub>--<child>.html`、側欄同步與篇幅檢查指令。
 - `assets/template.html`：單檔模板，包含內嵌 CSS、共用箭頭 marker、自動側欄目錄、可選的側欄頁面樹（`.pages`），以及通用 stepper 元件（`data-step="n"`／`"n+"`）。**不可引入外部資源。**字型堆疊中拉丁字型需排在 CJK 字型之前，否則 Linux 上英文引號會變全形。
 - `examples/autoresearch/`：以 karpathy/autoresearch 為例的英文範例（主頁＋兩個程式導讀子頁），同時是延伸流程的驗證案例。
+- `examples/explain-as-webpage/`：說明本儲存庫的英文單頁範例（L0），其中的圖 2（7 步流程）也是 README 的封面圖 `docs/images/cover-process.png`。
 - `.claude-plugin/`、`.codex-plugin/`、`.agents/plugins/`：plugin 與 marketplace manifest，版本號需同步。
 
 修改規則時，`SKILL.md` 維持精簡（約 130 行以內），細節放進 references。

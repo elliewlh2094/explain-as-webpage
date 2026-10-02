@@ -2,6 +2,8 @@
 
 English | [繁體中文](README.zh-TW.md)
 
+![The seven steps the agent follows: gather facts, write a brief, choose a tier, confirm once, build the page, self-check, report](docs/images/cover-process.png)
+
 Let an AI coding agent turn a technique or design in your project that you do not understand into a knowledge web page, **with your own project as the example**.
 
 This repository provides one skill: `explain-as-webpage`. It works in Claude Code and Codex, and both use the same `SKILL.md`.
@@ -27,7 +29,7 @@ This skill implements the first three. Its writing rules follow about 80% of ASD
 <details>
 <summary>What each tier looks like</summary>
 
-Screenshots from the [autoresearch example](#example).
+Screenshots from the [autoresearch example](#examples).
 
 **L0: static figure.** One experiment's path through the repository.
 
@@ -48,9 +50,13 @@ Screenshots from the [autoresearch example](#example).
 
 The agent first lists the questions, the proposed tier, and the output path, and **builds only after you confirm**. The default output path is `~/Documents/explainers/<repo-name>/<topic>.html`, outside your project.
 
-## Example
+## Examples
 
-[`examples/autoresearch/`](examples/autoresearch/) explains [karpathy/autoresearch](https://github.com/karpathy/autoresearch) (commit `228791f`, MIT license) in three English pages:
+Both examples are in English.
+
+**This repository.** [`examples/explain-as-webpage/explain-as-webpage.html`](examples/explain-as-webpage/explain-as-webpage.html) explains this skill in one L0 page: the problem it solves, the seven steps, how a tier is chosen, which file is read when, and how to install and use it. The cover image above is its Figure 2.
+
+**karpathy/autoresearch.** [`examples/autoresearch/`](examples/autoresearch/) explains [karpathy/autoresearch](https://github.com/karpathy/autoresearch) (commit `228791f`, MIT license) in three pages:
 
 | Page | Tier | Content |
 |---|---|---|
@@ -58,10 +64,13 @@ The agent first lists the questions, the proposed tier, and the output path, and
 | `autoresearch--train-py.html` | L1 | Code walkthrough of `train.py`: model size, the two optimizers, the time-based learning-rate schedule |
 | `autoresearch--prepare-py.html` | L0 | Code walkthrough of `prepare.py`: data, the validation shard, row packing, how `val_bpb` is computed |
 
-The two child pages were added as follow-up questions, through the extension flow. GitHub does not render HTML, so clone the repository and open the page locally:
+The two child pages were added as follow-up questions, through the extension flow.
+
+GitHub does not render HTML, so clone the repository and open a page locally:
 
 ```bash
-xdg-open examples/autoresearch/autoresearch.html   # on macOS: open
+xdg-open examples/explain-as-webpage/explain-as-webpage.html   # on macOS: open
+xdg-open examples/autoresearch/autoresearch.html
 ```
 
 ## Installation
@@ -120,6 +129,7 @@ skills/explain-as-webpage/
 │   └── extending-pages.md      # Follow-up questions: where answers go, the page tree, sync checks
 └── assets/
     └── template.html           # Single-file Read the Docs-style template
+examples/explain-as-webpage/    # Example: one page that explains this repository
 examples/autoresearch/          # Example: hub page + two code walkthrough pages
 .claude-plugin/                 # Claude Code plugin and marketplace manifests
 .codex-plugin/                  # Codex plugin manifest

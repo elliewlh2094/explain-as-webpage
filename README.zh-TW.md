@@ -2,6 +2,8 @@
 
 [English](README.md) | 繁體中文
 
+![代理產出頁面的 7 個步驟：收集事實、撰寫摘要、選擇層級、一次性確認、產出頁面、自我檢查、回報](docs/images/cover-process.png)
+
 讓 AI 代理把「你專案裡用到、但你不熟悉的技術或設計」做成**以你的專案為例**的知識網頁。
 
 本儲存庫提供一個 skill：`explain-as-webpage`。它可以在 Claude Code 與 Codex 上使用，兩者共用同一份 `SKILL.md`。
@@ -50,7 +52,11 @@
 
 ## 範例
 
-[`examples/autoresearch/`](examples/autoresearch/) 以 [karpathy/autoresearch](https://github.com/karpathy/autoresearch)（commit `228791f`，MIT 授權）為例，產出三頁英文網頁：
+兩個範例都是英文網頁。
+
+**本儲存庫。** [`examples/explain-as-webpage/explain-as-webpage.html`](examples/explain-as-webpage/explain-as-webpage.html) 以單一 L0 頁面說明這個 skill：它解決的問題、7 個步驟、如何選擇層級、各檔案在什麼時候被讀取，以及安裝與使用方式。上方的封面圖就是這一頁的圖 2。
+
+**karpathy/autoresearch。** [`examples/autoresearch/`](examples/autoresearch/) 以 [karpathy/autoresearch](https://github.com/karpathy/autoresearch)（commit `228791f`，MIT 授權）為例，產出三頁網頁：
 
 | 頁面 | 層級 | 內容 |
 |---|---|---|
@@ -58,10 +64,13 @@
 | `autoresearch--train-py.html` | L1 | `train.py` 程式導讀：模型大小、兩種最佳化器、依時間計算的學習率排程 |
 | `autoresearch--prepare-py.html` | L0 | `prepare.py` 程式導讀：資料、驗證分片、資料打包、`val_bpb` 的計算 |
 
-兩個子頁是以「追問」的方式，透過延伸流程加入的。GitHub 不會直接顯示 HTML，請 clone 後在本機開啟：
+兩個子頁是以「追問」的方式，透過延伸流程加入的。
+
+GitHub 不會直接顯示 HTML，請 clone 後在本機開啟：
 
 ```bash
-xdg-open examples/autoresearch/autoresearch.html   # macOS 用 open
+xdg-open examples/explain-as-webpage/explain-as-webpage.html   # macOS 用 open
+xdg-open examples/autoresearch/autoresearch.html
 ```
 
 ## 安裝
@@ -120,6 +129,7 @@ skills/explain-as-webpage/
 │   └── extending-pages.md      # 依追問延伸頁面：落點判準、頁面樹、同步檢查
 └── assets/
     └── template.html           # RTD 風格的單檔模板
+examples/explain-as-webpage/    # 範例：說明本儲存庫的單頁網頁
 examples/autoresearch/          # 範例：主頁＋兩個程式導讀子頁
 .claude-plugin/                 # Claude Code 的 plugin 與 marketplace manifest
 .codex-plugin/                  # Codex 的 plugin manifest
