@@ -1,6 +1,6 @@
 ---
 name: explain-as-webpage
-description: Builds one self-contained HTML explainer page (Read the Docs look, inline SVG diagrams, optional step-by-step animation) that teaches the user an unfamiliar technique, method, or design by using their own project's code, data, and reports as the examples. Use when the user wants to understand why a technique is used in their project, what a package or module the agent built actually does, or how a chain of causes leads to a result; or when they ask for an explainer, primer, visual explanation, or knowledge page. Picks the cheapest presentation tier that answers the questions and confirms it with the user before building. 觸發詞：解釋、說明、看不懂、為什麼要這樣做、圖解、知識網頁、學習筆記、解說頁面。
+description: Builds one self-contained HTML explainer page (Read the Docs look, inline SVG diagrams, optional step-by-step animation) that teaches the user an unfamiliar technique, method, or design by using their own project's code, data, and reports as the examples. Use when the user wants to understand why a technique is used in their project, what a package or module the agent built actually does, or how a chain of causes leads to a result; or when they ask for an explainer, primer, visual explanation, or knowledge page. Also use when the user asks follow-up questions about an existing explainer page: it extends the page or adds linked child pages. Picks the cheapest presentation tier that answers the questions and confirms it with the user before building. Writes in the user's language (e.g. English or Traditional Chinese). 觸發詞：解釋、說明、看不懂、為什麼要這樣做、圖解、知識網頁、學習筆記、解說頁面、追問、深入說明、補充頁面。
 ---
 
 # Explain as Webpage
@@ -9,7 +9,7 @@ description: Builds one self-contained HTML explainer page (Read the Docs look, 
 
 Turn "I don't understand why the agent did X" into one HTML page the user can read in 15 minutes and reopen later. The page is built from the user's own project: real file paths, real numbers, real code. It is organised around the questions the user is stuck on and one causal chain, not around a survey of the topic.
 
-The page is a single `.html` file. No build step, no external URLs, no extra figure or script folders.
+Each page is a single `.html` file. No build step, no external URLs, no extra figure or script folders. When the user keeps asking about a topic, the topic grows into a hub page plus linked child pages, and each page keeps its own length budget.
 
 ## When to Use
 
@@ -20,6 +20,8 @@ The page is a single `.html` file. No build step, no external URLs, no extra fig
 **When NOT to use:** a one-line answer is enough; the user wants project documentation that lives in the repo (write normal docs); the user wants a video (out of scope: the highest tier is an in-browser step animation).
 
 ## Process
+
+**Follow-up on an existing page?** If the user asks more about a topic that already has a page (they name the page, or the output directory has one on this topic), read `references/extending-pages.md` first. It changes how steps 2, 4, 5, and 6 apply.
 
 ### 1. Gather project context
 
@@ -51,7 +53,7 @@ Send **one** message (use a structured question tool if the platform has one, e.
 1. The core questions — ask the user to add, remove, or reword.
 2. The proposed tier, why, and the cheaper alternative with what it would lose.
 3. The output path. Default: `~/Documents/explainers/<repo-name>/<topic-slug>.html`, where `<repo-name>` is the basename of the git top-level directory. Offer "inside the project" as an alternative.
-4. The page language (default: the language the user writes in).
+4. The page language: the language the user asks for; otherwise the language the user writes in. All pages of one topic use one language.
 
 **Do not build until the user answers.**
 
@@ -81,6 +83,8 @@ google-chrome --headless=new --disable-gpu --window-size=390,2400  --screenshot=
 ```
 
 Look for text overflowing boxes, overlapping labels, arrows that miss their targets, empty figures, and (in the narrow shot) a horizontal scrollbar for the whole page. If no browser is available, say so in the report.
+
+If the page is part of a page tree, also run the checks in `references/extending-pages.md` §5.
 
 To inspect one figure or one stepper frame, screenshot a temporary copy that hides everything else and clicks ▶ n−1 times (delete the copy afterwards):
 
@@ -112,6 +116,7 @@ Tell the user: the file path, how to open it (`xdg-open <path>` / `open <path>`)
 - Prose that restates a long report section by section instead of following one causal chain.
 - Generic textbook examples where a project example exists.
 - Leaving helper scripts, image files, or extra folders next to the page.
+- Adding a new question to a page that is already at its length budget, instead of a child page.
 
 ## Common Rationalizations
 

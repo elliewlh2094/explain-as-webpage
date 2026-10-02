@@ -28,6 +28,12 @@ body { font: 16px/1.7 var(--font); color: var(--text); background: var(--bg); }
 .toc a { display: block; color: var(--side-text); text-decoration: none; padding: 6px 18px; font-size: .9rem; line-height: 1.4; }
 .toc a:hover { background: #4e4a4a; }
 .toc a.h3 { padding-left: 34px; font-size: .85rem; color: #b3b3b3; }
+.pages { padding: 8px 0; border-bottom: 1px solid #4e4a4a; }
+.pages .label { display: block; padding: 4px 18px; font-size: .75rem; letter-spacing: .05em; text-transform: uppercase; color: #8a8a8a; }
+.pages a { display: block; color: var(--side-text); text-decoration: none; padding: 6px 18px; font-size: .9rem; line-height: 1.4; }
+.pages a.sub { padding-left: 34px; }
+.pages a:hover { background: #4e4a4a; }
+.pages a[aria-current="page"] { background: var(--bg); color: var(--text); font-weight: 700; }
 
 /* Content (RTD wy-nav-content) */
 .main { margin-left: 300px; background: var(--bg); min-height: 100vh; }
@@ -111,10 +117,18 @@ svg .dot { fill: var(--blue); } svg .dot.bad { fill: var(--red); } svg .dot.good
 <div class="topbar"><button type="button" aria-label="Menu" onclick="document.body.classList.toggle('nav-open')">☰</button><span>FILL: Topic title</span></div>
 <nav class="side">
   <div class="side-head"><span class="title">FILL: Topic title</span><span class="meta">FILL: project name · YYYY-MM-DD</span></div>
+  <!-- Page tree: only when the topic has a hub page and child pages; delete the whole block for a single page.
+       Every page of the topic carries the same list; only the aria-current mark moves. See references/extending-pages.md. -->
+  <div class="pages">
+    <span class="label">FILL: Pages in this topic</span>
+    <a href="FILL-hub.html" aria-current="page">FILL: Hub page title</a>
+    <a href="FILL-hub--child.html" class="sub">FILL: Child page title</a>
+  </div>
   <div class="toc" id="toc"><!-- built from h2/h3 by the script --></div>
 </nav>
 
 <div class="main"><main class="content">
+<!-- On a child page, link the hub: project » <a href="hub.html">Hub title</a> » child topic -->
 <div class="crumbs">FILL: project name » FILL: topic</div>
 <h1>FILL: Topic title</h1>
 

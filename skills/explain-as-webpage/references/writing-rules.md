@@ -16,6 +16,14 @@ How to structure and write the page. The goal: a reader who stopped understandin
 
 **Package or architecture pages** (the question is "what does this code do and why is it built this way"): Figure 1 is the main flow of one unit of work through the modules (input → steps → output). The causal chain becomes a "risk → design decision" figure: for each decision, the problem it prevents, with the test or record that enforces it. End with what works today and what does not yet.
 
+**Code walkthrough pages** (usually a child page; the question is "what does this file or module do, and why is it written this way"):
+
+1. Conclusion box: the file's job in one sentence, its inputs and outputs, and the design decision that matters most.
+2. Figure 1: the call flow of one run through the file's main functions (entry point → functions → output). Put line ranges in `sm` labels.
+3. One `h2` per question, still phrased as the reader asks it ("Why does `evaluate_bpb` report bits per byte, not loss?"). Answer with a code excerpt and point at the key line.
+4. A function table: name, lines, what it does (one clause), called by. List only the functions the page discusses or the reader will meet first.
+5. Design decisions: decision → the risk it prevents → where the code enforces it.
+
 Do not add: scope/authority tables, "how to read this document" guides, change history, timelines of how the analysis evolved, or summaries of other documents. Link to the source report instead.
 
 ## Figures and text belong together
@@ -35,7 +43,29 @@ Do not add: scope/authority tables, "how to read this document" guides, change h
 - **Explain every pattern you point out.** If the page says "A almost equals B", say in the same place why, and when it stops holding. An unexplained pattern makes the reader wonder whether it is a coincidence.
 - Prefer concrete project nouns (`uav_0`, waypoint 5, `down_camera_lightglue.py`) over abstract ones ("the system", "the module").
 - No filler: delete "it is worth noting", "basically", "in order to".
-- Write in the reader's language **and regional usage**. For Traditional Chinese, default to Taiwan usage (程式、資料、檔案、預設、執行、網路、品質; not 程序 for "program"、文件 for "file"、默認、運行、網絡、質量、視頻). Keep code identifiers, file paths, and standard abbreviations (RANSAC, RTF, EKF) in their original form.
+- Write in the page language (SKILL.md step 4) and follow its rules below. Keep code identifiers, file paths, and standard abbreviations (RANSAC, RTF, EKF) in their original form in every language.
+
+## Language
+
+**English.** Plain international English: many readers are not native speakers.
+
+- Use US spelling and keep it consistent.
+- Prefer one exact verb to a phrasal verb or an idiom: "remove", not "get rid of"; "check", not "keep an eye on".
+- Give every number its unit. Write symbols as they are in the code (`val_bpb`, not "validation BPB").
+- Term definitions do not need a second language unless the user asks.
+
+**Traditional Chinese.** Taiwan usage by default: 程式、資料、檔案、預設、執行、網路、品質. Do not use 程序 for "program", 文件 for "file", 默認, 運行, 網絡, 質量, 視頻. Give the English original of each term at its first use.
+
+**Fixed labels.** Set `<html lang>` and use these labels for the page language:
+
+| Element | English (`lang="en"`) | Traditional Chinese (`lang="zh-Hant"`) |
+|---|---|---|
+| Conclusion box title | Conclusion | 結論 |
+| Inference box title | Inference | 推論 |
+| Terms / Sources sections | Terms / Sources | 名詞 / 來源 |
+| Figure caption prefix | Figure 1. | 圖 1　(full-width space) |
+| Page tree label | Pages in this topic | 本主題頁面 |
+| Link to a child page | More: | 延伸閱讀： |
 
 ## Facts, inferences, sources
 
