@@ -24,6 +24,25 @@ This skill implements the first three. Its writing rules follow about 80% of ASD
 | L1 | L0 + collapsible blocks, one slider | A trade-off: the result depends on a parameter |
 | L2 | L1 + step animation (previous / next / play) | A process: an iterative algorithm, events over time |
 
+<details>
+<summary>What each tier looks like</summary>
+
+Screenshots from the [autoresearch example](#example).
+
+**L0: static figure.** One experiment's path through the repository.
+
+<img src="docs/images/tier-l0-figure.png" width="640" alt="L0 example: a static SVG flow figure of one autoresearch experiment">
+
+**L1: one slider.** Moving the time-budget slider updates both bars and the numbers.
+
+<img src="docs/images/tier-l1-slider.gif" width="640" alt="L1 example: moving the time-budget slider changes experiments per night and tokens per run">
+
+**L2: step animation.** Stepping through the experiment loop, one change per step.
+
+<img src="docs/images/tier-l2-stepper.gif" width="640" alt="L2 example: stepping through the eight steps of the autoresearch experiment loop">
+
+</details>
+
 - **English or Traditional Chinese.** The page uses the language you ask for. If you do not ask, it uses the language you write in. Traditional Chinese uses Taiwan usage by default.
 - **Pages that grow with follow-up questions.** When you ask more about an existing page, the agent decides where each answer goes. A short answer to an existing question goes into a collapsible block on that page. A new question gets a child page, linked to and from the hub page. A finding that changes the main conclusion revises the hub page. Each page keeps its own length budget, so the hub page does not keep growing.
 
@@ -106,6 +125,7 @@ examples/autoresearch/          # Example: hub page + two code walkthrough pages
 .codex-plugin/                  # Codex plugin manifest
 .agents/plugins/                # Codex marketplace manifest
 docs/ideas/                     # Idea one-pagers
+docs/images/                    # README screenshots of the three tiers
 tasks/                          # Implementation plan and task list
 ```
 

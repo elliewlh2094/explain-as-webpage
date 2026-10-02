@@ -24,6 +24,25 @@
 | L1 | L0＋展開區塊、一個滑桿 | 結果隨某個參數變化的取捨 |
 | L2 | L1＋逐步動畫（上一步／下一步／播放） | 迭代演算法、隨時間演進的過程 |
 
+<details>
+<summary>各層級的實際樣貌</summary>
+
+以下截圖取自 [autoresearch 範例](#範例)。
+
+**L0：靜態圖。** 一次實驗在儲存庫中的流程。
+
+<img src="docs/images/tier-l0-figure.png" width="640" alt="L0 範例：autoresearch 一次實驗流程的靜態 SVG 圖">
+
+**L1：一個滑桿。** 拖動時間預算滑桿，兩條長條與數字會跟著更新。
+
+<img src="docs/images/tier-l1-slider.gif" width="640" alt="L1 範例：拖動時間預算滑桿，每晚實驗數與每次訓練的 token 數隨之改變">
+
+**L2：逐步動畫。** 逐步播放實驗迴圈，每一步只改變一件事。
+
+<img src="docs/images/tier-l2-stepper.gif" width="640" alt="L2 範例：逐步播放 autoresearch 實驗迴圈的 8 個步驟">
+
+</details>
+
 - **英文或繁體中文**：頁面語言依你的要求決定；沒有指定時，跟隨你提問使用的語言。繁體中文預設使用台灣用語。
 - **可依追問延伸**：對既有頁面繼續追問時，代理會依判準決定落點。短答且屬於既有疑問，補進原頁的展開區塊；新的疑問，另開子頁並與主頁互相連結；會改變主結論，則修訂主頁。每一頁各自遵守篇幅預算，主頁不會越補越長。
 
@@ -106,6 +125,7 @@ examples/autoresearch/          # 範例：主頁＋兩個程式導讀子頁
 .codex-plugin/                  # Codex 的 plugin manifest
 .agents/plugins/                # Codex 的 marketplace manifest
 docs/ideas/                     # 構想摘要
+docs/images/                    # README 用的三個層級截圖
 tasks/                          # 實作計畫與待辦
 ```
 
