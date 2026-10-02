@@ -1,35 +1,62 @@
-# sphinx-style-notes-maker
+# Explain As Webpage
 
-讓 AI 代理把「你專案裡用到、但你不熟悉的技術或設計」做成一頁**以你的專案為例**的知識網頁。
+English | [繁體中文](README.zh-TW.md)
 
-本儲存庫提供一個 skill：`explain-as-webpage`。它可以在 Claude Code 與 Codex 上使用，兩者共用同一份 `SKILL.md`。
+Let an AI coding agent turn a technique or design in your project that you do not understand into a knowledge web page, **with your own project as the example**.
 
-## 它會產出什麼
+This repository provides one skill: `explain-as-webpage`. It works in Claude Code and Codex, and both use the same `SKILL.md`.
 
-- **單一 HTML 檔**：外觀仿照 Read the Docs（sphinx_rtd_theme），圖片全部是內嵌 SVG，不連外部資源，可以離線開啟。不需要建置，也不會另外產生 `figures/` 或 `scripts/` 資料夾。
-- **以疑問為章節**：先給結論，再畫一條因果鏈。每一節回答一個讀者真正卡住的問題，並用專案的真實檔案、數據與程式碼舉例。
-- **依主題選擇成本最低、但仍足以說明的呈現層級**：
+## Inspiration
 
-| 層級 | 形式 | 適用的疑問 |
+This skill is inspired by Andrej Karpathy's post: [x.com/karpathy/status/2105819303471976479](https://x.com/karpathy/status/2105819303471976479). The post says that as LLMs do more of the work, we will spend more time trying to understand their outputs. It then suggests output formats that are easier to understand, in this order: writing in ASD-STE100 (a controlled English specification from aerospace maintenance documentation), diagrams, HTML web pages, and, the format it is most bullish on, explainer videos.
+
+This skill implements the first three. Its writing rules follow about 80% of ASD-STE100, its figures are inline SVG, and its output is a single HTML page that can include an in-browser step animation. It **deliberately stops before video**; see [What it does not do](#what-it-does-not-do).
+
+## What it produces
+
+- **One HTML file per page.** The page looks like Read the Docs (sphinx_rtd_theme). All figures are inline SVG and the page loads no external resources, so it opens offline. There is no build step and no extra `figures/` or `scripts/` folder.
+- **Sections that are questions.** The page gives the conclusion first, then one causal chain. Each section answers one question the reader is stuck on, with real files, numbers, and code from the project.
+- **The cheapest presentation tier that still answers the questions:**
+
+| Tier | Form | Use for questions about |
 |---|---|---|
-| L0 | 文字＋靜態 SVG | 結構、組成、因果鏈、前後對照 |
-| L1 | L0＋展開區塊、一個滑桿 | 結果隨某個參數變化的取捨 |
-| L2 | L1＋逐步動畫（上一步／下一步／播放） | 迭代演算法、隨時間演進的過程 |
+| L0 | Text + static SVG | Structure, composition, a causal chain, before/after |
+| L1 | L0 + collapsible blocks, one slider | A trade-off: the result depends on a parameter |
+| L2 | L1 + step animation (previous / next / play) | A process: an iterative algorithm, events over time |
 
-代理會先列出疑問清單、建議的層級與輸出路徑，**等你確認後才開始產出**。預設輸出位置是 `~/Documents/explainers/<repo 名稱>/<主題>.html`，不會放進你的專案。
+- **English or Traditional Chinese.** The page uses the language you ask for. If you do not ask, it uses the language you write in. Traditional Chinese uses Taiwan usage by default.
+- **Pages that grow with follow-up questions.** When you ask more about an existing page, the agent decides where each answer goes. A short answer to an existing question goes into a collapsible block on that page. A new question gets a child page, linked to and from the hub page. A finding that changes the main conclusion revises the hub page. Each page keeps its own length budget, so the hub page does not keep growing.
 
-## 安裝
+The agent first lists the questions, the proposed tier, and the output path, and **builds only after you confirm**. The default output path is `~/Documents/explainers/<repo-name>/<topic>.html`, outside your project.
+
+## Example
+
+[`examples/autoresearch/`](examples/autoresearch/) explains [karpathy/autoresearch](https://github.com/karpathy/autoresearch) (commit `228791f`, MIT license) in three English pages:
+
+| Page | Tier | Content |
+|---|---|---|
+| `autoresearch.html` (hub) | L2 | What the repository is for, what each of its three files does, and how to run it. Static figures for structure (L0), a slider for the 5-minute time budget trade-off (L1), a step animation for the experiment loop (L2) |
+| `autoresearch--train-py.html` | L1 | Code walkthrough of `train.py`: model size, the two optimizers, the time-based learning-rate schedule |
+| `autoresearch--prepare-py.html` | L0 | Code walkthrough of `prepare.py`: data, the validation shard, row packing, how `val_bpb` is computed |
+
+The two child pages were added as follow-up questions, through the extension flow. GitHub does not render HTML, so clone the repository and open the page locally:
+
+```bash
+xdg-open examples/autoresearch/autoresearch.html   # on macOS: open
+```
+
+## Installation
 
 ### Claude Code
 
-用 plugin 安裝。安裝後的 skill 名稱會加上 plugin 前綴：`/sphinx-style-notes-maker:explain-as-webpage`。
+Install it as a plugin. The installed skill name has the plugin prefix: `/sphinx-style-notes-maker:explain-as-webpage`.
 
 ```bash
-claude plugin marketplace add elliewlh2094/sphinx-style-notes-maker   # 或本機路徑
+claude plugin marketplace add elliewlh2094/sphinx-style-notes-maker   # or a local path
 claude plugin install sphinx-style-notes-maker@sphinx-style-notes-maker
 ```
 
-也可以直接複製 skill 資料夾，之後用 `/explain-as-webpage` 呼叫：
+Or copy the skill folder and call it as `/explain-as-webpage`:
 
 ```bash
 cp -r skills/explain-as-webpage ~/.claude/skills/
@@ -37,54 +64,58 @@ cp -r skills/explain-as-webpage ~/.claude/skills/
 
 ### Codex
 
-用 plugin 安裝。安裝後的 skill 名稱同樣會加上 plugin 前綴：`sphinx-style-notes-maker:explain-as-webpage`。
+Install it as a plugin. The installed skill name also has the plugin prefix: `sphinx-style-notes-maker:explain-as-webpage`.
 
 ```bash
-codex plugin marketplace add elliewlh2094/sphinx-style-notes-maker   # 或本機路徑
+codex plugin marketplace add elliewlh2094/sphinx-style-notes-maker   # or a local path
 codex plugin add sphinx-style-notes-maker@sphinx-style-notes-maker
 ```
 
-也可以直接複製 skill 資料夾，之後用 `@explain-as-webpage` 呼叫：
+Or copy the skill folder and call it as `@explain-as-webpage`:
 
 ```bash
 cp -r skills/explain-as-webpage ~/.codex/skills/
 ```
 
-安裝後請開新的 session，讓工具重新載入 skill。
+After you install it, start a new session so that the tool loads the skill.
 
-## 使用方式
+## Usage
 
-直接描述你想看懂的東西，或明確呼叫 skill。例如：
+Describe what you want to understand, or call the skill by name. For example:
 
-- 「我不懂為什麼影像辨識要加 RANSAC 幾何驗證，參考 `docs/notebooks/XXX.md`，做成知識網頁。」
-- 「`src/swarm_experiment` 這個套件在做什麼、為什麼這樣設計？用網頁解釋給我看。」
+- "I don't understand why the image matching needs RANSAC geometric verification. Use `docs/notebooks/XXX.md` and make a knowledge page."
+- "What does the `src/swarm_experiment` package do, and why is it built this way? Explain it as a web page."
+- "Continuing from `swarm-experiment-package.html`: what does each source file do?" (extends an existing page)
+- "Make a page in English that explains what this repository is for and how to use it."
 
-產出後，用 `xdg-open <路徑>`（Linux）或 `open <路徑>`（macOS）開啟。
+Open the result with `xdg-open <path>` (Linux) or `open <path>` (macOS).
 
-## 目錄結構
+## Repository layout
 
 ```text
 skills/explain-as-webpage/
-├── SKILL.md                    # 流程與層級判準（Claude Code 與 Codex 共用）
+├── SKILL.md                    # Process and tier criteria (shared by Claude Code and Codex)
 ├── references/
-│   ├── writing-rules.md        # 頁面骨架、圖文綁定、用語與篇幅規則
-│   └── svg-recipes.md          # SVG 版面規則、顏色語意、圖形配方、逐步動畫與滑桿
+│   ├── writing-rules.md        # Page skeletons, code walkthrough pages, figures and text, language and length rules
+│   ├── svg-recipes.md          # SVG layout rules, color meaning, figure recipes, step animation and slider
+│   └── extending-pages.md      # Follow-up questions: where answers go, the page tree, sync checks
 └── assets/
-    └── template.html           # RTD 風格的單檔模板
-.claude-plugin/                 # Claude Code 的 plugin 與 marketplace manifest
-.codex-plugin/                  # Codex 的 plugin manifest
-.agents/plugins/                # Codex 的 marketplace manifest
-docs/ideas/                     # 構想摘要
-tasks/                          # 實作計畫與待辦
+    └── template.html           # Single-file Read the Docs-style template
+examples/autoresearch/          # Example: hub page + two code walkthrough pages
+.claude-plugin/                 # Claude Code plugin and marketplace manifests
+.codex-plugin/                  # Codex plugin manifest
+.agents/plugins/                # Codex marketplace manifest
+docs/ideas/                     # Idea one-pagers
+tasks/                          # Implementation plan and task list
 ```
 
-## 刻意不做的事
+## What it does not do
 
-- **影片**：最高層級是瀏覽器內的逐步動畫，不使用 manim、ffmpeg 或語音合成。
-- **外部 CDN**：例如 MathJax、D3、Mermaid。公式改用 HTML 上下標表示。
-- **Sphinx 建置**：只仿照它的外觀。
-- **跨主題索引或知識庫**：避免增加管理負擔。
+- **Video.** The highest tier is an in-browser step animation; no manim, ffmpeg, or text-to-speech. A video toolchain costs much more to run, and a step animation already covers questions about a process.
+- **External CDNs** such as MathJax, D3, or Mermaid. Formulas use HTML superscripts and subscripts.
+- **A Sphinx build.** Only the look is borrowed.
+- **A cross-topic index or knowledge base.** A page tree stays inside one topic (one hub page and its child pages), to keep maintenance low.
 
-## 授權
+## License
 
 MIT

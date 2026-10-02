@@ -8,7 +8,7 @@
   "plugins": [
     {
       "name": "sphinx-style-notes-maker",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "source": "./",
       "description": "Turn an unfamiliar technique in your own project into a single Read the Docs-style HTML explainer page.",
       "license": "MIT",
