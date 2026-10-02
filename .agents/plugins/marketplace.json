@@ -1,0 +1,22 @@
+{
+  "name": "sphinx-style-notes-maker",
+  "interface": {
+    "displayName": "Sphinx-style Notes Maker"
+  },
+  "plugins": [
+    {
+      "name": "sphinx-style-notes-maker",
+      "version": "0.1.0",
+      "description": "Turn an unfamiliar technique in your own project into a single Read the Docs-style HTML explainer page.",
+      "source": {
+        "source": "local",
+        "path": "./"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

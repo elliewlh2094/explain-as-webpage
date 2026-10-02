@@ -1,0 +1,28 @@
+{
+  "name": "sphinx-style-notes-maker",
+  "version": "0.1.0",
+  "description": "Turn an unfamiliar technique in your own project into a single Read the Docs-style HTML explainer page, built from your project's code, data, and reports.",
+  "author": {
+    "name": "Ellie Huang"
+  },
+  "homepage": "https://github.com/elliewlh2094/sphinx-style-notes-maker",
+  "repository": "https://github.com/elliewlh2094/sphinx-style-notes-maker",
+  "license": "MIT",
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Sphinx-style Notes Maker",
+    "shortDescription": "Project-grounded HTML explainer pages with inline SVG diagrams.",
+    "longDescription": "Explains a technique, a package, or a chain of causes in your project as one self-contained Read the Docs-style HTML page. Picks the cheapest presentation tier (static, interactive, or step-by-step animation) and confirms it with you before building.",
+    "developerName": "Ellie Huang",
+    "category": "Productivity",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Explain why this project uses this technique, as a webpage",
+      "Make an explainer page for what this package does and why it is designed this way"
+    ]
+  }
+}
