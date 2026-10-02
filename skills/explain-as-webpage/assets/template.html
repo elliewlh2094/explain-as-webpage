@@ -13,7 +13,7 @@
   --rule: #e1e4e5; --code-bg: #f8f8f8; --row-alt: #f3f6f6;
   --blue: #2980b9; --blue-bg: #e7f2fa; --red: #c0392b; --red-bg: #fdf3f2;
   --green: #16a085; --green-bg: #dbfaf4; --orange: #e67e22; --orange-bg: #ffedcc; --grey-bg: #f0f0f0;
-  --font: -apple-system, "Segoe UI", Roboto, "Noto Sans CJK TC", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+  --font: -apple-system, "Segoe UI", Roboto, "Noto Sans", "Liberation Sans", Arial, "DejaVu Sans", "Noto Sans CJK TC", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
   --mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, "Noto Sans Mono CJK TC", monospace;
 }
 * { box-sizing: border-box; }
@@ -47,6 +47,7 @@ a { color: var(--link); } a:visited { color: var(--link-visited); }
 p, ul, ol { margin: 0 0 16px; }
 li { margin-bottom: 4px; }
 code { font: .88em var(--mono); color: #e74c3c; background: #fff; border: 1px solid var(--rule); padding: 0 4px; overflow-wrap: anywhere; }
+th code, td code { overflow-wrap: normal; }
 pre { font: .85rem/1.5 var(--mono); background: var(--code-bg); border: 1px solid var(--rule); padding: 12px; overflow-x: auto; }
 pre code { color: inherit; border: 0; padding: 0; background: none; }
 table { border-collapse: collapse; margin: 0 0 20px; width: 100%; font-size: .92rem; display: block; overflow-x: auto; }

@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>prepare.py: the fixed data, tokenizer, and metric</title>
+<style>
+:root {
+  --text: #404040; --muted: #6a6a6a; --link: #2980b9; --link-visited: #9b59b6;
+  --bg: #fcfcfc; --side-bg: #343131; --side-head: #2980b9; --side-text: #d9d9d9;
+  --rule: #e1e4e5; --code-bg: #f8f8f8; --row-alt: #f3f6f6;
+  --blue: #2980b9; --blue-bg: #e7f2fa; --red: #c0392b; --red-bg: #fdf3f2;
+  --green: #16a085; --green-bg: #dbfaf4; --orange: #e67e22; --orange-bg: #ffedcc; --grey-bg: #f0f0f0;
+  --font: -apple-system, "Segoe UI", Roboto, "Noto Sans", "Liberation Sans", Arial, "DejaVu Sans", "Noto Sans CJK TC", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+  --mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, "Noto Sans Mono CJK TC", monospace;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { font: 16px/1.7 var(--font); color: var(--text); background: var(--bg); }
+
+/* Sidebar (RTD wy-nav-side) */
+.side { position: fixed; top: 0; bottom: 0; left: 0; width: 300px; overflow-y: auto; background: var(--side-bg); }
+.side-head { background: var(--side-head); color: #fff; padding: 16px 18px; }
+.side-head .title { font-size: 1.1rem; font-weight: 700; display: block; }
+.side-head .meta { font-size: .8rem; opacity: .85; }
+.toc a { display: block; color: var(--side-text); text-decoration: none; padding: 6px 18px; font-size: .9rem; line-height: 1.4; }
+.toc a:hover { background: #4e4a4a; }
+.toc a.h3 { padding-left: 34px; font-size: .85rem; color: #b3b3b3; }
+.pages { padding: 8px 0; border-bottom: 1px solid #4e4a4a; }
+.pages .label { display: block; padding: 4px 18px; font-size: .75rem; letter-spacing: .05em; text-transform: uppercase; color: #8a8a8a; }
+.pages a { display: block; color: var(--side-text); text-decoration: none; padding: 6px 18px; font-size: .9rem; line-height: 1.4; }
+.pages a.sub { padding-left: 34px; }
+.pages a:hover { background: #4e4a4a; }
+.pages a[aria-current="page"] { background: var(--bg); color: var(--text); font-weight: 700; }
+
+/* Content (RTD wy-nav-content) */
+.main { margin-left: 300px; background: var(--bg); min-height: 100vh; }
+.content { max-width: 820px; padding: 24px 36px 64px; }
+.crumbs { font-size: .85rem; color: var(--muted); border-bottom: 1px solid var(--rule); padding-bottom: 8px; margin-bottom: 24px; }
+h1, h2, h3 { color: #2c2c2c; line-height: 1.3; font-weight: 700; }
+h1 { font-size: 1.9rem; margin: 0 0 16px; }
+h2 { font-size: 1.45rem; margin: 40px 0 12px; padding-top: 8px; border-top: 1px solid var(--rule); }
+h3 { font-size: 1.15rem; margin: 28px 0 8px; }
+a { color: var(--link); } a:visited { color: var(--link-visited); }
+p, ul, ol { margin: 0 0 16px; }
+li { margin-bottom: 4px; }
+code { font: .88em var(--mono); color: #e74c3c; background: #fff; border: 1px solid var(--rule); padding: 0 4px; overflow-wrap: anywhere; }
+th code, td code { overflow-wrap: normal; }
+pre { font: .85rem/1.5 var(--mono); background: var(--code-bg); border: 1px solid var(--rule); padding: 12px; overflow-x: auto; }
+pre code { color: inherit; border: 0; padding: 0; background: none; }
+table { border-collapse: collapse; margin: 0 0 20px; width: 100%; font-size: .92rem; display: block; overflow-x: auto; }
+th, td { border: 1px solid var(--rule); padding: 6px 12px; text-align: left; vertical-align: top; }
+th { background: #eee; } tr:nth-child(even) td { background: var(--row-alt); }
+.src { font-size: .8rem; color: var(--muted); }
+
+/* Admonitions: note / tip / warning / danger */
+.admonition { margin: 0 0 20px; background: var(--blue-bg); }
+.admonition > .admonition-title { margin: 0; padding: 6px 12px; font-weight: 700; color: #fff; background: #6ab0de; }
+.admonition > :not(.admonition-title) { margin: 0; padding: 10px 12px; }
+.admonition.tip { background: var(--green-bg); } .admonition.tip > .admonition-title { background: #1abc9c; }
+.admonition.warning { background: var(--orange-bg); } .admonition.warning > .admonition-title { background: #f0b37e; }
+.admonition.danger { background: var(--red-bg); } .admonition.danger > .admonition-title { background: #f29f97; }
+
+/* Figures. SVG keeps a readable minimum width; the figure scrolls sideways on phones, never the page. */
+figure { margin: 8px 0 24px; overflow-x: auto; }
+figure svg { display: block; width: 100%; min-width: 540px; height: auto; margin: 0 auto; }
+figcaption { font-size: .9rem; color: var(--muted); margin-top: 6px; }
+details { border: 1px solid var(--rule); padding: 8px 12px; margin: 0 0 20px; background: #fff; }
+details > summary { cursor: pointer; font-weight: 700; }
+
+/* Shared SVG vocabulary (see references/svg-recipes.md) */
+svg text { font-family: var(--font); font-size: 14px; fill: var(--text); }
+svg .sm { font-size: 12px; fill: var(--muted); }
+svg .b { font-weight: 700; }
+svg text.bad { fill: var(--red); } svg text.good { fill: var(--green); }
+svg .box { fill: var(--blue-bg); stroke: var(--blue); stroke-width: 1.5; }
+svg .box.bad { fill: var(--red-bg); stroke: var(--red); }
+svg .box.good { fill: var(--green-bg); stroke: var(--green); }
+svg .box.warn { fill: var(--orange-bg); stroke: var(--orange); }
+svg .box.muted { fill: var(--grey-bg); stroke: #999; }
+svg .line { stroke: var(--text); stroke-width: 1.5; fill: none; }
+svg .line.bad { stroke: var(--red); } svg .line.good { stroke: var(--green); }
+svg .dash { stroke-dasharray: 5 4; }
+svg .dot { fill: var(--blue); } svg .dot.bad { fill: var(--red); } svg .dot.good { fill: var(--green); }
+
+/* Stepper (L2): controls are injected by the script below */
+.stepper-bar { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+.stepper-bar button { font: inherit; padding: 2px 12px; border: 1px solid var(--rule); background: #fff; cursor: pointer; }
+.stepper-bar .count { font-size: .85rem; color: var(--muted); min-width: 3.5em; text-align: center; }
+.stepper-caption { margin: 6px 0 0; padding: 6px 10px; background: var(--blue-bg); font-size: .92rem; }
+
+/* Narrow screens: sidebar becomes a collapsible top bar */
+.topbar { display: none; }
+@media (max-width: 768px) {
+  .topbar { display: flex; align-items: center; gap: 12px; position: sticky; top: 0; z-index: 2; background: var(--side-head); color: #fff; padding: 8px 16px; }
+  .topbar button { font-size: 1.2rem; background: none; border: 0; color: #fff; cursor: pointer; }
+  .side { display: none; position: fixed; top: 44px; width: 100%; z-index: 2; }
+  body.nav-open .side { display: block; }
+  .main { margin-left: 0; }
+  .content { padding: 16px 16px 48px; }
+}
+@media print {
+  .side, .topbar, .stepper-bar { display: none !important; }
+  .main { margin-left: 0; }
+}
+</style>
+</head>
+<body>
+<!-- Arrow markers shared by every SVG on the page: marker-end="url(#arr)" / url(#arr-bad) / url(#arr-good) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#404040"/></marker>
+  <marker id="arr-bad" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#c0392b"/></marker>
+  <marker id="arr-good" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#16a085"/></marker>
+</defs></svg>
+
+<div class="topbar"><button type="button" aria-label="Menu" onclick="document.body.classList.toggle('nav-open')">☰</button><span>prepare.py walkthrough</span></div>
+<nav class="side">
+  <div class="side-head"><span class="title">autoresearch</span><span class="meta">karpathy/autoresearch · 2026-10-02</span></div>
+  <div class="pages">
+    <span class="label">Pages in this topic</span>
+    <a href="autoresearch.html">What it is and how to use it</a>
+    <a href="autoresearch--train-py.html" class="sub">train.py walkthrough</a>
+    <a href="autoresearch--prepare-py.html" class="sub" aria-current="page">prepare.py walkthrough</a>
+  </div>
+  <div class="toc" id="toc"><!-- built from h2/h3 by the script --></div>
+</nav>
+
+<div class="main"><main class="content">
+<div class="crumbs">autoresearch » <a href="autoresearch.html">What it is and how to use it</a> » prepare.py walkthrough</div>
+<h1>prepare.py: the fixed data, tokenizer, and metric</h1>
+
+<div class="admonition tip"><p class="admonition-title">Conclusion</p>
+<p><code>prepare.py</code> runs once to download text data and train a tokenizer (the part that splits text into tokens). After that, <code>train.py</code> imports three fixed tools from it on every run: the tokenizer, a dataloader, and <code>evaluate_bpb</code>. The agent may not edit it, because it defines the test. Every experiment is scored on the same validation text (shard 6542), the same 20,971,520 evaluation tokens, and the same bits-per-byte formula.</p></div>
+<p>This page assumes the file split from the <a href="autoresearch.html#q2">main page</a>: the human edits <code>program.md</code>, the agent edits <code>train.py</code>, and <code>prepare.py</code> stays fixed.</p>
+
+<h2 id="chain">What does prepare.py do once, and what does it give train.py on every run?</h2>
+<p>The file has two jobs, shown as the two panels of <a href="#fig-1">Figure 1</a>. The top panel runs once, when you type <code>uv run prepare.py</code>. It writes its results to <code>~/.cache/autoresearch/</code>. The bottom panel is the code that <code>train.py</code> imports and runs on every experiment.</p>
+<figure id="fig-1">
+<svg viewBox="0 0 720 270" role="img" aria-label="Once: download_data and train_tokenizer write to ~/.cache/autoresearch. Every run: train.py imports Tokenizer, make_dataloader, and evaluate_bpb, which load from that cache.">
+  <rect class="box muted" x="10" y="10" width="700" height="100" rx="6"/>
+  <text x="20" y="30" class="sm">Once: uv run prepare.py</text>
+  <rect class="box" x="30" y="40" width="190" height="50" rx="6"/>
+  <text x="125" y="61" text-anchor="middle" class="b">download_data</text><text x="125" y="81" text-anchor="middle" class="sm">line 91</text>
+  <line class="line" x1="220" y1="65" x2="265" y2="65" marker-end="url(#arr)"/>
+  <rect class="box" x="265" y="40" width="190" height="50" rx="6"/>
+  <text x="360" y="61" text-anchor="middle" class="b">train_tokenizer</text><text x="360" y="81" text-anchor="middle" class="sm">line 141</text>
+  <line class="line" x1="455" y1="65" x2="500" y2="65" marker-end="url(#arr)"/>
+  <rect class="box muted" x="500" y="40" width="190" height="50" rx="6"/>
+  <text x="595" y="61" text-anchor="middle" class="b">~/.cache/autoresearch/</text><text x="595" y="81" text-anchor="middle" class="sm">data shards, tokenizer</text>
+
+  <line class="line" x1="595" y1="90" x2="595" y2="150" marker-end="url(#arr)"/>
+  <text x="603" y="125" class="sm">loaded on every run</text>
+
+  <rect class="box muted" x="10" y="150" width="700" height="110" rx="6"/>
+  <text x="20" y="170" class="sm">Every run: train.py imports these</text>
+  <rect class="box good" x="30" y="185" width="190" height="50" rx="6"/>
+  <text x="125" y="206" text-anchor="middle" class="b">Tokenizer</text><text x="125" y="226" text-anchor="middle" class="sm">line 209</text>
+  <rect class="box good" x="265" y="185" width="190" height="50" rx="6"/>
+  <text x="360" y="206" text-anchor="middle" class="b">make_dataloader</text><text x="360" y="226" text-anchor="middle" class="sm">line 276</text>
+  <rect class="box good" x="500" y="185" width="190" height="50" rx="6"/>
+  <text x="595" y="206" text-anchor="middle" class="b">evaluate_bpb</text><text x="595" y="226" text-anchor="middle" class="sm">line 344</text>
+</svg>
+<figcaption>Figure 1. Slow work (downloads, tokenizer training) happens once; each 5-minute run only loads the results.</figcaption>
+</figure>
+<p>The constants at the top of the file are the other half of the fixed test. <code>train.py</code> imports <code>MAX_SEQ_LEN</code> and <code>TIME_BUDGET</code> directly (its line 26).</p>
+<table>
+<tr><th>Constant</th><th>Value</th><th>What it fixes</th></tr>
+<tr><td><code>MAX_SEQ_LEN</code></td><td>2048</td><td>Context length: tokens per training and evaluation row</td></tr>
+<tr><td><code>TIME_BUDGET</code></td><td>300</td><td>Seconds of training per run</td></tr>
+<tr><td><code>EVAL_TOKENS</code></td><td>40 × 524,288 = 20,971,520</td><td>How much validation text <code>evaluate_bpb</code> reads</td></tr>
+<tr><td><code>VOCAB_SIZE</code></td><td>8192</td><td>Number of distinct tokens, including 4 reserved special tokens</td></tr>
+<tr><td><code>VAL_SHARD</code></td><td>6542</td><td>The data file used only for validation</td></tr>
+</table>
+<p>The functions, in the order the data flows through them:</p>
+<table>
+<tr><th>Name</th><th>Line</th><th>What it does</th><th>Used by</th></tr>
+<tr><td><code>download_single_shard</code></td><td>57</td><td>Downloads one data file, with up to 5 attempts</td><td><code>download_data</code></td></tr>
+<tr><td><code>download_data</code></td><td>91</td><td>Downloads the training shards and the validation shard in parallel</td><td>main</td></tr>
+<tr><td><code>text_iterator</code></td><td>125</td><td>Yields training text for the tokenizer, skipping the validation shard</td><td><code>train_tokenizer</code></td></tr>
+<tr><td><code>train_tokenizer</code></td><td>141</td><td>Trains the BPE tokenizer and stores the byte length of every token</td><td>main</td></tr>
+<tr><td><code>Tokenizer</code></td><td>209</td><td>Loads the saved tokenizer and encodes text</td><td><code>train.py</code></td></tr>
+<tr><td><code>make_dataloader</code></td><td>276</td><td>Packs documents into full rows of tokens on the GPU</td><td><code>train.py</code>, <code>evaluate_bpb</code></td></tr>
+<tr><td><code>evaluate_bpb</code></td><td>344</td><td>Computes the metric, <code>val_bpb</code></td><td><code>train.py</code></td></tr>
+</table>
+<p class="src">Source: <code>prepare.py</code> lines 30–45 (constants) and the listed lines; <code>train.py</code> line 26.</p>
+
+<h2 id="q1">Which data does it download, and why is one validation shard pinned?</h2>
+<p>It downloads parquet files (a column-based data file format) from the Hugging Face dataset <code>karpathy/climbmix-400b-shuffle</code>. Each file is one shard. By default it takes shards 0–9 for training (<code>--num-shards 10</code>). It always adds shard 6542, the last one, for validation (lines 91–97). <a href="#fig-2">Figure 2</a> shows which code reads which shard.</p>
+<figure id="fig-2">
+<svg viewBox="0 0 720 240" role="img" aria-label="Shards 0 to 9 feed tokenizer training and the training dataloader; shard 6542 feeds only evaluate_bpb.">
+  <text x="10" y="30" class="sm">training shards (default: 0–9)</text>
+  <rect class="box" x="10" y="40" width="40" height="40" rx="4"/><text x="30" y="65" text-anchor="middle" class="sm">0</text>
+  <rect class="box" x="60" y="40" width="40" height="40" rx="4"/><text x="80" y="65" text-anchor="middle" class="sm">1</text>
+  <rect class="box" x="110" y="40" width="40" height="40" rx="4"/><text x="130" y="65" text-anchor="middle" class="sm">2</text>
+  <rect class="box" x="160" y="40" width="40" height="40" rx="4"/><text x="180" y="65" text-anchor="middle" class="sm">3</text>
+  <rect class="box" x="210" y="40" width="40" height="40" rx="4"/><text x="230" y="65" text-anchor="middle" class="sm">4</text>
+  <rect class="box" x="260" y="40" width="40" height="40" rx="4"/><text x="280" y="65" text-anchor="middle" class="sm">5</text>
+  <rect class="box" x="310" y="40" width="40" height="40" rx="4"/><text x="330" y="65" text-anchor="middle" class="sm">6</text>
+  <rect class="box" x="360" y="40" width="40" height="40" rx="4"/><text x="380" y="65" text-anchor="middle" class="sm">7</text>
+  <rect class="box" x="410" y="40" width="40" height="40" rx="4"/><text x="430" y="65" text-anchor="middle" class="sm">8</text>
+  <rect class="box" x="460" y="40" width="40" height="40" rx="4"/><text x="480" y="65" text-anchor="middle" class="sm">9</text>
+  <text x="550" y="65" text-anchor="middle" class="sm">…</text>
+  <text x="640" y="30" text-anchor="middle" class="sm">validation shard</text>
+  <rect class="box good" x="600" y="40" width="80" height="40" rx="4"/><text x="640" y="65" text-anchor="middle" class="sm">6542</text>
+
+  <line class="line" x1="10" y1="100" x2="500" y2="100"/>
+  <line class="line" x1="125" y1="100" x2="125" y2="160" marker-end="url(#arr)"/>
+  <line class="line" x1="360" y1="100" x2="360" y2="160" marker-end="url(#arr)"/>
+  <line class="line good" x1="640" y1="80" x2="640" y2="160" marker-end="url(#arr-good)"/>
+  <rect class="box" x="30" y="160" width="190" height="50" rx="6"/>
+  <text x="125" y="181" text-anchor="middle" class="b">train_tokenizer</text><text x="125" y="201" text-anchor="middle" class="sm">via text_iterator</text>
+  <rect class="box" x="265" y="160" width="190" height="50" rx="6"/>
+  <text x="360" y="181" text-anchor="middle" class="b">dataloader "train"</text><text x="360" y="201" text-anchor="middle" class="sm">training batches</text>
+  <rect class="box good" x="545" y="160" width="165" height="50" rx="6"/>
+  <text x="627" y="181" text-anchor="middle" class="b">dataloader "val"</text><text x="627" y="201" text-anchor="middle" class="sm">evaluate_bpb only</text>
+</svg>
+<figcaption>Figure 2. No training code ever reads shard 6542, so <code>val_bpb</code> always measures text the model has not seen.</figcaption>
+</figure>
+<p>Three places in the code keep the validation shard apart. <code>text_iterator</code> leaves it out when it trains the tokenizer (line 127). The training dataloader removes it from its file list (lines 259–261). The validation dataloader reads only that file (line 263). If the model had trained on the validation text, a lower <code>val_bpb</code> could mean memorized text, not a better model. Because the shard number is a constant, every experiment, on every machine, is scored on the same text.</p>
+<p class="src">Source: <code>prepare.py</code> lines 41–44 (<code>BASE_URL</code>, <code>VAL_SHARD</code>), 91–97, 125–127, 254–263, 373 (<code>--num-shards</code> default 10).</p>
+
+<h2 id="q2">How does the dataloader fill every row without padding?</h2>
+<p>It packs whole documents into each row, choosing the largest one that still fits. The docstring calls this “best-fit packing” with “100% utilization (no padding)”. Each row holds 2,049 tokens: the targets are the inputs shifted by one token, so 2,048 inputs need one extra token (lines 334–335). Every document starts with the BOS (beginning-of-sequence) token, so every row starts at the beginning of a document.</p>
+<figure id="fig-3">
+<svg viewBox="0 0 720 240" role="img" aria-label="Padding leaves 449 of 2049 positions empty; best-fit packing adds a 400-token document and a 49-token cropped piece, leaving none empty.">
+  <text x="10" y="74" class="b">Padding</text>
+  <rect class="box" x="100" y="50" width="264" height="40" rx="2"/><text x="232" y="75" text-anchor="middle" class="sm">doc A · 900</text>
+  <rect class="box" x="364" y="50" width="205" height="40" rx="2"/><text x="466" y="75" text-anchor="middle" class="sm">doc B · 700</text>
+  <rect class="box bad dash" x="569" y="50" width="131" height="40" rx="2"/><text x="634" y="75" text-anchor="middle" class="sm bad">empty · 449</text>
+  <text x="100" y="112" class="sm bad">449 of 2,049 positions (22%) carry no text</text>
+
+  <text x="10" y="174" class="b">Best-fit</text>
+  <rect class="box" x="100" y="150" width="264" height="40" rx="2"/><text x="232" y="175" text-anchor="middle" class="sm">doc A · 900</text>
+  <rect class="box" x="364" y="150" width="205" height="40" rx="2"/><text x="466" y="175" text-anchor="middle" class="sm">doc B · 700</text>
+  <rect class="box good" x="569" y="150" width="117" height="40" rx="2"/><text x="627" y="175" text-anchor="middle" class="sm">doc D · 400</text>
+  <rect class="box warn" x="686" y="150" width="14" height="40" rx="2"/>
+  <text x="700" y="140" text-anchor="end" class="sm">cropped piece · 49</text>
+  <text x="100" y="212" class="sm good">0 empty positions; the rest of the cropped document is dropped</text>
+</svg>
+<figcaption>Figure 3. Best-fit packing trades a little dropped text for rows with no empty positions. Document lengths are illustrative.</figcaption>
+</figure>
+<p>In <a href="#fig-3">Figure 3</a>, the row has 449 positions left after documents A and B. Lines 317–321 search the buffer of about 1,000 documents for the largest one with at most 449 tokens, here document D. When no document fits the last 49 positions, lines 329–331 take the shortest document and keep only its first 49 tokens.</p>
+<pre><code># prepare.py lines 323–332
+                if best_idx &gt;= 0:
+                    doc = doc_buffer.pop(best_idx)
+                    row_buffer[row_idx, pos:pos + len(doc)] = torch.tensor(doc, dtype=torch.long)
+                    pos += len(doc)
+                else:
+                    # No doc fits — crop shortest to fill remaining
+                    shortest_idx = min(range(len(doc_buffer)), key=lambda i: len(doc_buffer[i]))
+                    doc = doc_buffer.pop(shortest_idx)
+                    row_buffer[row_idx, pos:pos + remaining] = torch.tensor(doc[:remaining], dtype=torch.long)
+                    pos += remaining</code></pre>
+<p>Line 330 removes the document from the buffer, so the cropped tail is never used. Choosing the <em>largest</em> fit first leaves small gaps, and a small gap means a short crop. This matters inside a fixed time budget: an empty position would cost GPU time and teach nothing.</p>
+
+<h2 id="q3">How does evaluate_bpb turn loss into bits per byte?</h2>
+<p>It adds up the model's loss over all validation tokens and divides by the number of bytes those tokens stand for. The loss of one token is the cross-entropy, measured in nats (the natural-log unit; 1 nat = 1 / ln 2 ≈ 1.443 bits). Line 365 converts the sum to bits per byte:</p>
+<p style="text-align:center">val_bpb = Σ loss<sub>nats</sub> ÷ (ln 2 × Σ bytes)</p>
+<p>A worked example with three illustrative tokens:</p>
+<table>
+<tr><th>Target token</th><th>Bytes</th><th>Loss (nats)</th></tr>
+<tr><td><code>"The"</code></td><td>3</td><td>1.2</td></tr>
+<tr><td><code>" cat"</code></td><td>4</td><td>2.9</td></tr>
+<tr><td><code>" sat"</code></td><td>4</td><td>1.4</td></tr>
+<tr><td><b>Sum</b></td><td><b>11</b></td><td><b>5.5</b></td></tr>
+</table>
+<p>val_bpb = 5.5 ÷ (0.693 × 11) ≈ 0.72. The upstream baseline, 0.9979, means the model needs about 1 bit to encode each byte of validation text. Plain UTF-8 text uses 8 bits per byte.</p>
+<pre><code># prepare.py lines 357–365
+    for _ in range(steps):
+        x, y, _ = next(val_loader)
+        loss_flat = model(x, y, reduction='none').view(-1)
+        y_flat = y.view(-1)
+        nbytes = token_bytes[y_flat]
+        mask = nbytes &gt; 0
+        total_nats += (loss_flat * mask).sum().item()
+        total_bytes += nbytes.sum().item()
+    return total_nats / (math.log(2) * total_bytes)</code></pre>
+<p>Line 361 looks up each target's byte length in the table that <code>train_tokenizer</code> saved. Special tokens have length 0, and line 362 removes them from the loss sum. With the default batch of 128 rows, the loop runs 20,971,520 ÷ (128 × 2,048) = 80 times.</p>
+<p>The docstring calls bits per byte “vocab size-independent”. A tokenizer with a larger vocabulary makes longer tokens, so the loss per token grows even when the model is equally good. The number of bytes in the validation text does not depend on the tokenizer.</p>
+<div class="admonition warning"><p class="admonition-title">Inference</p>
+<p>Within one autoresearch run, <code>VOCAB_SIZE</code> is fixed, so every experiment already uses the same tokenizer. The byte normalization matters most when a human changes <code>VOCAB_SIZE</code>, as the README suggests for small computers, or compares results with a fork that uses another tokenizer.</p></div>
+<p class="src">Source: <code>prepare.py</code> lines 32, 248–252, 344–365; <code>README.md</code> “How it works” and “Platform support” item 2; <code>program.md</code> example output.</p>
+
+<h2 id="terms">Terms</h2>
+<table>
+<tr><th>Term</th><th>Meaning on this page</th></tr>
+<tr><td>Tokenizer</td><td>The part that splits text into tokens, the units the model reads.</td></tr>
+<tr><td>BPE (byte pair encoding)</td><td>A way to build tokens by repeatedly merging the most frequent pair of byte sequences.</td></tr>
+<tr><td>Shard</td><td>One file of the dataset; here, one parquet file.</td></tr>
+<tr><td>Parquet</td><td>A column-based data file format; the text is in the <code>text</code> column.</td></tr>
+<tr><td>BOS (beginning-of-sequence) token</td><td>A special token placed at the start of every document.</td></tr>
+<tr><td>Padding</td><td>Empty positions that fill a row when the documents do not.</td></tr>
+<tr><td>Cross-entropy loss</td><td>How surprised the model is by the correct next token; lower is better.</td></tr>
+<tr><td>Nat</td><td>A unit of information based on the natural logarithm; 1 nat ≈ 1.443 bits.</td></tr>
+</table>
+
+<h2 id="sources">Sources</h2>
+<p>All files are from <a href="https://github.com/karpathy/autoresearch">karpathy/autoresearch</a> at commit <code>228791f</code> (MIT license).</p>
+<ul>
+<li><code>prepare.py</code> — lines as cited in each section</li>
+<li><code>train.py</code> line 26 — the import list</li>
+<li><code>README.md</code> “How it works”, “Platform support”</li>
+<li><code>program.md</code> example output (<code>val_bpb: 0.997900</code>)</li>
+</ul>
+</main></div>
+
+<script>
+// Sidebar table of contents from h2/h3.
+document.querySelectorAll('.content h2, .content h3').forEach(function (h, i) {
+  if (!h.id) h.id = 'sec-' + i;
+  var a = document.createElement('a');
+  a.href = '#' + h.id; a.textContent = h.textContent; a.className = h.tagName.toLowerCase();
+  a.onclick = function () { document.body.classList.remove('nav-open'); };
+  document.getElementById('toc').appendChild(a);
+});
+// Stepper: <figure class="stepper"> with <g data-step="n"> or <g data-step="n+">.
+document.querySelectorAll('figure.stepper').forEach(function (fig) {
+  var frames = fig.querySelectorAll('[data-step]'), max = 0, cur = 1, timer = null;
+  frames.forEach(function (g) { max = Math.max(max, parseInt(g.dataset.step, 10)); });
+  var bar = document.createElement('div'); bar.className = 'stepper-bar';
+  bar.innerHTML = '<button type="button">◀</button><span class="count"></span><button type="button">▶</button><button type="button">▷</button>';
+  var cap = document.createElement('p'); cap.className = 'stepper-caption';
+  var btn = bar.querySelectorAll('button'), count = bar.querySelector('.count');
+  fig.querySelector('svg').after(bar, cap);
+  function show(n) {
+    cur = Math.min(Math.max(n, 1), max); cap.textContent = '';
+    frames.forEach(function (g) {
+      var s = parseInt(g.dataset.step, 10), on = /\+$/.test(g.dataset.step) ? cur >= s : cur === s;
+      g.style.display = on ? '' : 'none';
+      if (s === cur && g.dataset.caption) cap.textContent = g.dataset.caption;
+    });
+    count.textContent = cur + ' / ' + max;
+  }
+  function stop() { clearInterval(timer); timer = null; btn[2].textContent = '▷'; }
+  btn[0].onclick = function () { stop(); show(cur - 1); };
+  btn[1].onclick = function () { stop(); show(cur + 1); };
+  btn[2].onclick = function () {
+    if (timer) return stop();
+    if (cur === max) show(1);
+    btn[2].textContent = '||';
+    timer = setInterval(function () { cur < max ? show(cur + 1) : stop(); }, 1800);
+  };
+  show(1);
+});
+</script>
+</body>
+</html>

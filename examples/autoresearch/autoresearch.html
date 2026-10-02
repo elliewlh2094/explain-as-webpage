@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>autoresearch: an AI agent that runs LLM experiments overnight</title>
+<style>
+:root {
+  --text: #404040; --muted: #6a6a6a; --link: #2980b9; --link-visited: #9b59b6;
+  --bg: #fcfcfc; --side-bg: #343131; --side-head: #2980b9; --side-text: #d9d9d9;
+  --rule: #e1e4e5; --code-bg: #f8f8f8; --row-alt: #f3f6f6;
+  --blue: #2980b9; --blue-bg: #e7f2fa; --red: #c0392b; --red-bg: #fdf3f2;
+  --green: #16a085; --green-bg: #dbfaf4; --orange: #e67e22; --orange-bg: #ffedcc; --grey-bg: #f0f0f0;
+  --font: -apple-system, "Segoe UI", Roboto, "Noto Sans", "Liberation Sans", Arial, "DejaVu Sans", "Noto Sans CJK TC", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+  --mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, "Noto Sans Mono CJK TC", monospace;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { font: 16px/1.7 var(--font); color: var(--text); background: var(--bg); }
+
+/* Sidebar (RTD wy-nav-side) */
+.side { position: fixed; top: 0; bottom: 0; left: 0; width: 300px; overflow-y: auto; background: var(--side-bg); }
+.side-head { background: var(--side-head); color: #fff; padding: 16px 18px; }
+.side-head .title { font-size: 1.1rem; font-weight: 700; display: block; }
+.side-head .meta { font-size: .8rem; opacity: .85; }
+.toc a { display: block; color: var(--side-text); text-decoration: none; padding: 6px 18px; font-size: .9rem; line-height: 1.4; }
+.toc a:hover { background: #4e4a4a; }
+.toc a.h3 { padding-left: 34px; font-size: .85rem; color: #b3b3b3; }
+.pages { padding: 8px 0; border-bottom: 1px solid #4e4a4a; }
+.pages .label { display: block; padding: 4px 18px; font-size: .75rem; letter-spacing: .05em; text-transform: uppercase; color: #8a8a8a; }
+.pages a { display: block; color: var(--side-text); text-decoration: none; padding: 6px 18px; font-size: .9rem; line-height: 1.4; }
+.pages a.sub { padding-left: 34px; }
+.pages a:hover { background: #4e4a4a; }
+.pages a[aria-current="page"] { background: var(--bg); color: var(--text); font-weight: 700; }
+
+/* Content (RTD wy-nav-content) */
+.main { margin-left: 300px; background: var(--bg); min-height: 100vh; }
+.content { max-width: 820px; padding: 24px 36px 64px; }
+.crumbs { font-size: .85rem; color: var(--muted); border-bottom: 1px solid var(--rule); padding-bottom: 8px; margin-bottom: 24px; }
+h1, h2, h3 { color: #2c2c2c; line-height: 1.3; font-weight: 700; }
+h1 { font-size: 1.9rem; margin: 0 0 16px; }
+h2 { font-size: 1.45rem; margin: 40px 0 12px; padding-top: 8px; border-top: 1px solid var(--rule); }
+h3 { font-size: 1.15rem; margin: 28px 0 8px; }
+a { color: var(--link); } a:visited { color: var(--link-visited); }
+p, ul, ol { margin: 0 0 16px; }
+li { margin-bottom: 4px; }
+code { font: .88em var(--mono); color: #e74c3c; background: #fff; border: 1px solid var(--rule); padding: 0 4px; overflow-wrap: anywhere; }
+th code, td code { overflow-wrap: normal; }
+pre { font: .85rem/1.5 var(--mono); background: var(--code-bg); border: 1px solid var(--rule); padding: 12px; overflow-x: auto; }
+pre code { color: inherit; border: 0; padding: 0; background: none; }
+table { border-collapse: collapse; margin: 0 0 20px; width: 100%; font-size: .92rem; display: block; overflow-x: auto; }
+th, td { border: 1px solid var(--rule); padding: 6px 12px; text-align: left; vertical-align: top; }
+th { background: #eee; } tr:nth-child(even) td { background: var(--row-alt); }
+.src { font-size: .8rem; color: var(--muted); }
+
+/* Admonitions: note / tip / warning / danger */
+.admonition { margin: 0 0 20px; background: var(--blue-bg); }
+.admonition > .admonition-title { margin: 0; padding: 6px 12px; font-weight: 700; color: #fff; background: #6ab0de; }
+.admonition > :not(.admonition-title) { margin: 0; padding: 10px 12px; }
+.admonition.tip { background: var(--green-bg); } .admonition.tip > .admonition-title { background: #1abc9c; }
+.admonition.warning { background: var(--orange-bg); } .admonition.warning > .admonition-title { background: #f0b37e; }
+.admonition.danger { background: var(--red-bg); } .admonition.danger > .admonition-title { background: #f29f97; }
+
+/* Figures. SVG keeps a readable minimum width; the figure scrolls sideways on phones, never the page. */
+figure { margin: 8px 0 24px; overflow-x: auto; }
+figure svg { display: block; width: 100%; min-width: 540px; height: auto; margin: 0 auto; }
+figcaption { font-size: .9rem; color: var(--muted); margin-top: 6px; }
+details { border: 1px solid var(--rule); padding: 8px 12px; margin: 0 0 20px; background: #fff; }
+details > summary { cursor: pointer; font-weight: 700; }
+
+/* Shared SVG vocabulary (see references/svg-recipes.md) */
+svg text { font-family: var(--font); font-size: 14px; fill: var(--text); }
+svg .sm { font-size: 12px; fill: var(--muted); }
+svg .b { font-weight: 700; }
+svg text.bad { fill: var(--red); } svg text.good { fill: var(--green); }
+svg .box { fill: var(--blue-bg); stroke: var(--blue); stroke-width: 1.5; }
+svg .box.bad { fill: var(--red-bg); stroke: var(--red); }
+svg .box.good { fill: var(--green-bg); stroke: var(--green); }
+svg .box.warn { fill: var(--orange-bg); stroke: var(--orange); }
+svg .box.muted { fill: var(--grey-bg); stroke: #999; }
+svg .line { stroke: var(--text); stroke-width: 1.5; fill: none; }
+svg .line.bad { stroke: var(--red); } svg .line.good { stroke: var(--green); }
+svg .dash { stroke-dasharray: 5 4; }
+svg .dot { fill: var(--blue); } svg .dot.bad { fill: var(--red); } svg .dot.good { fill: var(--green); }
+
+/* Stepper (L2): controls are injected by the script below */
+.stepper-bar { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+.stepper-bar button { font: inherit; padding: 2px 12px; border: 1px solid var(--rule); background: #fff; cursor: pointer; }
+.stepper-bar .count { font-size: .85rem; color: var(--muted); min-width: 3.5em; text-align: center; }
+.stepper-caption { margin: 6px 0 0; padding: 6px 10px; background: var(--blue-bg); font-size: .92rem; }
+
+/* Narrow screens: sidebar becomes a collapsible top bar */
+.topbar { display: none; }
+@media (max-width: 768px) {
+  .topbar { display: flex; align-items: center; gap: 12px; position: sticky; top: 0; z-index: 2; background: var(--side-head); color: #fff; padding: 8px 16px; }
+  .topbar button { font-size: 1.2rem; background: none; border: 0; color: #fff; cursor: pointer; }
+  .side { display: none; position: fixed; top: 44px; width: 100%; z-index: 2; }
+  body.nav-open .side { display: block; }
+  .main { margin-left: 0; }
+  .content { padding: 16px 16px 48px; }
+}
+@media print {
+  .side, .topbar, .stepper-bar { display: none !important; }
+  .main { margin-left: 0; }
+}
+</style>
+</head>
+<body>
+<!-- Arrow markers shared by every SVG on the page: marker-end="url(#arr)" / url(#arr-bad) / url(#arr-good) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#404040"/></marker>
+  <marker id="arr-bad" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#c0392b"/></marker>
+  <marker id="arr-good" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#16a085"/></marker>
+</defs></svg>
+
+<div class="topbar"><button type="button" aria-label="Menu" onclick="document.body.classList.toggle('nav-open')">☰</button><span>autoresearch</span></div>
+<nav class="side">
+  <div class="side-head"><span class="title">autoresearch</span><span class="meta">karpathy/autoresearch · 2026-10-02</span></div>
+  <div class="pages">
+    <span class="label">Pages in this topic</span>
+    <a href="autoresearch.html" aria-current="page">What it is and how to use it</a>
+    <a href="autoresearch--train-py.html" class="sub">train.py walkthrough</a>
+    <a href="autoresearch--prepare-py.html" class="sub">prepare.py walkthrough</a>
+  </div>
+  <div class="toc" id="toc"><!-- built from h2/h3 by the script --></div>
+</nav>
+
+<div class="main"><main class="content">
+<div class="crumbs">autoresearch » What it is and how to use it</div>
+<h1>autoresearch: an AI agent that runs LLM experiments overnight</h1>
+
+<div class="admonition tip"><p class="admonition-title">Conclusion</p>
+<p>autoresearch lets an AI coding agent run small LLM (large language model) training experiments without a human. The agent changes only <code>train.py</code>, trains for a fixed 5 minutes, and keeps the change only if <code>val_bpb</code> (validation bits per byte, lower is better) goes down. In the upstream run in <code>progress.png</code>, 83 experiments ran, 15 were kept (the baseline and 14 changes), and <code>val_bpb</code> fell from 0.9979 to about 0.977. The human stops editing Python and edits the agent's instructions in <code>program.md</code> instead.</p></div>
+
+<h2 id="chain">How does one experiment flow through the repository?</h2>
+<p>Read the top row of <a href="#fig-1">Figure 1</a> from left to right. The human's rules in <code>program.md</code> reach the agent, the agent edits <code>train.py</code>, and the run writes its result to <code>run.log</code>. The bottom row shows what the run depends on and what happens to the result. The dashed path is the loop: after each decision, the agent starts the next idea.</p>
+<figure id="fig-1">
+<svg viewBox="0 0 720 280" role="img" aria-label="One experiment: program.md guides the agent, the agent edits train.py, train.py imports prepare.py and writes val_bpb to run.log, the agent keeps or resets, then loops to the next idea.">
+  <rect class="box" x="10" y="40" width="150" height="60" rx="6"/>
+  <text x="85" y="66" text-anchor="middle" class="b">program.md</text><text x="85" y="86" text-anchor="middle" class="sm">human edits it</text>
+  <line class="line" x1="160" y1="70" x2="190" y2="70" marker-end="url(#arr)"/>
+  <rect class="box" x="190" y="40" width="150" height="60" rx="6"/>
+  <text x="265" y="66" text-anchor="middle" class="b">AI agent</text><text x="265" y="86" text-anchor="middle" class="sm">reads, edits, runs</text>
+  <line class="line" x1="340" y1="70" x2="370" y2="70" marker-end="url(#arr)"/>
+  <rect class="box warn" x="370" y="40" width="150" height="60" rx="6"/>
+  <text x="445" y="66" text-anchor="middle" class="b">train.py</text><text x="445" y="86" text-anchor="middle" class="sm">agent edits it</text>
+  <line class="line" x1="520" y1="70" x2="550" y2="70" marker-end="url(#arr)"/>
+  <rect class="box muted" x="550" y="40" width="150" height="60" rx="6"/>
+  <text x="625" y="66" text-anchor="middle" class="b">run.log</text><text x="625" y="86" text-anchor="middle" class="sm">after 5 min of training</text>
+
+  <rect class="box good" x="370" y="170" width="150" height="60" rx="6"/>
+  <text x="445" y="196" text-anchor="middle" class="b">prepare.py</text><text x="445" y="216" text-anchor="middle" class="sm">clock, data, metric</text>
+  <line class="line" x1="445" y1="170" x2="445" y2="100" marker-end="url(#arr)"/>
+  <text x="453" y="140" class="sm">imports</text>
+  <line class="line" x1="625" y1="100" x2="625" y2="170" marker-end="url(#arr)"/>
+  <text x="633" y="140" class="sm">val_bpb</text>
+  <rect class="box" x="550" y="170" width="150" height="60" rx="6"/>
+  <text x="625" y="196" text-anchor="middle" class="b">keep or reset</text><text x="625" y="216" text-anchor="middle" class="sm">git + results.tsv</text>
+
+  <path class="line dash" d="M625 230 V260 H265 V100" marker-end="url(#arr)"/>
+  <text x="445" y="252" text-anchor="middle" class="sm">next idea</text>
+</svg>
+<figcaption>Figure 1. Between runs only <code>train.py</code> changes (orange). <code>prepare.py</code> holds the clock and the metric, and it never changes (green).</figcaption>
+</figure>
+<p class="src">Source: <code>README.md</code> “How it works”; <code>program.md</code> “The experiment loop”; <code>train.py</code> line 26 (the import from <code>prepare.py</code>).</p>
+
+<h2 id="q1">What is autoresearch for?</h2>
+<p>It turns small-scale LLM research into a loop that an agent can run alone, for example while you sleep. A researcher normally edits training code, runs it, compares the result, and decides what to try next. autoresearch gives that whole loop to the agent. The training code is a simplified single-GPU version of nanochat, Karpathy's full LLM training repository.</p>
+<p>The table compares the same research work without and with autoresearch. The last row is the main change: the human's work moves from the code to the instructions. The README calls <code>program.md</code> “a super lightweight skill”.</p>
+<table>
+<tr><th></th><th>Researcher alone</th><th>With autoresearch</th></tr>
+<tr><td>Who edits the training code</td><td>the researcher</td><td>the agent, only <code>train.py</code></td></tr>
+<tr><td>Who decides to keep a change</td><td>the researcher</td><td>a fixed rule: keep only if <code>val_bpb</code> is lower</td></tr>
+<tr><td>Experiments during an 8-hour night</td><td>0</td><td>about 100 (README); 83 in the upstream run</td></tr>
+<tr><td>What the human edits</td><td>Python code</td><td><code>program.md</code>, the agent's instructions</td></tr>
+</table>
+<p class="src">Source: <code>README.md</code> introduction and “Design choices”; the experiment count is the title of <code>progress.png</code>.</p>
+
+<h2 id="q2">What does each file do, and who edits it?</h2>
+<p>Three files matter, and each has one owner. <a href="#fig-2">Figure 2</a> puts them in three panels. The human edits <code>program.md</code>. The agent edits <code>train.py</code>. Nobody edits <code>prepare.py</code> during a run.</p>
+<figure id="fig-2">
+<svg viewBox="0 0 720 240" role="img" aria-label="Three panels: the human edits program.md, the agent edits train.py, and prepare.py with the time budget, data, and metric is fixed.">
+  <rect class="box muted" x="10" y="10" width="220" height="220" rx="6"/>
+  <text x="120" y="34" text-anchor="middle" class="b">Human edits</text>
+  <rect class="box" x="30" y="50" width="180" height="50" rx="6"/>
+  <text x="120" y="80" text-anchor="middle" class="b">program.md</text>
+  <text x="30" y="130" class="sm">setup steps</text>
+  <text x="30" y="152" class="sm">the experiment loop</text>
+  <text x="30" y="174" class="sm">keep / discard rule</text>
+  <text x="30" y="196" class="sm">simplicity criterion</text>
+
+  <rect class="box muted" x="250" y="10" width="220" height="220" rx="6"/>
+  <text x="360" y="34" text-anchor="middle" class="b">Agent edits</text>
+  <rect class="box warn" x="270" y="50" width="180" height="50" rx="6"/>
+  <text x="360" y="80" text-anchor="middle" class="b">train.py</text>
+  <text x="270" y="130" class="sm">GPT model</text>
+  <text x="270" y="152" class="sm">optimizer</text>
+  <text x="270" y="174" class="sm">hyperparameters (DEPTH…)</text>
+  <text x="270" y="196" class="sm">training loop</text>
+
+  <rect class="box muted" x="490" y="10" width="220" height="220" rx="6"/>
+  <text x="600" y="34" text-anchor="middle" class="b">Fixed</text>
+  <rect class="box good" x="510" y="50" width="180" height="50" rx="6"/>
+  <text x="600" y="80" text-anchor="middle" class="b">prepare.py</text>
+  <text x="510" y="130" class="sm">TIME_BUDGET = 300 s</text>
+  <text x="510" y="152" class="sm">data shards, tokenizer</text>
+  <text x="510" y="174" class="sm">evaluate_bpb (the metric)</text>
+  <text x="510" y="196" class="sm">+ packages in pyproject.toml</text>
+
+  <line class="line dash" x1="210" y1="75" x2="270" y2="75" marker-end="url(#arr)"/>
+  <line class="line" x1="510" y1="75" x2="450" y2="75" marker-end="url(#arr)"/>
+</svg>
+<figcaption>Figure 2. The agent can change everything that shapes the model, and nothing that measures it.</figcaption>
+</figure>
+<p>The solid arrow is an import: <code>train.py</code> takes the clock, the data loader, and the metric from <code>prepare.py</code>. The dashed arrow means that <code>program.md</code> guides the agent's edits. This split is what makes the score trustworthy. <code>program.md</code> forbids the agent to modify <code>prepare.py</code>, to install new packages, or to change the evaluation. It calls <code>evaluate_bpb</code> “the ground truth metric”. If the agent could edit the metric, a lower number could mean a weaker test, not a better model.</p>
+<p><code>val_bpb</code> is the average number of bits the model needs to encode one byte of the fixed validation text. Fewer bits mean the model predicts the text better. The README chooses bytes, not tokens, so that architectural changes are “fairly compared”.</p>
+<p class="src">Source: <code>program.md</code> “What you CAN do” and “What you CANNOT do”; <code>prepare.py</code> lines 30–45 and 344 (<code>evaluate_bpb</code>); <code>README.md</code> “How it works”.</p>
+<p>More: <a href="autoresearch--train-py.html">train.py walkthrough</a> · <a href="autoresearch--prepare-py.html">prepare.py walkthrough</a></p>
+
+<h2 id="q3">How does one experiment go from idea to keep or discard?</h2>
+<p>The agent commits each idea before it runs it. It keeps the commit only if <code>val_bpb</code> goes down; otherwise it resets the branch. Step through <a href="#fig-3">Figure 3</a>: the top row is the current stage, and the bottom row is the git branch. Each dot is a commit.</p>
+<figure id="fig-3" class="stepper">
+<svg viewBox="0 0 720 280" role="img" aria-label="Eight steps of the experiment loop: commit an idea, train, read val_bpb, keep the commit if it improved, reset if it did not or if it crashed, repeat.">
+  <rect class="box" x="10" y="20" width="124" height="50" rx="6"/>
+  <text x="72" y="41" text-anchor="middle" class="b">Edit train.py</text><text x="72" y="61" text-anchor="middle" class="sm">one idea</text>
+  <line class="line" x1="134" y1="45" x2="154" y2="45" marker-end="url(#arr)"/>
+  <rect class="box" x="154" y="20" width="124" height="50" rx="6"/>
+  <text x="216" y="41" text-anchor="middle" class="b">git commit</text><text x="216" y="61" text-anchor="middle" class="sm">save the idea</text>
+  <line class="line" x1="278" y1="45" x2="298" y2="45" marker-end="url(#arr)"/>
+  <rect class="box" x="298" y="20" width="124" height="50" rx="6"/>
+  <text x="360" y="41" text-anchor="middle" class="b">Train 5 min</text><text x="360" y="61" text-anchor="middle" class="sm">uv run train.py</text>
+  <line class="line" x1="422" y1="45" x2="442" y2="45" marker-end="url(#arr)"/>
+  <rect class="box" x="442" y="20" width="124" height="50" rx="6"/>
+  <text x="504" y="41" text-anchor="middle" class="b">Read val_bpb</text><text x="504" y="61" text-anchor="middle" class="sm">grep run.log</text>
+  <line class="line" x1="566" y1="45" x2="586" y2="45" marker-end="url(#arr)"/>
+  <rect class="box" x="586" y="20" width="124" height="50" rx="6"/>
+  <text x="648" y="41" text-anchor="middle" class="b">Keep or reset</text><text x="648" y="61" text-anchor="middle" class="sm">log results.tsv</text>
+
+  <text x="10" y="100" class="sm">git branch autoresearch/&lt;tag&gt; (each dot is a commit)</text>
+  <circle class="dot" cx="90" cy="190" r="10"/>
+  <text x="90" y="220" text-anchor="middle" class="sm">baseline</text><text x="90" y="238" text-anchor="middle" class="sm">0.997900</text>
+
+  <!-- branch tip at the baseline: steps 1-3 -->
+  <g data-step="1" data-caption="Step 1. Start: the branch tip is the baseline run, val_bpb 0.997900.">
+    <rect class="box" x="40" y="115" width="100" height="26" rx="4"/><text x="90" y="133" text-anchor="middle" class="sm">branch tip</text>
+    <line class="line" x1="90" y1="141" x2="90" y2="176" marker-end="url(#arr)"/>
+  </g>
+  <g data-step="2">
+    <rect class="box" x="40" y="115" width="100" height="26" rx="4"/><text x="90" y="133" text-anchor="middle" class="sm">branch tip</text>
+    <line class="line" x1="90" y1="141" x2="90" y2="176" marker-end="url(#arr)"/>
+    <line class="line dash" x1="100" y1="190" x2="240" y2="190"/><circle class="line dash" cx="250" cy="190" r="10"/>
+    <text x="250" y="220" text-anchor="middle" class="sm">LR 0.04</text><text x="250" y="238" text-anchor="middle" class="sm">running…</text>
+  </g>
+  <g data-step="3">
+    <rect class="box" x="40" y="115" width="100" height="26" rx="4"/><text x="90" y="133" text-anchor="middle" class="sm">branch tip</text>
+    <line class="line" x1="90" y1="141" x2="90" y2="176" marker-end="url(#arr)"/>
+    <line class="line dash" x1="100" y1="190" x2="240" y2="190"/><circle class="line dash" cx="250" cy="190" r="10"/>
+    <text x="250" y="220" text-anchor="middle" class="sm">LR 0.04</text><text x="250" y="238" text-anchor="middle" class="sm">running…</text>
+  </g>
+  <!-- kept commit and branch tip at it: step 4 on -->
+  <g data-step="4+">
+    <rect class="box" x="200" y="115" width="100" height="26" rx="4"/><text x="250" y="133" text-anchor="middle" class="sm">branch tip</text>
+    <line class="line" x1="250" y1="141" x2="250" y2="176" marker-end="url(#arr)"/>
+    <line class="line good" x1="100" y1="190" x2="240" y2="190"/><circle class="dot good" cx="250" cy="190" r="10"/>
+    <text x="250" y="220" text-anchor="middle" class="sm">LR 0.04</text><text x="250" y="238" text-anchor="middle" class="sm good">0.993200 keep</text>
+  </g>
+  <g data-step="5">
+    <line class="line dash" x1="259" y1="186" x2="421" y2="154"/><circle class="line dash" cx="430" cy="150" r="10"/>
+    <text x="450" y="155" class="sm">GeLU activation · running…</text>
+  </g>
+  <g data-step="6+">
+    <line class="line bad dash" x1="259" y1="186" x2="421" y2="154"/><circle class="dot bad" cx="430" cy="150" r="10"/>
+    <text x="450" y="155" class="sm bad">GeLU activation · 1.005000 · discard</text>
+  </g>
+  <g data-step="7+">
+    <line class="line bad dash" x1="259" y1="194" x2="421" y2="236"/><circle class="dot bad" cx="430" cy="240" r="10"/>
+    <text x="450" y="245" class="sm bad">2× model width · crash</text>
+  </g>
+  <g data-step="8">
+    <line class="line dash" x1="260" y1="190" x2="420" y2="190"/><circle class="line dash" cx="430" cy="190" r="10"/>
+    <text x="450" y="195" class="sm">next idea…</text>
+  </g>
+
+  <!-- stage highlights -->
+  <g data-step="2" data-caption="Step 2. The agent edits train.py with one idea (raise the learning rate, LR, to 0.04) and commits it before the run.">
+    <rect class="line" style="stroke:#e67e22;stroke-width:3" x="10" y="20" width="268" height="50" rx="6"/></g>
+  <g data-step="3" data-caption="Step 3. uv run train.py trains for 5 minutes of training time and writes all output to run.log.">
+    <rect class="line" style="stroke:#e67e22;stroke-width:3" x="298" y="20" width="124" height="50" rx="6"/></g>
+  <g data-step="4" data-caption="Step 4. grep reads val_bpb 0.993200. It is lower than 0.997900, so the commit stays and the branch tip moves to it. results.tsv gets a “keep” row.">
+    <rect class="line" style="stroke:#e67e22;stroke-width:3" x="442" y="20" width="268" height="50" rx="6"/></g>
+  <g data-step="5" data-caption="Step 5. Next idea: switch the activation function to GeLU. The agent commits it on top of the branch tip and trains.">
+    <rect class="line" style="stroke:#e67e22;stroke-width:3" x="10" y="20" width="412" height="50" rx="6"/></g>
+  <g data-step="6" data-caption="Step 6. val_bpb is 1.005000, worse than 0.993200. The agent logs “discard” and runs git reset. The branch tip stays at 0.993200.">
+    <rect class="line" style="stroke:#e67e22;stroke-width:3" x="442" y="20" width="268" height="50" rx="6"/></g>
+  <g data-step="7" data-caption="Step 7. Doubling the model width runs out of GPU memory. grep finds no val_bpb, so the agent reads the end of run.log, logs “crash”, and resets.">
+    <rect class="line" style="stroke:#e67e22;stroke-width:3" x="442" y="20" width="124" height="50" rx="6"/></g>
+  <g data-step="8" data-caption="Step 8. The loop repeats without asking the human, about 12 runs per hour. results.tsv keeps every attempt, because git does not track it.">
+    <rect class="line" style="stroke:#e67e22;stroke-width:3" x="10" y="20" width="124" height="50" rx="6"/></g>
+</svg>
+<figcaption>Figure 3. The branch tip only moves forward to a lower <code>val_bpb</code>, so it always holds the best <code>train.py</code> found so far.</figcaption>
+</figure>
+<p class="src">Source: <code>program.md</code> “The experiment loop” (steps 1–9, timeout, crashes, NEVER STOP). The three example ideas and their numbers are the example rows in <code>program.md</code> “Logging results”, not a real run.</p>
+<p>Two details keep the loop running without a human. First, <code>results.tsv</code> stays untracked, so <code>git reset</code> never deletes the record of a failed idea. Second, <code>program.md</code> tells the agent to never stop and ask “should I keep going?”. A run that takes more than 10 minutes is killed and counts as a failure.</p>
+<div class="admonition warning"><p class="admonition-title">Inference</p>
+<p>“The branch tip is the best version” holds only if one run measures the idea, not luck. The loop runs each idea once. The last kept change in <code>progress.png</code> only changes the random seed (42 → 137), so part of the small late gains may be run-to-run noise.</p></div>
+
+<h2 id="q4">Why a fixed 5-minute budget, and what does it cost?</h2>
+<p>A fixed budget makes every run comparable, whatever the agent changes. The cost is fewer training tokens per run, and results that depend on your GPU. Training stops when the training time reaches <code>TIME_BUDGET</code> = 300 s. The first 10 steps do not count, so compilation time does not use up the budget (<code>train.py</code> lines 578–579 and 603).</p>
+<p>Move the slider in <a href="#fig-4">Figure 4</a> to change the budget. A run takes the budget plus about 26 s for startup and evaluation. In the upstream example output, <code>total_seconds</code> 325.9 − <code>training_seconds</code> 300.1 = 25.8 s.</p>
+<p style="text-align:center">experiments per night = 8 h × 3600 s ÷ (budget + 25.8 s)</p>
+<p>At 5 minutes: 28,800 ÷ 325.9 ≈ 88 experiments. The README says “approx 100”, because it counts the 5 training minutes only (12 per hour × 8 hours = 96).</p>
+<figure id="fig-4">
+<svg viewBox="0 0 720 200" role="img" aria-label="Two bars: experiments per 8-hour night falls as the budget grows, tokens trained per run grows with the budget.">
+  <text x="10" y="30" class="b">Experiments per 8-hour night</text>
+  <rect class="box muted" x="10" y="40" width="560" height="30" rx="4"/>
+  <rect id="f4-exp" class="box good" x="10" y="40" width="148" height="30" rx="4"/>
+  <text id="f4-exp-t" x="580" y="60" class="b">88</text>
+  <text x="10" y="110" class="b">Tokens trained per run (H100 rate)</text>
+  <rect class="box muted" x="10" y="120" width="560" height="30" rx="4"/>
+  <rect id="f4-tok" class="box warn" x="10" y="120" width="93" height="30" rx="4"/>
+  <text id="f4-tok-t" x="580" y="140" class="b">500 M</text>
+  <text id="f4-out" x="360" y="185" text-anchor="middle" class="sm">Budget 5 min → one run ≈ 5.4 min of wall-clock time</text>
+</svg>
+<p><label>Budget (minutes) <input id="f4-in" type="range" min="1" max="30" step="1" value="5"></label> <button type="button" id="f4-def">Upstream default: 5 min</button></p>
+<figcaption>Figure 4. A longer budget gives each idea more training, but tests fewer ideas per night.</figcaption>
+</figure>
+<script>
+(function () {
+  var inp = document.getElementById('f4-in'), night = 8 * 3600, overhead = 25.8, rate = 499.6 / 300.1; // M tokens per s
+  var maxExp = night / (60 + overhead), maxTok = rate * 30 * 60;
+  function draw() {
+    var b = +inp.value * 60, exp = night / (b + overhead), tok = rate * b;
+    document.getElementById('f4-exp').setAttribute('width', exp / maxExp * 560);
+    document.getElementById('f4-tok').setAttribute('width', tok / maxTok * 560);
+    document.getElementById('f4-exp-t').textContent = Math.floor(exp);
+    document.getElementById('f4-tok-t').textContent = Math.round(tok) + ' M';
+    document.getElementById('f4-out').textContent = 'Budget ' + inp.value + ' min → one run ≈ ' + ((b + overhead) / 60).toFixed(1) + ' min of wall-clock time';
+  }
+  inp.oninput = draw;
+  document.getElementById('f4-def').onclick = function () { inp.value = 5; draw(); };
+  draw();
+})();
+</script>
+<p class="src">Source: <code>prepare.py</code> line 31; <code>program.md</code> “Output format” (example: 300.1 s, 325.9 s, 499.6 M tokens on an H100); <code>README.md</code> “Design choices”. The token bar assumes the H100 rate 499.6 M ÷ 300.1 s ≈ 1.66 M tokens/s.</p>
+<p>The README names the cost directly. The budget finds the best model <em>for your platform</em> in 5 minutes. As a result, your runs “become not comparable” to runs on other hardware.</p>
+<div class="admonition warning"><p class="admonition-title">Inference</p>
+<p>A short budget rewards changes that help in the first few minutes of training. A change that only pays off after longer training will look worse here and be discarded. A longer budget reduces this bias, but Figure 4 shows its price: fewer ideas per night.</p></div>
+
+<h2 id="q5">How do I run it?</h2>
+<p>You need one NVIDIA GPU (tested on an H100), Python 3.10 or newer, and uv, a Python project manager. First check the setup by hand:</p>
+<pre><code>uv sync              # install the dependencies
+uv run prepare.py    # one time, ~2 min: download data shards, train the tokenizer
+uv run train.py      # one manual experiment, ~5 min</code></pre>
+<p>Then start your coding agent in the repository. The README says to start it “and disable all permissions”, so that the loop does not stop at permission prompts. Prompt it with:</p>
+<pre><code>Hi have a look at program.md and let's kick off a new experiment! let's do the setup first.</code></pre>
+<p>The agent then follows the “Setup” section of <code>program.md</code>. It agrees on a run tag with you (for example <code>mar5</code>), creates the branch <code>autoresearch/mar5</code>, checks that the data exists in <code>~/.cache/autoresearch/</code>, and creates <code>results.tsv</code>. After you confirm, the first run is always the unchanged baseline.</p>
+<p class="src">Source: <code>README.md</code> “Quick start” and “Running the agent”; <code>program.md</code> “Setup”.</p>
+
+<h2 id="decisions">What does each design decision protect against?</h2>
+<p>Each rule in the table prevents one way an unattended loop can go wrong. The last column says where the repository enforces it.</p>
+<table>
+<tr><th>Risk</th><th>Decision</th><th>Enforced in</th></tr>
+<tr><td>Diffs too large to review</td><td>The agent edits one file only</td><td><code>program.md</code> “What you CAN do”</td></tr>
+<tr><td>Runs not comparable after the agent changes model or batch size</td><td>Fixed training-time budget</td><td><code>prepare.py</code> <code>TIME_BUDGET</code>; <code>train.py</code> line 603</td></tr>
+<tr><td>A better score from a weaker test</td><td>Metric, data, and packages are read-only</td><td><code>program.md</code> “What you CANNOT do”</td></tr>
+<tr><td>Bad ideas pile up</td><td>Keep only a lower <code>val_bpb</code>, else <code>git reset</code></td><td><code>program.md</code> loop steps 8–9</td></tr>
+<tr><td>Code grows complex for tiny gains</td><td>Simplicity criterion: “simpler is better”</td><td><code>program.md</code> “Experimentation”</td></tr>
+<tr><td>The loop stops while the human sleeps</td><td>Never ask to continue; kill runs over 10 min</td><td><code>program.md</code> “NEVER STOP”, “Timeout”</td></tr>
+</table>
+
+<h2 id="limits">What does it not do?</h2>
+<ul>
+<li>It needs one NVIDIA GPU. The README links community forks for macOS, Windows, and AMD.</li>
+<li>It does not compare results across hardware: a 5-minute run on another GPU trains a different amount.</li>
+<li>It does not check a kept result with a second run (see the Inference box in the experiment-loop section).</li>
+</ul>
+
+<h2 id="terms">Terms</h2>
+<table>
+<tr><th>Term</th><th>Meaning on this page</th></tr>
+<tr><td>LLM (large language model)</td><td>A neural network trained to predict the next piece of text.</td></tr>
+<tr><td><code>val_bpb</code> (validation bits per byte)</td><td>Average bits the model needs per byte of the fixed validation text. Lower is better.</td></tr>
+<tr><td>Tokenizer</td><td>The part that splits text into tokens, the units the model reads. <code>prepare.py</code> trains it once.</td></tr>
+<tr><td>Training-time budget</td><td>The 300 s of training after the first 10 steps; startup and evaluation are extra.</td></tr>
+<tr><td>Branch tip</td><td>The newest commit on the experiment branch; here, the best <code>train.py</code> so far.</td></tr>
+<tr><td><code>results.tsv</code></td><td>Tab-separated log of every experiment: commit, <code>val_bpb</code>, memory, status, description.</td></tr>
+<tr><td>nanochat</td><td>Karpathy's full LLM training repository; autoresearch's training code is a simplified version of it.</td></tr>
+<tr><td>uv</td><td>A Python package and project manager; <code>uv run</code> runs a script in the project's environment.</td></tr>
+<tr><td>H100</td><td>An NVIDIA data-center GPU; the upstream numbers come from one.</td></tr>
+</table>
+
+<h2 id="sources">Sources</h2>
+<p>All files are from <a href="https://github.com/karpathy/autoresearch">karpathy/autoresearch</a> at commit <code>228791f</code> (MIT license).</p>
+<ul>
+<li><code>README.md</code> — purpose, “How it works”, “Quick start”, “Running the agent”, “Design choices”</li>
+<li><code>program.md</code> — setup, rules, output format, example log rows, the experiment loop</li>
+<li><code>prepare.py</code> lines 30–45 (constants), 344 (<code>evaluate_bpb</code>)</li>
+<li><code>train.py</code> lines 26 (imports), 578–579 and 603 (budget accounting)</li>
+<li><code>progress.png</code> — 83 experiments, 15 kept; baseline 0.9979, best about 0.977 (read from the plot)</li>
+</ul>
+</main></div>
+
+<script>
+// Sidebar table of contents from h2/h3.
+document.querySelectorAll('.content h2, .content h3').forEach(function (h, i) {
+  if (!h.id) h.id = 'sec-' + i;
+  var a = document.createElement('a');
+  a.href = '#' + h.id; a.textContent = h.textContent; a.className = h.tagName.toLowerCase();
+  a.onclick = function () { document.body.classList.remove('nav-open'); };
+  document.getElementById('toc').appendChild(a);
+});
+// Stepper: <figure class="stepper"> with <g data-step="n"> or <g data-step="n+">.
+document.querySelectorAll('figure.stepper').forEach(function (fig) {
+  var frames = fig.querySelectorAll('[data-step]'), max = 0, cur = 1, timer = null;
+  frames.forEach(function (g) { max = Math.max(max, parseInt(g.dataset.step, 10)); });
+  var bar = document.createElement('div'); bar.className = 'stepper-bar';
+  bar.innerHTML = '<button type="button">◀</button><span class="count"></span><button type="button">▶</button><button type="button">▷</button>';
+  var cap = document.createElement('p'); cap.className = 'stepper-caption';
+  var btn = bar.querySelectorAll('button'), count = bar.querySelector('.count');
+  fig.querySelector('svg').after(bar, cap);
+  function show(n) {
+    cur = Math.min(Math.max(n, 1), max); cap.textContent = '';
+    frames.forEach(function (g) {
+      var s = parseInt(g.dataset.step, 10), on = /\+$/.test(g.dataset.step) ? cur >= s : cur === s;
+      g.style.display = on ? '' : 'none';
+      if (s === cur && g.dataset.caption) cap.textContent = g.dataset.caption;
+    });
+    count.textContent = cur + ' / ' + max;
+  }
+  function stop() { clearInterval(timer); timer = null; btn[2].textContent = '▷'; }
+  btn[0].onclick = function () { stop(); show(cur - 1); };
+  btn[1].onclick = function () { stop(); show(cur + 1); };
+  btn[2].onclick = function () {
+    if (timer) return stop();
+    if (cur === max) show(1);
+    btn[2].textContent = '||';
+    timer = setInterval(function () { cur < max ? show(cur + 1) : stop(); }, 1800);
+  };
+  show(1);
+});
+</script>
+</body>
+</html>

@@ -11,11 +11,11 @@
 - [ ] 使用者檢視規則 diff 與模板截圖
 
 ## 第 2 階段：autoresearch 範例
-- [ ] T4 英文主頁 `examples/autoresearch/autoresearch.html`（L0／L1／L2）
-- [ ] T5 以延伸流程加入 `train.py`、`prepare.py` 程式導讀子頁
+- [x] T4 英文主頁 `examples/autoresearch/autoresearch.html`（L0／L1／L2）
+- [x] T5 以延伸流程加入 `train.py`、`prepare.py` 程式導讀子頁
 
 ### 檢查點 B
-- [ ] 使用者確認英文範例可讀，依回饋修正規則
+- [x] 使用者確認英文範例可讀，依回饋修正規則
 
 ## 第 3 階段：文件與打包
 - [ ] T6 `README.md`（英文）與 `README.zh-TW.md`，引用 Karpathy 貼文
