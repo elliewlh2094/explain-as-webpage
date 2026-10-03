@@ -1,6 +1,6 @@
 # Sources and Research
 
-How to read material that is not the user's project, how to cite it, and when to use a helper skill. SKILL.md step 1 sends you here in document mode.
+How to read material that is not the user's project, how to research a topic the user only names, how to cite and grade sources, and when to use a helper skill. SKILL.md step 1 sends you here in document and topic modes.
 
 ## 1. Modes and output path
 
@@ -8,9 +8,10 @@ How to read material that is not the user's project, how to cite it, and when to
 |---|---|---|
 | project | a repo, report, or code path | `~/Documents/explainers/<repo-name>/<topic-slug>.html` |
 | document | a web article URL, a PDF, a Markdown or text file, or pasted text | `~/Documents/explainers/<topic-slug>/<topic-slug>.html` |
+| topic | only a topic and questions | same as document |
 
 - The mode follows the material, not the current directory. A document read while the agent works inside some repo still uses the document path.
-- If the user also asks questions the document does not answer, say so in the confirmation. Answer them only as labelled general background (`writing-rules.md`), or leave them out.
+- If the user also asks questions the document does not answer, say so in the confirmation, and research them as in topic mode (§7), or leave them out.
 - A video URL is out of scope. Say so and stop; do not download subtitles.
 
 ## 2. Get the full text
@@ -77,13 +78,15 @@ The platform lists the installed skills, with names and descriptions, in your co
 |---|---|---|
 | Read web pages | a browser skill or tool (e.g. `chrome-browser`, `built-in-browser`), a fetch MCP server | the page needs JavaScript or a login |
 | Read PDFs | a PDF skill (e.g. `pdf`) | the PDF has tables, scanned pages, or text that `pdftotext` garbles |
+| Research | a research skill (e.g. `deep-research`) | the user picks deep research in topic mode (§7) |
 
 Rules:
 
 - Before proposing a helper, check that it can run here: the tools or libraries its instructions use are installed (e.g. `python3 -c "import pdfplumber"`, `command -v pdftotext`). If it needs an install, say so in the confirmation; installing is the user's decision (ask first), and a helper that falls back to the built-in method adds nothing.
 - Name each helper and the step it is for in the confirmation (SKILL.md step 4, item 4). Use it only if the user agrees. If no helper is listed or the user declines, use the built-in method.
 - A helper only gets the material. Page structure, writing rules, and the self-check still come from this skill.
-- Keep a helper's intermediate files in a temporary directory and delete them afterwards. If the helper asks the user its own questions, say so in the confirmation.
+- Keep a helper's intermediate files in a temporary directory outside the repository and the output directory, and delete them afterwards, including files its subagents download (e.g. under `/tmp`; check what a folder holds before deleting it). A research helper may by default write notes and a report into the current directory and spawn several subagents: point it at the temporary directory, and say in the confirmation that it runs subagents and takes longer (minutes, not seconds). If the helper asks the user its own questions, say so in the confirmation.
+- Check a helper's numbers against its own notes before using them; a summary can disagree with the notes it summarises.
 - Report which helpers you used, or which built-in method you fell back to.
 
 ## 6. Expanding material into steps
@@ -93,5 +96,40 @@ A plan or a guide often says what to do but not how. When the user agrees in the
 - Keep the material's goals, tasks, and checks unchanged. The added content explains them; it does not replace or extend them.
 - Label it. Every page with added content carries a note box (`admonition`, title Note / 說明, `writing-rules.md` fixed labels) that says which fields come from the material, which are general practice, and the versions assumed (e.g. Ubuntu 24.04, ROS 2 Jazzy, C++17). The Sources section repeats this in one line.
 - Use the official way: commands, file layouts, and APIs as the official documentation for that version describes them. Keep excerpts within the limits in `writing-rules.md`.
-- Verify what can break. If a web tool is available, check version-specific commands and APIs against the official documentation; otherwise say in the report that they are unverified.
+- Verify what can break. If a web tool is available, check version-specific commands and APIs against the official documentation, as a light research pass (§7); otherwise say in the report that they are unverified.
 - Do not add numbers the material does not give (prices, durations, results), except as labelled general background.
+
+## 7. Topic mode: research
+
+The user names a topic and asks questions, with no material. The page is then built from sources you find.
+
+1. **Primary sources first.** Look for the paper, the official documentation or repository, the standard, or the responsible agency. Once found, read each one as a document (§2) and cite it by heading or page. Search results and summaries point to sources; they are not sources.
+2. **Scan before the confirmation.** Run a few searches, just enough to draft the outline and the candidate questions (§3). Do not build from the scan.
+3. **Ask for the depth in the confirmation** (SKILL.md step 4, item 4):
+
+   | Depth | Sources | Rule |
+   |---|---|---|
+   | Light | about 5–10 | Primary or authoritative sources first (§8). Every key claim has a source |
+   | Deep | more | Every key claim has at least two independent sources. Where sources disagree, the page says so. Also ask whether to save the notes as `<topic-slug>.research.md` next to the page; the default is no |
+
+   A research helper skill (e.g. `deep-research`) can run the deep pass, with the user's consent (§5).
+4. **No web tool:** say so in the confirmation and ask the user for material. Never fall back silently to writing from memory.
+5. **Your own knowledge** may connect and explain sourced facts, labelled as general background. It is never the only support for a key claim.
+6. **Record the access date** of every source as you read it.
+7. **Fast-moving topics** (a launch programme, a young technique): the conclusion box says "as of <date>".
+8. **Every case you cite traces to a sentence.** Before a real-world case goes on the page ("the team tested one nail and went back to two"), find the sentence in the source that says it. Summarising a source in your own words is fine; adding an outcome the source does not state is not.
+
+## 8. Source grades
+
+In topic mode, every item in Sources carries a grade and an access date. Grades are optional in document and project modes.
+
+| Grade | Class | English | 繁體中文 | Typical sources |
+|---|---|---|---|---|
+| 1 | `grade g1` | Primary | 原始材料 | the paper, the official documentation or code, the user's own material |
+| 2 | `grade g2` | Authoritative | 權威或同儕審查 | standards bodies, government agencies, professional societies, peer-reviewed reviews, textbooks |
+| 3 | `grade g3` | Secondary | 二手整理 | tutorials, blog posts, news articles, encyclopedias |
+| 4 | `grade g4` | Emerging | 新興或個人說法 | one person's post or talk, a newly coined term, a preprint nobody has followed up |
+
+- Write each Sources item on one line, so the self-check can read it: `<li><span class="grade g1">原始材料</span> Author, <a href="…">title</a> — what was taken. 存取日期 2026-10-03</li>`.
+- A claim that only grade 4 sources support goes in an Emerging view box (`admonition`, title Emerging view / 新興說法) that names who makes it. Do not write it as settled.
+- When grade 1–2 sources disagree, say so in the section, with both sources.

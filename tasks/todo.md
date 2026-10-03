@@ -23,12 +23,12 @@
 - [x] 使用者判讀 V2 與 V8，依回饋修正頁型與頁面樹規則
 
 ## 第 3 階段：topic 模式
-- [ ] T9 topic 模式查證、來源等級與模板 `.grade` 樣式
-- [ ] T10 V3：EKF，輕量查證，拒絕輔助 skill（驗證內建退路）
-- [ ] T11 V7：first principle
+- [x] T9 topic 模式查證、來源等級與模板 `.grade` 樣式
+- [x] T10 V3：EKF（依使用者選擇改為深度研究＋deep-research；內建退路改在 T11 驗證）
+- [x] T11 V7：first principle（輕量查證、不用輔助 skill，驗證內建退路）
 
 ### 檢查點 C
-- [ ] 使用者判讀 V3 與 V7，並決定 EKF 是否做成公開範例
+- [x] 使用者判讀 V3 與 V7，並決定 EKF 是否做成公開範例（決定：不公開）
 
 ## 第 4 階段：讀者設定與高風險主題
 - [ ] T12 R6 規則：讀者設定與高風險主題
@@ -41,7 +41,7 @@
 
 ## 第 5 階段：Codex 與打包
 - [ ] T16 Codex 實測
-- [ ] T17 `README.md` 與 `README.zh-TW.md`（以及視檢查點 C 的決定加入 EKF 範例）
+- [ ] T17 `README.md` 與 `README.zh-TW.md`（EKF 不公開，範例段落不變）
 - [ ] T18 manifest 0.3.0、`CLAUDE.md`、規格狀態、暫存檔刪除方式（`rm` 安全檢查）與回歸檢查
 
 ### 檢查點 E

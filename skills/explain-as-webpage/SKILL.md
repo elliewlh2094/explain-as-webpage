@@ -1,13 +1,13 @@
 ---
 name: explain-as-webpage
-description: Builds one self-contained HTML explainer page (Read the Docs look, inline SVG diagrams, optional step-by-step animation) that teaches an unfamiliar technique, method, or idea, using the user's own material as the examples - their project's code, data, and reports, or a document they give (web article URL, PDF, Markdown or text file). Use when the user wants to understand why a technique is used in their project, what a package the agent built does, or how a chain of causes leads to a result; when they want an article, PDF, or notes turned into an easier-to-read page; or when they ask for an explainer, primer, visual explanation, or knowledge page. Also use for follow-up questions on an existing page: it extends the page or adds linked child pages. Picks the cheapest presentation tier and confirms it before building. Writes in the user's language. 觸發詞：解釋、說明、看不懂、為什麼要這樣做、圖解、知識網頁、知識文件、學習筆記、整理成網頁、這篇文章、這份 PDF、追問、補充頁面。
+description: Builds one self-contained HTML explainer page (Read the Docs look, inline SVG diagrams, optional step-by-step animation) that teaches an unfamiliar technique, method, or idea, using the user's own material as the examples - their project's code, data, and reports, or a document they give (web article URL, PDF, Markdown or text file); for a topic they only name, it researches and grades sources. Use when the user wants to understand why a technique is used in their project, what a package the agent built does, or how a chain of causes leads to a result; when they want an article, PDF, notes, or a named topic turned into an easier-to-read page; or when they ask for an explainer, primer, visual explanation, or knowledge page. Also use for follow-up questions on an existing page: it extends the page or adds linked child pages. Picks the cheapest presentation tier and confirms it before building. Writes in the user's language. 觸發詞：解釋、說明、看不懂、為什麼要這樣做、圖解、知識網頁、知識文件、學習筆記、整理成網頁、這篇文章、這份 PDF、查資料做成網頁、追問、補充頁面。
 ---
 
 # Explain as Webpage
 
 ## Overview
 
-Turn "I don't understand why the agent did X" (or "I can't get through this article") into one HTML page the user can read in 15 minutes and reopen later. The page is built from the user's own material: real file paths, numbers, and code from their project, or the sections and examples of a document they give. It is organised around the questions the user is stuck on and one causal chain, not around a survey of the topic.
+Turn "I don't understand why the agent did X" (or "I can't get through this article") into one HTML page the user can read in 15 minutes and reopen later. The page is built from the user's own material: real file paths, numbers, and code from their project, or the sections and examples of a document they give, or graded sources found by research. It is organised around the questions the user is stuck on and one causal chain, not around a survey of the topic.
 
 Each page is a single `.html` file. No build step, no external URLs, no extra figure or script folders. When the user keeps asking about a topic, the topic grows into a hub page plus linked child pages, and each page keeps its own length budget.
 
@@ -15,7 +15,7 @@ Each page is a single `.html` file. No build step, no external URLs, no extra fi
 
 - The user must judge or modify something they do not understand (an algorithm, a package an agent wrote, a performance analysis).
 - A long Markdown report exists but the user cannot find the causal thread in it.
-- The user gives an article, PDF, or notes and wants a page that is easier to read.
+- The user gives an article, PDF, or notes, or only names a topic, and wants a page that is easier to read.
 - The user asks for an explainer, primer, diagram, or "knowledge page".
 
 **When NOT to use:** a one-line answer is enough; the user wants project documentation that lives in the repo (write normal docs); the user wants a video, or gives a video as the material (out of scope: the agent cannot watch it, and the highest tier is an in-browser step animation).
@@ -30,14 +30,15 @@ Each page is a single `.html` file. No build step, no external URLs, no extra fi
 |---|---|---|---|
 | project | a repo, report, or code path | file reads | `path` + section heading or line |
 | document | a web article URL, PDF, Markdown or text file, pasted text | full text via `curl` / `pdftotext` | the material's heading or page |
+| topic | only a topic and questions | primary sources first, then search | source + access date + grade |
 
-In document mode, first read `references/sources-and-research.md`: how to get the full text (not a summary), long material and plans, quoting, helper skills, and the output path. Read only what the questions need: the report, the package directory, the code path, the document's sections. Record each fact you will use together with its source. Do not invent numbers. If the material has no measured result for a claim, say so on the page.
+In document and topic modes, first read `references/sources-and-research.md`: how to get the full text (not a summary), long material and plans, research depth, source grades, quoting, helper skills, and the output path. Read only what the questions need: the report, the package directory, the code path, the document's sections. Record each fact you will use together with its source. Do not invent numbers. If the material has no measured result for a claim, say so on the page.
 
 ### 2. Write a learning brief (internal, not shown as-is)
 
 - **Core questions** (3–5): phrased the way the user would ask them, e.g. "Why can't we just average the matches?"
 - **Page type and spine**: pick the type in `references/page-types.md` (an argument, a roadmap, a practical guide, an evolution, code, or by default a mechanism). For a mechanism, the spine is the causal chain: cause → mechanism → consequence → fix → measured result. One line per link, each link backed by a fact or marked as inference.
-- **Counterfactual pairs**: the same project case without and with the technique, with real numbers. In document mode, only if the material gives such a case.
+- **Counterfactual pairs**: the same project case without and with the technique, with real numbers. In document and topic modes, only if a source gives such a case.
 - **Key concepts**: at most 5 the reader must learn. Every other technical term still gets a one-clause definition at first use (see `writing-rules.md`).
 
 ### 3. Choose the presentation tier
@@ -59,16 +60,15 @@ Send **one** message (use a structured question tool if the platform has one, e.
 1. The core questions — ask the user to add, remove, or reword. In document mode, also show the material's outline and 5–8 numbered candidate questions inside the question itself (text written before a question tool can go unseen), and, for long material or a plan, the coverage choice and whether to expand units into steps (`sources-and-research.md` §3, §6).
 2. The proposed tier (and page count), why, and the cheaper alternative with what it would lose.
 3. The page language: the language the user asks for; otherwise the language the user writes in. All pages of one topic use one language.
-4. The output path, and any helper skill you plan to use and for which step (`sources-and-research.md` §5). Default path in project mode: `~/Documents/explainers/<repo-name>/<topic-slug>.html`, where `<repo-name>` is the basename of the git top-level directory; offer "inside the project" as an alternative. Document mode: `~/Documents/explainers/<topic-slug>/<topic-slug>.html`.
+4. The output path, the research depth in topic mode (light or deep, `sources-and-research.md` §7), and any helper skill you plan to use and for which step (§5). Default path in project mode: `~/Documents/explainers/<repo-name>/<topic-slug>.html`, where `<repo-name>` is the basename of the git top-level directory; offer "inside the project" as an alternative. Document mode: `~/Documents/explainers/<topic-slug>/<topic-slug>.html`.
 
 **Do not build until the user answers.**
 
 ### 5. Build the page
 
 1. Copy `assets/template.html` to the output path. Set `lang`, title, sidebar head, breadcrumb.
-2. Follow `references/writing-rules.md` for page structure and prose.
-3. Follow `references/svg-recipes.md` for every figure (grid, sizes, colours, stepper, slider).
-4. Delete all demo content and every `FILL` marker.
+2. Follow `references/writing-rules.md` for page structure and prose, and `references/svg-recipes.md` for every figure (grid, sizes, colours, stepper, slider).
+3. Delete all demo content and every `FILL` marker.
 
 ### 6. Self-check
 
@@ -79,6 +79,7 @@ F=<output path>
 grep -c 'FILL' "$F"                 # must be 0
 grep -nE '(src=|url\()["'\'']?https?://' "$F"   # must print nothing (no external resources; <a href> links in Sources are fine)
 wc -c < "$F"                        # should be ≤ ~150 KB
+awk '/id="sources"/{f=1} f&&/<li>/&&!(/class="grade/&&/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]/)' "$F"   # topic mode: must print nothing (every source has a grade and an access date)
 ```
 
 Then, if `google-chrome` / `chromium` is available, render and **look at** both widths:
@@ -99,7 +100,7 @@ Content checklist:
 - [ ] The spine figure (Figure 1) comes before the question sections, and the sections follow its order.
 - [ ] Every figure sits next to the paragraph that explains it, and that paragraph refers to it by number.
 - [ ] Every number has a source; every inference is inside an "Inference" admonition.
-- [ ] Every technical term and project identifier is defined at first use, with its English original.
+- [ ] Every technical term and project identifier is defined at first use, with its English original; in a domain explainer, every symbol is tied to one running example (`writing-rules.md`).
 - [ ] Every pattern the page points out ("A ≈ B") comes with why it holds and when it does not.
 - [ ] Reading time ≤ 15 minutes (see the length budget in `writing-rules.md`).
 
@@ -115,7 +116,7 @@ Tell the user: the file path, how to open it (`xdg-open <path>` / `open <path>`)
 - Figures that show data (histograms, ROC curves) without a mechanism figure that explains *why*.
 - Prose that restates a long report section by section instead of following one causal chain.
 - Generic textbook examples where a project example exists.
-- Writing a document-mode page from a fetch tool's summary instead of the full text, without saying so.
+- Writing a document-mode page from a fetch tool's summary, or a topic-mode page from memory, without saying so.
 - Leaving helper scripts, image files, or extra folders next to the page.
 - Adding a new question to a page that is already at its length budget, instead of a child page.
 

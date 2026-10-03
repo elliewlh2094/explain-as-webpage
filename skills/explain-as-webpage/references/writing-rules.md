@@ -55,10 +55,23 @@ Do not add: scope/authority tables, "how to read this document" guides, change h
 | Conclusion box title | Conclusion | 結論 |
 | Inference box title | Inference | 推論 |
 | Note box title (added content, `sources-and-research.md` §6) | Note | 說明 |
+| Emerging view box title (`sources-and-research.md` §8) | Emerging view | 新興說法 |
+| Caution box title (high-risk topics) | Caution | 注意 |
+| Access date in Sources | Accessed | 存取日期 |
+| Source grades g1–g4 | Primary / Authoritative / Secondary / Emerging | 原始材料／權威或同儕審查／二手整理／新興或個人說法 |
 | Terms / Sources sections | Terms / Sources | 名詞 / 來源 |
 | Figure caption prefix | Figure 1. | 圖 1　(full-width space) |
 | Page tree label | Pages in this topic | 本主題頁面 |
 | Link to a child page | More: | 延伸閱讀： |
+
+## Ground the symbols in one running example
+
+When a page explains a technique for a domain (EKF for robots, a codec for video), the reader must see the domain object behind every symbol, or the page reads as pure mathematics.
+
+- Early on, introduce one concrete example that the whole page reuses: a specific robot, file, or patient case, with what it knows and what it does not.
+- Give a table: symbol → general name → what it is in the example ("P: covariance: how unsure the robot is about where it is; drawn as an ellipse").
+- Narrate every process step (a stepper, a table of steps) in the example's words, with numbers actually computed for the example, not invented. Say that the numbers are illustrative and where they come from.
+- Explain each formula once by intuition in the example's terms ("3 m of travel with 2° of heading doubt is about 10 cm of sideways doubt").
 
 ## Facts, inferences, sources
 
@@ -78,11 +91,13 @@ Between two figures or tables, keep prose under ~250 words (~500 CJK characters)
 
 ## Label tables
 
-A two-column table whose first column is a short label (e.g. "What to do / Steps / What the check proves / Result") uses `<table class="kv">`. Without it, CJK labels wrap one or two characters per line, because the long second column takes the width. Put a list of steps in an `<ol>` inside the cell, not as ①②③ in one paragraph.
+A two-column table whose first column is a short label (e.g. "What to do / Steps / What the check proves / Result") uses `<table class="kv">`. Without it, CJK labels wrap one or two characters per line, because the long second column takes the width. Put a list of steps in an `<ol>` inside the cell, not as ①②③ in one paragraph. The same applies to a table with more columns: keep its short columns (names, symbols, formulas) on one line with `style="white-space:nowrap"` on those cells, and let the long description column wrap. A formula broken across two lines is misread.
 
 ## Formulas
 
 No math library. Use HTML: `RTF = Δt<sub>sim</sub> / Δt<sub>wall</sub>`, `x<sup>2</sup>`, Unicode symbols (×, ÷, ≤, ≈, Σ, θ). Put an important formula on its own line in a `<p style="text-align:center">`. Follow every formula with a worked example using a project number.
+
+Do not use combining marks such as x̄, μ̄, or x̂ (a letter plus U+0304 or U+0302): the mark drifts away from its letter in many fonts. Write the distinction another way: `x<sup>−</sup>` for a prior estimate, a subscript (`x<sub>pred</sub>`), or a word. Inside SVG text, use a superscript character (x⁻) or a `<tspan>`. Say once on the page what the mark means.
 
 ## Code excerpts
 

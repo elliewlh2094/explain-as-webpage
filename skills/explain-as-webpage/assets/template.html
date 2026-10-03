@@ -56,6 +56,9 @@ th, td { border: 1px solid var(--rule); padding: 6px 12px; text-align: left; ver
 th { background: #eee; } tr:nth-child(even) td { background: var(--row-alt); }
 table.kv td:first-child { white-space: nowrap; } /* label column of a label-content table */
 .src { font-size: .8rem; color: var(--muted); }
+/* Source grades (references/sources-and-research.md §8) */
+.grade { display: inline-block; font-size: .75rem; line-height: 1.5; padding: 0 6px; margin-right: 6px; border-radius: 3px; color: #fff; }
+.grade.g1 { background: #117a65; } .grade.g2 { background: #1f618d; } .grade.g3 { background: #616a6b; } .grade.g4 { background: #a04000; }
 
 /* Admonitions: note / tip / warning / danger */
 .admonition { margin: 0 0 20px; background: var(--blue-bg); }
@@ -204,7 +207,8 @@ svg .dot { fill: var(--blue); } svg .dot.bad { fill: var(--red); } svg .dot.good
 </table>
 
 <h2 id="sources">Sources</h2>
-<ul><li><code>FILL/path</code> — FILL: what was taken from it</li></ul>
+<!-- Topic mode: every item has a grade (g1 Primary, g2 Authoritative, g3 Secondary, g4 Emerging) and an access date, on one line. -->
+<ul><li><span class="grade g1">FILL: Primary</span> <code>FILL/path</code> — FILL: what was taken from it. Accessed FILL: YYYY-MM-DD</li></ul>
 </main></div>
 
 <script>
