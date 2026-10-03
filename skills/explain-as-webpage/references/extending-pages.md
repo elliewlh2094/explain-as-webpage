@@ -33,7 +33,7 @@ Rules:
 
 ## 3. Confirm once
 
-Use the same single message as SKILL.md step 4, with these items instead of items 1–3:
+Use the same single message as SKILL.md step 4, with these items instead of items 1 and 2 and the output path in item 4 (child pages go next to the hub):
 
 1. Each new question, where it goes (`<details>` / child page / revision), and why.
 2. For each child page: its core questions, tier, and file name `<hub>--<child-slug>.html`.

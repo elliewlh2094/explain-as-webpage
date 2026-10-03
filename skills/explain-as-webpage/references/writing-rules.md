@@ -69,9 +69,9 @@ Do not add: scope/authority tables, "how to read this document" guides, change h
 
 ## Facts, inferences, sources
 
-- A fact is something a file, log, measurement, or the code states. Give its source in a `.src` line under the table/figure or inline as `code`.
+- A fact is something a file, log, measurement, or the code states, or, in document mode, something the user's document states. Give its source in a `.src` line under the table/figure or inline as `code`. Cite a document by its section heading or page (`sources-and-research.md` §4).
 - An inference is your reasoning beyond the sources. Put it in an `admonition warning` titled "Inference" (or the reader's-language equivalent).
-- If the project has no measurement for a claim, write that explicitly. Do not borrow numbers from the web as if they were project numbers. Textbook background is allowed if labelled as general background.
+- If the project or document has no measurement for a claim, write that explicitly. Do not borrow numbers from the web as if they were the material's numbers. Textbook background is allowed if labelled as general background.
 
 ## Length budget
 

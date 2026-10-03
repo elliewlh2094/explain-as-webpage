@@ -3,14 +3,14 @@
 詳細驗收條件見 `tasks/plan.md`，規格見 `docs/specs/explain-as-webpage-v3.md`。第二輪的待辦已全部完成（見 git 歷史）。
 
 ## 第 0 階段：風險探測
-- [ ] T1 取得材料與環境探測（WebFetch 全文、`pdftotext`、可見的輔助 skill、Codex）
+- [x] T1 取得材料與環境探測（WebFetch 全文、`pdftotext`、可見的輔助 skill；Codex 延後到 T16）
 
 ## 第 1 階段：document 模式（短文）
-- [ ] T2 `SKILL.md` 分流與 `references/sources-and-research.md`（document 部分）
-- [ ] T3 V1：Karpathy LLM Wiki gist
+- [x] T2 `SKILL.md` 分流與 `references/sources-and-research.md`（document 部分）
+- [x] T3 V1：Karpathy LLM Wiki gist
 
 ### 檢查點 A
-- [ ] 使用者檢視規則 diff 與 V1 頁面，依回饋修正規則
+- [x] 使用者檢視規則 diff 與 V1 頁面，依回饋修正規則
 
 ## 第 2 階段：頁型與長文
 - [ ] T4 `references/page-types.md`（新增）與 4 種主軸圖配方
@@ -42,7 +42,7 @@
 ## 第 5 階段：Codex 與打包
 - [ ] T16 Codex 實測
 - [ ] T17 `README.md` 與 `README.zh-TW.md`（以及視檢查點 C 的決定加入 EKF 範例）
-- [ ] T18 manifest 0.3.0、`CLAUDE.md`、規格狀態與回歸檢查
+- [ ] T18 manifest 0.3.0、`CLAUDE.md`、規格狀態、暫存檔刪除方式（`rm` 安全檢查）與回歸檢查
 
 ### 檢查點 E
 - [ ] 規格 §8 的成功條件全部達成；提供 `git add` 範圍與提交訊息建議

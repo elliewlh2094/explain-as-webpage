@@ -84,6 +84,12 @@ For scatter-like content (matches, inliers, measurements), compute coordinates w
 - Draw the final state first, check it in a screenshot, then split it into steps.
 - The script in the template adds ◀ ▶ ▷ controls; do not write a second stepper script.
 
+To inspect one figure or one stepper frame, screenshot a temporary copy that hides everything else and clicks ▶ n−1 times (here: Figure 4, frame 3; delete the copy afterwards):
+
+```bash
+sed "s|</body>|<style>.side,.topbar{display:none!important}.main{margin-left:0}.content>*:not(#fig-4){display:none}</style><script>var b=document.querySelectorAll('#fig-4 .stepper-bar button');for(var i=1;i<3;i++)b[1].click();</script></body>|" "$F" > /tmp/frame.html
+```
+
 ## Slider (L1)
 
 One slider per figure, a few lines of page-specific script placed after the figure:

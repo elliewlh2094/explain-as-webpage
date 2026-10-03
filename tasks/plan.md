@@ -301,23 +301,25 @@
 - 相依：T16
 - 檔案：`README.md`、`README.zh-TW.md`，以及 `examples/ekf/`（視檢查點 C 的決定）
 
-**T18（XS）manifest、CLAUDE.md、規格狀態與回歸檢查**
+**T18（S）manifest、CLAUDE.md、規格狀態、暫存檔刪除方式與回歸檢查**
 - 說明：
   - 三份 manifest 的版本號升為 `0.3.0`。
-  - `CLAUDE.md` 的架構段落加入兩份新的 reference 與三種模式。
+  - `CLAUDE.md` 的架構段落加入兩份新的 reference 與三種模式。另外，模板驗證指令中的窄版截圖改用 iframe 方法（檢查點 A 第 3 點）。
   - 把規格開頭的狀態改為「已實作」。
+  - 修正暫存檔的刪除方式（檢查點 A 第 6 點）：`SKILL.md` 第 6 步會用 `rm "$P"` 刪除暫存檔，這種以變數組成路徑的刪除指令可能被 Claude Code 的安全檢查擋下。改寫方向：把暫存的探測頁放在固定的字面路徑（例如 `/tmp/explain-as-webpage-narrow.html`），用絕對的 `file://` 路徑嵌入 iframe，再用字面路徑刪除。`svg-recipes.md` 的單幀截圖範例已經使用字面路徑 `/tmp/frame.html`，要一併確認。
   - 回歸檢查：比對專案模式的 diff，並重新截圖 `examples/` 中的 4 個既有頁面。
 - 驗收：
   - [ ] 所有 manifest 的 JSON 都合法，而且版本號一致
   - [ ] plugin 驗證通過
   - [ ] 既有範例頁面沒有變化
+  - [ ] 在 Claude Code 中原樣執行第 6 步與單幀截圖的指令，不被安全檢查擋下，暫存檔也確實被刪除
 - 驗證：
   - 執行 `CLAUDE.md` 中的 manifest 迴圈
   - `claude plugin validate .`
   - `claude --plugin-dir . plugin details sphinx-style-notes-maker`
   - 截圖
 - 相依：T17
-- 檔案：`.claude-plugin/plugin.json`、`.claude-plugin/marketplace.json`、`.codex-plugin/plugin.json`、`.agents/plugins/marketplace.json`、`CLAUDE.md`、`docs/specs/explain-as-webpage-v3.md`（只改機械性的欄位）
+- 檔案：`.claude-plugin/plugin.json`、`.claude-plugin/marketplace.json`、`.codex-plugin/plugin.json`、`.agents/plugins/marketplace.json`、`CLAUDE.md`、`docs/specs/explain-as-webpage-v3.md`（只改機械性的欄位）、`SKILL.md`、`references/svg-recipes.md`
 
 **檢查點 E**：確認規格 §8 的成功條件全部達成，並提供 `git add` 範圍與提交訊息建議。
 
@@ -339,4 +341,71 @@
 - PG 長文、Harness Engineering 演進、LightGlue 是否要補驗（在檢查點 E 決定）。
 
 ## 探測結果
-（T1、T16 完成後填寫。）
+
+### T1（2026-10-03，Claude Code）
+
+**1. 網頁全文**
+
+| 材料 | `curl` 加上本機去除標籤 | WebFetch |
+|---|---|---|
+| PG〈How to Do Great Work〉 | 取得全文，11,738 個英文字，結尾為致謝段落 | 要求逐字回傳全文時，以著作權為由拒絕，只提供摘要與 125 字元以內的短引文 |
+| Karpathy gist（`…/raw`） | 取得全文，1,921 個英文字，結尾與原文一致 | 9 個標題全部正確，順序也正確；各節字數只是估計值（加總約 2,170 字，實際為 1,921 字） |
+
+結論：WebFetch 透過小模型回答提示，不能用來取得全文，只適合用來快速掌握大綱。
+
+**2. PDF**
+
+- Ronin PDF 共 39 頁，用 `pdftotext -layout` 抽出 11,456 個字。
+- 少數特殊字形會變成 `�`，例如 `@DeRonin_` 的 `@`。這不影響理解，但引用時要對照原 PDF。
+- Claude Code 的 Read 工具每次最多讀 20 頁 PDF，因此只作為退路。
+
+**3. Claude Code 中可見的輔助 skill**
+
+在代理上下文的 skill 清單中可以看到下列項目。這份清單只是本機現況，不得寫死進 `SKILL.md`。
+
+| 能力 | 可見的項目 |
+|---|---|
+| 讀取網頁 | `anthropic-skills:chrome-browser`、`anthropic-skills:built-in-browser`、`claude-in-chrome`；工具：WebFetch、WebSearch |
+| 讀取 PDF | `anthropic-skills:pdf` |
+| 深度研究 | `anthropic-skills:deep-research` |
+
+**4. Codex**
+
+使用者選擇延後到 T16 實測。
+
+**決定：網頁讀取的優先順序**（T2 寫入 `sources-and-research.md`）
+
+1. 靜態頁面或原始文字（gist 加上 `/raw`、GitHub 的 raw 檔、一般 HTML 文章）：用 `curl -sL` 下載到暫存目錄，再用 Python 標準函式庫去除標籤，取得全文。用完即刪。
+2. 需要 JS 或登入的頁面（例如 X）：經使用者同意後，使用讀取網頁類的輔助 skill。沒有這類 skill，或使用者拒絕時，請使用者把頁面存成 PDF。
+3. WebFetch 只用來快速掌握大綱、確認標題，或在 `curl` 被擋時取得摘要。用了 WebFetch 時，要在回報中說明頁面只依據摘要。
+
+### T16
+
+（待填寫。）
+
+### 檢查點 A 的發現（T2、T3，2026-10-03）
+
+1. **候選疑問的數量與結構化提問的上限衝突。**
+   - `AskUserQuestion` 每題最多 4 個選項，但規則要求列出 5–8 個候選疑問。
+   - V1 只好把 7 個候選疑問拆成兩題多選，這樣就用掉 4 題上限中的 2 題，層級、語言與路徑只能擠在剩下的 2 題裡。
+2. **長網址會撐開窄螢幕的版面。**
+   - V1 的「來源」區有一個很長的網址連結，造成整頁出現水平捲軸。量測結果：scrollWidth 508 px，clientWidth 485 px。
+   - 頁面上的處理方式是縮短連結文字。模板的 `a` 沒有 `overflow-wrap`，之後 document 與 topic 模式常會列出網址，所以同樣的問題會重複發生。
+3. **headless Chrome 的窄版截圖並不是 390 px。**
+   - 指定 `--window-size=390` 時，實際的視窗寬度是 500 px（Chrome 的最小視窗寬度），CSS 可用寬度是 485 px。
+   - 也就是說，目前的「窄版檢查」等於在 485 px 下進行，並沒有真正驗證 390 px 的手機寬度。
+4. 圖 2 的步進動畫中，第 3 步的說明文字在第 4 步與箭頭重疊。逐幀截圖時發現並已修正（改為只在第 3 幀顯示）。這屬於頁面本身的問題，不是規則的問題。
+5. 用 `sed` 插入含有 `|` 的探測腳本時，又遇到分隔字元衝突；改用 Python 處理。這與 `CLAUDE.md` 中記錄的問題相同，但只發生在探測工具上，不影響 skill 本身。
+
+**處理結果（使用者同意依建議處理）：**
+
+- 第 1 點：候選疑問改為在訊息文字中編號列出。結構化提問只提供「建議組合」與替代組合，使用者也可以自填編號（`SKILL.md` 第 4 步第 1 項、`sources-and-research.md` §3）。
+- 第 2 點：模板新增 `.content a { overflow-wrap: anywhere; }`。用含長網址的測試頁驗證：套用前是 OVERFLOW，套用後是 ok。
+- 第 3 點：`SKILL.md` 第 6 步的窄版檢查改為在 390 px 的 iframe 中算繪，並以 `scrollWidth` 判定。指令原樣在 V1 頁面與模板上各執行一次，都回報 ok。`CLAUDE.md` 中的模板驗證指令仍使用 `--window-size=390`，留到 T18 一併更新。
+
+6. **以變數組成路徑的 `rm` 會被 Claude Code 的安全檢查擋下。**（使用者以新模板重新產出 V1 時發現）
+   - 我在迴圈中用 `rm $P` 刪除暫存的探測頁，`$P` 由 `$D/$n.src.html` 組成。安全檢查判定這個路徑在變數為空時可能指向根目錄，因此拒絕執行，整段指令都沒有跑。
+   - `SKILL.md` 第 6 步的 `rm "$P"` 屬於同一種寫法。先前照原樣執行時沒有被擋，但其他代理在不同寫法下可能會被擋。
+   - 使用者決定在 T18 處理，處理方向見 T18 的說明。
+
+檢查點 A 判定通過（2026-10-03）。比較用的頁面 `~/Documents/explainers/llm-wiki/llm-wiki-new-template.html` 以新模板產出，在 390 px 下的溢出檢查為 ok。
