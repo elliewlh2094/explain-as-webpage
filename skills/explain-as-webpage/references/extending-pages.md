@@ -9,7 +9,7 @@ How to answer follow-up questions about a topic that already has a page, without
 └── <hub>--<child2>.html
 ```
 
-The tree has two levels only. A follow-up on a child page that needs a new page becomes another child of the hub.
+The tree has two levels only. A follow-up on a child page that needs a new page becomes another child of the hub. In document mode the directory is `~/Documents/explainers/<topic-slug>/`. A tree can also be planned from the first build, for a faithful guided reading of long material (§6).
 
 ## 1. Read what exists
 
@@ -43,7 +43,7 @@ Pages in one topic keep one language. Do not build until the user answers.
 
 ## 4. Build
 
-**Child page.** Copy `assets/template.html` and follow `writing-rules.md`. For "what does this file or module do" questions, use the code walkthrough skeleton. Also:
+**Child page.** Copy `assets/template.html` and follow `writing-rules.md`. For "what does this file or module do" questions, use the code walkthrough skeleton in `page-types.md`. Also:
 
 - Breadcrumb: `project » <a href="<hub>.html">Hub title</a> » child topic`.
 - Do not repeat what the hub explains. Give a one-sentence reminder and link the hub section (`<hub>.html#q2`).
@@ -81,3 +81,31 @@ t = re.sub(r"<[^>]+>", " ", s)
 print("CJK chars:", len(re.findall(r"[一-鿿]", t)), " English words:", len(re.findall(r"[A-Za-z][A-Za-z'-]*", t)))
 EOF
 ```
+
+## 6. A tree from the first build (faithful guided reading)
+
+When the user picks faithful guided reading for long material, or a page per stage for a plan (`sources-and-research.md` §3), plan the whole tree before building anything.
+
+**Plan the tree in the learning brief.**
+
+- Map every section of the material to one page and one `h2`: a table "material section → page → `h2`". Neighbouring sections may share an `h2`. A section you leave out on purpose (an advert, a sign-up request, a repeated summary) gets the row "skipped" with the reason.
+- Group the sections into at most ~6 child pages, 3–5 questions each, and keep each page within its length budget (`writing-rules.md`). If the material needs more pages, propose question-driven coverage for part of it instead.
+- The hub carries the conclusion, Figure 1 as the structure of the whole material (the spine of its page type in `page-types.md`, one node per child page), and one short section per child: 2–4 sentences and a "More:" link. The hub's own questions are about the whole material ("What is the plan?", "Why this order?").
+
+**Confirm once.** In the single message of SKILL.md step 4, item 1 lists the planned tree: each page's file name (`<hub>.html`, `<hub>--<child-slug>.html`), the material sections it covers, and its questions. Item 2 gives the tier per page.
+
+**Build.** Build the hub first, with its "More:" links and the page tree block already listing every child. Then build the children in reading order (§4 "Child page"). Every page carries the same page tree block. For four or more pages, generate the shared parts (the page tree block, the breadcrumbs, and Figure 1 of each page) from one list in a temporary script kept outside the output directory, and delete the script after the self-check; hand-copied blocks drift apart.
+
+**Self-check.** Run §5 on every page. Then walk the mapping table: every row points to a page that exists and an `h2` (or `h3`) that answers that section, and every "skipped" row has a reason. Report the skipped sections to the user. In the output directory, with one row per line (`section|page file|id`, or `section||skip`):
+
+```bash
+while IFS='|' read -r sec page id; do
+  if [ "$id" = skip ]; then echo "skipped: $sec"; continue; fi
+  grep -qE "<h[23] id=\"$id\"" "$page" || echo "MISSING: $sec -> $page#$id"
+done <<'EOF'
+Introduction|<hub>.html|q1
+Self-promotion paragraph||skip
+EOF
+```
+
+It must print only the "skipped" rows.

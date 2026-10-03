@@ -5,24 +5,16 @@ How to structure and write the page. The goal: a reader who stopped understandin
 ## Page skeleton (in this order)
 
 1. **Title + conclusion box** (`admonition tip`): 2–4 sentences. State what the technique does for *this* project and the single most important result. A reader who stops here has the main point.
-2. **Causal chain** (`h2` + Figure 1): cause → mechanism → consequence → fix → measured result. 3–6 nodes. This figure is the spine of the page.
-3. **One `h2` per core question**, in the order of the chain's nodes. The heading is the question, written as the reader would ask it. Each section:
+2. **Spine figure** (`h2` + Figure 1): for a technique, the causal chain: cause → mechanism → consequence → fix → measured result, 3–6 nodes. Other page types use another spine (`page-types.md`). This figure is the spine of the page.
+3. **One `h2` per core question**, in the order of the spine's nodes. The heading is the question, written as the reader would ask it. Each section:
    - opens with a one- or two-sentence answer;
    - explains with one figure (or table) next to the text;
    - ends, where possible, with the project's real number that proves the point.
-4. **Counterfactual** (table or before/after figure): the same project case without and with the technique.
+4. **Counterfactual** (table or before/after figure): the same project case without and with the technique. Required in project mode; in other modes only if the material gives such a case (`page-types.md` says what replaces it).
 5. **Limits** (optional, short): what the technique does not fix, what is still open.
 6. **Terms** (every technical term on the page, with its English original, one line each) and **Sources** (file paths with section names).
 
-**Package or architecture pages** (the question is "what does this code do and why is it built this way"): Figure 1 is the main flow of one unit of work through the modules (input → steps → output). The causal chain becomes a "risk → design decision" figure: for each decision, the problem it prevents, with the test or record that enforces it. End with what works today and what does not yet.
-
-**Code walkthrough pages** (usually a child page; the question is "what does this file or module do, and why is it written this way"):
-
-1. Conclusion box: the file's job in one sentence, its inputs and outputs, and the design decision that matters most.
-2. Figure 1: the call flow of one run through the file's main functions (entry point → functions → output). Put line ranges in `sm` labels.
-3. One `h2` per question, still phrased as the reader asks it ("Why does `evaluate_bpb` report bits per byte, not loss?"). Answer with a code excerpt and point at the key line.
-4. A function table: name, lines, what it does (one clause), called by. List only the functions the page discusses or the reader will meet first.
-5. Design decisions: decision → the risk it prevents → where the code enforces it.
+For package, code walkthrough, argument, roadmap, practical guide, and evolution pages, follow the skeleton in `page-types.md`.
 
 Do not add: scope/authority tables, "how to read this document" guides, change history, timelines of how the analysis evolved, or summaries of other documents. Link to the source report instead.
 
@@ -62,6 +54,7 @@ Do not add: scope/authority tables, "how to read this document" guides, change h
 |---|---|---|
 | Conclusion box title | Conclusion | 結論 |
 | Inference box title | Inference | 推論 |
+| Note box title (added content, `sources-and-research.md` §6) | Note | 說明 |
 | Terms / Sources sections | Terms / Sources | 名詞 / 來源 |
 | Figure caption prefix | Figure 1. | 圖 1　(full-width space) |
 | Page tree label | Pages in this topic | 本主題頁面 |
@@ -82,6 +75,10 @@ Do not add: scope/authority tables, "how to read this document" guides, change h
 | L2 | same | 2–6, at most 2 steppers, ≤ 8 steps each |
 
 Between two figures or tables, keep prose under ~250 words (~500 CJK characters). If a section needs more, it is two questions — split it or cut it.
+
+## Label tables
+
+A two-column table whose first column is a short label (e.g. "What to do / Steps / What the check proves / Result") uses `<table class="kv">`. Without it, CJK labels wrap one or two characters per line, because the long second column takes the width. Put a list of steps in an `<ol>` inside the cell, not as ①②③ in one paragraph.
 
 ## Formulas
 

@@ -44,21 +44,23 @@ wc -w "$T"/*.txt                 # material length
 - Check that the text is complete: its last paragraph matches the end of the article, and the word count is plausible.
 - `pdftotext` can turn rare glyphs into `�` (e.g. the `@` in a handle). Check every quote against the PDF.
 
-## 3. Outline, candidate questions, and long material
+## 3. Outline, candidate questions, long material, and plans
 
 In document mode, the confirmation (SKILL.md step 4, item 1) always shows:
 
 - **The outline:** each section heading of the material with its approximate length.
 - **5–8 candidate questions**, numbered, phrased as the reader would ask them and taken from the material's sections. Users often only say "make this easier to read", so let them pick questions instead of writing them.
 
-Put the outline and the numbered candidates in the message text. A structured question tool allows few options per question (4 in `AskUserQuestion`), so do not spend one option per candidate: offer the recommended set (e.g. "1, 2, 3, 5"), one or two alternative sets, and let the user type their own numbers. This keeps the other questions free for tier, language and path, and helpers.
+Put the numbered candidates inside the question itself: in the question text, or in the option descriptions. Text written before a structured question tool can go unseen, for example when the user interrupts the tool and answers in a message. A structured question tool allows few options per question (4 in `AskUserQuestion`), so do not spend one option per candidate: offer the recommended set (e.g. "1, 2, 3, 5"), one or two alternative sets, and let the user type their own numbers. This keeps the other questions free for tier, language and path, and helpers.
 
 If the material is longer than about 3,000 words (about 6,000 CJK characters), it does not fit one page budget (`writing-rules.md`). Also offer two ways to cover it:
 
 | Choice | Result | Cost |
 |---|---|---|
 | **Question-driven** | One page answers the 3–5 chosen questions. Everything else is a link to the original | 1 page |
-| **Faithful guided reading** | A page tree from the first build: a hub page plus up to about 6 child pages, named and linked as in `extending-pages.md`. Every section of the material maps to a section of some page | 1 + children |
+| **Faithful guided reading** | A page tree from the first build: a hub page plus up to about 6 child pages, planned and built as in `extending-pages.md` §6. Every section of the material maps to a section of some page | 1 + children |
+
+If the material is a plan (stages with tasks and checks, `page-types.md` § Roadmap and plan pages), offer one child page per stage whatever its length, and ask whether to expand its units into steps (§6). For a plan, the recommended answer to both is yes.
 
 ## 4. Citing and quoting
 
@@ -78,7 +80,18 @@ The platform lists the installed skills, with names and descriptions, in your co
 
 Rules:
 
+- Before proposing a helper, check that it can run here: the tools or libraries its instructions use are installed (e.g. `python3 -c "import pdfplumber"`, `command -v pdftotext`). If it needs an install, say so in the confirmation; installing is the user's decision (ask first), and a helper that falls back to the built-in method adds nothing.
 - Name each helper and the step it is for in the confirmation (SKILL.md step 4, item 4). Use it only if the user agrees. If no helper is listed or the user declines, use the built-in method.
 - A helper only gets the material. Page structure, writing rules, and the self-check still come from this skill.
 - Keep a helper's intermediate files in a temporary directory and delete them afterwards. If the helper asks the user its own questions, say so in the confirmation.
 - Report which helpers you used, or which built-in method you fell back to.
+
+## 6. Expanding material into steps
+
+A plan or a guide often says what to do but not how. When the user agrees in the confirmation, add the how:
+
+- Keep the material's goals, tasks, and checks unchanged. The added content explains them; it does not replace or extend them.
+- Label it. Every page with added content carries a note box (`admonition`, title Note / 說明, `writing-rules.md` fixed labels) that says which fields come from the material, which are general practice, and the versions assumed (e.g. Ubuntu 24.04, ROS 2 Jazzy, C++17). The Sources section repeats this in one line.
+- Use the official way: commands, file layouts, and APIs as the official documentation for that version describes them. Keep excerpts within the limits in `writing-rules.md`.
+- Verify what can break. If a web tool is available, check version-specific commands and APIs against the official documentation; otherwise say in the report that they are unverified.
+- Do not add numbers the material does not give (prices, durations, results), except as labelled general background.

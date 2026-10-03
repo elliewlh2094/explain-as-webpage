@@ -22,7 +22,7 @@ Each page is a single `.html` file. No build step, no external URLs, no extra fi
 
 ## Process
 
-**Follow-up on an existing page?** If the user asks more about a topic that already has a page (they name the page, or the output directory has one on this topic), read `references/extending-pages.md` first. It changes how steps 2, 4, 5, and 6 apply.
+**Follow-up on an existing page?** If the user asks more about a topic that already has a page (they name the page, or the output directory has one on this topic), read `references/extending-pages.md` first. It changes how steps 2, 4, 5, and 6 apply. The same holds when long material is read as a page tree from the start (faithful guided reading, §6 there).
 
 ### 1. Identify the material and gather context
 
@@ -31,12 +31,12 @@ Each page is a single `.html` file. No build step, no external URLs, no extra fi
 | project | a repo, report, or code path | file reads | `path` + section heading or line |
 | document | a web article URL, PDF, Markdown or text file, pasted text | full text via `curl` / `pdftotext` | the material's heading or page |
 
-In document mode, first read `references/sources-and-research.md`: how to get the full text (not a summary), long material, quoting, helper skills, and the output path. Read only what the questions need: the report, the package directory, the code path, the document's sections. Record each fact you will use together with its source. Do not invent numbers. If the material has no measured result for a claim, say so on the page.
+In document mode, first read `references/sources-and-research.md`: how to get the full text (not a summary), long material and plans, quoting, helper skills, and the output path. Read only what the questions need: the report, the package directory, the code path, the document's sections. Record each fact you will use together with its source. Do not invent numbers. If the material has no measured result for a claim, say so on the page.
 
 ### 2. Write a learning brief (internal, not shown as-is)
 
 - **Core questions** (3–5): phrased the way the user would ask them, e.g. "Why can't we just average the matches?"
-- **Causal chain**: cause → mechanism → consequence → fix → measured result. One line per link, each link backed by a fact or marked as inference.
+- **Page type and spine**: pick the type in `references/page-types.md` (an argument, a roadmap, a practical guide, an evolution, code, or by default a mechanism). For a mechanism, the spine is the causal chain: cause → mechanism → consequence → fix → measured result. One line per link, each link backed by a fact or marked as inference.
 - **Counterfactual pairs**: the same project case without and with the technique, with real numbers. In document mode, only if the material gives such a case.
 - **Key concepts**: at most 5 the reader must learn. Every other technical term still gets a one-clause definition at first use (see `writing-rules.md`).
 
@@ -56,7 +56,7 @@ Examples: a package's module responsibilities and data flow → L0. Real-time fa
 
 Send **one** message (use a structured question tool if the platform has one, e.g. `AskUserQuestion` in Claude Code, with at most 4 questions; otherwise a plain message) containing:
 
-1. The core questions — ask the user to add, remove, or reword. In document mode, also show the material's outline and 5–8 numbered candidate questions in the message text, and for long material the coverage choice (`sources-and-research.md` §3).
+1. The core questions — ask the user to add, remove, or reword. In document mode, also show the material's outline and 5–8 numbered candidate questions inside the question itself (text written before a question tool can go unseen), and, for long material or a plan, the coverage choice and whether to expand units into steps (`sources-and-research.md` §3, §6).
 2. The proposed tier (and page count), why, and the cheaper alternative with what it would lose.
 3. The page language: the language the user asks for; otherwise the language the user writes in. All pages of one topic use one language.
 4. The output path, and any helper skill you plan to use and for which step (`sources-and-research.md` §5). Default path in project mode: `~/Documents/explainers/<repo-name>/<topic-slug>.html`, where `<repo-name>` is the basename of the git top-level directory; offer "inside the project" as an alternative. Document mode: `~/Documents/explainers/<topic-slug>/<topic-slug>.html`.
@@ -96,7 +96,7 @@ Content checklist:
 
 - [ ] The conclusion box answers the main question in 2–4 sentences.
 - [ ] Every core question has its own `h2`, and the heading is the question.
-- [ ] The causal chain figure comes before the question sections, and the sections follow its order.
+- [ ] The spine figure (Figure 1) comes before the question sections, and the sections follow its order.
 - [ ] Every figure sits next to the paragraph that explains it, and that paragraph refers to it by number.
 - [ ] Every number has a source; every inference is inside an "Inference" admonition.
 - [ ] Every technical term and project identifier is defined at first use, with its English original.

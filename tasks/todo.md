@@ -13,14 +13,14 @@
 - [x] 使用者檢視規則 diff 與 V1 頁面，依回饋修正規則
 
 ## 第 2 階段：頁型與長文
-- [ ] T4 `references/page-types.md`（新增）與 4 種主軸圖配方
-- [ ] T5 `extending-pages.md`：第一次產出就建立頁面樹（忠實導讀）
-- [ ] T6 V2：Ronin PDF，忠實導讀，使用 PDF 輔助 skill
-- [ ] T7 V8 前提：與使用者互動產出 C++ 學習計畫（儲存庫外，不屬於 skill 流程）
-- [ ] T8 V8：把 C++ 學習計畫轉成網頁
+- [x] T4 `references/page-types.md`（新增）與 4 種主軸圖配方
+- [x] T5 `extending-pages.md`：第一次產出就建立頁面樹（忠實導讀）
+- [x] T6 V2：Ronin PDF，忠實導讀，使用 PDF 輔助 skill
+- [x] T7 V8 前提：與使用者互動產出 C++ 學習計畫（儲存庫外，不屬於 skill 流程）
+- [x] T8 V8：把 C++ 學習計畫轉成網頁
 
 ### 檢查點 B
-- [ ] 使用者判讀 V2 與 V8，依回饋修正頁型與頁面樹規則
+- [x] 使用者判讀 V2 與 V8，依回饋修正頁型與頁面樹規則
 
 ## 第 3 階段：topic 模式
 - [ ] T9 topic 模式查證、來源等級與模板 `.grade` 樣式
