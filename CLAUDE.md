@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 本儲存庫提供一個 agent skill：`explain-as-webpage`。它讓代理以使用者專案的真實程式碼、資料與報告為例，把陌生的技術或設計做成單一、RTD 風格的 HTML 知識網頁；使用者追問時，可補進原頁或延伸為「主頁＋子頁」的頁面樹。頁面可用英文或繁體中文產出。Claude Code 與 Codex 共用同一份 `skills/explain-as-webpage/SKILL.md`，兩個平台只各自附 plugin manifest，格式仿照 addyosmani/agent-skills。
 
-需求與取捨記錄在 `docs/ideas/explain-as-webpage.md`（第一輪）與 `docs/ideas/explain-as-webpage-v2.md`（第二輪），實作計畫與進度記錄在 `tasks/plan.md`、`tasks/todo.md`。
+需求與取捨記錄在 `docs/ideas/explain-as-webpage.md`（第一輪）、`docs/ideas/explain-as-webpage-v2.md`（第二輪）與 `docs/specs/explain-as-webpage-v3.md`（第三輪規格：材料模式，尚未實作），實作計畫與進度記錄在 `tasks/plan.md`、`tasks/todo.md`。
 
 ## 架構
 
