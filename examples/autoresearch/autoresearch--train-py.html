@@ -215,8 +215,9 @@ def build_model_config(depth):
   <rect class="box" x="470" y="80" width="240" height="180" rx="6"/>
   <text x="590" y="166" text-anchor="middle" class="b">AdamW</text><text x="590" y="186" text-anchor="middle" class="sm">a step size per parameter</text>
 </svg>
-<figcaption>Figure 2. About 40% of the parameters are embedding tables (21.0 M of 50.3 M), and none of them go to Muon.</figcaption>
+<figcaption>Figure 2. About 40% of the parameters are embedding tables (21.0 M of 50.3 M), and none of them go to Muon. Numbers are parameter counts at DEPTH = 8 (M = million).</figcaption>
 </figure>
+<p class="src">Source: train.py lines 236–266 (groups and learning rates) and 248 (the × 1.22 AdamW width scaling, explained below); parameter counts computed as in the table above. LR is a learning rate and has no unit.</p>
 <p>The AdamW learning rates are multiplied by 1/√(width / 768) (line 248). The comment says the rates were “tuned at 768 dim”. At width 512 the factor is (512 / 768)<sup>−0.5</sup> ≈ 1.22, which is the 1.22 in Figure 2. This scaling lets a <code>DEPTH</code> change keep sensible AdamW rates without retuning.</p>
 <div class="admonition note"><p class="admonition-title">General background (not stated in the repository)</p>
 <p>Muon replaces each matrix update with an orthogonalized version, so no single direction of the matrix gets most of the step. <code>muon_step_fused</code> does this with a few matrix multiplications (“Polar express orthogonalization”, lines 323–336). Muon is designed for the weight matrices inside the network. The usual practice is to keep embedding tables, the output head, and scalars on AdamW.</p></div>

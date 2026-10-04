@@ -297,7 +297,7 @@ svg .dot { fill: var(--blue); } svg .dot.bad { fill: var(--red); } svg .dot.good
   <g data-step="8" data-caption="Step 8. The loop repeats without asking the human, about 12 runs per hour. results.tsv keeps every attempt, because git does not track it.">
     <rect class="line" style="stroke:#e67e22;stroke-width:3" x="10" y="20" width="124" height="50" rx="6"/></g>
 </svg>
-<figcaption>Figure 3. The branch tip only moves forward to a lower <code>val_bpb</code>, so it always holds the best <code>train.py</code> found so far.</figcaption>
+<figcaption>Figure 3. The branch tip only moves forward to a lower <code>val_bpb</code> (validation bits per byte; lower is better), so it always holds the best <code>train.py</code> found so far.</figcaption>
 </figure>
 <p class="src">Source: <code>program.md</code> “The experiment loop” (steps 1–9, timeout, crashes, NEVER STOP). The three example ideas and their numbers are the example rows in <code>program.md</code> “Logging results”, not a real run.</p>
 <p>Two details keep the loop running without a human. First, <code>results.tsv</code> stays untracked, so <code>git reset</code> never deletes the record of a failed idea. Second, <code>program.md</code> tells the agent to never stop and ask “should I keep going?”. A run that takes more than 10 minutes is killed and counts as a failure.</p>

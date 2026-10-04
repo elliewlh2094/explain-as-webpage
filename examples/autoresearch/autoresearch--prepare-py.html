@@ -237,8 +237,9 @@ svg .dot { fill: var(--blue); } svg .dot.bad { fill: var(--red); } svg .dot.good
   <text x="700" y="140" text-anchor="end" class="sm">cropped piece · 49</text>
   <text x="100" y="212" class="sm good">0 empty positions; the rest of the cropped document is dropped</text>
 </svg>
-<figcaption>Figure 3. Best-fit packing trades a little dropped text for rows with no empty positions. Document lengths are illustrative.</figcaption>
+<figcaption>Figure 3. Best-fit packing trades a little dropped text for rows with no empty positions. Numbers are lengths in tokens (one position holds one token); document lengths are illustrative.</figcaption>
 </figure>
+<p class="src">Source: prepare.py lines 317–335 (the 2,049-token row, the best-fit search, the cropping). Document lengths A–D are illustrative, not from a real batch.</p>
 <p>In <a href="#fig-3">Figure 3</a>, the row has 449 positions left after documents A and B. Lines 317–321 search the buffer of about 1,000 documents for the largest one with at most 449 tokens, here document D. When no document fits the last 49 positions, lines 329–331 take the shortest document and keep only its first 49 tokens.</p>
 <pre><code># prepare.py lines 323–332
                 if best_idx &gt;= 0:
