@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>explain-as-webpage: a skill that turns your project into explainer pages</title>
+<title>explain-as-webpage</title>
 <style>
 :root {
   --text: #404040; --muted: #6a6a6a; --link: #2980b9; --link-visited: #9b59b6;
@@ -42,6 +42,7 @@ h1 { font-size: 1.9rem; margin: 0 0 16px; }
 h2 { font-size: 1.45rem; margin: 40px 0 12px; padding-top: 8px; border-top: 1px solid var(--rule); }
 h3 { font-size: 1.15rem; margin: 28px 0 8px; }
 a { color: var(--link); } a:visited { color: var(--link-visited); }
+.content a { overflow-wrap: anywhere; }
 p, ul, ol { margin: 0 0 16px; }
 li { margin-bottom: 4px; }
 code { font: .88em var(--mono); color: #e74c3c; background: #fff; border: 1px solid var(--rule); padding: 0 4px; overflow-wrap: anywhere; }
@@ -51,7 +52,11 @@ pre code { color: inherit; border: 0; padding: 0; background: none; }
 table { border-collapse: collapse; margin: 0 0 20px; width: 100%; font-size: .92rem; display: block; overflow-x: auto; }
 th, td { border: 1px solid var(--rule); padding: 6px 12px; text-align: left; vertical-align: top; }
 th { background: #eee; } tr:nth-child(even) td { background: var(--row-alt); }
+table.kv td:first-child { white-space: nowrap; } /* label column of a label-content table */
 .src { font-size: .8rem; color: var(--muted); }
+/* Source grades (references/sources-and-research.md §8) */
+.grade { display: inline-block; font-size: .75rem; line-height: 1.5; padding: 0 6px; margin-right: 6px; border-radius: 3px; color: #fff; }
+.grade.g1 { background: #117a65; } .grade.g2 { background: #1f618d; } .grade.g3 { background: #616a6b; } .grade.g4 { background: #a04000; }
 
 /* Admonitions: note / tip / warning / danger */
 .admonition { margin: 0 0 20px; background: var(--blue-bg); }
@@ -115,231 +120,245 @@ svg .dot { fill: var(--blue); } svg .dot.bad { fill: var(--red); } svg .dot.good
 
 <div class="topbar"><button type="button" aria-label="Menu" onclick="document.body.classList.toggle('nav-open')">☰</button><span>explain-as-webpage</span></div>
 <nav class="side">
-  <div class="side-head"><span class="title">explain-as-webpage</span><span class="meta">this repository · 2026-10-03</span></div>
+  <div class="side-head"><span class="title">explain-as-webpage</span><span class="meta">Project guide · 2026-10-04</span></div>
   <div class="toc" id="toc"><!-- built from h2/h3 by the script --></div>
 </nav>
 
 <div class="main"><main class="content">
-<div class="crumbs">explain-as-webpage » What it is and how to use it</div>
-<h1>explain-as-webpage: a skill that turns your project into explainer pages</h1>
+<div class="crumbs">sphinx-style-notes-maker » explain-as-webpage</div>
+<h1>explain-as-webpage: turn what you do not understand into one knowledge page</h1>
 
 <div class="admonition tip"><p class="admonition-title">Conclusion</p>
-<p>This repository holds one agent skill (a packaged set of instructions that an AI coding agent loads on demand). When you do not understand something an agent did in your project, the skill makes the agent explain it as a single HTML page, built from your own code, data, and reports. The page answers 3–5 of your questions in about 15 minutes of reading, and the agent asks you to confirm the questions before it builds anything. The three example pages for <code>karpathy/autoresearch</code> are 848–1,225 words each, inside the 1,800-word budget.</p></div>
+<p>This repository provides one agent skill, <code>explain-as-webpage</code>. You give it a project, a document, or a topic, plus your questions. The agent then follows the 7 steps in <code>SKILL.md</code> and builds one self-contained HTML page in the Read the Docs style that opens offline. Only step 4 needs you: the agent lists the questions, the presentation tier, and the output path once, and it builds only after you answer. The rules are split into 1 main file and 5 reference files. Every session holds only the description (an estimated 400 tokens); calling the skill loads the main file (an estimated 3.7k tokens); the reference files load only at the step that needs them.</p></div>
 
-<h2 id="chain">What problem does this skill solve?</h2>
-<p>Agents now write long reports, and long reports are hard to judge. <a href="#fig-1">Figure 1</a> shows the chain this skill was built to break. The author's own robotics project had agent-written Markdown reports of 833–1,674 lines. One of them already had matplotlib figures, and it was still hard to follow.</p>
+<h2 id="flow">How does one request become one page?</h2>
+<p><a href="#fig-1">Figure 1</a> shows one request going through the 7 steps of <code>SKILL.md</code>. The second line of each box is the file that step reads or the thing it produces. The next sections follow the figure: the material modes of step 1, the page type and tier of steps 2 and 3, and then when each file is read and how pages grow with follow-up questions.</p>
 <figure id="fig-1">
-<svg viewBox="0 0 720 120" role="img" aria-label="Long reports lead to a lost causal thread, which leads to blind trust in the agent; question-driven pages within a word budget break the chain.">
-  <rect class="box bad" x="10" y="30" width="150" height="60" rx="6"/>
-  <text x="85" y="56" text-anchor="middle" class="b">Long reports</text><text x="85" y="76" text-anchor="middle" class="sm">833–1,674 lines</text>
-  <line class="line" x1="160" y1="60" x2="190" y2="60" marker-end="url(#arr)"/>
-  <rect class="box" x="190" y="30" width="150" height="60" rx="6"/>
-  <text x="265" y="56" text-anchor="middle" class="b">Lost thread</text><text x="265" y="76" text-anchor="middle" class="sm">text without a spine</text>
-  <line class="line" x1="340" y1="60" x2="370" y2="60" marker-end="url(#arr)"/>
-  <rect class="box warn" x="370" y="30" width="150" height="60" rx="6"/>
-  <text x="445" y="56" text-anchor="middle" class="b">Blind trust</text><text x="445" y="76" text-anchor="middle" class="sm">accept agent's ideas</text>
-  <line class="line good" x1="520" y1="60" x2="550" y2="60" marker-end="url(#arr-good)"/>
-  <rect class="box good" x="550" y="30" width="160" height="60" rx="6"/>
-  <text x="630" y="56" text-anchor="middle" class="b">Question pages</text><text x="630" y="76" text-anchor="middle" class="sm">≤ 1,800 words, 15 min</text>
+<svg viewBox="0 0 720 340" role="img" aria-label="Main flow: gather material, write a learning brief, choose a tier, confirm once, build, self-check, report, and the result is one HTML file. Step 4 waits for the user.">
+  <rect class="box" x="10" y="40" width="200" height="60" rx="6"/>
+  <text x="110" y="66" text-anchor="middle" class="b">① Gather material</text><text x="110" y="86" text-anchor="middle" class="sm">sources-and-research.md *</text>
+  <line class="line" x1="210" y1="70" x2="258" y2="70" marker-end="url(#arr)"/>
+  <rect class="box" x="260" y="40" width="200" height="60" rx="6"/>
+  <text x="360" y="66" text-anchor="middle" class="b">② Learning brief</text><text x="360" y="86" text-anchor="middle" class="sm">page-types.md: page type</text>
+  <line class="line" x1="460" y1="70" x2="508" y2="70" marker-end="url(#arr)"/>
+  <rect class="box" x="510" y="40" width="200" height="60" rx="6"/>
+  <text x="610" y="66" text-anchor="middle" class="b">③ Choose a tier</text><text x="610" y="86" text-anchor="middle" class="sm">L0 / L1 / L2</text>
+  <line class="line" x1="610" y1="100" x2="610" y2="138" marker-end="url(#arr)"/>
+  <rect class="box warn" x="510" y="140" width="200" height="60" rx="6"/>
+  <text x="610" y="166" text-anchor="middle" class="b">④ Confirm once</text><text x="610" y="186" text-anchor="middle" class="sm">build only after answers</text>
+  <line class="line" x1="510" y1="170" x2="462" y2="170" marker-end="url(#arr)"/>
+  <rect class="box" x="260" y="140" width="200" height="60" rx="6"/>
+  <text x="360" y="166" text-anchor="middle" class="b">⑤ Build</text><text x="360" y="186" text-anchor="middle" class="sm">template + 2 rule files</text>
+  <line class="line" x1="260" y1="170" x2="212" y2="170" marker-end="url(#arr)"/>
+  <rect class="box" x="10" y="140" width="200" height="60" rx="6"/>
+  <text x="110" y="166" text-anchor="middle" class="b">⑥ Self-check</text><text x="110" y="186" text-anchor="middle" class="sm">commands + 2 screenshots</text>
+  <line class="line" x1="110" y1="200" x2="110" y2="238" marker-end="url(#arr)"/>
+  <rect class="box" x="10" y="240" width="200" height="60" rx="6"/>
+  <text x="110" y="266" text-anchor="middle" class="b">⑦ Report</text><text x="110" y="286" text-anchor="middle" class="sm">path, unverified items</text>
+  <line class="line" x1="210" y1="270" x2="258" y2="270" marker-end="url(#arr)"/>
+  <rect class="box good" x="260" y="240" width="200" height="60" rx="6"/>
+  <text x="360" y="266" text-anchor="middle" class="b">One HTML file</text><text x="360" y="286" text-anchor="middle" class="sm">inline SVG, opens offline</text>
+  <text x="10" y="330" class="sm">* Read only in document and topic modes; project mode reads the project files directly.</text>
 </svg>
-<figcaption>Figure 1. The fix is not more figures. It is structure: one page, a few questions, one causal chain.</figcaption>
+<figcaption>Figure 1. Of the 7 steps, only step 4 stops for the user. The reference files are read at the steps that need them, not all at the start.</figcaption>
 </figure>
-<p>The design notes name four problems: the reports were too long, the text was too dense, there was no causal thread, and the figures were far from the text that explained them. Adding figures did not help, because figures were never the missing part. So the skill controls the structure of the page. It opens with the conclusion, draws one causal chain, gives each question its own section, and puts each figure next to the paragraph that explains it.</p>
-<p>The table compares the same request, “help me understand this”, without and with the skill.</p>
+<p class="src">Source: <code>skills/explain-as-webpage/SKILL.md</code> § Process (steps 1–7).</p>
+<p>The table follows one real request through the steps: the one that produced <code>examples/starship-reusability/</code>, a Traditional Chinese example in this repository. It is a topic-mode request (a topic, no material), so step 1 starts with research.</p>
 <table>
-<tr><th></th><th>Agent-written report</th><th>With explain-as-webpage</th></tr>
-<tr><td>Length</td><td>833–1,674 lines of Markdown</td><td>3–5 questions, at most ~1,800 words</td></tr>
-<tr><td>Order</td><td>Section by section, as the author thought</td><td>Conclusion first, then one causal chain</td></tr>
-<tr><td>Figures</td><td>None, or plots apart from the text</td><td>Each figure next to the paragraph that cites it</td></tr>
-<tr><td>Your input before writing</td><td>None</td><td>You confirm the questions, tier, and path</td></tr>
+<tr><th>Step</th><th>What it does</th><th>What happened for the Starship request</th></tr>
+<tr><td style="white-space:nowrap">① Gather material</td><td>Picks the mode from the material; in topic mode, a few searches, just enough for an outline</td><td>The latest event found was flight 14 on 2026-09-28</td></tr>
+<tr><td style="white-space:nowrap">② Learning brief</td><td>3–5 core questions, the page type and its spine, a counterfactual, at most 5 key concepts</td><td>Mechanism page; the spine is the causal chain "propellant → payload share → thrown away → recovery"</td></tr>
+<tr><td style="white-space:nowrap">③ Choose a tier</td><td>The lowest tier that answers every question</td><td>Proposed L0; offered L2 because "how does the booster come back?" is a process</td></tr>
+<tr><td style="white-space:nowrap">④ Confirm once</td><td>At most 4 questions: core questions, tier, language and reader, path and research depth</td><td>The user chose questions 1–5, L2, Traditional Chinese for non-specialist undergraduates, light research</td></tr>
+<tr><td style="white-space:nowrap">⑤ Build</td><td>Copies the template and fills it, following the writing rules and SVG recipes</td><td>4 figures, one of them a 5-step stepper</td></tr>
+<tr><td style="white-space:nowrap">⑥ Self-check</td><td>Runs the commands, then takes screenshots at two widths and looks at them</td><td>The screenshots showed that the labels of stepper frames 4 and 5 were too far from the booster; moved and re-checked</td></tr>
+<tr><td style="white-space:nowrap">⑦ Report</td><td>The path, the questions answered, the helper skills used, what could not be verified</td><td>No source sentence gave the date of flight 15, so the page leaves it out and the report says so</td></tr>
 </table>
-<p class="src">Source: <code>docs/ideas/explain-as-webpage.md</code> “Recommended Direction”; <code>tasks/plan.md</code> “Context” at commit <code>2ec4278</code>; word counts from the length command in <code>references/extending-pages.md</code> §5.</p>
+<p class="src">Source: <code>SKILL.md</code> steps 2–7; <code>tasks/plan.md</code> § "T15 結果（2026-10-04）" (T15 results).</p>
+<p>The commands in step 6 check four things: no template placeholder is left, the page loads no external resources, the file is about 150 KB or smaller, and in topic mode every source has a grade and an access date. Then headless Chrome takes screenshots at 1280 px and 390 px. The 390 px check puts the page in an iframe, because a Chrome window is at least 500 px wide.</p>
+<p class="src">Source: <code>SKILL.md</code> § 6. Self-check.</p>
 
-<h2 id="q1">What does the agent do when you ask for a page?</h2>
-<p>It follows seven steps, shown in <a href="#fig-2">Figure 2</a>. The orange step is a gate: the agent stops and waits for your answer. The green step is a self-check that loops back until every check passes.</p>
+<h2 id="q1">What problem does the skill solve, and what does it produce?</h2>
+<p>It solves "the agent finished, and I do not understand what it did". An agent wrote a package, used an algorithm, or left a long analysis report; you must judge or change it, but you cannot find the chain of causes in it. The skill is inspired by a post by Andrej Karpathy (a screenshot is in <code>README.md</code>). The third round of work (v3) extends it from projects to documents and topics: without a software project, an article, a PDF, or a topic becomes an equally readable page.</p>
+<table class="kv">
+<tr><td>Form</td><td>One <code>.html</code> file per page in the Read the Docs look (sphinx_rtd_theme); no build step and no extra image or script folders</td></tr>
+<tr><td>Offline</td><td>Every figure is inline SVG, and the CSS and scripts are inside the file; the page loads no external resources</td></tr>
+<tr><td>Structure</td><td>The conclusion first, then one spine through the page; every <code>h2</code> is a question the reader would ask</td></tr>
+<tr><td>Length</td><td>About 15 minutes of reading: at most about 1,800 words of prose, or about 3,500 CJK characters</td></tr>
+<tr><td>Language</td><td>English or Traditional Chinese; if you do not say, the language you write in</td></tr>
+<tr><td>Template</td><td><code>assets/template.html</code> (254 lines) with a sidebar table of contents, an optional page tree, and a shared stepper component</td></tr>
+</table>
+<p class="src">Source: <code>README.md</code> § Inspiration, § What it produces; <code>docs/specs/explain-as-webpage-v3.md</code> §0; <code>references/writing-rules.md</code> § Length budget; <code>CLAUDE.md</code> § 架構 (architecture).</p>
+
+<h2 id="q2">How do reading and citing change with the material?</h2>
+<p>Step 1 picks one of three modes from what you give. The mode decides how the agent reads the material, how each fact names its source, and the default output path.</p>
+<table>
+<tr><th>Mode</th><th>You give</th><th>How the agent reads it</th><th>How a fact names its source</th></tr>
+<tr><td style="white-space:nowrap">project</td><td>A repository, a report, a code path</td><td>Reads the files</td><td>File path + section heading or line</td></tr>
+<tr><td style="white-space:nowrap">document</td><td>A web article, a PDF, Markdown, pasted text</td><td>Gets the full text with <code>curl</code> or <code>pdftotext</code></td><td>The material's heading or page</td></tr>
+<tr><td style="white-space:nowrap">topic</td><td>Only a topic and questions</td><td>Primary sources first, then search</td><td>Source + access date + grade</td></tr>
+</table>
+<p class="src">Source: <code>SKILL.md</code> § 1; <code>references/sources-and-research.md</code> §1.</p>
+<p>The most important rule of document mode is "the full text, not a summary". The table shows a test from task T1 on the same two articles. A fetch tool that answers through a model, such as WebFetch, gives the model's summary; <code>curl</code> plus local tag stripping gives the original text.</p>
+<table>
+<tr><th>Material</th><th>WebFetch</th><th><code>curl</code> + tag stripping</th></tr>
+<tr><td>Paul Graham, "How to Do Great Work"</td><td>Asked for the text word for word, it refused for copyright reasons and gave only a summary and short quotes</td><td>Full text, 11,738 words, ending with the acknowledgements</td></tr>
+<tr><td>Karpathy, "LLM Wiki" gist</td><td>All 9 headings correct, but the section lengths were guesses, about 2,170 words in total</td><td>Full text, 1,921 words, the ending matches the original</td></tr>
+</table>
+<p class="src">Source: <code>tasks/plan.md</code> § "T1（2026-10-03，Claude Code）" item 1.</p>
+<p>In topic mode, you choose the research depth: light means about 5–10 sources; deep means at least two independent sources for every key claim, and the page says where sources disagree. Every source carries a grade and an access date: g1 Primary (papers, official documentation), g2 Authoritative (government agencies, professional societies), g3 Secondary (news, encyclopedias), g4 Emerging (one person's claim). A claim that only g4 sources support goes into an Emerging view box that names who makes it. The Starship page works this way: SpaceX flight reports are g1, NASA pages are g2, Wikipedia is g3, and Musk's guess about cost sits in an Emerging view box. Health, safety, law, and personal finance are high-risk topics: only g1–g2 sources, a reader's own national agencies first, a Caution box on the page, and no doses or individual advice.</p>
+<p class="src">Source: <code>references/sources-and-research.md</code> §7, §8, §9; <code>examples/starship-reusability/starship-reusability.html</code> § 來源 (sources).</p>
+
+<h2 id="q3">How does it decide what a page looks like?</h2>
+<p>Two independent choices decide it. The page type decides Figure 1 (the spine of the page) and the section skeleton; the tier decides how interactive the page is. Step 2 picks the page type from what the material is:</p>
+<table>
+<tr><th>Page type</th><th>The material is</th><th>Figure 1 (spine)</th></tr>
+<tr><td style="white-space:nowrap">Mechanism (default)</td><td>A technique, an algorithm, a physical or biological mechanism</td><td>Causal chain</td></tr>
+<tr><td style="white-space:nowrap">Package or architecture</td><td>A code package: what it does and why it is built this way</td><td>Main flow of one unit of work through the modules</td></tr>
+<tr><td style="white-space:nowrap">Code walkthrough</td><td>One file or module, usually a child page</td><td>Call flow through its main functions</td></tr>
+<tr><td style="white-space:nowrap">Argument</td><td>An essay, an opinion piece, a way of thinking</td><td>Argument map</td></tr>
+<tr><td style="white-space:nowrap">Roadmap or plan</td><td>A plan with stages, tasks, and checks</td><td>Roadmap of stages; a page tree by default</td></tr>
+<tr><td style="white-space:nowrap">Practical guide</td><td>How to prepare for or decide something</td><td>Decision tree or grouped checklist</td></tr>
+<tr><td style="white-space:nowrap">Evolution</td><td>An idea that changed through named stages</td><td>Evolution of stages</td></tr>
+</table>
+<p class="src">Source: <code>references/page-types.md</code>, the table at the top.</p>
+<p>Step 3 picks the tier: the lowest tier that answers every question, decided question by question (<a href="#fig-2">Figure 2</a>). Only a question about a process gets an animation; the rest of the page stays static. This page is a package page at L0: Figure 1 is the main flow of a request through the steps, and no question needs interaction.</p>
 <figure id="fig-2">
-<svg viewBox="0 0 720 240" role="img" aria-label="Seven steps: gather facts, write a brief, choose a tier, confirm once and wait, build the page, self-check with a loop back to build, report.">
-  <text x="700" y="20" text-anchor="end" class="sm">gate: no building before you answer</text>
-  <rect class="box" x="10" y="30" width="150" height="60" rx="6"/>
-  <text x="85" y="56" text-anchor="middle" class="b">1 Gather facts</text><text x="85" y="76" text-anchor="middle" class="sm">files, numbers, lines</text>
-  <line class="line" x1="160" y1="60" x2="190" y2="60" marker-end="url(#arr)"/>
-  <rect class="box" x="190" y="30" width="150" height="60" rx="6"/>
-  <text x="265" y="56" text-anchor="middle" class="b">2 Write brief</text><text x="265" y="76" text-anchor="middle" class="sm">3–5 questions, chain</text>
-  <line class="line" x1="340" y1="60" x2="370" y2="60" marker-end="url(#arr)"/>
-  <rect class="box" x="370" y="30" width="150" height="60" rx="6"/>
-  <text x="445" y="56" text-anchor="middle" class="b">3 Choose tier</text><text x="445" y="76" text-anchor="middle" class="sm">lowest that answers</text>
-  <line class="line" x1="520" y1="60" x2="550" y2="60" marker-end="url(#arr)"/>
-  <rect class="box warn" x="550" y="30" width="150" height="60" rx="6"/>
-  <text x="625" y="56" text-anchor="middle" class="b">4 Confirm once</text><text x="625" y="76" text-anchor="middle" class="sm">wait for the user</text>
-  <path class="line" d="M625 90 V115 H85 V140" marker-end="url(#arr)"/>
-  <rect class="box" x="10" y="140" width="150" height="60" rx="6"/>
-  <text x="85" y="166" text-anchor="middle" class="b">5 Build page</text><text x="85" y="186" text-anchor="middle" class="sm">template + rules</text>
-  <line class="line" x1="160" y1="170" x2="190" y2="170" marker-end="url(#arr)"/>
-  <rect class="box good" x="190" y="140" width="150" height="60" rx="6"/>
-  <text x="265" y="166" text-anchor="middle" class="b">6 Self-check</text><text x="265" y="186" text-anchor="middle" class="sm">grep + screenshots</text>
-  <line class="line" x1="340" y1="170" x2="370" y2="170" marker-end="url(#arr)"/>
-  <rect class="box" x="370" y="140" width="150" height="60" rx="6"/>
-  <text x="445" y="166" text-anchor="middle" class="b">7 Report</text><text x="445" y="186" text-anchor="middle" class="sm">path, how to open</text>
-  <path class="line dash" d="M265 200 V220 H85 V200" marker-end="url(#arr)"/>
-  <text x="175" y="235" text-anchor="middle" class="sm">fix every failure</text>
+<svg viewBox="0 0 720 230" role="img" aria-label="How the tier is chosen: a question about structure or a causal chain gets L0, a static figure; a question about a trade-off, where the result depends on a parameter, gets L1, one slider; a question about a process or events over time gets L2, a stepper.">
+  <rect class="box" x="10" y="85" width="200" height="60" rx="6"/>
+  <text x="110" y="111" text-anchor="middle" class="b">What does it ask about?</text><text x="110" y="131" text-anchor="middle" class="sm">one question at a time</text>
+  <path class="line" d="M210 105 H240 V40 H328" marker-end="url(#arr)"/><text x="246" y="62" class="sm">structure</text>
+  <line class="line" x1="210" y1="115" x2="328" y2="115" marker-end="url(#arr)"/><text x="250" y="108" class="sm">trade-off</text>
+  <path class="line" d="M210 125 H240 V190 H328" marker-end="url(#arr)"/><text x="246" y="170" class="sm">process</text>
+  <rect class="box good" x="330" y="10" width="280" height="60" rx="6"/>
+  <text x="470" y="36" text-anchor="middle" class="b">L0: text + static SVG</text><text x="470" y="56" text-anchor="middle" class="sm">structure, causal chain, before/after</text>
+  <rect class="box good" x="330" y="85" width="280" height="60" rx="6"/>
+  <text x="470" y="111" text-anchor="middle" class="b">L1: one slider or toggle</text><text x="470" y="131" text-anchor="middle" class="sm">the result depends on a parameter</text>
+  <rect class="box good" x="330" y="160" width="280" height="60" rx="6"/>
+  <text x="470" y="186" text-anchor="middle" class="b">L2: add a stepper</text><text x="470" y="206" text-anchor="middle" class="sm">an algorithm loop, events over time</text>
+  <text x="625" y="45" class="sm">cost 1×</text>
+  <text x="625" y="120" class="sm">about 1.5×</text>
+  <text x="625" y="195" class="sm">about 2–3×</text>
 </svg>
-<figcaption>Figure 2. You see the plan at step 4, before any HTML exists, and you see the result at step 7, after it passed its own checks.</figcaption>
+<figcaption>Figure 2. The tier follows the question, not the topic. A page uses L2 only because one question is about a process, not because an animation looks good.</figcaption>
 </figure>
-<p>Step 4 sends one message with four items: the core questions, the proposed tier with a cheaper alternative, the output path, and the page language. The default path is <code>~/Documents/explainers/&lt;repo-name&gt;/&lt;topic&gt;.html</code>, outside your project. Step 6 runs real commands. <code>grep</code> confirms that no template placeholder and no external URL is left. Then a headless Chrome takes screenshots at 1280 px and 390 px wide, and the agent looks at them for overlapping labels, overflowing text, and arrows that miss their boxes.</p>
-<p class="src">Source: <code>skills/explain-as-webpage/SKILL.md</code> “Process”, steps 1–7.</p>
+<p class="src">Source: <code>SKILL.md</code> § 3 (tier table, relative cost) and Red Flags; the choices for this page and the Starship page are in <code>tasks/plan.md</code> § "T15 結果".</p>
 
-<h2 id="q2">How does it pick L0, L1, or L2?</h2>
-<p>By the type of each question, as in <a href="#fig-3">Figure 3</a>. The agent picks the lowest tier that answers every question, and it raises the tier only for the question that needs it. The rest of the page stays at L0.</p>
+<h2 id="q4">Which file is read when, and why are the rules split this way?</h2>
+<p>An agent platform keeps only each skill's description (the <code>description</code> at the top of <code>SKILL.md</code>) in every session; the body loads only when the skill is called. So the longer the rules, the more every call costs. This repository keeps only the process and the criteria in <code>SKILL.md</code> (at most about 130 lines) and moves the details into reference files, which the agent reads at the step that needs them (<a href="#fig-3">Figure 3</a>).</p>
 <figure id="fig-3">
-<svg viewBox="0 0 720 220" role="img" aria-label="Structure or causal chain questions get L0 static SVG; a trade-off on one parameter gets L1 with one slider; a process that unfolds in steps gets L2 with a stepper.">
-  <text x="160" y="14" text-anchor="middle" class="sm">the question is about…</text>
-  <text x="430" y="14" text-anchor="middle" class="sm">tier</text>
-  <text x="625" y="14" text-anchor="middle" class="sm">live example</text>
-  <rect class="box muted" x="10" y="20" width="300" height="50" rx="6"/><text x="160" y="50" text-anchor="middle">Structure or a causal chain</text>
-  <line class="line" x1="310" y1="45" x2="350" y2="45" marker-end="url(#arr)"/>
-  <rect class="box" x="350" y="20" width="160" height="50" rx="6"/><text x="430" y="50" text-anchor="middle" class="b">L0 · static SVG</text>
-  <line class="line dash" x1="510" y1="45" x2="540" y2="45"/>
-  <text x="550" y="50" class="sm">autoresearch Fig. 1</text>
-
-  <rect class="box muted" x="10" y="90" width="300" height="50" rx="6"/><text x="160" y="120" text-anchor="middle">A trade-off on one parameter</text>
-  <line class="line" x1="310" y1="115" x2="350" y2="115" marker-end="url(#arr)"/>
-  <rect class="box" x="350" y="90" width="160" height="50" rx="6"/><text x="430" y="120" text-anchor="middle" class="b">L1 · one slider</text>
-  <line class="line dash" x1="510" y1="115" x2="540" y2="115"/>
-  <text x="550" y="120" class="sm">autoresearch Fig. 4</text>
-
-  <rect class="box muted" x="10" y="160" width="300" height="50" rx="6"/><text x="160" y="190" text-anchor="middle">A process that unfolds in steps</text>
-  <line class="line" x1="310" y1="185" x2="350" y2="185" marker-end="url(#arr)"/>
-  <rect class="box" x="350" y="160" width="160" height="50" rx="6"/><text x="430" y="190" text-anchor="middle" class="b">L2 · stepper</text>
-  <line class="line dash" x1="510" y1="185" x2="540" y2="185"/>
-  <text x="550" y="190" class="sm">autoresearch Fig. 3</text>
+<svg viewBox="0 0 720 360" role="img" aria-label="Estimated tokens and load time of each file: description about 400, held in every session; SKILL.md about 3.7k, loaded when the skill is called; sources-and-research.md about 5.7k, page-types.md about 3.2k, writing-rules.md about 3.7k, svg-recipes.md about 6.4k, template.html about 6.2k, extending-pages.md about 2.9k, read at the step that needs them.">
+  <text x="710" y="20" text-anchor="end" class="sm">unit: tokens (estimates)</text>
+  <text x="10" y="20" class="b">Every session</text>
+  <text x="250" y="44" text-anchor="end" class="sm">description</text>
+  <rect class="box" x="260" y="32" width="21" height="16"/><text x="289" y="44" class="sm">~400</text>
+  <text x="10" y="76" class="b">When the skill is called</text>
+  <text x="250" y="100" text-anchor="end" class="sm">SKILL.md (with description)</text>
+  <rect class="box" x="260" y="88" width="197" height="16"/><text x="465" y="100" class="sm">~3.7k</text>
+  <text x="10" y="132" class="b">Read only when needed</text>
+  <text x="250" y="156" text-anchor="end" class="sm">sources-and-research.md (step 1)</text>
+  <rect class="box warn" x="260" y="144" width="303" height="16"/><text x="571" y="156" class="sm">~5.7k</text>
+  <text x="250" y="182" text-anchor="end" class="sm">page-types.md (step 2)</text>
+  <rect class="box warn" x="260" y="170" width="170" height="16"/><text x="438" y="182" class="sm">~3.2k</text>
+  <text x="250" y="208" text-anchor="end" class="sm">writing-rules.md (steps 4, 5)</text>
+  <rect class="box warn" x="260" y="196" width="197" height="16"/><text x="465" y="208" class="sm">~3.7k</text>
+  <text x="250" y="234" text-anchor="end" class="sm">svg-recipes.md (step 5)</text>
+  <rect class="box warn" x="260" y="222" width="340" height="16"/><text x="608" y="234" class="sm">~6.4k</text>
+  <text x="250" y="260" text-anchor="end" class="sm">template.html (step 5)</text>
+  <rect class="box warn" x="260" y="248" width="329" height="16"/><text x="597" y="260" class="sm">~6.2k</text>
+  <text x="250" y="286" text-anchor="end" class="sm">extending-pages.md (follow-ups)</text>
+  <rect class="box warn" x="260" y="274" width="154" height="16"/><text x="422" y="286" class="sm">~2.9k</text>
+  <text x="10" y="312" class="sm">Bar length is proportional to the token estimate.</text>
+  <text x="10" y="330" class="sm">The estimates come from claude plugin details and may differ from actual use.</text>
+  <text x="10" y="348" class="sm">Each reference file and the template were wrapped as a test skill and estimated the same way.</text>
 </svg>
-<figcaption>Figure 3. The tier follows the question, not the topic. One page can mix all three.</figcaption>
+<figcaption>Figure 3. A session pays only for the description. A first build in project mode does not need sources-and-research.md or extending-pages.md. (All numbers are estimates.)</figcaption>
 </figure>
-<p>The live examples are on the autoresearch page: <a href="../autoresearch/autoresearch.html#fig-1">a static flow figure</a> (L0), <a href="../autoresearch/autoresearch.html#fig-4">a time-budget slider</a> (L1), and <a href="../autoresearch/autoresearch.html#fig-3">an eight-step experiment loop</a> (L2). That page mixes all three tiers. This page uses only L0, because each of its questions is about structure or order.</p>
-<p>The rule exists because each tier costs more to build: about 1× for L0, 1.5× for L1, and 2–3× for L2. Animation helps only when the question is about a process; for structure, a static figure is faster to read.</p>
-<p class="src">Source: <code>SKILL.md</code> step 3 (tier table, relative cost) and “Common Rationalizations”; <code>examples/autoresearch/autoresearch.html</code>.</p>
+<p class="src">The unit is tokens because this section asks about loading cost, and a model's context and its price are counted in tokens; file size is only a proxy. Source: estimates from <code>claude --plugin-dir . plugin details sphinx-style-notes-maker</code> (about 403 tokens always on, about 3.7k tokens per call). For the reference files and the template, each file was wrapped as its own test skill (3 lines of frontmatter added) and estimated with the same command. When each file is read: <code>SKILL.md</code> steps 1, 2, 4, 5 and the start of § Process.</p>
+<p>Add up the estimates. A first build in project mode reads <code>SKILL.md</code>, <code>page-types.md</code>, <code>writing-rules.md</code>, <code>svg-recipes.md</code>, and the template: 3.7k + 3.2k + 3.7k + 6.4k + 6.2k ≈ 23.2k tokens. Document or topic mode adds <code>sources-and-research.md</code>, about 28.9k tokens. All files together are about 31.8k tokens. File size does not stand in for tokens: <code>writing-rules.md</code> is only 9.8 KB, but its estimate is about 3.7k, the same as the 11.8 KB <code>SKILL.md</code>, because the files differ in their share of CJK text and code. <code>CLAUDE.md</code> also states the rule: when the rules change, <code>SKILL.md</code> stays at about 130 lines or fewer, and the details go into the reference files.</p>
+<p class="src">Source: the estimates in Figure 3 (the sums are computed on this page); file sizes measured with <code>wc -c</code>; <code>CLAUDE.md</code> § 架構 (architecture), last paragraph.</p>
+<div class="admonition warning"><p class="admonition-title">Inference</p>
+<p>The cost of this split is that the rules are spread over 6 files that refer to each other by section number (for example <code>sources-and-research.md</code> §7). When a section of one file changes, the files that refer to it must be checked too.</p></div>
 
-<h2 id="q3">What is in the repository, and when is each file read?</h2>
-<p>The skill is one folder, read in three layers, as in <a href="#fig-4">Figure 4</a>. Only a short description is always in the agent's context. The rest loads when the skill runs, and the detailed rules load only at the step that needs them.</p>
+<h2 id="q5">How does a page grow into a page tree with follow-up questions?</h2>
+<p>When you ask more about an existing page, the agent first reads <code>extending-pages.md</code> and decides where each new question goes (<a href="#fig-4">Figure 4</a>). The principle: every page keeps its own length budget, so the hub page does not keep growing.</p>
 <figure id="fig-4">
-<svg viewBox="0 0 720 240" role="img" aria-label="Three layers: the description is always loaded, the SKILL.md body loads when the skill runs, and the references and template are read at the steps that need them.">
-  <rect class="box muted" x="10" y="10" width="220" height="220" rx="6"/>
-  <text x="120" y="34" text-anchor="middle" class="b">Always loaded</text>
-  <rect class="box" x="30" y="50" width="180" height="50" rx="6"/>
-  <text x="120" y="80" text-anchor="middle" class="b">description</text>
-  <text x="30" y="130" class="sm">SKILL.md frontmatter</text>
-  <text x="30" y="152" class="sm">~341 tokens per session</text>
-  <text x="30" y="174" class="sm">decides when to trigger</text>
-
-  <rect class="box muted" x="250" y="10" width="220" height="220" rx="6"/>
-  <text x="360" y="34" text-anchor="middle" class="b">When the skill runs</text>
-  <rect class="box warn" x="270" y="50" width="180" height="50" rx="6"/>
-  <text x="360" y="80" text-anchor="middle" class="b">SKILL.md body</text>
-  <text x="270" y="130" class="sm">the 7 steps, tier table</text>
-  <text x="270" y="152" class="sm">red flags, checklists</text>
-  <text x="270" y="174" class="sm">~2.8k tokens per call</text>
-
-  <rect class="box muted" x="490" y="10" width="220" height="220" rx="6"/>
-  <text x="600" y="34" text-anchor="middle" class="b">Read when needed</text>
-  <rect class="box good" x="510" y="50" width="180" height="50" rx="6"/>
-  <text x="600" y="80" text-anchor="middle" class="b">references, assets</text>
-  <text x="510" y="130" class="sm">writing-rules.md · step 5</text>
-  <text x="510" y="152" class="sm">svg-recipes.md · step 5</text>
-  <text x="510" y="174" class="sm">template.html · step 5</text>
-  <text x="510" y="196" class="sm">extending-pages.md · follow-ups</text>
-
-  <line class="line" x1="210" y1="75" x2="270" y2="75" marker-end="url(#arr)"/>
-  <line class="line" x1="450" y1="75" x2="510" y2="75" marker-end="url(#arr)"/>
+<svg viewBox="0 0 720 230" role="img" aria-label="Where a follow-up goes: more detail on an existing question, about 150 words and no new figure, goes into a details block in that section; a new question, such as another mechanism or what a file does, becomes a child page; a finding that overturns the conclusion or the causal chain revises the hub page.">
+  <rect class="box" x="10" y="85" width="200" height="60" rx="6"/>
+  <text x="110" y="111" text-anchor="middle" class="b">What is the follow-up?</text><text x="110" y="131" text-anchor="middle" class="sm">extending-pages.md §2</text>
+  <path class="line" d="M210 105 H240 V40 H348" marker-end="url(#arr)"/><text x="246" y="62" class="sm">detail</text>
+  <line class="line" x1="210" y1="115" x2="348" y2="115" marker-end="url(#arr)"/><text x="248" y="108" class="sm">new question</text>
+  <path class="line" d="M210 125 H240 V190 H348" marker-end="url(#arr)"/><text x="246" y="170" class="sm">overturns</text>
+  <rect class="box good" x="350" y="10" width="340" height="60" rx="6"/>
+  <text x="520" y="36" text-anchor="middle" class="b">&lt;details&gt; at the end of the section</text><text x="520" y="56" text-anchor="middle" class="sm">about 150 words, no new figure</text>
+  <rect class="box good" x="350" y="85" width="340" height="60" rx="6"/>
+  <text x="520" y="111" text-anchor="middle" class="b">Child page &lt;hub&gt;--&lt;child&gt;.html</text><text x="520" y="131" text-anchor="middle" class="sm">another mechanism, what a file does</text>
+  <rect class="box warn" x="350" y="160" width="340" height="60" rx="6"/>
+  <text x="520" y="186" text-anchor="middle" class="b">Revise the hub page</text><text x="520" y="206" text-anchor="middle" class="sm">conclusion, Figure 1, affected sections</text>
 </svg>
-<figcaption>Figure 4. An agent that never runs the skill pays about 341 tokens for it; the detailed rules cost nothing until step 5.</figcaption>
+<figcaption>Figure 4. Details stay on their page, a new question gets a child page, and only a finding that overturns the conclusion changes the hub page.</figcaption>
 </figure>
-<p>The table lists every part of the repository. The first five rows are the skill; the rest packages it and shows it.</p>
-<table>
-<tr><th>Path</th><th>What it holds</th></tr>
-<tr><td><code>skills/explain-as-webpage/SKILL.md</code></td><td>The 7-step process, the tier table, red flags (128 lines)</td></tr>
-<tr><td><code>references/writing-rules.md</code></td><td>Page skeletons, sentence rules (about 80% of ASD-STE100), language rules, length budget</td></tr>
-<tr><td><code>references/svg-recipes.md</code></td><td>The 10 px drawing grid, color meaning, figure recipes, stepper and slider code</td></tr>
-<tr><td><code>references/extending-pages.md</code></td><td>Where follow-up answers go, the page tree, sync and length checks</td></tr>
-<tr><td><code>assets/template.html</code></td><td>The single-file page: CSS, sidebar, arrow markers, stepper script; no external resources</td></tr>
-<tr><td><code>.claude-plugin/</code>, <code>.codex-plugin/</code>, <code>.agents/plugins/</code></td><td>Plugin and marketplace manifests for Claude Code and Codex, version 0.2.0</td></tr>
-<tr><td><code>examples/</code></td><td>The autoresearch pages and this page</td></tr>
-<tr><td><code>docs/</code>, <code>tasks/</code></td><td>Design notes, README images, the implementation plan</td></tr>
-</table>
-<p>Claude Code and Codex read the same <code>SKILL.md</code>; only the manifests differ. The project rules keep <code>SKILL.md</code> at about 130 lines and move details into the references, because a short instruction file is easier for an agent to follow completely.</p>
-<p class="src">Source: the repository at commit <code>9e5e754</code>; token estimates from <code>claude --plugin-dir . plugin details sphinx-style-notes-maker</code>; <code>CLAUDE.md</code> (the 130-line rule); <code>tasks/plan.md</code> “風險與對策” (risks) at commit <code>2ec4278</code>.</p>
+<p class="src">Source: <code>references/extending-pages.md</code> §2.</p>
+<p>A child page answers 3–5 related questions, not one question per page. If a topic would pass about 6 child pages, the agent proposes a new topic instead. Every page carries the same page tree in its sidebar and marks the page you are on. Step 6 then runs three more commands: the page tree is the same on every page, every page marks itself, and every linked file exists. This repository's <code>examples/autoresearch/</code> grew this way: after the hub page, the two code walkthrough pages <code>autoresearch--train-py.html</code> and <code>autoresearch--prepare-py.html</code> were added as follow-up questions. Long material or a plan can also get a page tree at the first build, with one child page per stage (§6).</p>
+<p class="src">Source: <code>references/extending-pages.md</code> §2, §4, §5, §6; <code>README.md</code> § Examples.</p>
 
-<h2 id="q4">How do I install and use it?</h2>
-<p>Install it as a plugin. In Claude Code:</p>
-<pre><code>claude plugin marketplace add elliewlh2094/sphinx-style-notes-maker
-claude plugin install sphinx-style-notes-maker@sphinx-style-notes-maker</code></pre>
-<p>In Codex, use <code>codex plugin marketplace add</code> with the same repository, then <code>codex plugin add sphinx-style-notes-maker@sphinx-style-notes-maker</code>. You can also copy <code>skills/explain-as-webpage</code> into <code>~/.claude/skills/</code> or <code>~/.codex/skills/</code>. Start a new session after you install it.</p>
-<p>Then ask in plain words, in English or Traditional Chinese. Name the code or the report the page should use:</p>
-<pre><code>What does the src/swarm_experiment package do, and why is it built this way?
-Explain it as a web page.</code></pre>
-<p>Answer the step-4 message, wait for the report, and open the file with <code>xdg-open &lt;path&gt;</code> (Linux) or <code>open &lt;path&gt;</code> (macOS).</p>
-<p>To learn more about the same topic, ask a follow-up question about the page. <a href="#fig-5">Figure 5</a> shows where the answer goes. A short answer to an existing question goes into a collapsible block on that page. A new question gets a child page that links to and from the hub page.</p>
-<figure id="fig-5">
-<svg viewBox="0 0 720 200" role="img" aria-label="A hub page links to two child pages; a panel lists where a follow-up goes: a short answer to a details block, a new question to a child page, a new conclusion to a revised hub.">
-  <rect class="box" x="10" y="70" width="180" height="50" rx="6"/>
-  <text x="100" y="91" text-anchor="middle" class="b">&lt;hub&gt;.html</text><text x="100" y="111" text-anchor="middle" class="sm">the first page</text>
-  <path class="line" d="M190 95 H220 V45 H250" marker-end="url(#arr)"/>
-  <path class="line" d="M190 95 H220 V145 H250" marker-end="url(#arr)"/>
-  <rect class="box" x="250" y="20" width="220" height="50" rx="6"/>
-  <text x="360" y="41" text-anchor="middle" class="b">&lt;hub&gt;--&lt;child&gt;.html</text><text x="360" y="61" text-anchor="middle" class="sm">a new set of questions</text>
-  <rect class="box" x="250" y="120" width="220" height="50" rx="6"/>
-  <text x="360" y="141" text-anchor="middle" class="b">&lt;hub&gt;--&lt;child2&gt;.html</text><text x="360" y="161" text-anchor="middle" class="sm">at most two levels</text>
-
-  <rect class="box muted" x="500" y="20" width="210" height="150" rx="6"/>
-  <text x="605" y="46" text-anchor="middle" class="b">Where a follow-up goes</text>
-  <text x="515" y="80" class="sm">Short answer → &lt;details&gt;</text>
-  <text x="515" y="110" class="sm">New question → child page</text>
-  <text x="515" y="140" class="sm">New conclusion → revise hub</text>
-</svg>
-<figcaption>Figure 5. Every page in the tree keeps its own length budget, so the hub page stays short as the topic grows.</figcaption>
-</figure>
-<p>The autoresearch example grew this way: its <code>train.py</code> and <code>prepare.py</code> pages were added as follow-up questions, and the hub page grew by about 60 words.</p>
-<p class="src">Source: <code>README.md</code> “Installation” and “Usage”; <code>references/extending-pages.md</code> §1–§4; <code>examples/autoresearch/</code>.</p>
-
-<h2 id="decisions">What does each design decision protect against?</h2>
-<p>Each rule prevents one way an explainer page can fail. The last column says where the rule lives.</p>
-<table>
-<tr><th>Risk</th><th>Decision</th><th>Rule lives in</th></tr>
-<tr><td>The agent builds the wrong page, or an expensive one</td><td>Confirm questions, tier, path, and language before building</td><td><code>SKILL.md</code> step 4</td></tr>
-<tr><td>The page becomes as long as the report</td><td>3–5 questions; at most ~1,800 words; follow-ups go to child pages</td><td><code>writing-rules.md</code> “Length budget”; <code>extending-pages.md</code> §2</td></tr>
-<tr><td>Invented numbers</td><td>Every number has a source; reasoning goes in an “Inference” box</td><td><code>writing-rules.md</code> “Facts, inferences, sources”</td></tr>
-<tr><td>Hand-drawn figures break</td><td>A 10 px grid, a fixed canvas, and screenshot checks</td><td><code>svg-recipes.md</code> “Layout rules”; <code>SKILL.md</code> step 6</td></tr>
-<tr><td>The page stops working offline or later</td><td>One file, no external URLs, no build step</td><td><code>template.html</code>; <code>SKILL.md</code> step 6</td></tr>
-<tr><td>Links in a page tree drift apart</td><td>The same page list on every page, checked by commands</td><td><code>extending-pages.md</code> §5</td></tr>
-</table>
-
-<h2 id="limits">What does it not do?</h2>
+<h2 id="limits">Status and limits</h2>
 <ul>
-<li>No video: the highest tier is an in-browser stepper.</li>
-<li>No external libraries such as MathJax, D3, or Mermaid: formulas use HTML superscripts and subscripts.</li>
-<li>No index across topics: a page tree stays inside one topic.</li>
+<li>The material modes of round 3 were tested in Claude Code with 8 cases (<code>tasks/todo.md</code>, phases 1–4). The test in Codex (task T16) has not run yet, and the plugin manifests are still at version 0.2.0.</li>
+<li>No video: the highest tier is an in-browser step animation. A video URL is not accepted as material either, because the agent cannot watch it.</li>
+<li>A page that needs a login (for example a post on X) needs a web-reading helper skill, or the user saves it as a PDF.</li>
+<li>All token numbers in Figure 3 are estimates from <code>claude plugin details</code> and may differ from actual use; the estimates for the reference files include the 3 lines of frontmatter added for the test skill.</li>
 </ul>
+<p class="src">Source: <code>tasks/todo.md</code>; <code>.claude-plugin/plugin.json</code>; <code>SKILL.md</code> § When to Use; <code>references/sources-and-research.md</code> §1, §2.</p>
+
+<h2 id="install">How do I install it?</h2>
+<pre><code># Claude Code: install as a plugin
+claude plugin marketplace add elliewlh2094/sphinx-style-notes-maker
+claude plugin install sphinx-style-notes-maker@sphinx-style-notes-maker
+# Codex: install as a plugin
+codex plugin marketplace add elliewlh2094/sphinx-style-notes-maker
+codex plugin add sphinx-style-notes-maker@sphinx-style-notes-maker
+# Or copy the skill folder
+cp -r skills/explain-as-webpage ~/.claude/skills/   # Claude Code
+cp -r skills/explain-as-webpage ~/.codex/skills/    # Codex</code></pre>
+<table>
+<tr><th>Installed as</th><th>Call it as</th></tr>
+<tr><td style="white-space:nowrap">Claude Code (plugin)</td><td><code>/sphinx-style-notes-maker:explain-as-webpage</code></td></tr>
+<tr><td style="white-space:nowrap">Claude Code (copy)</td><td><code>/explain-as-webpage</code></td></tr>
+<tr><td style="white-space:nowrap">Codex (plugin)</td><td><code>sphinx-style-notes-maker:explain-as-webpage</code></td></tr>
+<tr><td style="white-space:nowrap">Codex (copy)</td><td><code>@explain-as-webpage</code></td></tr>
+</table>
+<p class="src">Source: <code>README.md</code> § Installation. After you install it, start a new session so that the tool loads the skill.</p>
 
 <h2 id="terms">Terms</h2>
 <table>
 <tr><th>Term</th><th>Meaning on this page</th></tr>
-<tr><td>Agent skill</td><td>A folder with a <code>SKILL.md</code> file that an AI coding agent loads when a request matches its description.</td></tr>
-<tr><td>Tier (L0, L1, L2)</td><td>How much interaction a page uses: static figures, one slider, or a stepper.</td></tr>
-<tr><td>Stepper</td><td>A figure with previous, next, and play buttons that shows a process one step at a time.</td></tr>
-<tr><td>Inline SVG</td><td>A vector figure written directly in the HTML file, so the page needs no image files.</td></tr>
-<tr><td>Hub page / child page</td><td>The first page of a topic, and a page added later for a new set of follow-up questions.</td></tr>
-<tr><td>ASD-STE100</td><td>Simplified Technical English, a controlled-language standard from aerospace maintenance documentation.</td></tr>
-<tr><td>Plugin / marketplace</td><td>The packaging that Claude Code and Codex use to install a skill from a repository.</td></tr>
+<tr><td>skill</td><td>A set of instructions and files for an agent; the platform always holds its description and loads the body when the skill is called</td></tr>
+<tr><td>plugin, manifest</td><td>A package that makes a skill installable; the manifest is a JSON file with its name and version</td></tr>
+<tr><td>description</td><td>The trigger text at the top of <code>SKILL.md</code>; it decides when the agent thinks of the skill</td></tr>
+<tr><td>material mode (project / document / topic)</td><td>Whether you give a project, a document, or only a topic; it decides how the agent reads and cites</td></tr>
+<tr><td>page type</td><td>The page skeleton and the shape of Figure 1, chosen from what the material is</td></tr>
+<tr><td>tier (L0 / L1 / L2)</td><td>How interactive a page is: static figures, one slider, a step animation</td></tr>
+<tr><td>stepper</td><td>A multi-frame SVG animation with previous, next, and play buttons</td></tr>
+<tr><td>page tree</td><td>A hub page and its linked child pages; every page lists the same pages in its sidebar</td></tr>
+<tr><td>source grade (g1–g4)</td><td>The reliability grade on each source in topic mode</td></tr>
+<tr><td>WebFetch</td><td>Claude Code's tool for reading web pages; it returns a model's summary, not the full text</td></tr>
 </table>
 
 <h2 id="sources">Sources</h2>
-<p>All paths are in this repository, <a href="https://github.com/elliewlh2094/sphinx-style-notes-maker">elliewlh2094/sphinx-style-notes-maker</a>, at commit <code>9e5e754</code> unless noted.</p>
 <ul>
-<li><code>skills/explain-as-webpage/SKILL.md</code> — process, tier table, self-check</li>
-<li><code>skills/explain-as-webpage/references/</code> — writing rules, SVG recipes, extending pages</li>
-<li><code>docs/ideas/explain-as-webpage.md</code> — the problem and the chosen direction</li>
-<li><code>tasks/plan.md</code> at commit <code>2ec4278</code> — report lengths in the author's project</li>
-<li><code>examples/autoresearch/</code> — live examples of L0, L1, L2, and a page tree</li>
-<li><code>README.md</code> — installation and usage</li>
+<li><code>skills/explain-as-webpage/SKILL.md</code> — § Process steps 1–7, § When to Use, § Red Flags</li>
+<li><code>skills/explain-as-webpage/references/sources-and-research.md</code> — §1 modes, §2 full text, §7 research, §8 source grades, §9 high-risk topics</li>
+<li><code>skills/explain-as-webpage/references/page-types.md</code> — page type table</li>
+<li><code>skills/explain-as-webpage/references/writing-rules.md</code> — § Length budget</li>
+<li><code>skills/explain-as-webpage/references/extending-pages.md</code> — §2 placement, §4 build, §5 checks, §6 a tree from the first build</li>
+<li><code>skills/explain-as-webpage/assets/template.html</code> — the template (254 lines)</li>
+<li><code>docs/specs/explain-as-webpage-v3.md</code> — §0 problem statement and scope</li>
+<li><code>tasks/plan.md</code> — § "T1（2026-10-03，Claude Code）", § "T15 結果（2026-10-04）"; <code>tasks/todo.md</code></li>
+<li><code>README.md</code> — § Inspiration, § What it produces, § Examples, § Installation</li>
+<li><code>CLAUDE.md</code> — § 架構 (architecture)</li>
+<li><code>.claude-plugin/plugin.json</code> — version 0.2.0; token estimates from <code>claude --plugin-dir . plugin details sphinx-style-notes-maker</code></li>
+<li><code>examples/starship-reusability/starship-reusability.html</code>, <code>examples/autoresearch/</code> — the running examples</li>
 </ul>
 </main></div>
 

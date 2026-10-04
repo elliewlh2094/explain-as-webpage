@@ -2,7 +2,7 @@
 
 English | [繁體中文](README.zh-TW.md)
 
-![The seven steps the agent follows: gather facts, write a brief, choose a tier, confirm once, build the page, self-check, report](docs/images/cover-process.png)
+![The seven steps the agent follows: gather material, write a learning brief, choose a tier, confirm once, build, self-check, report](docs/images/cover-process.png)
 
 Let an AI coding agent turn a technique or design in your project that you do not understand into a knowledge web page, **with your own project as the example**.
 
@@ -10,9 +10,11 @@ This repository provides one skill: `explain-as-webpage`. It works in Claude Cod
 
 ## Inspiration
 
-This skill is inspired by Andrej Karpathy's post: [x.com/karpathy/status/2105819303471976479](https://x.com/karpathy/status/2105819303471976479). The post says that as LLMs do more of the work, we will spend more time trying to understand their outputs. It then suggests output formats that are easier to understand, in this order: writing in ASD-STE100 (a controlled English specification from aerospace maintenance documentation), diagrams, HTML web pages, and, the format it is most bullish on, explainer videos.
+This skill is inspired by Andrej Karpathy's post: [x.com/karpathy/status/2105819303471976479](https://x.com/karpathy/status/2105819303471976479).
 
-This skill implements the first three. Its writing rules follow about 80% of ASD-STE100, its figures are inline SVG, and its output is a single HTML page that can include an in-browser step animation. It **deliberately stops before video**; see [What it does not do](#what-it-does-not-do).
+<img src="docs/images/karpathy-x-post.png" width="640" alt="Andrej Karpathy's post">
+
+This skill implements the first three suggestions in the post. Its writing rules follow about 80% of ASD-STE100, its figures are inline SVG, and its output is a single HTML page that can include an in-browser step animation. It **deliberately stops before video**; see [What it does not do](#what-it-does-not-do).
 
 ## What it produces
 
@@ -45,16 +47,14 @@ Screenshots from the [autoresearch example](#examples).
 
 </details>
 
-- **English or Traditional Chinese.** The page uses the language you ask for. If you do not ask, it uses the language you write in. Traditional Chinese uses Taiwan usage by default.
+- **Page's Language.** The page uses the language you ask for. If you do not ask, it uses the language you write in.
 - **Pages that grow with follow-up questions.** When you ask more about an existing page, the agent decides where each answer goes. A short answer to an existing question goes into a collapsible block on that page. A new question gets a child page, linked to and from the hub page. A finding that changes the main conclusion revises the hub page. Each page keeps its own length budget, so the hub page does not keep growing.
 
 The agent first lists the questions, the proposed tier, and the output path, and **builds only after you confirm**. The default output path is `~/Documents/explainers/<repo-name>/<topic>.html`, outside your project.
 
 ## Examples
 
-Both examples are in English.
-
-**This repository.** [`examples/explain-as-webpage/explain-as-webpage.html`](examples/explain-as-webpage/explain-as-webpage.html) explains this skill in one L0 page: the problem it solves, the seven steps, how a tier is chosen, which file is read when, and how to install and use it. The cover image above is its Figure 2.
+**This repository.** [`examples/explain-as-webpage/explain-as-webpage.html`](examples/explain-as-webpage/explain-as-webpage.html) explains this skill in one L0 page: how one request becomes a page (followed through a real request), how reading and citing change with the material, how the page type and tier are chosen, which file is read when (with token estimates), how pages grow with follow-up questions, and how to install it. The cover image above is its Figure 1.
 
 **karpathy/autoresearch.** [`examples/autoresearch/`](examples/autoresearch/) explains [karpathy/autoresearch](https://github.com/karpathy/autoresearch) (commit `228791f`, MIT license) in three pages:
 
@@ -129,8 +129,10 @@ skills/explain-as-webpage/
 │   └── extending-pages.md      # Follow-up questions: where answers go, the page tree, sync checks
 └── assets/
     └── template.html           # Single-file Read the Docs-style template
-examples/explain-as-webpage/    # Example: one page that explains this repository
+examples/explain-as-webpage/    # Example: one page that explains this repository (English and Traditional Chinese)
 examples/autoresearch/          # Example: hub page + two code walkthrough pages
+examples/llm-wiki/              # Example (Traditional Chinese): a page from a document
+examples/starship-reusability/  # Example (Traditional Chinese): a page from researched sources
 .claude-plugin/                 # Claude Code plugin and marketplace manifests
 .codex-plugin/                  # Codex plugin manifest
 .agents/plugins/                # Codex marketplace manifest

@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>explain-as-webpage</title>
+<style>
+:root {
+  --text: #404040; --muted: #6a6a6a; --link: #2980b9; --link-visited: #9b59b6;
+  --bg: #fcfcfc; --side-bg: #343131; --side-head: #2980b9; --side-text: #d9d9d9;
+  --rule: #e1e4e5; --code-bg: #f8f8f8; --row-alt: #f3f6f6;
+  --blue: #2980b9; --blue-bg: #e7f2fa; --red: #c0392b; --red-bg: #fdf3f2;
+  --green: #16a085; --green-bg: #dbfaf4; --orange: #e67e22; --orange-bg: #ffedcc; --grey-bg: #f0f0f0;
+  --font: -apple-system, "Segoe UI", Roboto, "Noto Sans", "Liberation Sans", Arial, "DejaVu Sans", "Noto Sans CJK TC", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+  --mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, "Noto Sans Mono CJK TC", monospace;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { font: 16px/1.7 var(--font); color: var(--text); background: var(--bg); }
+
+/* Sidebar (RTD wy-nav-side) */
+.side { position: fixed; top: 0; bottom: 0; left: 0; width: 300px; overflow-y: auto; background: var(--side-bg); }
+.side-head { background: var(--side-head); color: #fff; padding: 16px 18px; }
+.side-head .title { font-size: 1.1rem; font-weight: 700; display: block; }
+.side-head .meta { font-size: .8rem; opacity: .85; }
+.toc a { display: block; color: var(--side-text); text-decoration: none; padding: 6px 18px; font-size: .9rem; line-height: 1.4; }
+.toc a:hover { background: #4e4a4a; }
+.toc a.h3 { padding-left: 34px; font-size: .85rem; color: #b3b3b3; }
+.pages { padding: 8px 0; border-bottom: 1px solid #4e4a4a; }
+.pages .label { display: block; padding: 4px 18px; font-size: .75rem; letter-spacing: .05em; text-transform: uppercase; color: #8a8a8a; }
+.pages a { display: block; color: var(--side-text); text-decoration: none; padding: 6px 18px; font-size: .9rem; line-height: 1.4; }
+.pages a.sub { padding-left: 34px; }
+.pages a:hover { background: #4e4a4a; }
+.pages a[aria-current="page"] { background: var(--bg); color: var(--text); font-weight: 700; }
+
+/* Content (RTD wy-nav-content) */
+.main { margin-left: 300px; background: var(--bg); min-height: 100vh; }
+.content { max-width: 820px; padding: 24px 36px 64px; }
+.crumbs { font-size: .85rem; color: var(--muted); border-bottom: 1px solid var(--rule); padding-bottom: 8px; margin-bottom: 24px; }
+h1, h2, h3 { color: #2c2c2c; line-height: 1.3; font-weight: 700; }
+h1 { font-size: 1.9rem; margin: 0 0 16px; }
+h2 { font-size: 1.45rem; margin: 40px 0 12px; padding-top: 8px; border-top: 1px solid var(--rule); }
+h3 { font-size: 1.15rem; margin: 28px 0 8px; }
+a { color: var(--link); } a:visited { color: var(--link-visited); }
+.content a { overflow-wrap: anywhere; }
+p, ul, ol { margin: 0 0 16px; }
+li { margin-bottom: 4px; }
+code { font: .88em var(--mono); color: #e74c3c; background: #fff; border: 1px solid var(--rule); padding: 0 4px; overflow-wrap: anywhere; }
+th code, td code { overflow-wrap: normal; }
+pre { font: .85rem/1.5 var(--mono); background: var(--code-bg); border: 1px solid var(--rule); padding: 12px; overflow-x: auto; }
+pre code { color: inherit; border: 0; padding: 0; background: none; }
+table { border-collapse: collapse; margin: 0 0 20px; width: 100%; font-size: .92rem; display: block; overflow-x: auto; }
+th, td { border: 1px solid var(--rule); padding: 6px 12px; text-align: left; vertical-align: top; }
+th { background: #eee; } tr:nth-child(even) td { background: var(--row-alt); }
+table.kv td:first-child { white-space: nowrap; } /* label column of a label-content table */
+.src { font-size: .8rem; color: var(--muted); }
+/* Source grades (references/sources-and-research.md §8) */
+.grade { display: inline-block; font-size: .75rem; line-height: 1.5; padding: 0 6px; margin-right: 6px; border-radius: 3px; color: #fff; }
+.grade.g1 { background: #117a65; } .grade.g2 { background: #1f618d; } .grade.g3 { background: #616a6b; } .grade.g4 { background: #a04000; }
+
+/* Admonitions: note / tip / warning / danger */
+.admonition { margin: 0 0 20px; background: var(--blue-bg); }
+.admonition > .admonition-title { margin: 0; padding: 6px 12px; font-weight: 700; color: #fff; background: #6ab0de; }
+.admonition > :not(.admonition-title) { margin: 0; padding: 10px 12px; }
+.admonition.tip { background: var(--green-bg); } .admonition.tip > .admonition-title { background: #1abc9c; }
+.admonition.warning { background: var(--orange-bg); } .admonition.warning > .admonition-title { background: #f0b37e; }
+.admonition.danger { background: var(--red-bg); } .admonition.danger > .admonition-title { background: #f29f97; }
+
+/* Figures. SVG keeps a readable minimum width; the figure scrolls sideways on phones, never the page. */
+figure { margin: 8px 0 24px; overflow-x: auto; }
+figure svg { display: block; width: 100%; min-width: 540px; height: auto; margin: 0 auto; }
+figcaption { font-size: .9rem; color: var(--muted); margin-top: 6px; }
+details { border: 1px solid var(--rule); padding: 8px 12px; margin: 0 0 20px; background: #fff; }
+details > summary { cursor: pointer; font-weight: 700; }
+
+/* Shared SVG vocabulary (see references/svg-recipes.md) */
+svg text { font-family: var(--font); font-size: 14px; fill: var(--text); }
+svg .sm { font-size: 12px; fill: var(--muted); }
+svg .b { font-weight: 700; }
+svg text.bad { fill: var(--red); } svg text.good { fill: var(--green); }
+svg .box { fill: var(--blue-bg); stroke: var(--blue); stroke-width: 1.5; }
+svg .box.bad { fill: var(--red-bg); stroke: var(--red); }
+svg .box.good { fill: var(--green-bg); stroke: var(--green); }
+svg .box.warn { fill: var(--orange-bg); stroke: var(--orange); }
+svg .box.muted { fill: var(--grey-bg); stroke: #999; }
+svg .line { stroke: var(--text); stroke-width: 1.5; fill: none; }
+svg .line.bad { stroke: var(--red); } svg .line.good { stroke: var(--green); }
+svg .dash { stroke-dasharray: 5 4; }
+svg .dot { fill: var(--blue); } svg .dot.bad { fill: var(--red); } svg .dot.good { fill: var(--green); }
+
+/* Stepper (L2): controls are injected by the script below */
+.stepper-bar { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+.stepper-bar button { font: inherit; padding: 2px 12px; border: 1px solid var(--rule); background: #fff; cursor: pointer; }
+.stepper-bar .count { font-size: .85rem; color: var(--muted); min-width: 3.5em; text-align: center; }
+.stepper-caption { margin: 6px 0 0; padding: 6px 10px; background: var(--blue-bg); font-size: .92rem; }
+
+/* Narrow screens: sidebar becomes a collapsible top bar */
+.topbar { display: none; }
+@media (max-width: 768px) {
+  .topbar { display: flex; align-items: center; gap: 12px; position: sticky; top: 0; z-index: 2; background: var(--side-head); color: #fff; padding: 8px 16px; }
+  .topbar button { font-size: 1.2rem; background: none; border: 0; color: #fff; cursor: pointer; }
+  .side { display: none; position: fixed; top: 44px; width: 100%; z-index: 2; }
+  body.nav-open .side { display: block; }
+  .main { margin-left: 0; }
+  .content { padding: 16px 16px 48px; }
+}
+@media print {
+  .side, .topbar, .stepper-bar { display: none !important; }
+  .main { margin-left: 0; }
+}
+</style>
+</head>
+<body>
+<!-- Arrow markers shared by every SVG on the page: marker-end="url(#arr)" / url(#arr-bad) / url(#arr-good) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#404040"/></marker>
+  <marker id="arr-bad" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#c0392b"/></marker>
+  <marker id="arr-good" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#16a085"/></marker>
+</defs></svg>
+
+<div class="topbar"><button type="button" aria-label="Menu" onclick="document.body.classList.toggle('nav-open')">☰</button><span>explain-as-webpage</span></div>
+<nav class="side">
+  <div class="side-head"><span class="title">explain-as-webpage</span><span class="meta">專案說明 · 2026-10-04</span></div>
+  <div class="toc" id="toc"><!-- built from h2/h3 by the script --></div>
+</nav>
+
+<div class="main"><main class="content">
+<div class="crumbs">sphinx-style-notes-maker » explain-as-webpage</div>
+<h1>explain-as-webpage：把看不懂的東西做成一頁知識網頁</h1>
+
+<div class="admonition tip"><p class="admonition-title">結論</p>
+<p>本儲存庫提供一個代理技能（skill）<code>explain-as-webpage</code>：使用者給它一個專案、一份文件或一個主題，再加上想問的問題，代理就依 <code>SKILL.md</code> 的 7 個步驟，產出一個單檔、離線可開的 Read the Docs 風格 HTML 網頁。流程中只有第 4 步需要使用者：代理一次列出疑問、呈現層級與輸出路徑，使用者回答後才動工。規則拆成 1 個主檔與 5 個參考檔，每次對話常駐的只有描述（估計約 400 tokens），呼叫時再載入主檔（估計約 3.7k tokens），其餘參考檔在需要的步驟才讀。</p></div>
+
+<h2 id="flow">一個請求怎麼變成一頁網頁？</h2>
+<p><a href="#fig-1">圖 1</a> 是一個請求走過 <code>SKILL.md</code> 7 個步驟的主流程，每一格的第二行是那一步讀的檔案或產出。後面各節依序展開：第 1 步的材料分流、第 2 與第 3 步的頁型與層級，最後是檔案載入的時機與追問時的延伸。</p>
+<figure id="fig-1">
+<svg viewBox="0 0 720 340" role="img" aria-label="主流程：收集材料、學習摘要、選層級、確認一次、產出、自我檢查、回報，最後得到單一 HTML 檔。第 4 步需要使用者回答。">
+  <rect class="box" x="10" y="40" width="200" height="60" rx="6"/>
+  <text x="110" y="66" text-anchor="middle" class="b">① 收集材料</text><text x="110" y="86" text-anchor="middle" class="sm">sources-and-research.md *</text>
+  <line class="line" x1="210" y1="70" x2="258" y2="70" marker-end="url(#arr)"/>
+  <rect class="box" x="260" y="40" width="200" height="60" rx="6"/>
+  <text x="360" y="66" text-anchor="middle" class="b">② 學習摘要</text><text x="360" y="86" text-anchor="middle" class="sm">page-types.md：選頁型</text>
+  <line class="line" x1="460" y1="70" x2="508" y2="70" marker-end="url(#arr)"/>
+  <rect class="box" x="510" y="40" width="200" height="60" rx="6"/>
+  <text x="610" y="66" text-anchor="middle" class="b">③ 選層級</text><text x="610" y="86" text-anchor="middle" class="sm">L0／L1／L2</text>
+  <line class="line" x1="610" y1="100" x2="610" y2="138" marker-end="url(#arr)"/>
+  <rect class="box warn" x="510" y="140" width="200" height="60" rx="6"/>
+  <text x="610" y="166" text-anchor="middle" class="b">④ 確認一次</text><text x="610" y="186" text-anchor="middle" class="sm">使用者回答後才動工</text>
+  <line class="line" x1="510" y1="170" x2="462" y2="170" marker-end="url(#arr)"/>
+  <rect class="box" x="260" y="140" width="200" height="60" rx="6"/>
+  <text x="360" y="166" text-anchor="middle" class="b">⑤ 產出</text><text x="360" y="186" text-anchor="middle" class="sm">template.html＋兩份規則</text>
+  <line class="line" x1="260" y1="170" x2="212" y2="170" marker-end="url(#arr)"/>
+  <rect class="box" x="10" y="140" width="200" height="60" rx="6"/>
+  <text x="110" y="166" text-anchor="middle" class="b">⑥ 自我檢查</text><text x="110" y="186" text-anchor="middle" class="sm">指令＋兩種寬度截圖</text>
+  <line class="line" x1="110" y1="200" x2="110" y2="238" marker-end="url(#arr)"/>
+  <rect class="box" x="10" y="240" width="200" height="60" rx="6"/>
+  <text x="110" y="266" text-anchor="middle" class="b">⑦ 回報</text><text x="110" y="286" text-anchor="middle" class="sm">路徑、未能查證的項目</text>
+  <line class="line" x1="210" y1="270" x2="258" y2="270" marker-end="url(#arr)"/>
+  <rect class="box good" x="260" y="240" width="200" height="60" rx="6"/>
+  <text x="360" y="266" text-anchor="middle" class="b">單一 HTML 檔</text><text x="360" y="286" text-anchor="middle" class="sm">內嵌 SVG、無外部資源</text>
+  <text x="10" y="330" class="sm">* 只在文件與主題模式讀取；專案模式直接讀專案檔案。</text>
+</svg>
+<figcaption>圖 1　7 步中只有第 4 步停下來等使用者；參考檔分散在各步驟讀取，而不是一開始全部載入。</figcaption>
+</figure>
+<p class="src">來源：<code>skills/explain-as-webpage/SKILL.md</code> § Process（第 1–7 步）</p>
+<p>以本儲存庫的範例 <code>examples/starship-reusability/</code> 為例，下表是這個請求在每一步實際發生的事。它是 topic 模式（只給主題、沒有材料），所以第 1 步要先查資料。</p>
+<table>
+<tr><th>步驟</th><th>做什麼</th><th>Starship 請求的實際情況</th></tr>
+<tr><td style="white-space:nowrap">① 收集材料</td><td>依材料分流；topic 模式先做幾次搜尋，只夠擬大綱</td><td>搜到最新是 2026-09-28 的第 14 次試飛</td></tr>
+<tr><td style="white-space:nowrap">② 學習摘要</td><td>3–5 個核心疑問、頁型與主軸、反事實、至多 5 個關鍵概念</td><td>機制頁型，主軸是「推進劑 → 載荷比例 → 用完就丟 → 回收」的因果鏈</td></tr>
+<tr><td style="white-space:nowrap">③ 選層級</td><td>能回答所有疑問的最低層級</td><td>建議 L0；「助推器怎麼回來」是過程，L2 列為選項</td></tr>
+<tr><td style="white-space:nowrap">④ 確認一次</td><td>至多 4 題：疑問、層級、語言與讀者、路徑與查證深度</td><td>使用者選疑問 1–5、L2、繁中非本科大學生、輕量查證</td></tr>
+<tr><td style="white-space:nowrap">⑤ 產出</td><td>複製模板，依寫作規則與 SVG 配方填入</td><td>4 張圖，其中 1 張是 5 步的 stepper</td></tr>
+<tr><td style="white-space:nowrap">⑥ 自我檢查</td><td>指令檢查後，在兩種寬度截圖並實際看過</td><td>截圖發現 stepper 第 4、5 步的標籤離助推器太遠，移位後重拍</td></tr>
+<tr><td style="white-space:nowrap">⑦ 回報</td><td>路徑、回答了哪些疑問、用了哪些輔助 skill、哪些沒能查證</td><td>第 15 次試飛的日期找不到原句，頁面不寫，並在回報中說明</td></tr>
+</table>
+<p class="src">來源：<code>SKILL.md</code> 第 2–7 步；<code>tasks/plan.md</code> §「T15 結果（2026-10-04）」</p>
+<p>第 6 步的指令檢查有四項：模板的待填標記必須全部清除、不可引用外部資源、檔案約 150 KB 以內、topic 模式的每個來源都要有等級與存取日期。接著用無頭 Chrome 在 1280 px 與 390 px 兩種寬度截圖；390 px 是把頁面放進 iframe 量測，因為 Chrome 視窗最窄 500 px。</p>
+<p class="src">來源：<code>SKILL.md</code> § 6. Self-check</p>
+
+<h2 id="q1">這個 skill 解決什麼問題？產出長什麼樣子？</h2>
+<p>它解決的是「代理做完了，我卻看不懂」：代理寫了一個套件、用了一個演算法，或留下一份很長的分析報告，使用者需要判斷或修改它，卻找不到其中的因果。靈感來自 Andrej Karpathy 的一則貼文（<code>README.md</code> 附有截圖）。第三輪（v3）把範圍從專案延伸到文件與主題：沒有軟體專案，也能把一篇文章、一份 PDF 或一個主題做成同樣好讀的網頁。</p>
+<table class="kv">
+<tr><td>形式</td><td>每頁一個 <code>.html</code> 檔，外觀仿 Read the Docs（sphinx_rtd_theme）；沒有建置步驟，也沒有額外的圖片或腳本資料夾</td></tr>
+<tr><td>離線</td><td>所有圖都是內嵌 SVG，CSS 與腳本都寫在檔內，不載入任何外部資源</td></tr>
+<tr><td>結構</td><td>先給結論，再以一條主軸串起全頁；每個 <code>h2</code> 就是讀者會問的一個問題</td></tr>
+<tr><td>篇幅</td><td>約 15 分鐘讀完：正文至多約 1,800 個英文字或 3,500 個中文字</td></tr>
+<tr><td>語言</td><td>英文或繁體中文；沒有指定時，跟隨使用者提問的語言</td></tr>
+<tr><td>模板</td><td><code>assets/template.html</code>（254 行）內含側欄目錄、可選的頁面樹，以及通用的 stepper 元件</td></tr>
+</table>
+<p class="src">來源：<code>README.md</code> § Inspiration、§ What it produces；<code>docs/specs/explain-as-webpage-v3.md</code> §0；<code>references/writing-rules.md</code> § Length budget；<code>CLAUDE.md</code> § 架構</p>
+
+<h2 id="q2">材料不同時，讀法與引用方式有什麼不同？</h2>
+<p>第 1 步依使用者給的東西分成三種模式，模式決定怎麼讀、事實怎麼標出處，以及預設輸出到哪裡。</p>
+<table>
+<tr><th>模式</th><th>使用者給的東西</th><th>怎麼讀</th><th>事實的出處寫法</th></tr>
+<tr><td style="white-space:nowrap">project</td><td>儲存庫、報告、程式路徑</td><td>直接讀檔案</td><td>檔案路徑＋段落標題或行號</td></tr>
+<tr><td style="white-space:nowrap">document</td><td>網頁文章、PDF、Markdown、貼上的文字</td><td>用 <code>curl</code> 或 <code>pdftotext</code> 取得全文</td><td>原文的標題或頁碼</td></tr>
+<tr><td style="white-space:nowrap">topic</td><td>只有主題與疑問</td><td>先找原始文件，再搜尋補充</td><td>來源＋存取日期＋等級</td></tr>
+</table>
+<p class="src">來源：<code>SKILL.md</code> § 1；<code>references/sources-and-research.md</code> §1</p>
+<p>document 模式最重要的規則是「全文，不是摘要」。下表是 T1 對同樣兩篇文章的實測：WebFetch 這類透過模型回答的工具，給的是模型的摘要；<code>curl</code> 加上本機去除 HTML 標籤，拿到的才是原文。</p>
+<table>
+<tr><th>材料</th><th>WebFetch</th><th><code>curl</code>＋去除標籤</th></tr>
+<tr><td>Paul Graham〈How to Do Great Work〉</td><td>要求逐字回傳時，以著作權為由拒絕，只給摘要與短引文</td><td>全文 11,738 字，結尾是致謝段落</td></tr>
+<tr><td>Karpathy〈LLM Wiki〉gist</td><td>9 個標題正確，但各節字數是估計，加總約 2,170 字</td><td>全文 1,921 字，結尾與原文一致</td></tr>
+</table>
+<p class="src">來源：<code>tasks/plan.md</code> §「T1（2026-10-03，Claude Code）」第 1 點</p>
+<p>topic 模式由使用者選查證深度：輕量約 5–10 個來源；深度則每個關鍵主張至少兩個獨立來源，來源之間不一致時頁面要寫出來。每個來源標上等級與存取日期：g1 原始材料（論文、官方文件）、g2 權威或同儕審查（政府機關、學會）、g3 二手整理（新聞、百科）、g4 新興或個人說法；只有 g4 支持的主張要放進「新興說法」框，並寫明是誰說的。Starship 頁就是這樣：SpaceX 試飛報告是 g1，NASA 的頁面是 g2，Wikipedia 是 g3，Musk 對成本的推測放在新興說法框。健康、安全、法律、理財屬於高風險主題，只能用 g1–g2 來源，台灣讀者優先採用台灣機關的資料，頁面還要加上「注意」框，而且不提供劑量或個人建議。</p>
+<p class="src">來源：<code>references/sources-and-research.md</code> §7、§8、§9；<code>examples/starship-reusability/starship-reusability.html</code> § 來源</p>
+
+<h2 id="q3">它怎麼決定頁面長相？</h2>
+<p>頁面長相由兩個獨立的選擇決定：頁型決定圖 1（全頁的主軸）與章節骨架，層級決定互動程度。頁型在第 2 步依材料的性質選：</p>
+<table>
+<tr><th>頁型</th><th>材料是</th><th>圖 1（主軸）</th></tr>
+<tr><td style="white-space:nowrap">機制（預設）</td><td>技術、演算法、物理或生物機制</td><td>因果鏈</td></tr>
+<tr><td style="white-space:nowrap">套件或架構</td><td>一個程式套件：做什麼、為什麼這樣設計</td><td>一次工作流經各模組的主流程</td></tr>
+<tr><td style="white-space:nowrap">程式導讀</td><td>單一檔案或模組，通常是子頁</td><td>主要函式的呼叫流程</td></tr>
+<tr><td style="white-space:nowrap">論證</td><td>文章、評論、一種思考方式</td><td>論證圖</td></tr>
+<tr><td style="white-space:nowrap">路線圖或計畫</td><td>有階段、任務與檢查點的計畫</td><td>階段路線圖；預設做成頁面樹</td></tr>
+<tr><td style="white-space:nowrap">實務指南</td><td>如何準備或決定某件事</td><td>決策樹或分組清單</td></tr>
+<tr><td style="white-space:nowrap">演進</td><td>經過幾個具名階段演變的概念</td><td>階段演進圖</td></tr>
+</table>
+<p class="src">來源：<code>references/page-types.md</code> 開頭的頁型表</p>
+<p>層級在第 3 步選，原則是「能回答所有疑問的最低層級」，而且逐題決定（<a href="#fig-2">圖 2</a>）：只有關於過程的那一題用動畫，其餘仍是靜態圖。本頁就是套件頁型、L0：圖 1 是請求流經各步驟的主流程，沒有一題需要互動。</p>
+<figure id="fig-2">
+<svg viewBox="0 0 720 230" role="img" aria-label="層級的選法：核心問題是關於結構或因果鏈，用 L0 靜態圖；關於取捨、結果依參數而變，用 L1 加一個滑桿；關於過程或隨時間的事件，用 L2 逐步動畫。">
+  <rect class="box" x="10" y="85" width="200" height="60" rx="6"/>
+  <text x="110" y="111" text-anchor="middle" class="b">這一題問的是？</text><text x="110" y="131" text-anchor="middle" class="sm">逐題判斷</text>
+  <path class="line" d="M210 105 H240 V40 H288" marker-end="url(#arr)"/><text x="246" y="62" class="sm">結構</text>
+  <line class="line" x1="210" y1="115" x2="288" y2="115" marker-end="url(#arr)"/><text x="252" y="108" class="sm">取捨</text>
+  <path class="line" d="M210 125 H240 V190 H288" marker-end="url(#arr)"/><text x="246" y="170" class="sm">過程</text>
+  <rect class="box good" x="290" y="10" width="300" height="60" rx="6"/>
+  <text x="440" y="36" text-anchor="middle" class="b">L0：文字＋靜態 SVG</text><text x="440" y="56" text-anchor="middle" class="sm">結構、組成、因果鏈、前後對照</text>
+  <rect class="box good" x="290" y="85" width="300" height="60" rx="6"/>
+  <text x="440" y="111" text-anchor="middle" class="b">L1：加一個滑桿或切換</text><text x="440" y="131" text-anchor="middle" class="sm">結果依某個參數而變</text>
+  <rect class="box good" x="290" y="160" width="300" height="60" rx="6"/>
+  <text x="440" y="186" text-anchor="middle" class="b">L2：加上 stepper</text><text x="440" y="206" text-anchor="middle" class="sm">迭代演算法、隨時間發生的事件</text>
+  <text x="610" y="45" class="sm">成本 1×</text>
+  <text x="610" y="120" class="sm">約 1.5×</text>
+  <text x="610" y="195" class="sm">約 2–3×</text>
+</svg>
+<figcaption>圖 2　層級跟著問題走，不是跟著主題走；選 L2 只因為某一題是過程，不因為動畫好看。</figcaption>
+</figure>
+<p class="src">來源：<code>SKILL.md</code> § 3 與 Red Flags；本頁與 Starship 頁的選擇見 <code>tasks/plan.md</code> §「T15 結果」</p>
+
+<h2 id="q4">哪個檔案在什麼時候被讀？為什麼這樣拆？</h2>
+<p>代理平台只把每個 skill 的描述（<code>SKILL.md</code> 開頭的 <code>description</code>）常駐在每次對話裡，本體要等 skill 被呼叫才載入。因此規則越長，每次呼叫的成本越高。本儲存庫的做法是 <code>SKILL.md</code> 只放流程與判準（維持約 130 行以內），細節拆進參考檔，到需要的步驟才讀（<a href="#fig-3">圖 3</a>）。</p>
+<figure id="fig-3">
+<svg viewBox="0 0 720 340" role="img" aria-label="各檔案的 token 估計值與讀取時機：description 約 400，常駐於每次對話；SKILL.md 約 3.7k，在呼叫時載入；sources-and-research.md 約 5.7k、page-types.md 約 3.2k、writing-rules.md 約 3.7k、svg-recipes.md 約 6.4k、template.html 約 6.2k、extending-pages.md 約 2.9k，在需要的步驟才讀。">
+  <text x="710" y="20" text-anchor="end" class="sm">單位：tokens（估計值）</text>
+  <text x="10" y="20" class="b">每次對話</text>
+  <text x="250" y="44" text-anchor="end" class="sm">description</text>
+  <rect class="box" x="260" y="32" width="21" height="16"/><text x="289" y="44" class="sm">約 400</text>
+  <text x="10" y="76" class="b">呼叫 skill 時</text>
+  <text x="250" y="100" text-anchor="end" class="sm">SKILL.md（含 description）</text>
+  <rect class="box" x="260" y="88" width="197" height="16"/><text x="465" y="100" class="sm">約 3.7k</text>
+  <text x="10" y="132" class="b">需要時才讀</text>
+  <text x="250" y="156" text-anchor="end" class="sm">sources-and-research.md（第 1 步）</text>
+  <rect class="box warn" x="260" y="144" width="303" height="16"/><text x="571" y="156" class="sm">約 5.7k</text>
+  <text x="250" y="182" text-anchor="end" class="sm">page-types.md（第 2 步）</text>
+  <rect class="box warn" x="260" y="170" width="170" height="16"/><text x="438" y="182" class="sm">約 3.2k</text>
+  <text x="250" y="208" text-anchor="end" class="sm">writing-rules.md（第 4、5 步）</text>
+  <rect class="box warn" x="260" y="196" width="197" height="16"/><text x="465" y="208" class="sm">約 3.7k</text>
+  <text x="250" y="234" text-anchor="end" class="sm">svg-recipes.md（第 5 步）</text>
+  <rect class="box warn" x="260" y="222" width="340" height="16"/><text x="608" y="234" class="sm">約 6.4k</text>
+  <text x="250" y="260" text-anchor="end" class="sm">template.html（第 5 步）</text>
+  <rect class="box warn" x="260" y="248" width="329" height="16"/><text x="597" y="260" class="sm">約 6.2k</text>
+  <text x="250" y="286" text-anchor="end" class="sm">extending-pages.md（追問時）</text>
+  <rect class="box warn" x="260" y="274" width="154" height="16"/><text x="422" y="286" class="sm">約 2.9k</text>
+  <text x="10" y="312" class="sm">長條長度與 token 估計值成正比。數字是 claude plugin details 的估計，可能與實際用量不同；</text>
+  <text x="10" y="330" class="sm">參考檔與模板是逐一包成測試用 skill 後估得。</text>
+</svg>
+<figcaption>圖 3　每次對話只付 description 的成本；一次專案模式的首次產出，用不到 sources-and-research.md 與 extending-pages.md（數字皆為估計值）。</figcaption>
+</figure>
+<p class="src">單位選 token：本節問的是載入成本，而模型的上下文與費用以 token 計，檔案大小只是代理指標。來源：<code>claude --plugin-dir . plugin details sphinx-style-notes-maker</code> 的估計值（常駐約 403 tokens、呼叫時約 3.7k tokens）。參考檔與模板的數字，是把每個檔案各包成一個測試用 skill（只加 3 行 frontmatter），再以同一個指令估得。讀取時機見 <code>SKILL.md</code> 第 1、2、4、5 步與 § Process 開頭。</p>
+<p>用估計值算一次：專案模式的首次產出會讀 <code>SKILL.md</code>、<code>page-types.md</code>、<code>writing-rules.md</code>、<code>svg-recipes.md</code> 與模板，3.7k＋3.2k＋3.7k＋6.4k＋6.2k ≈ 23.2k tokens；文件或主題模式多讀 <code>sources-and-research.md</code>，約 28.9k tokens；全部檔案約 31.8k tokens。檔案大小不能代替 token 數：<code>writing-rules.md</code> 只有 9.8 KB，估計值卻和 11.8 KB 的 <code>SKILL.md</code> 一樣約 3.7k，因為各檔案中文與程式碼的比例不同。<code>CLAUDE.md</code> 也明文規定：修改規則時 <code>SKILL.md</code> 維持約 130 行以內，細節放進參考檔。</p>
+<p class="src">來源：圖 3 的估計值（加總為本頁計算）；檔案大小以 <code>wc -c</code> 量測；<code>CLAUDE.md</code> §「架構」最後一段</p>
+<div class="admonition warning"><p class="admonition-title">推論</p>
+<p>這個拆法的代價是規則分散在 6 個檔案，彼此以章節編號互相引用（例如 <code>sources-and-research.md</code> §7），所以修改一個檔案的章節時，要一起檢查引用它的檔案。</p></div>
+
+<h2 id="q5">追問時，頁面怎麼延伸成頁面樹？</h2>
+<p>使用者對已有的頁面追問時，代理先讀 <code>extending-pages.md</code>，判斷每個新問題放在哪裡（<a href="#fig-4">圖 4</a>）。原則是每一頁都守住自己的篇幅預算，主頁不會越長越大。</p>
+<figure id="fig-4">
+<svg viewBox="0 0 720 230" role="img" aria-label="追問的落點：既有問題的細節、約 300 字內且不需要新圖，放進該節的 details；新問題，例如另一個機制或某個檔案做什麼，做成子頁；推翻結論或因果鏈的發現，修訂主頁。">
+  <rect class="box" x="10" y="85" width="200" height="60" rx="6"/>
+  <text x="110" y="111" text-anchor="middle" class="b">這個追問是？</text><text x="110" y="131" text-anchor="middle" class="sm">extending-pages.md §2</text>
+  <path class="line" d="M210 105 H240 V40 H288" marker-end="url(#arr)"/><text x="246" y="62" class="sm">細節</text>
+  <line class="line" x1="210" y1="115" x2="288" y2="115" marker-end="url(#arr)"/><text x="248" y="108" class="sm">新問題</text>
+  <path class="line" d="M210 125 H240 V190 H288" marker-end="url(#arr)"/><text x="246" y="170" class="sm">推翻</text>
+  <rect class="box good" x="290" y="10" width="330" height="60" rx="6"/>
+  <text x="455" y="36" text-anchor="middle" class="b">原節末尾的 &lt;details&gt;</text><text x="455" y="56" text-anchor="middle" class="sm">約 300 字以內、不需要新圖</text>
+  <rect class="box good" x="290" y="85" width="330" height="60" rx="6"/>
+  <text x="455" y="111" text-anchor="middle" class="b">子頁 &lt;hub&gt;--&lt;child&gt;.html</text><text x="455" y="131" text-anchor="middle" class="sm">另一個機制、某個檔案做什麼</text>
+  <rect class="box warn" x="290" y="160" width="330" height="60" rx="6"/>
+  <text x="455" y="186" text-anchor="middle" class="b">修訂主頁</text><text x="455" y="206" text-anchor="middle" class="sm">結論、圖 1 與受影響的段落</text>
+</svg>
+<figcaption>圖 4　細節留在原頁，新問題開子頁，只有推翻結論的發現才改主頁。</figcaption>
+</figure>
+<p class="src">來源：<code>references/extending-pages.md</code> §2</p>
+<p>子頁一次回答 3–5 個相關問題，不是一題一頁；一個主題超過約 6 個子頁時，代理會建議另開新主題。每一頁的側欄都放同一份頁面樹，並標出目前所在的頁。第 6 步另外用三個指令確認頁面樹在各頁一致、每頁都標了自己、所有連結的檔案都存在。本儲存庫的 <code>examples/autoresearch/</code> 就是這樣長出來的：主頁之後，兩個程式導讀子頁 <code>autoresearch--train-py.html</code> 與 <code>autoresearch--prepare-py.html</code> 都是以追問加入。長篇文件或計畫則可以在第一次產出時就建好頁面樹，每個階段一個子頁（§6）。</p>
+<p class="src">來源：<code>references/extending-pages.md</code> §2、§4、§5、§6；<code>README.md</code> § Examples</p>
+
+<h2 id="limits">現況與限制</h2>
+<ul>
+<li>第三輪的材料模式已在 Claude Code 以 8 個案例驗證（<code>tasks/todo.md</code> 第 1–4 階段）；在 Codex 上的實測（T16）尚未進行，plugin manifest 的版本仍是 0.2.0。</li>
+<li>不做影片：最高層級是瀏覽器內的逐步動畫。影片網址也不接受，因為代理無法觀看影片。</li>
+<li>需要登入的頁面（例如 X 的貼文）要靠讀取網頁的輔助 skill，或請使用者存成 PDF。</li>
+<li>圖 3 的 token 數都是 <code>claude plugin details</code> 的估計值，可能與實際用量不同；參考檔的估計值包含測試用 skill 多出的 3 行 frontmatter。</li>
+</ul>
+<p class="src">來源：<code>tasks/todo.md</code>；<code>.claude-plugin/plugin.json</code>；<code>SKILL.md</code> § When to Use；<code>references/sources-and-research.md</code> §1、§2</p>
+
+<h2 id="install">怎麼安裝？</h2>
+<pre><code># Claude Code：以 plugin 安裝
+claude plugin marketplace add elliewlh2094/sphinx-style-notes-maker
+claude plugin install sphinx-style-notes-maker@sphinx-style-notes-maker
+# Codex：以 plugin 安裝
+codex plugin marketplace add elliewlh2094/sphinx-style-notes-maker
+codex plugin add sphinx-style-notes-maker@sphinx-style-notes-maker
+# 或直接複製 skill 資料夾
+cp -r skills/explain-as-webpage ~/.claude/skills/   # Claude Code
+cp -r skills/explain-as-webpage ~/.codex/skills/    # Codex</code></pre>
+<table>
+<tr><th>安裝方式</th><th>呼叫名稱</th></tr>
+<tr><td style="white-space:nowrap">Claude Code（plugin）</td><td><code>/sphinx-style-notes-maker:explain-as-webpage</code></td></tr>
+<tr><td style="white-space:nowrap">Claude Code（複製）</td><td><code>/explain-as-webpage</code></td></tr>
+<tr><td style="white-space:nowrap">Codex（plugin）</td><td><code>sphinx-style-notes-maker:explain-as-webpage</code></td></tr>
+<tr><td style="white-space:nowrap">Codex（複製）</td><td><code>@explain-as-webpage</code></td></tr>
+</table>
+<p class="src">來源：<code>README.md</code> § Installation。安裝後要開新的工作階段，工具才會載入 skill。</p>
+
+<h2 id="terms">名詞</h2>
+<table>
+<tr><th>名詞</th><th>在本頁的意思</th></tr>
+<tr><td>skill（技能）</td><td>一組給代理的指示與附檔；平台常駐它的描述，呼叫時才載入本體</td></tr>
+<tr><td>plugin、manifest</td><td>打包 skill 以便安裝的方式；manifest 是描述名稱與版本的 JSON 檔</td></tr>
+<tr><td>description</td><td><code>SKILL.md</code> 開頭的觸發描述，決定代理何時想到這個 skill</td></tr>
+<tr><td>材料模式（project／document／topic）</td><td>依使用者給的是專案、文件或只有主題，決定讀法與引用方式</td></tr>
+<tr><td>頁型（page type）</td><td>依材料性質決定的頁面骨架與圖 1 的形狀</td></tr>
+<tr><td>層級（tier，L0／L1／L2）</td><td>頁面的互動程度：靜態圖、加一個滑桿、加上逐步動畫</td></tr>
+<tr><td>stepper</td><td>多格的 SVG 動畫，以上一步、下一步、播放鍵逐格呈現</td></tr>
+<tr><td>頁面樹（page tree）</td><td>一個主頁（hub）加上連結的子頁，所有頁的側欄列出同一份清單</td></tr>
+<tr><td>來源等級（g1–g4）</td><td>topic 模式中標在每個來源上的可信度分級</td></tr>
+<tr><td>WebFetch</td><td>Claude Code 讀網頁的工具，回傳的是模型摘要而不是全文</td></tr>
+</table>
+
+<h2 id="sources">來源</h2>
+<ul>
+<li><code>skills/explain-as-webpage/SKILL.md</code> — § Process 第 1–7 步、§ When to Use、§ Red Flags</li>
+<li><code>skills/explain-as-webpage/references/sources-and-research.md</code> — §1 模式、§2 取得全文、§7 查證、§8 來源等級、§9 高風險主題</li>
+<li><code>skills/explain-as-webpage/references/page-types.md</code> — 頁型表</li>
+<li><code>skills/explain-as-webpage/references/writing-rules.md</code> — § Length budget</li>
+<li><code>skills/explain-as-webpage/references/extending-pages.md</code> — §2 落點、§4 建置、§5 檢查、§6 首次就建頁面樹</li>
+<li><code>skills/explain-as-webpage/assets/template.html</code> — 模板（254 行）</li>
+<li><code>docs/specs/explain-as-webpage-v3.md</code> — §0 問題陳述與範圍</li>
+<li><code>tasks/plan.md</code> — §「T1（2026-10-03，Claude Code）」、§「T15 結果（2026-10-04）」；<code>tasks/todo.md</code></li>
+<li><code>README.md</code> — § Inspiration、§ What it produces、§ Examples、§ Installation</li>
+<li><code>CLAUDE.md</code> — § 架構</li>
+<li><code>.claude-plugin/plugin.json</code> — 版本 0.2.0；<code>claude --plugin-dir . plugin details sphinx-style-notes-maker</code> 的 token 估計</li>
+<li><code>examples/starship-reusability/starship-reusability.html</code>、<code>examples/autoresearch/</code> — 貫穿全頁的例子</li>
+</ul>
+</main></div>
+
+<script>
+// Sidebar table of contents from h2/h3.
+document.querySelectorAll('.content h2, .content h3').forEach(function (h, i) {
+  if (!h.id) h.id = 'sec-' + i;
+  var a = document.createElement('a');
+  a.href = '#' + h.id; a.textContent = h.textContent; a.className = h.tagName.toLowerCase();
+  a.onclick = function () { document.body.classList.remove('nav-open'); };
+  document.getElementById('toc').appendChild(a);
+});
+// Stepper: <figure class="stepper"> with <g data-step="n"> or <g data-step="n+">.
+document.querySelectorAll('figure.stepper').forEach(function (fig) {
+  var frames = fig.querySelectorAll('[data-step]'), max = 0, cur = 1, timer = null;
+  frames.forEach(function (g) { max = Math.max(max, parseInt(g.dataset.step, 10)); });
+  var bar = document.createElement('div'); bar.className = 'stepper-bar';
+  bar.innerHTML = '<button type="button">◀</button><span class="count"></span><button type="button">▶</button><button type="button">▷</button>';
+  var cap = document.createElement('p'); cap.className = 'stepper-caption';
+  var btn = bar.querySelectorAll('button'), count = bar.querySelector('.count');
+  fig.querySelector('svg').after(bar, cap);
+  function show(n) {
+    cur = Math.min(Math.max(n, 1), max); cap.textContent = '';
+    frames.forEach(function (g) {
+      var s = parseInt(g.dataset.step, 10), on = /\+$/.test(g.dataset.step) ? cur >= s : cur === s;
+      g.style.display = on ? '' : 'none';
+      if (s === cur && g.dataset.caption) cap.textContent = g.dataset.caption;
+    });
+    count.textContent = cur + ' / ' + max;
+  }
+  function stop() { clearInterval(timer); timer = null; btn[2].textContent = '▷'; }
+  btn[0].onclick = function () { stop(); show(cur - 1); };
+  btn[1].onclick = function () { stop(); show(cur + 1); };
+  btn[2].onclick = function () {
+    if (timer) return stop();
+    if (cur === max) show(1);
+    btn[2].textContent = '||';
+    timer = setInterval(function () { cur < max ? show(cur + 1) : stop(); }, 1800);
+  };
+  show(1);
+});
+</script>
+</body>
+</html>

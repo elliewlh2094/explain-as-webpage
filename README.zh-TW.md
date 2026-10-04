@@ -2,7 +2,7 @@
 
 [English](README.md) | 繁體中文
 
-![代理產出頁面的 7 個步驟：收集事實、撰寫摘要、選擇層級、一次性確認、產出頁面、自我檢查、回報](docs/images/cover-process.png)
+![代理產出頁面的 7 個步驟：收集材料、學習摘要、選層級、確認一次、產出、自我檢查、回報](docs/images/cover-process.zh-TW.png)
 
 讓 AI 代理把「你專案裡用到、但你不熟悉的技術或設計」做成**以你的專案為例**的知識網頁。
 
@@ -10,9 +10,11 @@
 
 ## 靈感來源
 
-本 skill 的靈感來自 Andrej Karpathy 的貼文：[x.com/karpathy/status/2105819303471976479](https://x.com/karpathy/status/2105819303471976479)。貼文指出，隨著 LLM 代為完成越來越多工作，我們會花更多時間理解它們的產出；並依序建議幾種更容易理解的輸出形式：以 ASD-STE100（源自航太維修文件的受控英語規範）撰寫、改畫成圖、改做成 HTML 網頁，以及最看好的解說影片。
+本 skill 的靈感來自 Andrej Karpathy 的貼文：[x.com/karpathy/status/2105819303471976479](https://x.com/karpathy/status/2105819303471976479)。
 
-本 skill 實作前三項：寫作規則約為「八成的 ASD-STE100」，圖片是內嵌 SVG，成品是單一 HTML 網頁，並可加上瀏覽器內的逐步動畫。本 skill **刻意不做影片**，理由見[刻意不做的事](#刻意不做的事)。
+<img src="docs/images/karpathy-x-post.png" width="640" alt="Andrej Karpathy 的貼文">
+
+本 skill 實作貼文內分享的前三項：寫作規則約為「八成的 ASD-STE100」，圖片是內嵌 SVG，成品是單一 HTML 網頁，並可加上瀏覽器內的逐步動畫。本 skill **刻意不做影片**，理由見[刻意不做的事](#刻意不做的事)。
 
 ## 它會產出什麼
 
@@ -29,7 +31,7 @@
 <details>
 <summary>各層級的實際樣貌</summary>
 
-以下截圖取自 [autoresearch 範例](#範例)。
+以下截圖取自英文範例 `examples/autoresearch/`。
 
 **L0：靜態圖。** 一次實驗在儲存庫中的流程。
 
@@ -45,32 +47,25 @@
 
 </details>
 
-- **英文或繁體中文**：頁面語言依你的要求決定；沒有指定時，跟隨你提問使用的語言。繁體中文預設使用台灣用語。
+- **頁面語言**：頁面語言依你的要求決定；沒有指定時，跟隨你提問使用的語言。
 - **可依追問延伸**：對既有頁面繼續追問時，代理會依判準決定落點。短答且屬於既有疑問，補進原頁的展開區塊；新的疑問，另開子頁並與主頁互相連結；會改變主結論，則修訂主頁。每一頁各自遵守篇幅預算，主頁不會越補越長。
 
 代理會先列出疑問清單、建議的層級與輸出路徑，**等你確認後才開始產出**。預設輸出位置是 `~/Documents/explainers/<repo 名稱>/<主題>.html`，不會放進你的專案。
 
 ## 範例
 
-兩個範例都是英文網頁。
+**本儲存庫。** [`examples/explain-as-webpage/explain-as-webpage.zh-TW.html`](examples/explain-as-webpage/explain-as-webpage.zh-TW.html) 以單一 L0 頁面說明這個 skill：一個請求怎麼變成一頁網頁（以一個實際請求貫穿）、材料不同時讀法與引用方式的差別、頁型與層級怎麼決定、各檔案在什麼時候被讀取（附 token 估計值）、追問時頁面怎麼延伸，以及安裝方式。上方的封面圖就是這一頁的圖 1。
 
-**本儲存庫。** [`examples/explain-as-webpage/explain-as-webpage.html`](examples/explain-as-webpage/explain-as-webpage.html) 以單一 L0 頁面說明這個 skill：它解決的問題、7 個步驟、如何選擇層級、各檔案在什麼時候被讀取，以及安裝與使用方式。上方的封面圖就是這一頁的圖 2。
+**文件：Karpathy 的〈LLM Wiki〉。** [`examples/llm-wiki/llm-wiki.html`](examples/llm-wiki/llm-wiki.html) 把 [LLM Wiki gist](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f) 做成一頁 L2 網頁（document 模式）：它和 RAG 的差別（以逐步動畫對兩者依序加入三份來源並提出一個問題）、三層結構、Ingest、Query、Lint 三種操作，以及同一個問題用兩種做法回答的對照。每個事實都標出原文的段落。
 
-**karpathy/autoresearch。** [`examples/autoresearch/`](examples/autoresearch/) 以 [karpathy/autoresearch](https://github.com/karpathy/autoresearch)（commit `228791f`，MIT 授權）為例，產出三頁網頁：
-
-| 頁面 | 層級 | 內容 |
-|---|---|---|
-| `autoresearch.html`（主頁） | L2 | 儲存庫的目的、三個檔案的分工、使用方式。以靜態圖說明結構（L0），以滑桿說明 5 分鐘時間預算的取捨（L1），以逐步動畫說明實驗迴圈（L2） |
-| `autoresearch--train-py.html` | L1 | `train.py` 程式導讀：模型大小、兩種最佳化器、依時間計算的學習率排程 |
-| `autoresearch--prepare-py.html` | L0 | `prepare.py` 程式導讀：資料、驗證分片、資料打包、`val_bpb` 的計算 |
-
-兩個子頁是以「追問」的方式，透過延伸流程加入的。
+**主題：SpaceX Starship 與可復用火箭。** [`examples/starship-reusability/starship-reusability.html`](examples/starship-reusability/starship-reusability.html) 由查證並分級的來源寫成（topic 模式，資料截至 2026-10-04）：以 NASA 的數字實際計算火箭方程式、兩節的分工、以逐步動畫呈現的助推器返回過程、飛船再入為何比較難，以及取自 SpaceX 試飛報告的里程碑。
 
 GitHub 不會直接顯示 HTML，請 clone 後在本機開啟：
 
 ```bash
-xdg-open examples/explain-as-webpage/explain-as-webpage.html   # macOS 用 open
-xdg-open examples/autoresearch/autoresearch.html
+xdg-open examples/explain-as-webpage/explain-as-webpage.zh-TW.html   # macOS 用 open
+xdg-open examples/llm-wiki/llm-wiki.html
+xdg-open examples/starship-reusability/starship-reusability.html
 ```
 
 ## 安裝
@@ -129,8 +124,10 @@ skills/explain-as-webpage/
 │   └── extending-pages.md      # 依追問延伸頁面：落點判準、頁面樹、同步檢查
 └── assets/
     └── template.html           # RTD 風格的單檔模板
-examples/explain-as-webpage/    # 範例：說明本儲存庫的單頁網頁
+examples/explain-as-webpage/    # 範例：說明本儲存庫的單頁網頁（英文與繁體中文）
 examples/autoresearch/          # 範例：主頁＋兩個程式導讀子頁
+examples/llm-wiki/              # 範例（繁中）：由文件產出的網頁
+examples/starship-reusability/  # 範例（繁中）：由查證來源產出的網頁
 .claude-plugin/                 # Claude Code 的 plugin 與 marketplace manifest
 .codex-plugin/                  # Codex 的 plugin manifest
 .agents/plugins/                # Codex 的 marketplace manifest
