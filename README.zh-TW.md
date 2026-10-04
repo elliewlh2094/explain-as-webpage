@@ -4,7 +4,7 @@
 
 ![代理產出頁面的 7 個步驟：收集材料、學習摘要、選層級、確認一次、產出、自我檢查、回報](docs/images/cover-process.zh-TW.png)
 
-讓 AI 代理把「你專案裡用到、但你不熟悉的技術或設計」做成**以你的專案為例**的知識網頁。
+讓 AI 代理把「你專案裡用到、但你不熟悉的技術或設計」做成**以你的專案為例**的知識網頁。沒有專案也能用：給它一篇網路文章、一份 PDF 或 Markdown 筆記，或只給一個主題，由它查證並為來源分級。
 
 本儲存庫提供一個 skill：`explain-as-webpage`。它可以在 Claude Code 與 Codex 上使用，兩者共用同一份 `SKILL.md`。
 
@@ -50,7 +50,7 @@
 - **頁面語言**：頁面語言依你的要求決定；沒有指定時，跟隨你提問使用的語言。
 - **可依追問延伸**：對既有頁面繼續追問時，代理會依判準決定落點。短答且屬於既有疑問，補進原頁的展開區塊；新的疑問，另開子頁並與主頁互相連結；會改變主結論，則修訂主頁。每一頁各自遵守篇幅預算，主頁不會越補越長。
 
-代理會先列出疑問清單、建議的層級與輸出路徑，**等你確認後才開始產出**。預設輸出位置是 `~/Documents/explainers/<repo 名稱>/<主題>.html`，不會放進你的專案。
+代理會先列出疑問清單、建議的層級與輸出路徑，**等你確認後才開始產出**。預設輸出位置在你的專案之外：專案是 `~/Documents/explainers/<repo 名稱>/<主題>.html`，文件或主題是 `~/Documents/explainers/<主題>/<主題>.html`。
 
 ## 範例
 
@@ -110,6 +110,10 @@ cp -r skills/explain-as-webpage ~/.codex/skills/
 - 「`src/swarm_experiment` 這個套件在做什麼、為什麼這樣設計？用網頁解釋給我看。」
 - 「接續 `swarm-experiment-package.html`，我想知道每個程式檔各在做什麼。」（延伸既有頁面）
 - 「用英文做一頁網頁，解釋這個儲存庫的目的與使用方式。」
+- 「把這篇文章整理成容易閱讀的知識網頁：https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f」（文件）
+- 「把 `~/Downloads/robotics-roadmap.pdf` 做成網頁，每個階段一個子頁。」（長篇文件或計畫）
+- 「我想了解 SpaceX 怎麼重複使用 Starship，請查資料做成給非本科大學生看的網頁。」（主題：代理會請你選輕量或深度查證）
+- 「做一頁給我爸媽看的甲狀腺亢進與低下衛教網頁。」（高風險主題：只用權威來源，並加上「注意」框）
 
 產出後，用 `xdg-open <路徑>`（Linux）或 `open <路徑>`（macOS）開啟。
 
@@ -119,8 +123,10 @@ cp -r skills/explain-as-webpage ~/.codex/skills/
 skills/explain-as-webpage/
 ├── SKILL.md                    # 流程與層級判準（Claude Code 與 Codex 共用）
 ├── references/
-│   ├── writing-rules.md        # 頁面骨架、程式導讀頁型、圖文綁定、語言與篇幅規則
-│   ├── svg-recipes.md          # SVG 版面規則、顏色語意、圖形配方、逐步動畫與滑桿
+│   ├── writing-rules.md        # 頁面骨架、圖文綁定、讀者設定、語言與篇幅規則
+│   ├── page-types.md           # 頁型與主軸圖（機制、套件、程式導讀、論證、計畫、實務指南、演進）
+│   ├── sources-and-research.md # 文件與主題模式：取得全文、查證、來源等級、輔助 skill、高風險主題
+│   ├── svg-recipes.md          # SVG 版面規則、顏色語意、圖形配方、座標軸、逐步動畫與滑桿
 │   └── extending-pages.md      # 依追問延伸頁面：落點判準、頁面樹、同步檢查
 └── assets/
     └── template.html           # RTD 風格的單檔模板
@@ -132,13 +138,14 @@ examples/starship-reusability/  # 範例（繁中）：由查證來源產出的�
 .codex-plugin/                  # Codex 的 plugin manifest
 .agents/plugins/                # Codex 的 marketplace manifest
 docs/ideas/                     # 構想摘要
-docs/images/                    # README 用的三個層級截圖
+docs/specs/                     # 本輪規格（材料模式）
+docs/images/                    # README 用圖：封面、貼文截圖、三個層級截圖
 tasks/                          # 實作計畫與待辦
 ```
 
 ## 刻意不做的事
 
-- **影片**：最高層級是瀏覽器內的逐步動畫，不使用 manim、ffmpeg 或語音合成。影片的工具鏈與產出成本高，而「過程」類的疑問用逐步動畫已能說明。
+- **影片（不產出，也不接受為材料）**：最高層級是瀏覽器內的逐步動畫，不使用 manim、ffmpeg 或語音合成。影片的工具鏈與產出成本高，而「過程」類的疑問用逐步動畫已能說明。代理無法觀看影片，所以也不接受影片網址作為材料。
 - **外部 CDN**：例如 MathJax、D3、Mermaid。公式改用 HTML 上下標表示。
 - **Sphinx 建置**：只仿照它的外觀。
 - **跨主題索引或知識庫**：頁面樹只限於同一主題（一個主頁加上它的子頁），避免增加管理負擔。

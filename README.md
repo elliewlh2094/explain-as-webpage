@@ -4,7 +4,7 @@ English | [繁體中文](README.zh-TW.md)
 
 ![The seven steps the agent follows: gather material, write a learning brief, choose a tier, confirm once, build, self-check, report](docs/images/cover-process.png)
 
-Let an AI coding agent turn a technique or design in your project that you do not understand into a knowledge web page, **with your own project as the example**.
+Let an AI coding agent turn a technique or design in your project that you do not understand into a knowledge web page, **with your own project as the example**. It also works without a project: give it an article, a PDF, or Markdown notes, or only name a topic, and it researches and grades the sources.
 
 This repository provides one skill: `explain-as-webpage`. It works in Claude Code and Codex, and both use the same `SKILL.md`.
 
@@ -50,7 +50,7 @@ Screenshots from the [autoresearch example](#examples).
 - **Page's Language.** The page uses the language you ask for. If you do not ask, it uses the language you write in.
 - **Pages that grow with follow-up questions.** When you ask more about an existing page, the agent decides where each answer goes. A short answer to an existing question goes into a collapsible block on that page. A new question gets a child page, linked to and from the hub page. A finding that changes the main conclusion revises the hub page. Each page keeps its own length budget, so the hub page does not keep growing.
 
-The agent first lists the questions, the proposed tier, and the output path, and **builds only after you confirm**. The default output path is `~/Documents/explainers/<repo-name>/<topic>.html`, outside your project.
+The agent first lists the questions, the proposed tier, and the output path, and **builds only after you confirm**. The default output path is outside your project: `~/Documents/explainers/<repo-name>/<topic>.html` for a project, or `~/Documents/explainers/<topic>/<topic>.html` for a document or a topic.
 
 ## Examples
 
@@ -115,6 +115,10 @@ Describe what you want to understand, or call the skill by name. For example:
 - "What does the `src/swarm_experiment` package do, and why is it built this way? Explain it as a web page."
 - "Continuing from `swarm-experiment-package.html`: what does each source file do?" (extends an existing page)
 - "Make a page in English that explains what this repository is for and how to use it."
+- "Turn this article into an easy-to-read page: https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f" (a document)
+- "Make pages from `~/Downloads/robotics-roadmap.pdf`, one child page per stage." (a long document or a plan)
+- "I want to understand how SpaceX reuses Starship. Research it and make a page for a non-specialist student." (a topic: the agent asks for light or deep research)
+- "Make a health page about an overactive and an underactive thyroid for my parents." (a high-risk topic: authoritative sources only, with a caution box)
 
 Open the result with `xdg-open <path>` (Linux) or `open <path>` (macOS).
 
@@ -124,8 +128,10 @@ Open the result with `xdg-open <path>` (Linux) or `open <path>` (macOS).
 skills/explain-as-webpage/
 ├── SKILL.md                    # Process and tier criteria (shared by Claude Code and Codex)
 ├── references/
-│   ├── writing-rules.md        # Page skeletons, code walkthrough pages, figures and text, language and length rules
-│   ├── svg-recipes.md          # SVG layout rules, color meaning, figure recipes, step animation and slider
+│   ├── writing-rules.md        # Page skeleton, figures and text, readers, language and length rules
+│   ├── page-types.md           # Page types and their spine figures (mechanism, package, code, argument, plan, guide, evolution)
+│   ├── sources-and-research.md # Document and topic modes: full text, research, source grades, helper skills, high-risk topics
+│   ├── svg-recipes.md          # SVG layout rules, color meaning, figure recipes, axes, step animation and slider
 │   └── extending-pages.md      # Follow-up questions: where answers go, the page tree, sync checks
 └── assets/
     └── template.html           # Single-file Read the Docs-style template
@@ -137,13 +143,14 @@ examples/starship-reusability/  # Example (Traditional Chinese): a page from res
 .codex-plugin/                  # Codex plugin manifest
 .agents/plugins/                # Codex marketplace manifest
 docs/ideas/                     # Idea one-pagers
-docs/images/                    # README screenshots of the three tiers
+docs/specs/                     # Specification of the current round (material modes)
+docs/images/                    # README images: covers, the post screenshot, the three tiers
 tasks/                          # Implementation plan and task list
 ```
 
 ## What it does not do
 
-- **Video.** The highest tier is an in-browser step animation; no manim, ffmpeg, or text-to-speech. A video toolchain costs much more to run, and a step animation already covers questions about a process.
+- **Video, as output or as material.** The highest tier is an in-browser step animation; no manim, ffmpeg, or text-to-speech. A video toolchain costs much more to run, and a step animation already covers questions about a process. A video URL is not accepted as material either, because the agent cannot watch it.
 - **External CDNs** such as MathJax, D3, or Mermaid. Formulas use HTML superscripts and subscripts.
 - **A Sphinx build.** Only the look is borrowed.
 - **A cross-topic index or knowledge base.** A page tree stays inside one topic (one hub page and its child pages), to keep maintenance low.
