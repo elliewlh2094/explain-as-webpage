@@ -40,9 +40,9 @@
 - [x] 使用者判讀 V4、V5、V6（同意三條新規則；LLM Wiki 與 Starship 收為繁中範例；以最新 skill 重做儲存庫說明頁）
 
 ## 第 5 階段：Codex 與打包
-- [ ] T16 Codex 實測
-- [ ] T17 `README.md` 與 `README.zh-TW.md`（EKF 不公開；範例段落已加入兩個繁中範例；處理「靈感來源」段落改版後的指涉）
-- [ ] T18 manifest 0.3.0、`CLAUDE.md`、規格狀態、暫存檔刪除方式（`rm` 安全檢查）與回歸檢查
+- [x] T16 Codex 實測（使用者手動測試；兩個 Codex 假設成立；§1 補上 sandbox 寫入路徑規則）
+- [x] T17 `README.md` 與 `README.zh-TW.md`：沒有專案也能用、兩種預設路徑、文件與主題模式的例句、影片不接受為材料、目錄結構補上新 reference 與 `docs/specs/`
+- [x] T18 manifest 0.3.0、`CLAUDE.md`、規格狀態、暫存檔刪除方式（`rm` 安全檢查）與回歸檢查
 
 ### 檢查點 E
-- [ ] 規格 §8 的成功條件全部達成；提供 `git add` 範圍與提交訊息建議
+- [x] 規格 §8 的成功條件全部達成；提供 `git add` 範圍與提交訊息建議

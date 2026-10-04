@@ -283,7 +283,7 @@
   - 用一個短案例（V1 的請求）確認 4 件事：skill 是否觸發、是否有網路工具、能否看到 skill 清單、沒有網路工具時的退路能否運作。
   - 依結果修正 `sources-and-research.md`。
 - 驗收：
-  - [ ] 規格 §6 中與 Codex 相關的兩個假設都有結論，並寫在本檔
+  - [x] 規格 §6 中與 Codex 相關的兩個假設都有結論，並寫在本檔
 - 驗證：保存 Codex 的輸出摘要；依結果修改 references 後，再執行一次 `SKILL.md` 的行數檢查
 - 相依：檢查點 D
 - 檔案：`references/sources-and-research.md`（視結果而定）、`tasks/plan.md`
@@ -295,8 +295,8 @@
   - 「目錄結構」加入兩份新的 reference 與 `docs/specs/`。
   - 檢查點 C 決定 EKF 不公開，所以範例段落不變。
 - 驗收：
-  - [ ] 兩份 README 的內容互相對應
-  - [ ] README 中提到的路徑都存在
+  - [x] 兩份 README 的內容互相對應（範例段落依檢查點 D 的決定刻意分語言）
+  - [x] README 中提到的路徑都存在（`docs/notebooks/XXX.md` 是使用方式例句中使用者專案的示意路徑）
 - 驗證：逐段比對兩份 README；用 `grep` 檢查路徑
 - 相依：T16
 - 檔案：`README.md`、`README.zh-TW.md`，以及 `examples/ekf/`（視檢查點 C 的決定）
@@ -309,10 +309,10 @@
   - 修正暫存檔的刪除方式（檢查點 A 第 6 點）：`SKILL.md` 第 6 步會用 `rm "$P"` 刪除暫存檔，這種以變數組成路徑的刪除指令可能被 Claude Code 的安全檢查擋下。改寫方向：把暫存的探測頁放在固定的字面路徑（例如 `/tmp/explain-as-webpage-narrow.html`），用絕對的 `file://` 路徑嵌入 iframe，再用字面路徑刪除。`svg-recipes.md` 的單幀截圖範例已經使用字面路徑 `/tmp/frame.html`，要一併確認。
   - 回歸檢查：比對專案模式的 diff，並重新截圖 `examples/` 中的 4 個既有頁面。
 - 驗收：
-  - [ ] 所有 manifest 的 JSON 都合法，而且版本號一致
-  - [ ] plugin 驗證通過
-  - [ ] 既有範例頁面沒有變化
-  - [ ] 在 Claude Code 中原樣執行第 6 步與單幀截圖的指令，不被安全檢查擋下，暫存檔也確實被刪除
+  - [x] 所有 manifest 的 JSON 都合法，而且版本號一致
+  - [x] plugin 驗證通過
+  - [x] 既有範例頁面沒有變化
+  - [x] 在 Claude Code 中原樣執行第 6 步與單幀截圖的指令，不被安全檢查擋下，暫存檔也確實被刪除
 - 驗證：
   - 執行 `CLAUDE.md` 中的 manifest 迴圈
   - `claude plugin validate .`
@@ -322,6 +322,29 @@
 - 檔案：`.claude-plugin/plugin.json`、`.claude-plugin/marketplace.json`、`.codex-plugin/plugin.json`、`.agents/plugins/marketplace.json`、`CLAUDE.md`、`docs/specs/explain-as-webpage-v3.md`（只改機械性的欄位）、`SKILL.md`、`references/svg-recipes.md`
 
 **檢查點 E**：確認規格 §8 的成功條件全部達成，並提供 `git add` 範圍與提交訊息建議。
+
+### T18 結果（2026-10-04）
+
+- manifest：四份的版本號升為 0.3.0，JSON 都合法。描述原本只寫「你專案裡的技術」，與 0.3.0 的文件、主題模式不符，一併改寫（計畫原本只列版本號）。`claude plugin validate .` 通過，只有根目錄 `CLAUDE.md` 的已知警告；`plugin details` 顯示常駐約 400 tokens、呼叫時約 3.8k tokens（第 6 步指令變長，原為約 3.7k；兩個儲存庫說明頁記錄的是修改前的估計值）。
+- 暫存檔刪除方式：`SKILL.md` 第 6 步改用固定的字面路徑 `/tmp/explain-as-webpage-narrow.html`，iframe 以 `file://` 絕對路徑載入頁面，`F` 要求絕對路徑；`svg-recipes.md` 的「只看圖」與單幀截圖都補上截圖與 `rm` 字面路徑。三段指令都照寫法執行過，沒有被擋，暫存檔都已刪除；另以一個 900px 寬的測試頁確認跨目錄載入時仍會判為 `OVERFLOW`。`SKILL.md` 仍為 130 行。
+- `CLAUDE.md`：專案現況改寫為三種材料模式、規格已實作；架構加入 `sources-and-research.md`、`page-types.md`，並更新 `writing-rules.md`、`svg-recipes.md` 的說明；模板驗證指令的窄版截圖改用 iframe 方法（照寫法執行過，`<title>ok`，暫存檔已刪除）。
+- 規格開頭狀態改為「已實作（plugin 0.3.0）」。
+- 回歸：T18 期間 `examples/` 與模板沒有變動。7 頁範例以新寫法的第 6 步指令檢查：FILL 0、外部資源 0、390px 皆為 ok；autoresearch 頁面樹三頁一致；Starship 來源等級檢查無輸出；寬版截圖目視正常。
+
+### 檢查點 E（2026-10-04）
+
+規格 §8 的成功條件：
+
+| 條件 | 結果 | 依據 |
+|---|---|---|
+| 8 個驗證案例都產出頁面、通過自我檢查與截圖、使用者判讀比原材料好懂 | 達成 | V1–V8 依序在檢查點 A–D 判讀；V3（EKF）使用者接受但認為仍可改善，決定不公開 |
+| 每個案例的確認訊息都包含 R7 的內容，最多 4 題 | 達成 | 各案例都以一次結構化確認（至多 4 題）送出；候選疑問寫在題目內 |
+| topic 頁面的每筆來源都有等級與存取日期；V4、V6 有「注意」框 | 達成 | 各 topic 頁的 awk 檢查無輸出；V4、V6 的「注意」框緊接在結論之後 |
+| 用到輔助 skill 時確認訊息事先列出，回報寫明用了哪些或退回哪種內建做法 | 達成 | V2（PDF）、V3（deep-research）事先列出並回報；其餘案例回報內建做法 |
+| `SKILL.md` 沒有把任何其他 skill 寫成必要條件 | 達成 | 只以能力描述輔助 skill，並註明需使用者同意 |
+| `SKILL.md` 約 130 行以內、`description` 1024 字元以內、通過 plugin 驗證 | 達成 | 130 行；1,010 字元；validate 通過 |
+
+未涵蓋的部分：Codex 上「完全沒有網路工具」的退路與自動觸發未實測（見 T16）。
 
 ## Risks and Mitigations
 | 風險 | 影響 | 對策 |
@@ -540,9 +563,20 @@
 - `README.md` 的範例段落只列英文範例（explain-as-webpage、autoresearch），`README.zh-TW.md` 只列繁中範例（explain-as-webpage、llm-wiki、starship-reusability）；繁中版的層級截圖說明改為「取自英文範例 `examples/autoresearch/`」。兩份的目錄結構仍列出全部範例資料夾。`CLAUDE.md` 的範例說明同步更新。
 - 使用者修正了「Inspiration／靈感來源」；英文版的拼字錯誤（seggestions）與介系詞（of → in the post）已修正。
 
-### T16
+### T16 結果（2026-10-04，使用者在 Codex 手動實測）
 
-（待填寫。）
+- 環境：codex-cli 0.159.3，模型 GPT-6.1-Sol（high）。依 README 以本機路徑安裝：`codex plugin marketplace add <儲存庫路徑>`、`codex plugin add sphinx-style-notes-maker@sphinx-style-notes-maker`，狀態為 installed、enabled、0.2.0。
+- 測試 A（唯讀 sandbox）：
+  - skill 清單中有 `sphinx-style-notes-maker:explain-as-webpage`（帶 plugin 前綴）。規格 §6「Codex 會把已安裝 skill 的清單放進上下文」成立。
+  - 不加 `--search` 也有網頁工具 `web__run`（搜尋、開啟、查找）。shell 的 `curl -sI` 沒有輸出，無法判定能否連網。
+- 測試 B（唯讀 sandbox，使用者以 `$sphinx-style-notes-maker:explain-as-webpage` 明確指定 skill，在儲存庫目錄執行）：
+  - 依序讀了 `SKILL.md`、`sources-and-research.md`、`page-types.md`、`extending-pages.md`（plugin 快取）。
+  - 先用 `web__run` 開啟 gist 看大綱，再用 `curl -fSL …/raw` 下載全文；sandbox 內 DNS 失敗，Codex 請求在 sandbox 外執行，使用者核准後成功。追問結果：全文 1,921 個英文字、以空白分隔 1,959 個、最後一段以「This document is intentionally abstract.」開頭，經 Claude Code 另行下載核對完全一致。規格 §6「Codex 有可用的網路工具」成立。
+  - 確認訊息符合第 4 步：單次確認、大綱附各節篇幅、6 個編號候選疑問（建議 1–5）、L0 與更省做法的取捨、繁中、不使用輔助 skill、發現同主題既有頁面並提供「沿用並修訂」。讀者只直接選定「沒有相關背景的讀者」，沒有列出三種讓使用者選。
+  - 偏離：因 sandbox 只能寫入目前的工作目錄（本儲存庫），Codex 建議輸出到儲存庫內的 `output/llm-wiki/`，把預設的 `~/Documents/explainers/llm-wiki/` 列為「需另行授權」。也因為在儲存庫內執行，它找到的既有頁面是 `examples/llm-wiki/`，不是輸出目錄。修正：`sources-and-research.md` §1 補上「sandbox 不能寫入預設路徑時，仍提議預設路徑並說明需要核准，不改到目前儲存庫的資料夾」（使用者同意）。儲存庫內沒有留下 `output/`。
+- 未測：完全沒有網路工具時的退路（測試 C）、shell 可直接連網的情況（測試 D）。使用者判斷不需要再測其他執行位置。
+- 自動觸發（不指定 skill 名稱）在 Codex 上沒有測。
+- `SKILL.md` 仍為 130 行。
 
 ### 檢查點 A 的發現（T2、T3，2026-10-03）
 
