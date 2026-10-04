@@ -226,19 +226,19 @@
   - `sources-and-research.md` 新增高風險主題規則：只用權威來源、加上「注意」框、不寫劑量、醫療主題要有「何時就醫」、至少做輕量查證。
   - `SKILL.md` 第 4 步的第 3 題加入讀者設定。
 - 驗收：
-  - [ ] 專案模式的預設讀者為「工程師」
-  - [ ] 高風險主題的確認訊息中，沒有「只靠模型知識」的選項
-  - [ ] `SKILL.md` ≤ 約 130 行
+  - [x] 專案模式的預設讀者為「工程師」
+  - [x] 高風險主題的確認訊息中，沒有「只靠模型知識」的選項
+  - [x] `SKILL.md` ≤ 約 130 行
 - 驗證：通讀並交叉比對；確認行數
 - 相依：檢查點 C
 - 檔案：`references/writing-rules.md`、`references/sources-and-research.md`、`SKILL.md`
 
-**T13（M）V4：甲狀腺衛教，繁中，一般大眾，深度研究並使用研究類輔助 skill**
-- 說明：輸出到 `~/Documents/explainers/thyroid-health/`。驗證 R8 的「使用研究類 skill」情況，以及輔助 skill 的提問是否已在確認訊息中預告。
+**T13（M）V4：甲狀腺衛教，繁中，一般大眾，深度研究（使用者選擇不用輔助 skill）**
+- 說明：輸出到 `~/Documents/explainers/thyroid-health/`。原本要驗證 R8 的「使用研究類 skill」情況；使用者在確認時選擇不用輔助 skill，該情況已由 T10（deep-research）驗證，本題改為驗證內建做法的深度研究。
 - 驗收：
-  - [ ] 頁面有「注意」框與「何時就醫」段落
-  - [ ] 來源都是權威來源，台灣讀者優先採用台灣資料
-  - [ ] 頁面中沒有劑量
+  - [x] 頁面有「注意」框與「何時就醫」段落
+  - [x] 來源都是權威來源，台灣讀者優先採用台灣資料
+  - [x] 頁面中沒有劑量
 - 驗證：
   - 用 `grep -nE '[0-9]+ ?(mg|mcg|µg|微克|毫克)'` 檢查劑量，應該沒有輸出
   - 執行自我檢查指令
@@ -249,9 +249,9 @@
 **T14（M）V6：緊急避難包（台灣）**
 - 說明：輸出到 `~/Documents/explainers/emergency-go-bag/`。
 - 驗收：
-  - [ ] 使用實務指南主軸，即決策樹或檢查清單
-  - [ ] 頁面有「注意」框
-  - [ ] 引用台灣機關的來源
+  - [x] 使用實務指南主軸，即決策樹或檢查清單
+  - [x] 頁面有「注意」框
+  - [x] 引用台灣機關的來源
 - 驗證：
   - 執行自我檢查指令
   - 截取兩種寬度的圖
@@ -262,9 +262,9 @@
 **T15（M）V5：SpaceX Starship 與可復用火箭**
 - 說明：讀者設定為非本科大學生，輸出到 `~/Documents/explainers/starship-reusability/`。
 - 驗收：
-  - [ ] 結論寫明「截至 <日期>」
-  - [ ] 每個類比都說明在哪裡不成立
-  - [ ] 使用機制頁型，主軸為因果鏈
+  - [x] 結論寫明「截至 <日期>」
+  - [x] 每個類比都說明在哪裡不成立
+  - [x] 使用機制頁型，主軸為因果鏈
 - 驗證：
   - 執行自我檢查指令
   - 截取兩種寬度的圖
@@ -472,6 +472,73 @@
   - (b) 從某個領域角度解釋一項技術時，前段要有貫穿全頁的具體例子、符號與領域物件的對照表；過程類說明要用這個例子的實際計算數字（`writing-rules.md` 或 `page-types.md` 的機制頁）。
   - (c) 多欄表格中較短的名稱或公式欄也要不換行（把 `table.kv` 的規則擴大到前幾欄）。
 - 使用者決定（2026-10-03）：EKF 維持不公開，作為本機驗證產物；EKF 頁面仍有改善空間，等本計畫完成後再檢討。三條衍生規則 (a)(b)(c) 同意並已寫入 `writing-rules.md`（Formulas、Ground the symbols in one running example、Label tables），`SKILL.md` 的內容檢查清單同步加註。檢查點 C 通過。
+
+
+### T13 結果（2026-10-04）
+
+- 確認結果：疑問 1、2、3、5、6、8；L0；繁中、一般大眾；深度研究，不用輔助 skill。輸出路徑 `~/Documents/explainers/thyroid-health/thyroid-health.html`。
+- 自我檢查：FILL 0、外部資源 0、約 32 KB、來源等級與存取日期 awk 無輸出、劑量 grep 無輸出、正文 2,517 個 CJK 字（預算 3,500）、390px 為 ok；3 張圖。截圖發現原因表第一欄（每列標籤）斷成每行兩字，已加 `nowrap` 修正，這是 `writing-rules.md` § Label tables 已有的規則，屬執行疏漏而非規則缺口。
+- 查證：每個關鍵主張至少兩個權威來源。原始檔暫存於 `~/Documents/explainers/.work-thy/`，頁面完成後已刪除（先列出內容再以字面路徑刪除）。國健署在頁面上標為 g2（政府機關屬「權威」，依 §8 表格）。
+  - 美國 NIDDK：亢進、低下、葛瑞夫茲病、橋本氏病（g2）。
+  - 英國 NHS：亢進、低下、亢進併發症（甲狀腺風暴警訊）、亢進治療（服用抗甲狀腺藥物期間出現發燒、喉嚨痛要立即就醫）（g2）。
+  - 國健署〈碘攝取不足只跟甲狀腺腫大有關？〉2020/03/19：認明碘鹽、孕婦需碘量大增（g1）。
+  - 雙和醫院〈認識甲狀腺機能亢進〉2019-06-25：多為免疫疾病、約 5% 為毒性結節、不可隨便停藥（g2）。
+  - 臺大醫院健康電子報 2013-11（邱偉益）：低下的原因、症狀、補充甲狀腺素、不可自行調整劑量；台灣鼻咽癌放療後的甲狀腺低下（g2）。
+- 頁面要寫明的來源差異：國健署建議一般民眾使用碘鹽；NIDDK 提醒自體免疫甲狀腺疾病患者避免大量海藻與碘補充劑，兩者適用對象不同。
+- 新發現（檢查點 D 要討論）：
+  - 國健署主站的憑證鏈不完整，`curl` 與 WebFetch 都失敗。改依 AIA 下載 TWCA 中繼憑證，和系統根憑證合併後以 `--cacert` 完整驗證連線，沒有使用 `-k`。建議把這個做法補進 `sources-and-research.md` §2。
+  - 馬偕醫院擋下 `curl`，健康九九＋的文章已經 404，雙和醫院的內容是動態載入，改以 WebFetch 摘錄。
+
+### T14 結果（2026-10-04）
+
+- 確認結果：主頁回答疑問 1、2、3、4、6；疑問 7（地震、颱風、空襲的差別）依使用者要求做成子頁；L0；繁中、一般大眾；輕量查證，不用輔助 skill。這是第一次在確認時由使用者指定「某題做子頁」，流程不需要新規則：照 `extending-pages.md` §6 第一次產出就建立頁面樹即可。
+- 輸出：`~/Documents/explainers/emergency-go-bag/emergency-go-bag.html`（主頁，2 張圖、4 張表）與 `emergency-go-bag--scenarios.html`（子頁，1 張圖、3 張表）。
+- 自我檢查：兩頁 FILL 0、外部資源 0、約 31 KB 與 27 KB、來源等級 awk 無輸出、正文 2,103 與 2,171 個 CJK 字、390px 皆為 ok；頁面樹三項檢查（一致、標示目前頁、連結存在）皆無錯誤。
+- 來源：消防署〈緊急避難包準備清單〉（2025-06-26，含 1、2、3 天版）、國防部《臺灣全民安全指引》PDF（2025-11）、消防防災館 6 篇、臺北市與高雄市消防局，共 10 個，全為 g2。研究暫存檔放在工作階段暫存目錄，完成後已刪除。
+- 逐句核對來源時修正 5 處超出來源的敘述：電子支付失效（來源只寫提款機）、哨子用途、以「箱」換算瓶裝水（改為瓶數）、颱風「數天預報」、表格「為什麼」欄的推論。後兩類改為標示「一般背景說明／依官方建議推論」。實務指南的「為什麼」欄與「常見錯誤」表天生含推論，`page-types.md` 可考慮規定在表下標示（檢查點 D 討論）。
+- 消防署主站（www.nfa.gov.tw）與國健署同樣缺 TWCA 中繼憑證；同一個 AIA 做法有效。這是第二個政府網站出現同樣問題，支持把做法補進 `sources-and-research.md` §2。
+- 兩份官方文件對避難包飲水量的寫法不同（消防署：體重 × 15 毫升／天；《指引》：兩瓶 600 毫升），頁面以 60 公斤的範例實際計算並說明差異來自天數。
+
+### T15 結果（2026-10-04）
+
+- 確認結果：疑問 1、2、3、4、5；使用者選 L2（第 3 題「助推器怎麼回來」用 stepper，其餘 L0）；繁中、非本科大學生；輕量查證，不用輔助 skill。
+- 輸出：`~/Documents/explainers/starship-reusability/starship-reusability.html`。4 張圖：圖 1 因果鏈（兩列蛇形）、圖 2 兩節結構、圖 3 助推器返回 stepper（5 步）、圖 4 每公斤動能比較＋飛船回收四步。
+- 自我檢查：FILL 0、外部資源 0、約 37 KB、來源等級 awk 無輸出、無組合附加符號、正文 2,760 個 CJK 字＋247 個英文詞、390px 為 ok。stepper 逐格截圖發現第 4、5 步的標籤離助推器太遠且隔著上升軌跡，已把發射塔右移、標籤移到塔左側。
+- 貫穿例子：用 NASA Glenn 頁面的數字實算火箭方程式（比衝 350 秒、7,600 m/s → MR ≈ 9.1、推進劑約 89%），再對照 Starship 的載荷比例（約 2–3%）；第 4 題用 ½v² 算出飛船每公斤能量約為助推器的 10 倍。
+- 來源（8 筆）：SpaceX 試飛報告第 5、7–14 次（g1）、NASA Glenn 與 NASA Ames 的 Jones（2018）（g2）、Wikipedia 兩篇（g3）。成本的個人說法（Musk）放入「新興說法」框；Jones「可復用不保證便宜」與 Starship 的目標並列，放入「推論」框。
+- 新發現（檢查點 D 討論）：
+  - SpaceX 官網是 JavaScript 頁面，`curl` 與 WebFetch 都只拿到空殼；改從官網背後的內容服務（content.spacex.com 的 JSON）取得試飛報告全文。`sources-and-research.md` §2 對「需要 JavaScript 的頁面」只建議瀏覽器類輔助 skill 或請使用者存成 PDF，可補一句：先找頁面背後的公開資料端點。
+  - 新聞網站（NASASpaceFlight）回 403，第 15 次試飛的日期與目標無法找到原句，因此頁面不寫（遵守 §7 第 8 點）。
+  - Wikipedia 的一般網頁回傳的是內嵌 wikitext 的 HTML，改用 MediaWiki API 的 `prop=extracts&explaintext=1` 取得純文字。
+
+### 檢查點 D 的決定（2026-10-04）
+
+- 使用者同意三條新規則，已寫入並實際執行新增的指令：
+  - `sources-and-research.md` §2：伺服器缺中繼憑證時，依 AIA 補上中繼憑證後以 `--cacert` 連線，不用 `-k`（以 www.nfa.gov.tw 實測：未補時 `curl` 錯誤 60，補上後 200）。
+  - `sources-and-research.md` §2：需要 JavaScript 的頁面，先從 HTML 與它載入的小型腳本找公開資料端點（spacex.com 的 `environment.js` 寫有 `cmsBaseUrl`）；Wikipedia 改用 MediaWiki API 取得純文字（已實測）。
+  - `page-types.md` 實務指南：「為什麼」欄與常見錯誤表若是推論，要在表下標明。
+- 使用者決定把 LLM Wiki（以新模板產出的版本）與 Starship 收進 `examples/llm-wiki/`、`examples/starship-reusability/` 作為繁中範例。規格 §0「第三方頁面不公開」已加註這個例外；README 兩個語言版本的範例段落與目錄結構已加入兩個範例。EKF 仍不公開。
+- 使用者調整了 README 的「靈感來源」段落（改放貼文截圖）。調整後，下一段開頭的「This skill implements the first three.／本 skill 實作前三項」失去指涉對象，留給使用者決定，T17 一併處理。
+- 使用者要求以最新版 skill 重做儲存庫說明頁，且不參考 `examples/explain-as-webpage/`：
+  - 確認結果：疑問 1、2、3、4、5、7，安裝方式以小表放在頁尾；L0 單頁（套件頁型）；繁中、工程師；輸出 `~/Documents/explainers/sphinx-style-notes-maker/explain-as-webpage.html`。
+  - 貫穿例子用 Starship 請求走完 7 步；反事實用 T1 的「WebFetch 與 `curl` 讀同一篇文章」實測；圖 3 以 `wc -c` 與 `claude plugin details` 的數字畫出各檔案的載入時機。
+  - 自我檢查：FILL 0（正文原本提到這個標記本身，造成計數 1，已改寫）、外部資源 0、約 37 KB、390px 為 ok。截圖發現兩個問題並修正：決策樹中間分支的標籤壓在線上、安裝表的指令在字中間斷行（改為程式碼區塊）。
+  - 使用者回饋：圖 3 原本以位元組數畫長條，只有前兩列標 token 數，單位混用且會誤導（`writing-rules.md` 9.8 KB 與 `SKILL.md` 11.8 KB 的 token 估計值同為約 3.7k）。改為全部用 token 估計值：把每個參考檔與模板各包成測試用 skill，以 `claude plugin details` 估得，頁面標明是估計值。使用者決定這條規則屬於 skill 而非本儲存庫：已寫入 `writing-rules.md` § Figures and text（依問題選圖表單位、一張圖一種單位、代理指標要說明、在圖說或來源行與回報中說明單位與理由、估計值要標明），並在 `SKILL.md` 第 7 步的回報項目加上「每張數值圖的單位與理由」。
+
+### 圖中數值的意義（2026-10-04）
+
+- 使用者認為上一輪的「依問題選單位」太侷限，要涵蓋各種圖表。以 idea-refine 整理成 `docs/ideas/figure-values.md`，使用者選定方向 A＋B＋C＋E＋G：
+  - `writing-rules.md` § Figures and text：「讀圖四問」（量什麼、單位或無單位時的定義與範圍、怎麼讀、從哪來），取代「選單位」規則；「每個數字給單位」從 English 小節移到適用所有語言的 § Sentences。
+  - `svg-recipes.md`：新增 § Axes and scales（軸名附單位、刻度、參考線、圖例、示意圖不放刻度），附位移、溫度、ROC 三個例子；「只顯示圖」的截圖改為保留來源行（已實際執行）。
+  - `SKILL.md` 第 6 步清單合併成「每個數字有來源與單位，每張數值圖說明量什麼、怎麼讀、從哪來」，第 7 步回報列出單位與理由；仍為 130 行。
+- 四個範例的 21 張含數字的圖（含行號、步驟編號這類標籤）逐一檢查，修正 6 處：autoresearch `prepare.py` 子頁圖 3（token 單位、補來源行）、`train.py` 子頁圖 2（參數量、補來源行說明 × 1.22 與 LR 無單位）、主頁圖 3（val_bpb 的單位與方向）、LLM Wiki 圖 1（「約」10–15 頁、標明是作者的估計）、Starship 圖 1（「占起飛質量」）、圖 4（MJ → MJ/kg）。英文的 explain-as-webpage 範例符合四問，但內容停在 v2（只有專案模式），是否以新產出的繁中說明頁取代，留給使用者決定。
+
+### 儲存庫說明頁收為雙語範例（2026-10-04）
+
+- 依繁中說明頁產出英文版，取代舊的英文範例 `examples/explain-as-webpage/explain-as-webpage.html`；繁中版存為同目錄的 `explain-as-webpage.zh-TW.html`。英文版正文 1,616 字（預算 1,800），FILL 0、外部資源 0、390px 為 ok；英文標籤較長，圖 2、圖 4 的結果框右移，圖 3 的註記拆成三行，截圖確認無重疊。
+- README 封面圖改用兩版的圖 1：`docs/images/cover-process.png`（英文）與新增的 `cover-process.zh-TW.png`（繁中）。
+- `README.md` 的範例段落只列英文範例（explain-as-webpage、autoresearch），`README.zh-TW.md` 只列繁中範例（explain-as-webpage、llm-wiki、starship-reusability）；繁中版的層級截圖說明改為「取自英文範例 `examples/autoresearch/`」。兩份的目錄結構仍列出全部範例資料夾。`CLAUDE.md` 的範例說明同步更新。
+- 使用者修正了「Inspiration／靈感來源」；英文版的拼字錯誤（seggestions）與介系詞（of → in the post）已修正。
 
 ### T16
 
