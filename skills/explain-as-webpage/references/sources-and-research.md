@@ -22,7 +22,8 @@ Build the page from the full text, never from a summary.
 |---|---|
 | A static web page (article, blog post, essay) | Download it with `curl` and strip the tags locally (commands below) |
 | A GitHub gist or repo file | Download the raw text: drop the `#file-…` part of a gist URL and append `/raw`; for a repo file, use its `raw.githubusercontent.com` URL |
-| A page that needs JavaScript or a login (e.g. a post on X) | A web-reading helper skill, with the user's consent (§5). Without one, ask the user to save the page as PDF |
+| A page that needs JavaScript (the downloaded HTML has no article text) | Look for the public data the page loads: an API base URL in the HTML or in the small scripts it loads (e.g. `environment.js` on spacex.com names `cmsBaseUrl`), then download the JSON. For Wikipedia, use the MediaWiki API (below) |
+| A page that needs a login, or a JavaScript page with no public data (e.g. a post on X) | A web-reading helper skill, with the user's consent (§5). Without one, ask the user to save the page as PDF |
 | A PDF | `pdftotext -layout`. If it is not installed, read the PDF in chunks of at most 20 pages |
 | Markdown, plain text, pasted text | Read it directly |
 
@@ -41,6 +42,17 @@ pdftotext -layout "<file.pdf>" "$T/doc.txt"
 wc -w "$T"/*.txt                 # material length
 ```
 
+- Wikipedia as plain text: `curl -sG "https://en.wikipedia.org/w/api.php" --data-urlencode "titles=<Page_title>" -d action=query -d prop=extracts -d explaintext=1 -d format=json -d redirects=1`. The text is in `query.pages.*.extract`.
+- `curl` error 60 (`unable to get local issuer certificate`) on a site that opens in a browser usually means the server does not send its intermediate certificate (seen on several Taiwan government sites). Never switch off verification (`-k`). Add the missing certificate instead: its URL is in the site certificate (Authority Information Access, `CA Issuers`).
+
+  ```bash
+  H=<host>
+  timeout 20 openssl s_client -connect "$H:443" -servername "$H" </dev/null 2>/dev/null | openssl x509 -noout -ext authorityInfoAccess   # prints CA Issuers - URI:…
+  curl -s -o "$T/inter.crt" "<CA Issuers URI>"
+  openssl x509 -inform DER -in "$T/inter.crt" -out "$T/inter.pem" 2>/dev/null || cp "$T/inter.crt" "$T/inter.pem"
+  cat /etc/ssl/certs/ca-certificates.crt "$T/inter.pem" > "$T/bundle.pem"   # macOS: /etc/ssl/cert.pem
+  curl -sL --cacert "$T/bundle.pem" -o "$T/page.html" "<url>"
+  ```
 - Fetch tools that answer through a model (e.g. WebFetch in Claude Code) return a summary, not the text, and may refuse to reproduce a long article. Use them only for a quick outline, or when `curl` is blocked. If the page then rests on a summary, say so in the report.
 - Check that the text is complete: its last paragraph matches the end of the article, and the word count is plausible.
 - `pdftotext` can turn rare glyphs into `�` (e.g. the `@` in a handle). Check every quote against the PDF.
@@ -133,3 +145,14 @@ In topic mode, every item in Sources carries a grade and an access date. Grades 
 - Write each Sources item on one line, so the self-check can read it: `<li><span class="grade g1">原始材料</span> Author, <a href="…">title</a> — what was taken. 存取日期 2026-10-03</li>`.
 - A claim that only grade 4 sources support goes in an Emerging view box (`admonition`, title Emerging view / 新興說法) that names who makes it. Do not write it as settled.
 - When grade 1–2 sources disagree, say so in the section, with both sources.
+
+## 9. High-risk topics
+
+Health and medicine, emergency preparedness and personal safety, law, and personal finance are high-risk: a wrong page can hurt the reader. For these topics, in any mode:
+
+- **Authoritative sources only** for every claim the reader could act on: grade 1–2 (§8), such as government agencies, professional societies, and clinical or official guidelines. For readers in Taiwan, prefer Taiwan's own agencies and societies (for example the Ministry of Health and Welfare and its Health Promotion Administration, the National Fire Agency, the Central Weather Administration) and add international sources only where they agree or fill a gap.
+- **Research is required.** Offer light or deep research in the confirmation, never "from memory". Say in the confirmation that the topic is high-risk and the page will carry a caution box.
+- **A caution box** (`admonition danger`, title Caution / 注意) right after the conclusion box: the page is general information, does not replace a professional (a doctor, a lawyer, the local authority), and says when to contact one.
+- **No individual advice:** no doses, no "stop taking X", no advice for one person's legal or financial case. Name the kinds of treatment or options and what they do; leave choices to the professional.
+- **Medical topics** have a section "When should I see a doctor?" with the warning signs the sources list, including when it is urgent.
+- **Guidance that changes** (recommended supplies, regulations): the conclusion box says "as of <date>", and Sources record access dates (§8).

@@ -59,7 +59,7 @@ Send **one** message (use a structured question tool if the platform has one, e.
 
 1. The core questions — ask the user to add, remove, or reword. In document mode, also show the material's outline and 5–8 numbered candidate questions inside the question itself (text written before a question tool can go unseen), and, for long material or a plan, the coverage choice and whether to expand units into steps (`sources-and-research.md` §3, §6).
 2. The proposed tier (and page count), why, and the cheaper alternative with what it would lose.
-3. The page language: the language the user asks for; otherwise the language the user writes in. All pages of one topic use one language.
+3. The page language (the language the user asks for, otherwise the one the user writes in; one language per topic) and the reader: general public, non-specialist student, or engineer, which is the default in project mode (`writing-rules.md` § Reader). For a high-risk topic (health, safety, law, finance), say so; research is then required (`sources-and-research.md` §9).
 4. The output path, the research depth in topic mode (light or deep, `sources-and-research.md` §7), and any helper skill you plan to use and for which step (§5). Default path in project mode: `~/Documents/explainers/<repo-name>/<topic-slug>.html`, where `<repo-name>` is the basename of the git top-level directory; offer "inside the project" as an alternative. Document mode: `~/Documents/explainers/<topic-slug>/<topic-slug>.html`.
 
 **Do not build until the user answers.**
@@ -99,14 +99,14 @@ Content checklist:
 - [ ] Every core question has its own `h2`, and the heading is the question.
 - [ ] The spine figure (Figure 1) comes before the question sections, and the sections follow its order.
 - [ ] Every figure sits next to the paragraph that explains it, and that paragraph refers to it by number.
-- [ ] Every number has a source; every inference is inside an "Inference" admonition.
+- [ ] Every number has a source and a unit; every figure with numbers says what they measure, how to read them, and where they come from (`writing-rules.md` § Figures and text); every inference is inside an "Inference" admonition.
 - [ ] Every technical term and project identifier is defined at first use, with its English original; in a domain explainer, every symbol is tied to one running example (`writing-rules.md`).
 - [ ] Every pattern the page points out ("A ≈ B") comes with why it holds and when it does not.
 - [ ] Reading time ≤ 15 minutes (see the length budget in `writing-rules.md`).
 
 ### 7. Report
 
-Tell the user: the file path, how to open it (`xdg-open <path>` / `open <path>`), the questions the page answers, which helper skills you used (or which built-in method you fell back to), and anything you could not verify.
+Tell the user: the file path, how to open it (`xdg-open <path>` / `open <path>`), the questions the page answers, which helper skills you used (or which built-in method you fell back to), the unit of each figure with numbers and why you chose it, and anything you could not verify.
 
 ## Red Flags
 

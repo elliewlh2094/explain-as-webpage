@@ -72,7 +72,8 @@ A plan is material made of stages, each with tasks, deliverables, and checks: a 
 2. Figure 1: decision tree (questions → branches → which list applies). If there is no real decision, a grouped checklist (one panel per category).
 3. One `h2` per question; each section ends with an action.
 4. The full checklist as a table: item, why, how much or when. The table, not the prose, carries the list.
-5. Instead of a counterfactual: "What are the common mistakes?"
+5. Instead of a counterfactual: "What are the common mistakes?" A table: the mistake, why it is a problem, what the source advises.
+6. Sources say *what* to do more often than *why*. When a column holds your reasoning rather than a source's words (the "why" column, the problems in the mistakes table), say so in the source line under the table: "The Why column is general background unless a source is named."
 
 ## Evolution pages
 

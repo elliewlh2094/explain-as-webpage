@@ -64,6 +64,22 @@ For "simulated time vs wall-clock time" type questions: two horizontal axes, one
 
 For scatter-like content (matches, inliers, measurements), compute coordinates with a throwaway script (Python/Node) that prints `<circle>` elements, paste the output into the page, and **delete the script**. Keep ≤ ~200 elements per figure. Reserve the areas where labels and the legend go, and have the script reject layouts that put a point inside them; do not nudge labels by hand afterwards. Map data to the canvas with a fixed linear scale and draw the axes with tick labels in `sm`.
 
+## Axes and scales (any figure with numbers)
+
+The four questions every number must answer are in `writing-rules.md` § Figures and text. In the figure:
+
+- Each axis has a title with its unit in brackets, at its end or beside it in `sm`: "位移（m）", "Temperature (°C)". A quantity without a unit gets its definition and range instead: "偽陽性率 FPR（0–1，無單位）".
+- Tick labels in `sm` at round values. Start a value axis at 0, or draw a break and say so; say when a scale is logarithmic.
+- Label every reference line with what it means: a target, a baseline, the diagonal of a ROC plot.
+- Two or more series: a legend, or a label at the end of each line. Bars: the value and unit at the end of each bar.
+- A schematic (distances or times not to scale, no data behind them) has no ticks or values, and its caption says "示意，不按比例" / "Schematic, not to scale".
+
+| Question | x axis | y axis | How to read it (paragraph or caption) |
+|---|---|---|---|
+| How far did the robot move? | time (s) | displacement (m) | the slope is the speed; a flat part means the robot stopped |
+| How did the temperature change? | date | temperature (°C; °F for US readers, or both) | mark the threshold that matters (e.g. a fever line) with its value and source |
+| How good is the classifier? | false positive rate, FPR (0–1, no unit) | true positive rate, TPR (0–1, no unit) | closer to the top left is better; the diagonal is random guessing; AUC is the area under the curve: 0.5 is random, 1 is perfect |
+
 ## Recipe 6 — Argument map (Figure 1 of an argument page)
 
 The claim on top, the reasons under it, the material's evidence under each reason. Arrows point **up**: evidence supports a reason, a reason supports the claim. The main limit is a dashed `warn` box beside the claim.
@@ -186,14 +202,14 @@ Stages left to right, each with its name and period. Under each arrow, the probl
 - Draw the final state first, check it in a screenshot, then split it into steps.
 - The script in the template adds ◀ ▶ ▷ controls; do not write a second stepper script.
 
-To look at every figure of a page at once (labels that crowd an arrow, text that leaves its box), screenshot a temporary copy that hides everything but the figures. Use Python for the edit: CSS and scripts contain characters that clash with `sed` delimiters.
+To look at every figure of a page at once (labels that crowd an arrow, text that leaves its box, a number whose meaning the figure, caption, and source line do not give), screenshot a temporary copy that hides everything but the figures and the source lines. Use Python for the edit: CSS and scripts contain characters that clash with `sed` delimiters.
 
 ```bash
 python3 - "$F" <<'EOF'
 import sys
 s = open(sys.argv[1], encoding="utf-8").read()
 s = s.replace("</body>", "<style>.side,.topbar{display:none!important}.main{margin-left:0}"
-              ".content>*:not(figure){display:none}</style></body>")
+              ".content>*:not(figure):not(.src){display:none}</style></body>")
 open("/tmp/figures.html", "w", encoding="utf-8").write(s)
 EOF
 google-chrome --headless=new --disable-gpu --hide-scrollbars --window-size=900,2400 --screenshot=/tmp/figures.png file:///tmp/figures.html

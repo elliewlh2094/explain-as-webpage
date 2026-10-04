@@ -25,6 +25,13 @@ Do not add: scope/authority tables, "how to read this document" guides, change h
 - The caption says what the reader should conclude, not what the figure is: "Averaging all matches lands far from the true offset; the inlier fit does not." — not "Comparison of two methods."
 - Each figure has one message. If you need "and" to describe it, make two figures or a stepper.
 - Prefer a mechanism figure (what happens and why) over a data plot (distribution, ROC). Use a data plot only after the mechanism is clear, and only if it proves a claim on the page.
+- **Every number in a figure tells the reader what it means.** This covers axes, bars, sliders, and a single number inside a box. Using only the figure, its caption, and its source line, the reader can answer four questions; do not leave them to guess:
+  1. *What is measured*: the quantity the reader compares.
+  2. *The unit*: metres, °C, tokens, seconds. Pick the unit from the question, not because it is easy to measure: file size in bytes is not the cost of loading a file into a model (9.8 KB and 11.8 KB of rules can both be about 3.7k tokens). A quantity without a unit gets its definition and range instead (AUC: area under the ROC curve, 0 to 1).
+  3. *How to read it*: which direction is better, where the baseline is, what a reference line means.
+  4. *Where it comes from*: measured, computed, estimated, or schematic. Mark estimates as estimates.
+
+  Put axis titles, units, and the legend inside the figure (`svg-recipes.md` § Axes and scales), how to read it in the paragraph or the caption, and the origin in the source line. Use one unit per figure. If no source supports the numbers, draw a schematic without values and say so. In the report (SKILL.md step 7), give the unit of each figure with numbers and why you chose it.
 
 ## Sentences (about 80% of ASD-STE100)
 
@@ -34,6 +41,7 @@ Do not add: scope/authority tables, "how to read this document" guides, change h
 - **Define every technical term at its first use**, including inside the conclusion box: one short clause, with the English original in parentheses, e.g. 內點率（inlier ratio，同意模型的匹配佔全部匹配的比例）. Stop there unless the user asks for more. Project identifiers count too (phase names, task IDs, experiment names): say in a few words what each one is.
 - **Explain every pattern you point out.** If the page says "A almost equals B", say in the same place why, and when it stops holding. An unexplained pattern makes the reader wonder whether it is a coincidence.
 - Prefer concrete project nouns (`uav_0`, waypoint 5, `down_camera_lightglue.py`) over abstract ones ("the system", "the module").
+- Give every number its unit, in every language: "2.7 kg", "3.7k tokens", "15 秒".
 - No filler: delete "it is worth noting", "basically", "in order to".
 - Write in the page language (SKILL.md step 4) and follow its rules below. Keep code identifiers, file paths, and standard abbreviations (RANSAC, RTF, EKF) in their original form in every language.
 
@@ -43,7 +51,7 @@ Do not add: scope/authority tables, "how to read this document" guides, change h
 
 - Use US spelling and keep it consistent.
 - Prefer one exact verb to a phrasal verb or an idiom: "remove", not "get rid of"; "check", not "keep an eye on".
-- Give every number its unit. Write symbols as they are in the code (`val_bpb`, not "validation BPB").
+- Write symbols as they are in the code (`val_bpb`, not "validation BPB").
 - Term definitions do not need a second language unless the user asks.
 
 **Traditional Chinese.** Taiwan usage by default: 程式、資料、檔案、預設、執行、網路、品質. Do not use 程序 for "program", 文件 for "file", 默認, 運行, 網絡, 質量, 視頻. Give the English original of each term at its first use.
@@ -63,6 +71,18 @@ Do not add: scope/authority tables, "how to read this document" guides, change h
 | Figure caption prefix | Figure 1. | 圖 1　(full-width space) |
 | Page tree label | Pages in this topic | 本主題頁面 |
 | Link to a child page | More: | 延伸閱讀： |
+
+## Reader
+
+The confirmation (SKILL.md step 4, item 3) fixes the reader. Write every page of a topic for that reader:
+
+| Reader | New terms per page | Formulas | Code | Analogies |
+|---|---|---|---|---|
+| General public | at most ~3 key concepts; everyday words first, the technical term in brackets | none, or one in words | none | welcome, with their limit |
+| Non-specialist university student | at most 5 key concepts | simple ones, each with a worked example | none, unless asked | welcome, with their limit |
+| Engineer or specialist (default in project mode) | as the topic needs | as needed | short excerpts | only where they save time |
+
+Every analogy says where it stops holding, in the same place: "Like a thermostat, the controller compares and corrects; unlike a thermostat, it also reacts to how fast the error changes."
 
 ## Ground the symbols in one running example
 
