@@ -2,15 +2,13 @@
 
 [English](README.md) | 繁體中文
 
-![代理產出頁面的 7 個步驟：收集材料、學習摘要、選層級、確認一次、產出、自我檢查、回報](docs/images/cover-process.zh-TW.png)
+![說明本 skill 的範例頁開頭：側欄、結論，以及畫出代理 7 個步驟的圖 1](docs/images/cover-process.zh-TW.png)
 
 讓 AI 代理把「你專案裡用到、但你不熟悉的技術或設計」做成**以你的專案為例**的知識網頁。沒有專案也能用：給它一篇網路文章、一份 PDF 或 Markdown 筆記，或只給一個主題，由它查證並為來源分級。
 
-本儲存庫提供一個 skill：`explain-as-webpage`。它可以在 Claude Code 與 Codex 上使用，兩者共用同一份 `SKILL.md`。
-
 ## 靈感來源
 
-本 skill 的靈感來自 Andrej Karpathy 的貼文：[x.com/karpathy/status/2105819303471976479](https://x.com/karpathy/status/2105819303471976479)。
+本儲存庫提供一個 skill：`explain-as-webpage`，靈感來自 Andrej Karpathy 的貼文：[x.com/karpathy/status/2105819303471976479](https://x.com/karpathy/status/2105819303471976479)。
 
 <img src="docs/images/karpathy-x-post.png" width="640" alt="Andrej Karpathy 的貼文">
 
@@ -54,7 +52,7 @@
 
 ## 範例
 
-**本儲存庫。** [`examples/explain-as-webpage/explain-as-webpage.zh-TW.html`](examples/explain-as-webpage/explain-as-webpage.zh-TW.html) 以單一 L0 頁面說明這個 skill：一個請求怎麼變成一頁網頁（以一個實際請求貫穿）、材料不同時讀法與引用方式的差別、頁型與層級怎麼決定、各檔案在什麼時候被讀取（附 token 估計值）、追問時頁面怎麼延伸，以及安裝方式。上方的封面圖就是這一頁的圖 1。
+**本儲存庫。** [`examples/explain-as-webpage/explain-as-webpage.zh-TW.html`](examples/explain-as-webpage/explain-as-webpage.zh-TW.html) 以單一 L0 頁面說明這個 skill：一個請求怎麼變成一頁網頁（以一個實際請求貫穿）、材料不同時讀法與引用方式的差別、頁型與層級怎麼決定、各檔案在什麼時候被讀取（附 token 估計值）、追問時頁面怎麼延伸，以及安裝方式。上方的封面圖是這一頁的開頭：側欄、結論與圖 1。
 
 **文件：Karpathy 的〈LLM Wiki〉。** [`examples/llm-wiki/llm-wiki.html`](examples/llm-wiki/llm-wiki.html) 把 [LLM Wiki gist](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f) 做成一頁 L2 網頁（document 模式）：它和 RAG 的差別（以逐步動畫對兩者依序加入三份來源並提出一個問題）、三層結構、Ingest、Query、Lint 三種操作，以及同一個問題用兩種做法回答的對照。每個事實都標出原文的段落。
 

@@ -2,15 +2,13 @@
 
 English | [繁體中文](README.zh-TW.md)
 
-![The seven steps the agent follows: gather material, write a learning brief, choose a tier, confirm once, build, self-check, report](docs/images/cover-process.png)
+![The top of the example page that explains this skill: the sidebar, the conclusion, and Figure 1 with the seven steps the agent follows](docs/images/cover-process.png)
 
 Let an AI coding agent turn a technique or design in your project that you do not understand into a knowledge web page, **with your own project as the example**. It also works without a project: give it an article, a PDF, or Markdown notes, or only name a topic, and it researches and grades the sources.
 
-This repository provides one skill: `explain-as-webpage`. It works in Claude Code and Codex, and both use the same `SKILL.md`.
-
 ## Inspiration
 
-This skill is inspired by Andrej Karpathy's post: [x.com/karpathy/status/2105819303471976479](https://x.com/karpathy/status/2105819303471976479).
+This repository provides one skill, `explain-as-webpage`, inspired by Andrej Karpathy's post: [x.com/karpathy/status/2105819303471976479](https://x.com/karpathy/status/2105819303471976479).
 
 <img src="docs/images/karpathy-x-post.png" width="640" alt="Andrej Karpathy's post">
 
@@ -54,7 +52,7 @@ The agent first lists the questions, the proposed tier, and the output path, and
 
 ## Examples
 
-**This repository.** [`examples/explain-as-webpage/explain-as-webpage.html`](examples/explain-as-webpage/explain-as-webpage.html) explains this skill in one L0 page: how one request becomes a page (followed through a real request), how reading and citing change with the material, how the page type and tier are chosen, which file is read when (with token estimates), how pages grow with follow-up questions, and how to install it. The cover image above is its Figure 1.
+**This repository.** [`examples/explain-as-webpage/explain-as-webpage.html`](examples/explain-as-webpage/explain-as-webpage.html) explains this skill in one L0 page: how one request becomes a page (followed through a real request), how reading and citing change with the material, how the page type and tier are chosen, which file is read when (with token estimates), how pages grow with follow-up questions, and how to install it. The cover image above is the top of this page: the sidebar, the conclusion, and Figure 1.
 
 **karpathy/autoresearch.** [`examples/autoresearch/`](examples/autoresearch/) explains [karpathy/autoresearch](https://github.com/karpathy/autoresearch) (commit `228791f`, MIT license) in three pages:
 
