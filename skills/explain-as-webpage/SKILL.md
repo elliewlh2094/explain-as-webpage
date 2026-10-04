@@ -75,7 +75,7 @@ Send **one** message (use a structured question tool if the platform has one, e.
 Run these checks and fix every failure before reporting:
 
 ```bash
-F=<output path>
+F=<absolute output path>
 grep -c 'FILL' "$F"                 # must be 0
 grep -nE '(src=|url\()["'\'']?https?://' "$F"   # must print nothing (no external resources; <a href> links in Sources are fine)
 wc -c < "$F"                        # should be ≤ ~150 KB
@@ -86,9 +86,9 @@ Then, if `google-chrome` / `chromium` is available, render and **look at** both 
 
 ```bash
 google-chrome --headless=new --disable-gpu --hide-scrollbars --window-size=1280,2400 --screenshot=/tmp/wide.png "file://$F"
-P="${F%.html}.narrow.html"; printf '<iframe id="f" src="%s" width="390" height="2400" style="border:0"></iframe><script>f.onload=function(){var d=f.contentDocument.documentElement;document.title=d.scrollWidth>d.clientWidth?"OVERFLOW":"ok"}</script>' "$(basename "$F")" > "$P"
-google-chrome --headless=new --disable-gpu --allow-file-access-from-files --virtual-time-budget=3000 --dump-dom "file://$P" | grep -o '<title>[^<]*'   # must print <title>ok
-google-chrome --headless=new --disable-gpu --allow-file-access-from-files --window-size=500,2400 --screenshot=/tmp/narrow.png "file://$P"; rm "$P"
+printf '<iframe id="f" src="file://%s" width="390" height="2400" style="border:0"></iframe><script>f.onload=function(){var d=f.contentDocument.documentElement;document.title=d.scrollWidth>d.clientWidth?"OVERFLOW":"ok"}</script>' "$F" > /tmp/explain-as-webpage-narrow.html
+google-chrome --headless=new --disable-gpu --allow-file-access-from-files --virtual-time-budget=3000 --dump-dom file:///tmp/explain-as-webpage-narrow.html | grep -o '<title>[^<]*'   # must print <title>ok
+google-chrome --headless=new --disable-gpu --allow-file-access-from-files --window-size=500,2400 --screenshot=/tmp/narrow.png file:///tmp/explain-as-webpage-narrow.html; rm /tmp/explain-as-webpage-narrow.html
 ```
 
 Chrome windows are at least 500px wide, so the narrow check renders the page in a 390px iframe; `OVERFLOW` means the whole page scrolls sideways (a failure). Look for text overflowing boxes, overlapping labels, arrows that miss their targets, and empty figures. If no browser is available, say so in the report. If the page is part of a page tree, also run the checks in `references/extending-pages.md` §5. To inspect one figure or stepper frame, see `references/svg-recipes.md` § Stepper.

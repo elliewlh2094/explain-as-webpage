@@ -212,13 +212,14 @@ s = s.replace("</body>", "<style>.side,.topbar{display:none!important}.main{marg
               ".content>*:not(figure):not(.src){display:none}</style></body>")
 open("/tmp/figures.html", "w", encoding="utf-8").write(s)
 EOF
-google-chrome --headless=new --disable-gpu --hide-scrollbars --window-size=900,2400 --screenshot=/tmp/figures.png file:///tmp/figures.html
+google-chrome --headless=new --disable-gpu --hide-scrollbars --window-size=900,2400 --screenshot=/tmp/figures.png file:///tmp/figures.html; rm /tmp/figures.html
 ```
 
-To inspect one figure or one stepper frame, screenshot a temporary copy that hides everything else and clicks ▶ n−1 times (here: Figure 4, frame 3; delete the copy afterwards):
+To inspect one figure or one stepper frame, screenshot a temporary copy that hides everything else and clicks ▶ n−1 times (here: Figure 4, frame 3):
 
 ```bash
 sed "s|</body>|<style>.side,.topbar{display:none!important}.main{margin-left:0}.content>*:not(#fig-4){display:none}</style><script>var b=document.querySelectorAll('#fig-4 .stepper-bar button');for(var i=1;i<3;i++)b[1].click();</script></body>|" "$F" > /tmp/frame.html
+google-chrome --headless=new --disable-gpu --hide-scrollbars --window-size=900,800 --screenshot=/tmp/frame.png file:///tmp/frame.html; rm /tmp/frame.html
 ```
 
 ## Slider (L1)

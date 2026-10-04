@@ -10,7 +10,7 @@ How to read material that is not the user's project, how to research a topic the
 | document | a web article URL, a PDF, a Markdown or text file, or pasted text | `~/Documents/explainers/<topic-slug>/<topic-slug>.html` |
 | topic | only a topic and questions | same as document |
 
-- The mode follows the material, not the current directory. A document read while the agent works inside some repo still uses the document path.
+- The mode follows the material, not the current directory. A document read while the agent works inside some repo still uses the document path. If the sandbox cannot write to that path, still propose it and say that writing there needs the user's approval; do not move the output into a folder of the current repository.
 - If the user also asks questions the document does not answer, say so in the confirmation, and research them as in topic mode (§7), or leave them out.
 - A video URL is out of scope. Say so and stop; do not download subtitles.
 

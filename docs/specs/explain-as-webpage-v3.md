@@ -1,6 +1,6 @@
 # 規格：explain-as-webpage 第三輪（材料模式）
 
-> 狀態：規格已確認，尚未實作。前兩輪的構想見 `docs/ideas/explain-as-webpage.md`、`docs/ideas/explain-as-webpage-v2.md`。實作時先依本規格以 `planning-and-task-breakdown` 拆成 `tasks/plan.md` 與 `tasks/todo.md`；需求有變動時，先更新本文件再實作。
+> 狀態：已實作（2026-10-04，plugin 版本 0.3.0；實作與驗證紀錄見 `tasks/plan.md`）。前兩輪的構想見 `docs/ideas/explain-as-webpage.md`、`docs/ideas/explain-as-webpage-v2.md`。實作時先依本規格以 `planning-and-task-breakdown` 拆成 `tasks/plan.md` 與 `tasks/todo.md`；需求有變動時，先更新本文件再實作。
 
 ## 0. 問題陳述與範圍
 
@@ -225,8 +225,8 @@ Video URLs are out of scope: say so and stop.
 - [ ] 新增 4 種主軸圖後，手繪的 SVG 不會錯位。以截圖檢查。
 - [ ] 確認步驟最多 4 題時，使用者仍可以接受。以 V1、V2 的實際互動判讀。
 - [ ] 輕量查證足以支撐衛教內容的正確性。以 V4 的來源清單與使用者判讀確認。
-- [ ] Codex 有可用的網路工具，或「沒有網路工具」的退路可以運作。在 Codex 上實測一次。
-- [ ] Codex 也會把已安裝 skill 的清單放進上下文，使 R8 的偵測在兩個平台上行為一致。在 Codex 上實測一次。
+- [x] Codex 有可用的網路工具，或「沒有網路工具」的退路可以運作。在 Codex 上實測一次。（T16，2026-10-04：預設就有 `web__run`；唯讀 sandbox 內 `curl` 因 DNS 失敗，Codex 請求在 sandbox 外執行，經使用者核准後取得全文。完全沒有網路工具時的退路未實測，使用者決定不再測。）
+- [x] Codex 也會把已安裝 skill 的清單放進上下文，使 R8 的偵測在兩個平台上行為一致。在 Codex 上實測一次。（T16，2026-10-04：清單中有 `sphinx-style-notes-maker:explain-as-webpage`，名稱帶 plugin 前綴。）
 - [ ] 輔助 skill 自帶的提問或輸出檔，不會破壞「單次確認、單檔輸出」。以 R8 的驗證案例確認。
 
 ## 7. 邊界
