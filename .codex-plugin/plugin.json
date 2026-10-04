@@ -1,7 +1,7 @@
 {
   "name": "sphinx-style-notes-maker",
-  "version": "0.2.0",
-  "description": "Turn an unfamiliar technique in your own project into a single Read the Docs-style HTML explainer page, built from your project's code, data, and reports.",
+  "version": "0.3.0",
+  "description": "Turn an unfamiliar technique in your project, a document you give, or a topic you name into a single Read the Docs-style HTML explainer page, built from your project's code and reports, the document's full text, or graded sources.",
   "author": {
     "name": "Ellie Huang"
   },
@@ -11,8 +11,8 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "Sphinx-style Notes Maker",
-    "shortDescription": "Project-grounded HTML explainer pages with inline SVG diagrams.",
-    "longDescription": "Explains a technique, a package, or a chain of causes in your project as one self-contained Read the Docs-style HTML page. Picks the cheapest presentation tier (static, interactive, or step-by-step animation) and confirms it with you before building.",
+    "shortDescription": "Source-grounded HTML explainer pages with inline SVG diagrams.",
+    "longDescription": "Explains a technique, a package, or a chain of causes in your project, a document you give (web article, PDF, Markdown), or a topic it researches with graded sources, as one self-contained Read the Docs-style HTML page. Picks the cheapest presentation tier (static, interactive, or step-by-step animation) and confirms it with you before building.",
     "developerName": "Ellie Huang",
     "category": "Productivity",
     "capabilities": [

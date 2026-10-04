@@ -1,16 +1,16 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
   "name": "sphinx-style-notes-maker",
-  "description": "Project-grounded HTML explainer pages for AI coding agents.",
+  "description": "Source-grounded HTML explainer pages for AI coding agents.",
   "owner": {
     "name": "Ellie Huang"
   },
   "plugins": [
     {
       "name": "sphinx-style-notes-maker",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "source": "./",
-      "description": "Turn an unfamiliar technique in your own project into a single Read the Docs-style HTML explainer page.",
+      "description": "Turn an unfamiliar technique in your project, a document, or a topic into a single Read the Docs-style HTML explainer page.",
       "license": "MIT",
       "keywords": ["skills", "explainer", "documentation", "html", "svg"]
     }

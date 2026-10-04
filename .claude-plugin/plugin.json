@@ -1,7 +1,7 @@
 {
   "name": "sphinx-style-notes-maker",
-  "version": "0.2.0",
-  "description": "Turn an unfamiliar technique in your own project into a single Read the Docs-style HTML explainer page, built from your project's code, data, and reports.",
+  "version": "0.3.0",
+  "description": "Turn an unfamiliar technique in your project, a document you give, or a topic you name into a single Read the Docs-style HTML explainer page, built from your project's code and reports, the document's full text, or graded sources.",
   "author": {
     "name": "Ellie Huang"
   },
