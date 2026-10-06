@@ -58,11 +58,11 @@ A plan is material made of stages, each with tasks, deliverables, and checks: a 
 **Child page** (one stage, or part of one):
 
 1. Conclusion box: the stage's goal, its duration, and what the reader has at its end.
-2. Figure 1: the stage's units in order, each with its practice task or deliverable (Recipe 7).
-3. One `h2` per question. Group consecutive units under one question ("Weeks 1–3: how do I set up the tools and read C++ types?") and give each unit an `h3`. Ask what the reader would ask about this stage (what to buy, which part to choose and why, why a step is needed), not "How do this stage's units connect?" or "How should I use the resources?".
+2. Figure 1: the stage's units in order, each with its practice task or deliverable (Recipe 7), under a fixed heading such as "What does this stage cover?" (「這個月學哪些單元？」).
+3. Every other `h2` is a concrete question, one per question. Group consecutive units under one question ("Weeks 1–3: how do I set up the tools and read C++ types?") and give each unit an `h3`. Ask what the reader would ask about this stage (what to buy, which part to choose and why, why a step is needed), not "How do this stage's units connect?" or "How should I use the resources?".
 4. Each unit is a unit table: a `<table class="kv">` with four rows: what to do (from the material); steps (an `<ol>`; put the key command or a code excerpt under the table when it helps); what the check proves; result (what the reader has afterwards).
-5. The stage's milestone or checkpoint as a two-column table: the item, and what it checks.
-6. Resources, if the material lists them: the one or two it recommends most for each unit, with the material's reason.
+5. The stage's milestone or checkpoint as a two-column table: the item, and what it checks, under a fixed heading such as "What should I be able to do by the end?" (「月底要能做到什麼？」). Apart from Terms and Sources, these two are the only fixed headings on the page.
+6. Resources, if the material lists them, are not a section of its own: put the one or two the material recommends most under the question they serve, with the material's reason, and the rest in a `<details>` at the end of the page.
 7. At least one figure besides Figure 1: a mechanism figure for the idea the stage hinges on, e.g. a causal chain for "why a stalled motor resets the microcontroller", the control loop a robot closes, or two executor timelines; or a pictorial figure of what the stage builds (the parts of a line-following robot, Recipe P3). A list of units in boxes does not explain anything by itself.
 
 **Explain every check.** For each acceptance item, milestone, or checkpoint, say what it proves and which mistake it would catch: "the build has no warnings" proves the warning flags are on; "a test fails when the formula is broken" proves the tests protect something. A check the reader does not understand becomes a box they tick without doing the work.

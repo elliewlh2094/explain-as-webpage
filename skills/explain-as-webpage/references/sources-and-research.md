@@ -82,7 +82,7 @@ When the page is built from AI notes:
 In document mode, the confirmation (SKILL.md step 4, item 1) always shows:
 
 - **The outline:** each section of the material with its approximate length. Use the original's own structure: its chapters, sections, or the steps of a tutorial. When the text you read is an intermediary (AI notes, a summary) whose headings are its own questions, take the structure from what it reports about the original (e.g. "Step 1–5"), not from its headings. If it does not show the structure, say so and suggest the prompts in §2.
-- **5–8 candidate questions**, numbered, phrased as the reader would ask them and taken from the material's sections. Users often only say "make this easier to read", so let them pick questions instead of writing them.
+- **5–8 candidate questions**, numbered, phrased as the reader would ask them and taken from the material's sections. Number them (1), (2), (3): circled numbers (①②③) run together in some terminals and fonts. Users often only say "make this easier to read", so let them pick questions instead of writing them.
 
   **Good candidate questions** start from the reader's situation: what they must buy or install, what it costs, what they can do without the equipment, what goes wrong, how they show the result. For example: "How much do the two robots cost?", "Can I learn this month without a GPU?", "Why not the L298N motor driver?", "What makes a portfolio convincing?" Avoid questions that only restate the material's structure, such as "How do this month's units connect?" or "How should I use the resources?": the reader would not ask them, and every page ends up with the same headings.
 - **How to organise the page**, whatever the length:
