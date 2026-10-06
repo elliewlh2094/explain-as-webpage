@@ -250,7 +250,7 @@
 - [x] 候選問題附好壞範例；`SKILL.md` 第 2 步要求從讀者處境出發
 - [x] 路線圖頁型：各階段成果用連到子頁的卡片，貫穿各階段的成品用具象插圖 P3，「unit card」改為「unit table」，主頁與子頁都問讀者的實務問題
 - [x] 確認訊息第 2 項列出每頁預計的圖與圖型；L0 改為「文字＋靜態圖（SVG 或卡片）」；explainer-figure 對每份圖說明單逐列對照圖型表
-- [ ] 以同一份 PDF 重跑（Codex 與 Claude Code 各一次），比較標題與圖型（T13d）
+- [x] 以同一份 PDF 重跑（Codex 與 Claude Code 各一次），比較標題與圖型（T13d）
 
 **驗證：** 測試腳本 `$CLAUDE_JOB_DIR/tmp/t13c.sh`、引用檢查、片段檢查、`claude plugin validate .`。
 
@@ -815,4 +815,26 @@ Codex 實測（使用者，GPT-6.1-Sol high，材料：Ronin〈How to become a R
 | 殘留的「unit card」 | `skills`、構想文件、README、`CLAUDE.md` 都沒有 |
 | `claude plugin validate .` | 通過（預期的 `CLAUDE.md` 警告） |
 | `plugin details` on-invoke | explain-as-webpage ~4.2k（+0.1k）、explainer-figure ~2.5k（+0.1k） |
+
+### T13d（2026-10-07，使用者重跑）
+
+**結論：T13c 有效，但效果因代理而異。Claude（Opus 5.5 high）這版標題全是讀者的具體問題，並用了卡片、具象插圖與滑桿；Codex（GPT-6.1-Sol high）的主頁明顯改善，月份頁仍有三個模板標題，也沒有具象插圖。** 兩者都在 Plan mode 執行，提示詞與材料相同。
+
+注意：使用者提供的 `~/Downloads/robotics-engineer-6-months-codex-t13/` 是第一次 Codex 實測的產出（檔案時間 2026-10-06 21:40）。這次 Codex 改用 slug `robotics-engineer-six-months`，實際產出在 `~/Downloads/robotics-engineer-six-months-codex-t13c/`，以下比較用的是後者。
+
+| | 第一次 Codex | Codex（T13c 後） | Claude（T13c 後） |
+|---|---|---|---|
+| 確認：讀者／展開步驟 | 具基本程式概念的學習者／展開 | 工程師／不展開（「不是逐步安裝教學」） | 非本科大學生／展開 |
+| 確認是否列出每頁的圖與圖型 | 否 | 只寫「L0 靜態圖解」 | 是，逐頁列出（因果鏈、卡片、零件圖 P3、L1 滑桿等） |
+| 讀了哪些圖型規則 | 未讀 cards／pictorial | 讀了 `cards.md`，未讀 `pictorial.md` | 讀了 `cards.md`、`pictorial.md`、`icons.md` |
+| 主頁標題 | 結構導向（「如何連成一條學習路線」「如何讀就業說法」） | 「哪些部分不買硬體也能學，預算怎麼看？」「作品集要保留哪些證據？」等實務問題 | 「沒有硬體或 GPU，哪些可以先做？」「雇主實際看什麼？作品集怎麼寫才可信？」等 |
+| 月份頁標題 | 6 頁都是「本月的學習單元如何連接？」「本月里程碑如何證明…」「本月資源應該如何使用？」＋抽象問題 | 6 頁都有「本月如何從基礎走到實作成果？」「如何確認本月能力已達標？」「本月原文有哪些資源？」，中間的問題較具體（「Arduino 與 ESP32 如何選用？」「控制器為何振盪？」） | 只有「這個月學哪些單元？」「月底要能做到什麼？」兩個固定標題，其餘全是具體問題（「為什麼不要用 L298N？」「要不要買 3D 印表機？」「沒有 GPU 怎麼練強化學習？」） |
+| 卡片／具象插圖／stepper | 0／0／0 | 主頁 1 組卡片／0／0 | 主頁與第 1 月卡片、第 2、3、5 月具象插圖、每頁 stepper |
+| 官方文件查核 | 有 | 有（gazebosim、control.ros.org、OpenCV、Hugging Face 等 6 處） | 有（docs.ros.org、Nav2、Espressif 等 6 處） |
+
+觀察：
+
+- 使用者覺得 Claude「額外找了其他資源」。兩版查核官方文件的數量相近；差別主要來自確認時的選擇：Claude 那次選了「展開成步驟」，`sources-and-research.md` §6 規定展開時要對版本相關指令做輕度查核，所以內容多了安裝與操作的說明。這已在 skill 中，不需要新規則。
+- 兩個代理的候選問題都用 ①②③ 編號，在使用者的終端機中擠在一起。skill 沒有規定編號格式；`writing-rules.md` 只在頁面表格中提到 ①②③。
+- Codex 月份頁剩下的三個模板標題，對應路線圖子頁骨架的固定部分（圖 1、里程碑、資源）。目前骨架沒有說這些部分該用什麼標題，代理就各自寫成「本月…如何…？」。
 
