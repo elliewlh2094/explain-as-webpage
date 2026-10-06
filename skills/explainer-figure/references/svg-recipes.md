@@ -13,7 +13,7 @@ All figures are inline `<svg>` inside a `<figure id="fig-N">`. The template alre
 - **Arrows:** a `<line class="line" … marker-end="url(#arr)">` from the edge of one box to the edge of the next (not centre to centre). Horizontal flows: same y for both ends. Bends: use `<path class="line" d="M x y H x2 V y2">`.
 - **Max nodes per row:** 4 at width 720. For 5–6, wrap to a second row and connect with a down-then-left path.
 - **`role="img"` and `aria-label`** on every SVG: one sentence that says what the figure shows.
-- After building, screenshot and check (SKILL.md step 6). Fix any overflow by editing coordinates, not by adding CSS.
+- After building, screenshot and check (`SKILL.md` § Self-check). Fix any overflow by editing coordinates, not by adding CSS.
 
 ## Colour meaning (use consistently on the whole page)
 
@@ -30,7 +30,7 @@ Text in `class="sm"` is grey 12px: use it for units, sub-labels, and annotations
 
 ## Recipe 1 — Causal chain (Figure 1 of a mechanism page)
 
-Use the four-box chain in `assets/template.html` as the base. Each box: bold name on line 1, a short measured fact on line 2 (`sm`). Colour the boxes by meaning (cause `bad`, consequence `warn`, fix `good`). If a link is an inference, draw its arrow with `dash`.
+Use the four-box chain in `../explain-as-webpage/assets/template.html` as the base. Each box: bold name on line 1, a short measured fact on line 2 (`sm`). Colour the boxes by meaning (cause `bad`, consequence `warn`, fix `good`). If a link is an inference, draw its arrow with `dash`.
 
 ## Recipe 2 — Before / after (counterfactual)
 
@@ -66,7 +66,7 @@ For scatter-like content (matches, inliers, measurements), compute coordinates w
 
 ## Axes and scales (any figure with numbers)
 
-The four questions every number must answer are in `writing-rules.md` § Figures and text. In the figure:
+The four questions every number must answer are in `../explain-as-webpage/references/writing-rules.md` § Figures and text. In the figure:
 
 - Each axis has a title with its unit in brackets, at its end or beside it in `sm`: "位移（m）", "Temperature (°C)". A quantity without a unit gets its definition and range instead: "偽陽性率 FPR（0–1，無單位）".
 - Tick labels in `sm` at round values. Start a value axis at 0, or draw a break and say so; say when a scale is logarithmic.
@@ -201,26 +201,6 @@ Stages left to right, each with its name and period. Under each arrow, the probl
 - 3–8 steps. Each step changes one thing.
 - Draw the final state first, check it in a screenshot, then split it into steps.
 - The script in the template adds ◀ ▶ ▷ controls; do not write a second stepper script.
-
-To look at every figure of a page at once (labels that crowd an arrow, text that leaves its box, a number whose meaning the figure, caption, and source line do not give), screenshot a temporary copy that hides everything but the figures and the source lines. Use Python for the edit: CSS and scripts contain characters that clash with `sed` delimiters.
-
-```bash
-python3 - "$F" <<'EOF'
-import sys
-s = open(sys.argv[1], encoding="utf-8").read()
-s = s.replace("</body>", "<style>.side,.topbar{display:none!important}.main{margin-left:0}"
-              ".content>*:not(figure):not(.src){display:none}</style></body>")
-open("/tmp/figures.html", "w", encoding="utf-8").write(s)
-EOF
-google-chrome --headless=new --disable-gpu --hide-scrollbars --window-size=900,2400 --screenshot=/tmp/figures.png file:///tmp/figures.html; rm /tmp/figures.html
-```
-
-To inspect one figure or one stepper frame, screenshot a temporary copy that hides everything else and clicks ▶ n−1 times (here: Figure 4, frame 3):
-
-```bash
-sed "s|</body>|<style>.side,.topbar{display:none!important}.main{margin-left:0}.content>*:not(#fig-4){display:none}</style><script>var b=document.querySelectorAll('#fig-4 .stepper-bar button');for(var i=1;i<3;i++)b[1].click();</script></body>|" "$F" > /tmp/frame.html
-google-chrome --headless=new --disable-gpu --hide-scrollbars --window-size=900,800 --screenshot=/tmp/frame.png file:///tmp/frame.html; rm /tmp/frame.html
-```
 
 ## Slider (L1)
 

@@ -67,7 +67,7 @@ Send **one** message (use a structured question tool if the platform has one, e.
 ### 5. Build the page
 
 1. Copy `assets/template.html` to the output path. Set `lang`, title, sidebar head, breadcrumb.
-2. Follow `references/writing-rules.md` for page structure and prose, and `references/svg-recipes.md` for every figure (grid, sizes, colours, stepper, slider).
+2. Follow `references/writing-rules.md` for page structure and prose, and `../explainer-figure/SKILL.md` for every figure (grid, sizes, colours, stepper, slider). The two skills must sit side by side in the same `skills/` folder.
 3. Delete all demo content and every `FILL` marker.
 
 ### 6. Self-check
@@ -91,7 +91,7 @@ google-chrome --headless=new --disable-gpu --allow-file-access-from-files --virt
 google-chrome --headless=new --disable-gpu --allow-file-access-from-files --window-size=500,2400 --screenshot=/tmp/narrow.png file:///tmp/explain-as-webpage-narrow.html; rm /tmp/explain-as-webpage-narrow.html
 ```
 
-Chrome windows are at least 500px wide, so the narrow check renders the page in a 390px iframe; `OVERFLOW` means the whole page scrolls sideways (a failure). Look for text overflowing boxes, overlapping labels, arrows that miss their targets, and empty figures. If no browser is available, say so in the report. If the page is part of a page tree, also run the checks in `references/extending-pages.md` §5. To inspect one figure or stepper frame, see `references/svg-recipes.md` § Stepper.
+Chrome windows are at least 500px wide, so the narrow check renders the page in a 390px iframe; `OVERFLOW` means the whole page scrolls sideways (a failure). Look for text overflowing boxes, overlapping labels, arrows that miss their targets, and empty figures. If no browser is available, say so in the report. If the page is part of a page tree, also run the checks in `references/extending-pages.md` §5. To inspect the figures, or one stepper frame, see `../explainer-figure/SKILL.md` § Self-check.
 
 Content checklist:
 
@@ -126,5 +126,4 @@ Tell the user: the file path, how to open it (`xdg-open <path>` / `open <path>`)
 |---|---|
 | "The topic is big; the page must be long." | The page answers 3–5 questions. Everything else is a link to the source report. |
 | "An animation is always clearer." | Animation helps only for processes. For structure, a static figure is faster to read. |
-| "I'll draw it in ASCII/Markdown first." | ASCII diagrams break with fonts and widths. Draw SVG on the grid in `svg-recipes.md`. |
 | "The user can read the report for the numbers." | The page exists because the report did not work. Bring the key numbers onto the page. |

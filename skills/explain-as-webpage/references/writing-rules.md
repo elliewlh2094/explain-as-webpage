@@ -31,7 +31,7 @@ Do not add: scope/authority tables, "how to read this document" guides, change h
   3. *How to read it*: which direction is better, where the baseline is, what a reference line means.
   4. *Where it comes from*: measured, computed, estimated, or schematic. Mark estimates as estimates.
 
-  Put axis titles, units, and the legend inside the figure (`svg-recipes.md` § Axes and scales), how to read it in the paragraph or the caption, and the origin in the source line. Use one unit per figure. If no source supports the numbers, draw a schematic without values and say so. In the report (SKILL.md step 7), give the unit of each figure with numbers and why you chose it.
+  Put axis titles, units, and the legend inside the figure (`../explainer-figure/references/svg-recipes.md` § Axes and scales), how to read it in the paragraph or the caption, and the origin in the source line. Use one unit per figure. If no source supports the numbers, draw a schematic without values and say so. In the report (SKILL.md step 7), give the unit of each figure with numbers and why you chose it.
 
 ## Sentences (about 80% of ASD-STE100)
 

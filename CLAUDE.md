@@ -4,9 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 專案現況
 
-本儲存庫提供一個 agent skill：`explain-as-webpage`。它讓代理把陌生的技術、設計或主題做成單一、RTD 風格的 HTML 知識網頁。材料分三種模式：使用者的專案（以真實程式碼、資料與報告為例）、使用者給的文件（網頁文章、PDF、Markdown，讀取全文），或只有主題（查證並為來源分級）；使用者追問時，可補進原頁或延伸為「主頁＋子頁」的頁面樹。頁面可用英文或繁體中文產出。Claude Code 與 Codex 共用同一份 `skills/explain-as-webpage/SKILL.md`，兩個平台只各自附 plugin manifest，格式仿照 addyosmani/agent-skills。
+本儲存庫提供一個 agent skill：`explain-as-webpage`。它讓代理把陌生的技術、設計或主題做成單一、RTD 風格的 HTML 知識網頁。材料分三種模式：使用者的專案（以真實程式碼、資料與報告為例）、使用者給的文件（網頁文章、PDF、Markdown，讀取全文），或只有主題（查證並為來源分級）；使用者追問時，可補進原頁或延伸為「主頁＋子頁」的頁面樹。頁面可用英文或繁體中文產出。繪圖規則另放在 `explainer-figure` skill，只由 explain-as-webpage 以相對路徑讀取，兩個 skill 資料夾必須並列。Claude Code 與 Codex 共用同一份 `skills/*/SKILL.md`，兩個平台只各自附 plugin manifest，格式仿照 addyosmani/agent-skills。
 
-需求與取捨記錄在 `docs/ideas/explain-as-webpage.md`（第一輪）、`docs/ideas/explain-as-webpage-v2.md`（第二輪）、`docs/specs/explain-as-webpage-v3.md`（第三輪規格：材料模式，已實作）與 `docs/ideas/figure-values.md`（圖中數值的意義），實作計畫與進度記錄在 `tasks/plan.md`、`tasks/todo.md`。
+需求與取捨記錄在 `docs/ideas/explain-as-webpage.md`（第一輪）、`docs/ideas/explain-as-webpage-v2.md`（第二輪）、`docs/specs/explain-as-webpage-v3.md`（第三輪規格：材料模式，已實作）與 `docs/ideas/figure-values.md`（圖中數值的意義），實作計畫與進度記錄在 `tasks/plan.md`、`tasks/todo.md`（第三輪）。第四輪（視覺表現形式）的構想、計畫與待辦在 `docs/ideas/visual-forms.md`、`visual-forms-plan.md`、`visual-forms-todo.md`。
 
 ## 架構
 
@@ -14,15 +14,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `references/sources-and-research.md`：document 與 topic 模式的規則：取得全文（`curl`、`pdftotext`、缺中繼憑證、JavaScript 頁面）、長篇材料與計畫、查證深度、來源等級 g1–g4、輔助 skill、高風險主題、輸出路徑。
 - `references/page-types.md`：7 種頁型（機制、套件、程式導讀、論證、路線圖或計畫、實務指南、演進）各自的骨架與圖 1。
 - `references/writing-rules.md`：頁面骨架、圖文綁定與讀圖四問、術語定義、讀者設定、英文與台灣用語規則、固定標籤中英對照、篇幅預算。
-- `references/svg-recipes.md`：SVG 網格與尺寸規則、顏色語意、圖形配方、座標軸與刻度、逐步動畫（stepper）與滑桿的寫法、只看圖與單幀的截圖指令。
 - `references/extending-pages.md`：依追問延伸頁面的落點判準（`<details>`／子頁／修訂主頁）、兩層頁面樹、子頁命名 `<hub>--<child>.html`、側欄同步與篇幅檢查指令。
 - `assets/template.html`：單檔模板，包含內嵌 CSS、共用箭頭 marker、自動側欄目錄、可選的側欄頁面樹（`.pages`），以及通用 stepper 元件（`data-step="n"`／`"n+"`）。**不可引入外部資源。**字型堆疊中拉丁字型需排在 CJK 字型之前，否則 Linux 上英文引號會變全形。
+- `skills/explainer-figure/SKILL.md`：圖說明單格式、圖型選擇、繪圖步驟、單圖自檢（只看圖與單幀的截圖指令）。frontmatter 設 `disable-model-invocation: true`、`user-invocable: false`，不會被自動觸發。
+- `skills/explainer-figure/references/svg-recipes.md`：SVG 網格與尺寸規則、顏色語意、圖形配方、座標軸與刻度、逐步動畫（stepper）與滑桿的寫法。
 - `examples/autoresearch/`：以 karpathy/autoresearch 為例的英文範例（主頁＋兩個程式導讀子頁），同時是延伸流程的驗證案例。
 - `examples/explain-as-webpage/`：說明本儲存庫的單頁範例（L0），有英文（`explain-as-webpage.html`）與繁中（`explain-as-webpage.zh-TW.html`）兩版；兩版的開頭畫面（側欄、結論與圖 1 的 7 步流程）分別是 `README.md` 與 `README.zh-TW.md` 的封面圖 `docs/images/cover-process.png`、`cover-process.zh-TW.png`（以 `--force-device-scale-factor=1.5 --window-size=1247,<高度>` 截取，高度截到圖 1 圖說下方）。
 - `examples/llm-wiki/`、`examples/starship-reusability/`：繁中範例，分別示範 document 模式與 topic 模式。`README.md` 只列英文範例，`README.zh-TW.md` 只列繁中範例。
 - `.claude-plugin/`、`.codex-plugin/`、`.agents/plugins/`：plugin 與 marketplace manifest，版本號需同步。
 
-修改規則時，`SKILL.md` 維持精簡（約 130 行以內），細節放進 references。
+修改規則時，兩個 `SKILL.md` 都維持精簡（約 130 行以內），細節放進 references。跨 skill 的路徑從 skill 根目錄寫起，例如 `../explainer-figure/SKILL.md`。
 
 ## 驗證指令
 

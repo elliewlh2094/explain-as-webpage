@@ -77,10 +77,10 @@ claude plugin marketplace add elliewlh2094/sphinx-style-notes-maker   # 或本�
 claude plugin install sphinx-style-notes-maker@sphinx-style-notes-maker
 ```
 
-也可以直接複製 skill 資料夾，之後用 `/explain-as-webpage` 呼叫：
+也可以直接複製兩個 skill 資料夾，之後用 `/explain-as-webpage` 呼叫。`explainer-figure` 負責繪圖，`explain-as-webpage` 以相對路徑讀取它，所以兩個資料夾必須並列：
 
 ```bash
-cp -r skills/explain-as-webpage ~/.claude/skills/
+cp -r skills/explain-as-webpage skills/explainer-figure ~/.claude/skills/
 ```
 
 ### Codex
@@ -92,10 +92,10 @@ codex plugin marketplace add elliewlh2094/sphinx-style-notes-maker   # 或本機
 codex plugin add sphinx-style-notes-maker@sphinx-style-notes-maker
 ```
 
-也可以直接複製 skill 資料夾，之後用 `@explain-as-webpage` 呼叫：
+也可以直接複製兩個 skill 資料夾，之後用 `@explain-as-webpage` 呼叫：
 
 ```bash
-cp -r skills/explain-as-webpage ~/.codex/skills/
+cp -r skills/explain-as-webpage skills/explainer-figure ~/.codex/skills/
 ```
 
 安裝後請開新的 session，讓工具重新載入 skill。
@@ -124,10 +124,13 @@ skills/explain-as-webpage/
 │   ├── writing-rules.md        # 頁面骨架、圖文綁定、讀者設定、語言與篇幅規則
 │   ├── page-types.md           # 頁型與主軸圖（機制、套件、程式導讀、論證、計畫、實務指南、演進）
 │   ├── sources-and-research.md # 文件與主題模式：取得全文、查證、來源等級、輔助 skill、高風險主題
-│   ├── svg-recipes.md          # SVG 版面規則、顏色語意、圖形配方、座標軸、逐步動畫與滑桿
 │   └── extending-pages.md      # 依追問延伸頁面：落點判準、頁面樹、同步檢查
 └── assets/
     └── template.html           # RTD 風格的單檔模板
+skills/explainer-figure/        # 繪圖；只由 explain-as-webpage 讀取
+├── SKILL.md                    # 圖說明單、圖型選擇、單圖自檢
+└── references/
+    └── svg-recipes.md          # SVG 版面規則、顏色語意、圖形配方、座標軸、逐步動畫與滑桿
 examples/explain-as-webpage/    # 範例：說明本儲存庫的單頁網頁（英文與繁體中文）
 examples/autoresearch/          # 範例：主頁＋兩個程式導讀子頁
 examples/llm-wiki/              # 範例（繁中）：由文件產出的網頁

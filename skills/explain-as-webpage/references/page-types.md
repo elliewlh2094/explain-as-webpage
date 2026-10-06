@@ -2,7 +2,7 @@
 
 Pick one page type in SKILL.md step 2, from what the material is. The type decides Figure 1 (the spine of the page) and the section skeleton. Everything else in `writing-rules.md` applies to every type: the conclusion box, question headings, figures next to their text, terms, sources, and the length budget.
 
-| Type | Use when the material is | Figure 1 (spine) | Recipe in `svg-recipes.md` |
+| Type | Use when the material is | Figure 1 (spine) | Recipe in `../explainer-figure/references/svg-recipes.md` |
 |---|---|---|---|
 | Mechanism (default) | a technique, an algorithm, a physical or biological mechanism | causal chain | 1 |
 | Package or architecture | a code package: what it does and why it is built this way | main flow through the modules | 3 |

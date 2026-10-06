@@ -82,10 +82,10 @@ claude plugin marketplace add elliewlh2094/sphinx-style-notes-maker   # or a loc
 claude plugin install sphinx-style-notes-maker@sphinx-style-notes-maker
 ```
 
-Or copy the skill folder and call it as `/explain-as-webpage`:
+Or copy both skill folders and call it as `/explain-as-webpage`. `explainer-figure` draws the figures; `explain-as-webpage` reads it by a relative path, so the two folders must sit side by side:
 
 ```bash
-cp -r skills/explain-as-webpage ~/.claude/skills/
+cp -r skills/explain-as-webpage skills/explainer-figure ~/.claude/skills/
 ```
 
 ### Codex
@@ -97,10 +97,10 @@ codex plugin marketplace add elliewlh2094/sphinx-style-notes-maker   # or a loca
 codex plugin add sphinx-style-notes-maker@sphinx-style-notes-maker
 ```
 
-Or copy the skill folder and call it as `@explain-as-webpage`:
+Or copy both skill folders and call it as `@explain-as-webpage`:
 
 ```bash
-cp -r skills/explain-as-webpage ~/.codex/skills/
+cp -r skills/explain-as-webpage skills/explainer-figure ~/.codex/skills/
 ```
 
 After you install it, start a new session so that the tool loads the skill.
@@ -129,10 +129,13 @@ skills/explain-as-webpage/
 │   ├── writing-rules.md        # Page skeleton, figures and text, readers, language and length rules
 │   ├── page-types.md           # Page types and their spine figures (mechanism, package, code, argument, plan, guide, evolution)
 │   ├── sources-and-research.md # Document and topic modes: full text, research, source grades, helper skills, high-risk topics
-│   ├── svg-recipes.md          # SVG layout rules, color meaning, figure recipes, axes, step animation and slider
 │   └── extending-pages.md      # Follow-up questions: where answers go, the page tree, sync checks
 └── assets/
     └── template.html           # Single-file Read the Docs-style template
+skills/explainer-figure/        # Draws the figures; read only by explain-as-webpage
+├── SKILL.md                    # Figure brief, figure type choice, self-check
+└── references/
+    └── svg-recipes.md          # SVG layout rules, color meaning, figure recipes, axes, step animation and slider
 examples/explain-as-webpage/    # Example: one page that explains this repository (English and Traditional Chinese)
 examples/autoresearch/          # Example: hub page + two code walkthrough pages
 examples/llm-wiki/              # Example (Traditional Chinese): a page from a document
