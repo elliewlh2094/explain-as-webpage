@@ -40,7 +40,7 @@ The cards are HTML, not SVG. They use the CSS grid of the template (`../explain-
 - At most 2 card figures per page and 6 cards per figure. A card figure counts as one figure in the length budget.
 - The text inside a card is never below 13px; the template sets this, so do not shrink it with inline styles.
 - No SVG drawings inside a card. An icon before the title is allowed (`icons.md`).
-- The paragraph before the figure says what to compare across the cards. The caption states the conclusion, not "Overview of the layers".
+- The paragraph before the figure says what to compare across the cards, without restating the fields (`../explain-as-webpage/references/writing-rules.md` § Figures and text, *Do not repeat the figure in the text*). The caption states the conclusion, not "Overview of the layers".
 - Refer to cards by their order or their title ("the first three cards", "the Booster catch card"), never by row or column: on a narrow screen the grid becomes one column.
 
 ## Check

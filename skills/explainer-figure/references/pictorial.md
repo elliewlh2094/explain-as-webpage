@@ -14,6 +14,7 @@ These rules come from test drawings; each one prevents a failure that was seen.
 - **Colours:** the outline is `outline` (text colour). A part that is a key concept takes its concept class (`box c1`, `area c1`); other parts are `box` or `box muted`. Semantic colours (`bad`, `good`, `warn`) only mark a problem or a fix, as in any figure.
 - **Scale:** a drawing is a schematic. The caption says "示意，不按比例" / "Schematic, not to scale", unless the sizes come from data (then give the source, as for any number).
 - **Icons** may label a part (`icons.md`), but the object itself is drawn, not an icon.
+- **Notes stay in the figure.** The paragraph points to a part and says what to notice; it does not restate the notes (`../explain-as-webpage/references/writing-rules.md` § Figures and text, *Do not repeat the figure in the text*).
 - **Check the screenshot for text on shapes.** The text bounds of a figure can be inside the canvas and still cover a shape or a line. Only the figure screenshot (`SKILL.md` § Self-check) shows this; move the label or shorten it.
 
 ## Recipe P1 — Layered container
@@ -50,6 +51,46 @@ A container cut open to show its layers: what goes where, and why. Clip the laye
 
 - 2–4 layers. A layer's height can follow a real share (and then says so); otherwise make the layers about equal.
 - Other containers use the same steps: a cup (a path with straight sides), a cell (an ellipse), a building (a rectangle with a roof path).
+
+### P1 with actors and flow arrows
+
+When the question asks both where things sit and who reads or writes them, draw the actors outside the container and connect them to the layers with arrows. The arrows show the direction in which information moves. The notes about each layer go inside the layer, not on leader lines.
+
+```html
+<figure id="fig-4">
+<svg viewBox="0 0 720 360" role="img" aria-label="A git repo folder in three layers: schema, wiki, and raw sources. On the left, the LLM follows the schema, reads the raw sources, and writes the wiki. On the right, you read the wiki, pick the raw sources, and revise the schema with the LLM.">
+  <defs><clipPath id="f4-body"><rect x="240" y="60" width="240" height="280" rx="10"/></clipPath></defs>
+  <path class="outline" d="M250 60 V46 Q250 36 260 36 H330 L346 60"/><text x="260" y="53" class="sm">git repo</text>
+  <g clip-path="url(#f4-body)">
+    <rect class="box c3" x="240" y="60" width="240" height="60"/>
+    <rect class="box c1" x="240" y="120" width="240" height="130"/>
+    <rect class="box c2" x="240" y="250" width="240" height="90"/>
+  </g>
+  <rect class="outline" x="240" y="60" width="240" height="280" rx="10"/>
+  <text x="360" y="86" text-anchor="middle" class="b c3">schema</text><text x="360" y="106" text-anchor="middle" class="sm">CLAUDE.md / AGENTS.md</text>
+  <text x="360" y="156" text-anchor="middle" class="b c1">wiki</text><text x="360" y="176" text-anchor="middle" class="sm">summary, entity, concept pages</text>
+  <text x="360" y="196" text-anchor="middle" class="sm">index.md, log.md</text><text x="360" y="226" text-anchor="middle" class="sm">written only by the LLM</text>
+  <text x="360" y="281" text-anchor="middle" class="b c2">raw/ sources</text><text x="360" y="301" text-anchor="middle" class="sm">articles, papers, images, data</text>
+  <text x="360" y="321" text-anchor="middle" class="sm">read only; the source of truth</text>
+  <rect class="box" x="10" y="150" width="120" height="60" rx="6"/>
+  <text x="70" y="176" text-anchor="middle" class="b">LLM</text><text x="70" y="196" text-anchor="middle" class="sm">follows schema</text>
+  <path class="line" d="M240 90 H70 V148" marker-end="url(#arr)"/><text x="155" y="82" text-anchor="middle" class="sm">rules</text>
+  <path class="line" d="M240 300 H70 V212" marker-end="url(#arr)"/><text x="155" y="292" text-anchor="middle" class="sm">reads</text>
+  <line class="line" x1="130" y1="180" x2="238" y2="180" marker-end="url(#arr)"/><text x="184" y="172" text-anchor="middle" class="sm">writes</text>
+  <rect class="box" x="590" y="150" width="120" height="60" rx="6"/>
+  <text x="650" y="176" text-anchor="middle" class="b">You</text><text x="650" y="196" text-anchor="middle" class="sm">pick, ask, judge</text>
+  <line class="line" x1="480" y1="180" x2="588" y2="180" marker-end="url(#arr)"/><text x="534" y="172" text-anchor="middle" class="sm">reads</text>
+  <path class="line" d="M650 212 V300 H482" marker-end="url(#arr)"/><text x="566" y="292" text-anchor="middle" class="sm">picks sources</text>
+  <path class="line" d="M650 148 V90 H482" marker-end="url(#arr)"/><text x="566" y="82" text-anchor="middle" class="sm">revises with the LLM</text>
+</svg>
+<figcaption>Figure 4. Information flows from the raw sources through the LLM into the wiki and on to you; the only arrow into the wiki comes from the LLM. Folder names are illustrative.</figcaption>
+</figure>
+```
+
+- The container keeps the P1 coordinates, moved to x = 240–480; one actor box (120 × 60) on each side at x = 10 and x = 590.
+- At most 3 arrows per side. Route them so they never cross: the top one leaves above the actor, the middle one is straight, the bottom one leaves below.
+- Each arrow ends at a layer edge and has one verb in `sm` above its horizontal part.
+- The paragraph says which arrows to compare ("only one arrow reaches the wiki"), not what each arrow says.
 
 ## Recipe P2 — Silhouette with leaders
 

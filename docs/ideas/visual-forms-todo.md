@@ -30,7 +30,8 @@
 
 ## 第 4 階段：驗收頁面
 - [x] T10 重做 starship-reusability（v2：6 張圖、散文 −5%；`cards.md` 補一條規則）
-- [ ] T11 重做 llm-wiki
+- [x] T11 重做 llm-wiki（v2：5 張圖，含適用情境歸納卡；散文 +10% 來自新增內容）
+- [x] T11a 補兩條繪圖規則：不在段落重述圖上文字（`writing-rules.md`）、分層容器加角色與流向箭頭（`pictorial.md`）
 - [ ] T12 新主題一頁（主題由使用者指定）
 
 ### 檢查點 C
