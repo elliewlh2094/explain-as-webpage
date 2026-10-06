@@ -47,7 +47,7 @@ If a field is missing, take it from the page's learning brief. Do not invent fac
 | 4–6 parallel items with the same fields (layers, roles, options) | summary cards (HTML) | `references/cards.md` instead |
 | where the parts sit in a real object, a body, or a container metaphor | pictorial figure | `references/pictorial.md` instead |
 
-Draw a mechanism figure (what happens and why) by default. Draw a numeric figure only after the mechanism is clear, and only if it proves a claim on the page.
+Go down the table for each brief and note every row that fits. When summary cards or a pictorial figure fits, use it: a reader takes in cards and drawn objects faster than boxes and arrows. For causes and processes, a mechanism figure (what happens and why) stays the default. Draw a numeric figure only after the mechanism is clear, and only if it proves a claim on the page.
 
 ## Process
 

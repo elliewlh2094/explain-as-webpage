@@ -36,7 +36,7 @@ In document and topic modes, first read `references/sources-and-research.md`: ho
 
 ### 2. Write a learning brief (internal, not shown as-is)
 
-- **Core questions** (3–5): phrased the way the user would ask them, e.g. "Why can't we just average the matches?"
+- **Core questions** (3–5): phrased the way the user would ask them, starting from the reader's situation (what it costs, what they need first, what goes wrong), not from the material's headings, e.g. "Why can't we just average the matches?" (`sources-and-research.md` §3).
 - **Page type and spine**: pick the type in `references/page-types.md` (an argument, a roadmap, a practical guide, an evolution, code, or by default a mechanism). For a mechanism, the spine is the causal chain: cause → mechanism → consequence → fix → measured result. One line per link, each link backed by a fact or marked as inference.
 - **Counterfactual pairs**: the same project case without and with the technique, with real numbers. In document and topic modes, only if a source gives such a case.
 - **Key concepts**: at most 5 the reader must learn. Every other technical term still gets a one-clause definition at first use (see `writing-rules.md`).
@@ -48,7 +48,7 @@ Pick the **lowest** tier that answers every core question.
 
 | Tier | Form | Use when a core question is about | Relative cost |
 |---|---|---|---|
-| **L0** | Text + static inline SVG | Structure, composition, a causal chain, before/after | 1× |
+| **L0** | Text + static figures (SVG or cards) | Structure, composition, a causal chain, before/after | 1× |
 | **L1** | L0 + `<details>`, one slider or toggle | A trade-off: the result depends on a parameter | ~1.5× |
 | **L2** | L1 + stepper (multi-frame SVG with prev/next/play) | A process: an iterative algorithm, events over time | ~2–3× |
 
@@ -59,7 +59,7 @@ Examples: a package's module responsibilities and data flow → L0. Real-time fa
 Send **one** message (use a structured question tool if the platform has one, e.g. `AskUserQuestion` in Claude Code, with at most 4 questions; otherwise a plain message) containing:
 
 1. The core questions — ask the user to add, remove, or reword. In document mode, also show the material's outline and 5–8 numbered candidate questions inside the question itself (text written before a question tool can go unseen), how to organise the page (in the material's own order, or by questions), and for a plan whether to expand units into steps (`sources-and-research.md` §3, §6).
-2. The proposed tier (and page count), why, and the cheaper alternative with what it would lose.
+2. The proposed tier (and page count), the planned figures of each page with their type (mechanism, numeric, cards, pictorial), why, and the cheaper alternative with what it would lose.
 3. The page language (the language the user asks for, otherwise the one the user writes in; one language per topic) and the reader: general public, non-specialist student, or engineer, which is the default in project mode (`writing-rules.md` § Reader). For a high-risk topic (health, safety, law, finance), say so; research is then required (`sources-and-research.md` §9).
 4. The output path, the research depth in topic mode (light or deep, `sources-and-research.md` §7), and any helper skill you plan to use and for which step (§5). Default path in project mode: `~/Documents/explainers/<repo-name>/<topic-slug>.html`, where `<repo-name>` is the basename of the git top-level directory; offer "inside the project" as an alternative. Document mode: `~/Documents/explainers/<topic-slug>/<topic-slug>.html`.
 

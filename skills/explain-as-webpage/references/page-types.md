@@ -44,13 +44,14 @@ Usually a child page; the question is "what does this file or module do, and why
 
 A plan is material made of stages, each with tasks, deliverables, and checks: a roadmap, a learning plan, a project plan, a curriculum. Its reader needs to know, for every step, what to do, how to do it, and how to tell it worked. A shorter checklist is not an explanation.
 
-**Structure.** Build a page tree from the first build, whatever the length (`extending-pages.md` §6): the hub and one child page per stage. Split a stage whose unit cards do not fit one page's length budget (roughly more than 6–8 units) into two children; merge stages too small to fill a page. The confirmation still offers a single page as the cheaper alternative, and asks whether to expand units into steps (`sources-and-research.md` §6).
+**Structure.** Build a page tree from the first build, whatever the length (`extending-pages.md` §6): the hub and one child page per stage. Split a stage whose unit tables do not fit one page's length budget (roughly more than 6–8 units) into two children; merge stages too small to fill a page. The confirmation still offers a single page as the cheaper alternative, and asks whether to expand units into steps (`sources-and-research.md` §6).
 
 **Hub page:**
 
 1. Conclusion box: the goal, the total duration, the stages in one line, and the one ordering decision that matters most (why X comes before Y).
 2. Figure 1: the stages as a roadmap (Recipe 7), each box linking to its child page.
-3. Questions about the whole plan, usually: What does each stage produce? (a table: stage, duration, result, checkpoint, link) Why this order? (if the material names common mistakes, a table "mistake → how the plan avoids it") What connects the stages? (a project or artifact reused from stage to stage, with a figure of its parts) What do I cut when I fall behind? (each checkpoint and its first cuts)
+3. Questions about the whole plan, usually: What does each stage produce? (a card figure, one card per stage with its duration, result, and checkpoint, the title linking to the child page; `../explainer-figure/references/cards.md`) Why this order? (if the material names common mistakes, a table "mistake → how the plan avoids it") What connects the stages? (a project or artifact reused from stage to stage, drawn as a pictorial figure of its parts, Recipe P3 in `../explainer-figure/references/pictorial.md`) What do I cut when I fall behind? (each checkpoint and its first cuts)
+   Also 2–4 practical questions the reader came with, when the material answers them: what the plan costs, what the reader can do without the hardware, what employers ask for, how to show the result (a portfolio). These often matter more to the reader than the plan's structure.
 4. Leave unit details to the child pages; the hub links to them.
 5. Instead of a counterfactual: "What goes wrong if I skip ahead?", only if the material says so.
 
@@ -58,11 +59,11 @@ A plan is material made of stages, each with tasks, deliverables, and checks: a 
 
 1. Conclusion box: the stage's goal, its duration, and what the reader has at its end.
 2. Figure 1: the stage's units in order, each with its practice task or deliverable (Recipe 7).
-3. One `h2` per question. Group consecutive units under one question ("Weeks 1–3: how do I set up the tools and read C++ types?") and give each unit an `h3`.
-4. Each unit is a card: a `<table class="kv">` with four rows: what to do (from the material); steps (an `<ol>`; put the key command or a code excerpt under the table when it helps); what the check proves; result (what the reader has afterwards).
+3. One `h2` per question. Group consecutive units under one question ("Weeks 1–3: how do I set up the tools and read C++ types?") and give each unit an `h3`. Ask what the reader would ask about this stage (what to buy, which part to choose and why, why a step is needed), not "How do this stage's units connect?" or "How should I use the resources?".
+4. Each unit is a unit table: a `<table class="kv">` with four rows: what to do (from the material); steps (an `<ol>`; put the key command or a code excerpt under the table when it helps); what the check proves; result (what the reader has afterwards).
 5. The stage's milestone or checkpoint as a two-column table: the item, and what it checks.
 6. Resources, if the material lists them: the one or two it recommends most for each unit, with the material's reason.
-7. At least one figure besides Figure 1: a mechanism figure for the idea the stage hinges on, e.g. a causal chain for "why a stalled motor resets the microcontroller", the control loop a robot closes, or two executor timelines. A list of units in boxes does not explain anything by itself.
+7. At least one figure besides Figure 1: a mechanism figure for the idea the stage hinges on, e.g. a causal chain for "why a stalled motor resets the microcontroller", the control loop a robot closes, or two executor timelines; or a pictorial figure of what the stage builds (the parts of a line-following robot, Recipe P3). A list of units in boxes does not explain anything by itself.
 
 **Explain every check.** For each acceptance item, milestone, or checkpoint, say what it proves and which mistake it would catch: "the build has no warnings" proves the warning flags are on; "a test fails when the formula is broken" proves the tests protect something. A check the reader does not understand becomes a box they tick without doing the work.
 

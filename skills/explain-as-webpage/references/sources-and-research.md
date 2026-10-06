@@ -83,11 +83,13 @@ In document mode, the confirmation (SKILL.md step 4, item 1) always shows:
 
 - **The outline:** each section of the material with its approximate length. Use the original's own structure: its chapters, sections, or the steps of a tutorial. When the text you read is an intermediary (AI notes, a summary) whose headings are its own questions, take the structure from what it reports about the original (e.g. "Step 1–5"), not from its headings. If it does not show the structure, say so and suggest the prompts in §2.
 - **5–8 candidate questions**, numbered, phrased as the reader would ask them and taken from the material's sections. Users often only say "make this easier to read", so let them pick questions instead of writing them.
+
+  **Good candidate questions** start from the reader's situation: what they must buy or install, what it costs, what they can do without the equipment, what goes wrong, how they show the result. For example: "How much do the two robots cost?", "Can I learn this month without a GPU?", "Why not the L298N motor driver?", "What makes a portfolio convincing?" Avoid questions that only restate the material's structure, such as "How do this month's units connect?" or "How should I use the resources?": the reader would not ask them, and every page ends up with the same headings.
 - **How to organise the page**, whatever the length:
 
   | Choice | Result | Suggest it when the request says |
   |---|---|---|
-  | **The material's own order** | one `h2` per section of the original, in its order, so the reader can follow and review it: a single page for short material, a page tree for long material (below) | review, notes, guide me through, follow along |
+  | **The material's own order** | the original's sections, in its order, decide what each page covers and in which order, so the reader can follow and review it; each `h2` is still a question the reader would ask about that part, not the section's title. A single page for short material, a page tree for long material (below) | review, notes, guide me through, follow along |
   | **Question-driven** | one page that answers the 3–5 chosen questions; everything else is a link to the original | "I don't understand X", "why does it …" |
 
 Put the numbered candidates inside the question itself: in the question text, or in the option descriptions. Text written before a structured question tool can go unseen, for example when the user interrupts the tool and answers in a message. A structured question tool allows few options per question (4 in `AskUserQuestion`), so do not spend one option per candidate: offer the organisation choice and the question sets as options of one question (e.g. "In the material's order (7 sections)", "Questions 1, 2, 3, 5"), and let the user type their own numbers. This keeps the other questions free for tier, language and path, and helpers.
