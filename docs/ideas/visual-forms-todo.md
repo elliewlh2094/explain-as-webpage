@@ -29,7 +29,7 @@
 - [x] T9 圖說明單接入流程（第 2 步、`page-types.md`）
 
 ## 第 4 階段：驗收頁面
-- [ ] T10 重做 starship-reusability
+- [x] T10 重做 starship-reusability（v2：6 張圖、散文 −5%；`cards.md` 補一條規則）
 - [ ] T11 重做 llm-wiki
 - [ ] T12 新主題一頁（主題由使用者指定）
 
