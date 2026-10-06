@@ -48,7 +48,7 @@ Five classes, `c1`–`c5` (purple, olive, magenta, brown, indigo), one per key c
 
 ## Recipe 1 — Causal chain (Figure 1 of a mechanism page)
 
-Use the four-box chain in `../explain-as-webpage/assets/template.html` as the base. Each box: bold name on line 1, a short measured fact on line 2 (`sm`). Colour the boxes by meaning (cause `bad`, consequence `warn`, fix `good`). If a link is an inference, draw its arrow with `dash`.
+Use the four-box chain in `../explainer-page/assets/template.html` as the base. Each box: bold name on line 1, a short measured fact on line 2 (`sm`). Colour the boxes by meaning (cause `bad`, consequence `warn`, fix `good`). If a link is an inference, draw its arrow with `dash`.
 
 ## Recipe 2 — Before / after (counterfactual)
 
@@ -84,7 +84,7 @@ For scatter-like content (matches, inliers, measurements), compute coordinates w
 
 ## Axes and scales (any figure with numbers)
 
-The four questions every number must answer are in `../explain-as-webpage/references/writing-rules.md` § Figures and text. In the figure:
+The four questions every number must answer are in `../explainer-page/references/writing-rules.md` § Figures and text. In the figure:
 
 - Each axis has a title with its unit in brackets, at its end or beside it in `sm`: "位移（m）", "Temperature (°C)". A quantity without a unit gets its definition and range instead: "偽陽性率 FPR（0–1，無單位）".
 - Tick labels in `sm` at round values. Start a value axis at 0, or draw a break and say so; say when a scale is logarithmic.

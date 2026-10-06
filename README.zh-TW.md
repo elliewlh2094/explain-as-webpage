@@ -8,21 +8,21 @@
 
 ## 靈感來源
 
-本儲存庫提供一個 skill：`explain-as-webpage`，靈感來自 Andrej Karpathy 的貼文：[x.com/karpathy/status/2105819303471976479](https://x.com/karpathy/status/2105819303471976479)。
+本儲存庫是 plugin `explain-as-webpage`，提供 skill `explainer-page`，以及它在繪圖時讀取的輔助 skill `explainer-figure`。靈感來自 Andrej Karpathy 的貼文：[x.com/karpathy/status/2105819303471976479](https://x.com/karpathy/status/2105819303471976479)。
 
 <img src="docs/images/karpathy-x-post.png" width="640" alt="Andrej Karpathy 的貼文">
 
-本 skill 實作貼文內分享的前三項：寫作規則約為「八成的 ASD-STE100」，圖片是內嵌 SVG，成品是單一 HTML 網頁，並可加上瀏覽器內的逐步動畫。本 skill **刻意不做影片**，理由見[刻意不做的事](#刻意不做的事)。
+本 skill 實作貼文內分享的前三項：寫作規則約為「八成的 ASD-STE100」，圖片是內嵌 SVG 與 HTML 卡片，成品是單一 HTML 網頁，並可加上瀏覽器內的逐步動畫。本 skill **刻意不做影片**，理由見[刻意不做的事](#刻意不做的事)。
 
 ## 它會產出什麼
 
-- **單一 HTML 檔**：外觀仿照 Read the Docs（sphinx_rtd_theme），圖片全部是內嵌 SVG，不連外部資源，可以離線開啟。不需要建置，也不會另外產生 `figures/` 或 `scripts/` 資料夾。
+- **單一 HTML 檔**：外觀仿照 Read the Docs（sphinx_rtd_theme），圖片是內嵌 SVG 或 HTML，不連外部資源，可以離線開啟。不需要建置，也不會另外產生 `figures/` 或 `scripts/` 資料夾。
 - **以疑問為章節**：先給結論，再畫一條因果鏈。每一節回答一個讀者真正卡住的問題，並用專案的真實檔案、數據與程式碼舉例。
 - **依主題選擇成本最低、但仍足以說明的呈現層級**：
 
 | 層級 | 形式 | 適用的疑問 |
 |---|---|---|
-| L0 | 文字＋靜態 SVG | 結構、組成、因果鏈、前後對照 |
+| L0 | 文字＋靜態圖（SVG 或卡片） | 結構、組成、因果鏈、前後對照 |
 | L1 | L0＋展開區塊、一個滑桿 | 結果隨某個參數變化的取捨 |
 | L2 | L1＋逐步動畫（上一步／下一步／播放） | 迭代演算法、隨時間演進的過程 |
 
@@ -45,10 +45,11 @@
 
 </details>
 
+- **不只方框與箭頭**：除了因果鏈與逐步動畫，頁面還可以用歸納卡（4–6 個欄位相同的平行項目）、具象插圖（剖開的容器、加上引線的剪影、物件與它的組成、軟體介面示意）、最多 5 個概念色（同一個關鍵概念在每張圖都用同一個顏色），以及內附的 Lucide 圖示子集（只把頁面用到的圖示複製進去）。下方兩個繁中範例都用到了歸納卡、具象插圖、概念色與圖示。
 - **頁面語言**：頁面語言依你的要求決定；沒有指定時，跟隨你提問使用的語言。
 - **可依追問延伸**：對既有頁面繼續追問時，代理會依判準決定落點。短答且屬於既有疑問，補進原頁的展開區塊；新的疑問，另開子頁並與主頁互相連結；會改變主結論，則修訂主頁。每一頁各自遵守篇幅預算，主頁不會越補越長。
 
-代理會先列出疑問清單、建議的層級與輸出路徑，**等你確認後才開始產出**。預設輸出位置在你的專案之外：專案是 `~/Documents/explainers/<repo 名稱>/<主題>.html`，文件或主題是 `~/Documents/explainers/<主題>/<主題>.html`。
+代理會先列出疑問清單、建議的層級與每頁預計的圖、輸出路徑（文件模式還會問是否依原文順序整理），**等你確認後才開始產出**。預設輸出位置在你的專案之外：專案是 `~/Documents/explainers/<repo 名稱>/<主題>.html`，文件或主題是 `~/Documents/explainers/<主題>/<主題>.html`。
 
 ## 範例
 
@@ -70,32 +71,32 @@ xdg-open examples/starship-reusability/starship-reusability.html
 
 ### Claude Code
 
-用 plugin 安裝。安裝後的 skill 名稱會加上 plugin 前綴：`/sphinx-style-notes-maker:explain-as-webpage`。
+用 plugin 安裝。安裝後的 skill 名稱會加上 plugin 前綴：`/explain-as-webpage:explainer-page`。
 
 ```bash
-claude plugin marketplace add elliewlh2094/sphinx-style-notes-maker   # 或本機路徑
-claude plugin install sphinx-style-notes-maker@sphinx-style-notes-maker
+claude plugin marketplace add elliewlh2094/explain-as-webpage   # 或本機路徑
+claude plugin install explain-as-webpage@explain-as-webpage
 ```
 
-也可以直接複製兩個 skill 資料夾，之後用 `/explain-as-webpage` 呼叫。`explainer-figure` 負責繪圖，`explain-as-webpage` 以相對路徑讀取它，所以兩個資料夾必須並列：
+也可以直接複製兩個 skill 資料夾，之後用 `/explainer-page` 呼叫。`explainer-figure` 負責繪圖，`explainer-page` 以相對路徑讀取它，所以兩個資料夾必須並列：
 
 ```bash
-cp -r skills/explain-as-webpage skills/explainer-figure ~/.claude/skills/
+cp -r skills/explainer-page skills/explainer-figure ~/.claude/skills/
 ```
 
 ### Codex
 
-用 plugin 安裝。安裝後的 skill 名稱同樣會加上 plugin 前綴：`sphinx-style-notes-maker:explain-as-webpage`。
+用 plugin 安裝。安裝後的 skill 名稱同樣會加上 plugin 前綴：`explain-as-webpage:explainer-page`。
 
 ```bash
-codex plugin marketplace add elliewlh2094/sphinx-style-notes-maker   # 或本機路徑
-codex plugin add sphinx-style-notes-maker@sphinx-style-notes-maker
+codex plugin marketplace add elliewlh2094/explain-as-webpage   # 或本機路徑
+codex plugin add explain-as-webpage@explain-as-webpage
 ```
 
-也可以直接複製兩個 skill 資料夾，之後用 `@explain-as-webpage` 呼叫：
+也可以直接複製兩個 skill 資料夾，之後用 `@explainer-page` 呼叫：
 
 ```bash
-cp -r skills/explain-as-webpage skills/explainer-figure ~/.codex/skills/
+cp -r skills/explainer-page skills/explainer-figure ~/.codex/skills/
 ```
 
 安裝後請開新的 session，讓工具重新載入 skill。
@@ -112,13 +113,14 @@ cp -r skills/explain-as-webpage skills/explainer-figure ~/.codex/skills/
 - 「把 `~/Downloads/robotics-roadmap.pdf` 做成網頁，每個階段一個子頁。」（長篇文件或計畫）
 - 「我想了解 SpaceX 怎麼重複使用 Starship，請查資料做成給非本科大學生看的網頁。」（主題：代理會請你選輕量或深度查證）
 - 「做一頁給我爸媽看的甲狀腺亢進與低下衛教網頁。」（高風險主題：只用權威來源，並加上「注意」框）
+- 「這是我用 NotebookLM 整理的 YouTube 教學筆記：`~/Downloads/notes.md`，請依影片的順序做成網頁。」（代理讀不到的材料：依筆記製作，在頁面上說明這一點，並把工具自己的評價與原內容分開）
 
 產出後，用 `xdg-open <路徑>`（Linux）或 `open <路徑>`（macOS）開啟。
 
 ## 目錄結構
 
 ```text
-skills/explain-as-webpage/
+skills/explainer-page/
 ├── SKILL.md                    # 流程與層級判準（Claude Code 與 Codex 共用）
 ├── references/
 │   ├── writing-rules.md        # 頁面骨架、圖文綁定、讀者設定、語言與篇幅規則
@@ -127,10 +129,16 @@ skills/explain-as-webpage/
 │   └── extending-pages.md      # 依追問延伸頁面：落點判準、頁面樹、同步檢查
 └── assets/
     └── template.html           # RTD 風格的單檔模板
-skills/explainer-figure/        # 繪圖；只由 explain-as-webpage 讀取
-├── SKILL.md                    # 圖說明單、圖型選擇、單圖自檢
-└── references/
-    └── svg-recipes.md          # SVG 版面規則、顏色語意、圖形配方、座標軸、逐步動畫與滑桿
+skills/explainer-figure/        # 繪圖；只由 explainer-page 讀取
+├── SKILL.md                    # 圖說明單、圖型選擇、單圖自檢（含對比檢查）
+├── references/
+│   ├── svg-recipes.md          # SVG 版面規則、語意色與概念色、圖形配方、座標軸、逐步動畫與滑桿
+│   ├── cards.md                # 歸納卡：使用時機、結構、上限
+│   ├── pictorial.md            # 具象插圖：分層容器、剪影、物件與組成、介面示意
+│   └── icons.md                # 圖示名稱，以及把用到的圖示複製進頁面的指令
+└── assets/icons/
+    ├── lucide.svg              # Lucide 圖示子集（106 個）
+    └── LICENSE                 # Lucide 授權（ISC；部分圖示為 MIT）
 examples/explain-as-webpage/    # 範例：說明本儲存庫的單頁網頁（英文與繁體中文）
 examples/autoresearch/          # 範例：主頁＋兩個程式導讀子頁
 examples/llm-wiki/              # 範例（繁中）：由文件產出的網頁
@@ -138,19 +146,20 @@ examples/starship-reusability/  # 範例（繁中）：由查證來源產出的�
 .claude-plugin/                 # Claude Code 的 plugin 與 marketplace manifest
 .codex-plugin/                  # Codex 的 plugin manifest
 .agents/plugins/                # Codex 的 marketplace manifest
-docs/ideas/                     # 構想摘要
+docs/ideas/                     # 構想摘要；視覺表現形式這一輪的計畫與待辦也放在這裡
 docs/specs/                     # 本輪規格（材料模式）
 docs/images/                    # README 用圖：封面、貼文截圖、三個層級截圖
-tasks/                          # 實作計畫與待辦
+tasks/                          # 材料模式那一輪的實作計畫與待辦
 ```
 
 ## 刻意不做的事
 
-- **影片（不產出，也不接受為材料）**：最高層級是瀏覽器內的逐步動畫，不使用 manim、ffmpeg 或語音合成。影片的工具鏈與產出成本高，而「過程」類的疑問用逐步動畫已能說明。代理無法觀看影片，所以也不接受影片網址作為材料。
+- **不產出影片**：最高層級是瀏覽器內的逐步動畫，不使用 manim、ffmpeg 或語音合成。影片的工具鏈與產出成本高，而「過程」類的疑問用逐步動畫已能說明。
+- **不直接讀取讀不到的材料**：代理不觀看影片，也不繞過付費牆或登入。遇到這類材料，它會提出取得文字的方式：你能取得的全文、逐字稿，或用 NotebookLM 這類工具整理的筆記。
 - **外部 CDN**：例如 MathJax、D3、Mermaid。公式改用 HTML 上下標表示。
 - **Sphinx 建置**：只仿照它的外觀。
 - **跨主題索引或知識庫**：頁面樹只限於同一主題（一個主頁加上它的子頁），避免增加管理負擔。
 
 ## 授權
 
-MIT
+MIT。內附的圖示來自 [Lucide](https://lucide.dev)（ISC 授權；衍生自 Feather 的圖示為 MIT），見 `skills/explainer-figure/assets/icons/LICENSE`。

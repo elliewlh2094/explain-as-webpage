@@ -125,11 +125,11 @@ svg .dot { fill: var(--blue); } svg .dot.bad { fill: var(--red); } svg .dot.good
 </nav>
 
 <div class="main"><main class="content">
-<div class="crumbs">sphinx-style-notes-maker » explain-as-webpage</div>
+<div class="crumbs">explain-as-webpage » explain-as-webpage</div>
 <h1>explain-as-webpage: turn what you do not understand into one knowledge page</h1>
 
 <div class="admonition tip"><p class="admonition-title">Conclusion</p>
-<p>This repository provides one agent skill, <code>explain-as-webpage</code>. You give it a project, a document, or a topic, plus your questions. The agent then follows the 7 steps in <code>SKILL.md</code> and builds one self-contained HTML page in the Read the Docs style that opens offline. Only step 4 needs you: the agent lists the questions, the presentation tier, and the output path once, and it builds only after you answer. The rules are split into 1 main file and 5 reference files. Every session holds only the description (an estimated 400 tokens); calling the skill loads the main file (an estimated 3.7k tokens); the reference files load only at the step that needs them.</p></div>
+<p>This repository provides one agent skill, <code>explainer-page</code>. You give it a project, a document, or a topic, plus your questions. The agent then follows the 7 steps in <code>SKILL.md</code> and builds one self-contained HTML page in the Read the Docs style that opens offline. Only step 4 needs you: the agent lists the questions, the presentation tier, and the output path once, and it builds only after you answer. The rules are split into 1 main file and 5 reference files. Every session holds only the description (an estimated 400 tokens); calling the skill loads the main file (an estimated 3.7k tokens); the reference files load only at the step that needs them.</p></div>
 
 <h2 id="flow">How does one request become one page?</h2>
 <p><a href="#fig-1">Figure 1</a> shows one request going through the 7 steps of <code>SKILL.md</code>. The second line of each box is the file that step reads or the thing it produces. The next sections follow the figure: the material modes of step 1, the page type and tier of steps 2 and 3, and then when each file is read and how pages grow with follow-up questions.</p>
@@ -162,7 +162,7 @@ svg .dot { fill: var(--blue); } svg .dot.bad { fill: var(--red); } svg .dot.good
 </svg>
 <figcaption>Figure 1. Of the 7 steps, only step 4 stops for the user. The reference files are read at the steps that need them, not all at the start.</figcaption>
 </figure>
-<p class="src">Source: <code>skills/explain-as-webpage/SKILL.md</code> § Process (steps 1–7).</p>
+<p class="src">Source: <code>skills/explainer-page/SKILL.md</code> § Process (steps 1–7).</p>
 <p>The table follows one real request through the steps: the one that produced <code>examples/starship-reusability/</code>, a Traditional Chinese example in this repository. It is a topic-mode request (a topic, no material), so step 1 starts with research.</p>
 <table>
 <tr><th>Step</th><th>What it does</th><th>What happened for the Starship request</th></tr>
@@ -274,7 +274,7 @@ svg .dot { fill: var(--blue); } svg .dot.bad { fill: var(--red); } svg .dot.good
 </svg>
 <figcaption>Figure 3. A session pays only for the description. A first build in project mode does not need sources-and-research.md or extending-pages.md. (All numbers are estimates.)</figcaption>
 </figure>
-<p class="src">The unit is tokens because this section asks about loading cost, and a model's context and its price are counted in tokens; file size is only a proxy. Source: estimates from <code>claude --plugin-dir . plugin details sphinx-style-notes-maker</code> (about 403 tokens always on, about 3.7k tokens per call). For the reference files and the template, each file was wrapped as its own test skill (3 lines of frontmatter added) and estimated with the same command. When each file is read: <code>SKILL.md</code> steps 1, 2, 4, 5 and the start of § Process.</p>
+<p class="src">The unit is tokens because this section asks about loading cost, and a model's context and its price are counted in tokens; file size is only a proxy. Source: estimates from <code>claude --plugin-dir . plugin details explain-as-webpage</code> (about 403 tokens always on, about 3.7k tokens per call). For the reference files and the template, each file was wrapped as its own test skill (3 lines of frontmatter added) and estimated with the same command. When each file is read: <code>SKILL.md</code> steps 1, 2, 4, 5 and the start of § Process.</p>
 <p>Add up the estimates. A first build in project mode reads <code>SKILL.md</code>, <code>page-types.md</code>, <code>writing-rules.md</code>, <code>svg-recipes.md</code>, and the template: 3.7k + 3.2k + 3.7k + 6.4k + 6.2k ≈ 23.2k tokens. Document or topic mode adds <code>sources-and-research.md</code>, about 28.9k tokens. All files together are about 31.8k tokens. File size does not stand in for tokens: <code>writing-rules.md</code> is only 9.8 KB, but its estimate is about 3.7k, the same as the 11.8 KB <code>SKILL.md</code>, because the files differ in their share of CJK text and code. <code>CLAUDE.md</code> also states the rule: when the rules change, <code>SKILL.md</code> stays at about 130 lines or fewer, and the details go into the reference files.</p>
 <p class="src">Source: the estimates in Figure 3 (the sums are computed on this page); file sizes measured with <code>wc -c</code>; <code>CLAUDE.md</code> § 架構 (architecture), last paragraph.</p>
 <div class="admonition warning"><p class="admonition-title">Inference</p>
@@ -313,20 +313,20 @@ svg .dot { fill: var(--blue); } svg .dot.bad { fill: var(--red); } svg .dot.good
 
 <h2 id="install">How do I install it?</h2>
 <pre><code># Claude Code: install as a plugin
-claude plugin marketplace add elliewlh2094/sphinx-style-notes-maker
-claude plugin install sphinx-style-notes-maker@sphinx-style-notes-maker
+claude plugin marketplace add elliewlh2094/explain-as-webpage
+claude plugin install explain-as-webpage@explain-as-webpage
 # Codex: install as a plugin
-codex plugin marketplace add elliewlh2094/sphinx-style-notes-maker
-codex plugin add sphinx-style-notes-maker@sphinx-style-notes-maker
+codex plugin marketplace add elliewlh2094/explain-as-webpage
+codex plugin add explain-as-webpage@explain-as-webpage
 # Or copy the skill folder
-cp -r skills/explain-as-webpage ~/.claude/skills/   # Claude Code
-cp -r skills/explain-as-webpage ~/.codex/skills/    # Codex</code></pre>
+cp -r skills/explainer-page skills/explainer-figure ~/.claude/skills/   # Claude Code
+cp -r skills/explainer-page skills/explainer-figure ~/.codex/skills/    # Codex</code></pre>
 <table>
 <tr><th>Installed as</th><th>Call it as</th></tr>
-<tr><td style="white-space:nowrap">Claude Code (plugin)</td><td><code>/sphinx-style-notes-maker:explain-as-webpage</code></td></tr>
-<tr><td style="white-space:nowrap">Claude Code (copy)</td><td><code>/explain-as-webpage</code></td></tr>
-<tr><td style="white-space:nowrap">Codex (plugin)</td><td><code>sphinx-style-notes-maker:explain-as-webpage</code></td></tr>
-<tr><td style="white-space:nowrap">Codex (copy)</td><td><code>@explain-as-webpage</code></td></tr>
+<tr><td style="white-space:nowrap">Claude Code (plugin)</td><td><code>/explain-as-webpage:explainer-page</code></td></tr>
+<tr><td style="white-space:nowrap">Claude Code (copy)</td><td><code>/explainer-page</code></td></tr>
+<tr><td style="white-space:nowrap">Codex (plugin)</td><td><code>explain-as-webpage:explainer-page</code></td></tr>
+<tr><td style="white-space:nowrap">Codex (copy)</td><td><code>@explainer-page</code></td></tr>
 </table>
 <p class="src">Source: <code>README.md</code> § Installation. After you install it, start a new session so that the tool loads the skill.</p>
 
@@ -347,17 +347,17 @@ cp -r skills/explain-as-webpage ~/.codex/skills/    # Codex</code></pre>
 
 <h2 id="sources">Sources</h2>
 <ul>
-<li><code>skills/explain-as-webpage/SKILL.md</code> — § Process steps 1–7, § When to Use, § Red Flags</li>
-<li><code>skills/explain-as-webpage/references/sources-and-research.md</code> — §1 modes, §2 full text, §7 research, §8 source grades, §9 high-risk topics</li>
-<li><code>skills/explain-as-webpage/references/page-types.md</code> — page type table</li>
-<li><code>skills/explain-as-webpage/references/writing-rules.md</code> — § Length budget</li>
-<li><code>skills/explain-as-webpage/references/extending-pages.md</code> — §2 placement, §4 build, §5 checks, §6 a tree from the first build</li>
-<li><code>skills/explain-as-webpage/assets/template.html</code> — the template (254 lines)</li>
+<li><code>skills/explainer-page/SKILL.md</code> — § Process steps 1–7, § When to Use, § Red Flags</li>
+<li><code>skills/explainer-page/references/sources-and-research.md</code> — §1 modes, §2 full text, §7 research, §8 source grades, §9 high-risk topics</li>
+<li><code>skills/explainer-page/references/page-types.md</code> — page type table</li>
+<li><code>skills/explainer-page/references/writing-rules.md</code> — § Length budget</li>
+<li><code>skills/explainer-page/references/extending-pages.md</code> — §2 placement, §4 build, §5 checks, §6 a tree from the first build</li>
+<li><code>skills/explainer-page/assets/template.html</code> — the template (254 lines)</li>
 <li><code>docs/specs/explain-as-webpage-v3.md</code> — §0 problem statement and scope</li>
 <li><code>tasks/plan.md</code> — § "T1（2026-10-03，Claude Code）", § "T15 結果（2026-10-04）"; <code>tasks/todo.md</code></li>
 <li><code>README.md</code> — § Inspiration, § What it produces, § Examples, § Installation</li>
 <li><code>CLAUDE.md</code> — § 架構 (architecture)</li>
-<li><code>.claude-plugin/plugin.json</code> — version 0.2.0; token estimates from <code>claude --plugin-dir . plugin details sphinx-style-notes-maker</code></li>
+<li><code>.claude-plugin/plugin.json</code> — version 0.2.0; token estimates from <code>claude --plugin-dir . plugin details explain-as-webpage</code></li>
 <li><code>examples/starship-reusability/starship-reusability.html</code>, <code>examples/autoresearch/</code> — the running examples</li>
 </ul>
 </main></div>

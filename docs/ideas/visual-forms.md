@@ -93,8 +93,12 @@ MVP 只做 B 類具象插圖、D 類歸納卡與圖示，不涉及點陣圖，�
 ## Open Questions
 
 - 選 Lucide（約 1.6k 個，ISC）還是 Tabler（約 5k 個，MIT）？建議先統計需要哪些圖示，再看哪一套涵蓋較完整。
+  - **已決定（2026-10-06）**：Lucide。兩套對 101 個圖示概念各缺 3 個；Lucide 單一圖示較小。子集 106 個，見 `visual-forms-plan.md` T1、T7。
 - skill 名稱：`draw-figure` 太泛用，容易和 dataviz 等 skill 競爭觸發。是否改名，例如 `explainer-figure`、`explainer-cite`？
+  - **已決定（2026-10-06）**：繪圖 skill 叫 `explainer-figure`；第二階段的引用 skill 對應命名為 `explainer-cite`。
 - draw-figure 是否開放使用者單獨呼叫（例如畫 README 封面）？這會決定它的 description 寫法，以及單獨使用時如何取得 `template.html` 的樣式。
+  - **已決定（2026-10-06）**：只由編排者以相對路徑讀取；frontmatter 設 `disable-model-invocation: true`、`user-invocable: false`。T4 確認 Claude Code 不會自動觸發；Codex 的 skill 清單未測。
 - （第二階段）頁面樹的 `<slug>.assets/` 要每頁一個資料夾，還是整個主題共用一個？
 - 版本號是否升為 0.4.0？
+  - **已決定（2026-10-07）**：升為 0.4.0，四個 manifest 檔同步（T14）。
 - （未來）L3 層級：以 [anime.js](https://animejs.com)（MIT，v4 完整版約 24.5 KB，有 UMD 單檔版本，可內嵌）實作 SVG 描線、形狀變形、沿路徑移動。L0–L2 是依核心問題的類型定義的，L3 也要先定義它回答哪一類問題（例如連續變形、沿路徑的運動、兩狀態間的漸變），anime.js 只是實作手段；並要決定頁面大小上限如何容納這 24.5 KB。

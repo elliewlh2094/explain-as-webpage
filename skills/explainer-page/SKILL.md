@@ -1,9 +1,9 @@
 ---
-name: explain-as-webpage
+name: explainer-page
 description: Builds one self-contained HTML explainer page (Read the Docs look, inline SVG diagrams, optional step-by-step animation) that teaches an unfamiliar technique, method, or idea, using the user's own material as the examples - their project's code, data, and reports, or a document they give (web article URL, PDF, Markdown or text file); for a topic they only name, it researches and grades sources. Use when the user wants to understand why a technique is used in their project, what a package the agent built does, or how a chain of causes leads to a result; when they want an article, PDF, notes, or a named topic turned into an easier-to-read page; or when they ask for an explainer, primer, visual explanation, or knowledge page. Also use for follow-up questions on an existing page: it extends the page or adds linked child pages. Picks the cheapest presentation tier and confirms it before building. Writes in the user's language. 觸發詞：解釋、說明、看不懂、為什麼要這樣做、圖解、知識網頁、知識文件、學習筆記、整理成網頁、這篇文章、這份 PDF、查資料做成網頁、追問、補充頁面。
 ---
 
-# Explain as Webpage
+# Explainer Page
 
 ## Overview
 
@@ -87,9 +87,9 @@ Then, if `google-chrome` / `chromium` is available, render and **look at** both 
 
 ```bash
 google-chrome --headless=new --disable-gpu --hide-scrollbars --window-size=1280,2400 --screenshot=/tmp/wide.png "file://$F"
-printf '<iframe id="f" src="file://%s" width="390" height="2400" style="border:0"></iframe><script>f.onload=function(){var d=f.contentDocument.documentElement;document.title=d.scrollWidth>d.clientWidth?"OVERFLOW":"ok"}</script>' "$F" > /tmp/explain-as-webpage-narrow.html
-google-chrome --headless=new --disable-gpu --allow-file-access-from-files --virtual-time-budget=3000 --dump-dom file:///tmp/explain-as-webpage-narrow.html | grep -o '<title>[^<]*'   # must print <title>ok
-google-chrome --headless=new --disable-gpu --allow-file-access-from-files --window-size=500,2400 --screenshot=/tmp/narrow.png file:///tmp/explain-as-webpage-narrow.html; rm /tmp/explain-as-webpage-narrow.html
+printf '<iframe id="f" src="file://%s" width="390" height="2400" style="border:0"></iframe><script>f.onload=function(){var d=f.contentDocument.documentElement;document.title=d.scrollWidth>d.clientWidth?"OVERFLOW":"ok"}</script>' "$F" > /tmp/explainer-page-narrow.html
+google-chrome --headless=new --disable-gpu --allow-file-access-from-files --virtual-time-budget=3000 --dump-dom file:///tmp/explainer-page-narrow.html | grep -o '<title>[^<]*'   # must print <title>ok
+google-chrome --headless=new --disable-gpu --allow-file-access-from-files --window-size=500,2400 --screenshot=/tmp/narrow.png file:///tmp/explainer-page-narrow.html; rm /tmp/explainer-page-narrow.html
 ```
 
 Chrome windows are at least 500px wide, so the narrow check renders the page in a 390px iframe; `OVERFLOW` means the whole page scrolls sideways (a failure). Look for text overflowing boxes, overlapping labels, arrows that miss their targets, and empty figures. If no browser is available, say so in the report. If the page is part of a page tree, also run the checks in `references/extending-pages.md` §5. To inspect the figures, or one stepper frame, see `../explainer-figure/SKILL.md` § Self-check.

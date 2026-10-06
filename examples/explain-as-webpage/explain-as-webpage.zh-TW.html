@@ -125,11 +125,11 @@ svg .dot { fill: var(--blue); } svg .dot.bad { fill: var(--red); } svg .dot.good
 </nav>
 
 <div class="main"><main class="content">
-<div class="crumbs">sphinx-style-notes-maker » explain-as-webpage</div>
+<div class="crumbs">explain-as-webpage » explain-as-webpage</div>
 <h1>explain-as-webpage：把看不懂的東西做成一頁知識網頁</h1>
 
 <div class="admonition tip"><p class="admonition-title">結論</p>
-<p>本儲存庫提供一個代理技能（skill）<code>explain-as-webpage</code>：使用者給它一個專案、一份文件或一個主題，再加上想問的問題，代理就依 <code>SKILL.md</code> 的 7 個步驟，產出一個單檔、離線可開的 Read the Docs 風格 HTML 網頁。流程中只有第 4 步需要使用者：代理一次列出疑問、呈現層級與輸出路徑，使用者回答後才動工。規則拆成 1 個主檔與 5 個參考檔，每次對話常駐的只有描述（估計約 400 tokens），呼叫時再載入主檔（估計約 3.7k tokens），其餘參考檔在需要的步驟才讀。</p></div>
+<p>本儲存庫提供一個代理技能（skill）<code>explainer-page</code>：使用者給它一個專案、一份文件或一個主題，再加上想問的問題，代理就依 <code>SKILL.md</code> 的 7 個步驟，產出一個單檔、離線可開的 Read the Docs 風格 HTML 網頁。流程中只有第 4 步需要使用者：代理一次列出疑問、呈現層級與輸出路徑，使用者回答後才動工。規則拆成 1 個主檔與 5 個參考檔，每次對話常駐的只有描述（估計約 400 tokens），呼叫時再載入主檔（估計約 3.7k tokens），其餘參考檔在需要的步驟才讀。</p></div>
 
 <h2 id="flow">一個請求怎麼變成一頁網頁？</h2>
 <p><a href="#fig-1">圖 1</a> 是一個請求走過 <code>SKILL.md</code> 7 個步驟的主流程，每一格的第二行是那一步讀的檔案或產出。後面各節依序展開：第 1 步的材料分流、第 2 與第 3 步的頁型與層級，最後是檔案載入的時機與追問時的延伸。</p>
@@ -162,7 +162,7 @@ svg .dot { fill: var(--blue); } svg .dot.bad { fill: var(--red); } svg .dot.good
 </svg>
 <figcaption>圖 1　7 步中只有第 4 步停下來等使用者；參考檔分散在各步驟讀取，而不是一開始全部載入。</figcaption>
 </figure>
-<p class="src">來源：<code>skills/explain-as-webpage/SKILL.md</code> § Process（第 1–7 步）</p>
+<p class="src">來源：<code>skills/explainer-page/SKILL.md</code> § Process（第 1–7 步）</p>
 <p>以本儲存庫的範例 <code>examples/starship-reusability/</code> 為例，下表是這個請求在每一步實際發生的事。它是 topic 模式（只給主題、沒有材料），所以第 1 步要先查資料。</p>
 <table>
 <tr><th>步驟</th><th>做什麼</th><th>Starship 請求的實際情況</th></tr>
@@ -273,7 +273,7 @@ svg .dot { fill: var(--blue); } svg .dot.bad { fill: var(--red); } svg .dot.good
 </svg>
 <figcaption>圖 3　每次對話只付 description 的成本；一次專案模式的首次產出，用不到 sources-and-research.md 與 extending-pages.md（數字皆為估計值）。</figcaption>
 </figure>
-<p class="src">單位選 token：本節問的是載入成本，而模型的上下文與費用以 token 計，檔案大小只是代理指標。來源：<code>claude --plugin-dir . plugin details sphinx-style-notes-maker</code> 的估計值（常駐約 403 tokens、呼叫時約 3.7k tokens）。參考檔與模板的數字，是把每個檔案各包成一個測試用 skill（只加 3 行 frontmatter），再以同一個指令估得。讀取時機見 <code>SKILL.md</code> 第 1、2、4、5 步與 § Process 開頭。</p>
+<p class="src">單位選 token：本節問的是載入成本，而模型的上下文與費用以 token 計，檔案大小只是代理指標。來源：<code>claude --plugin-dir . plugin details explain-as-webpage</code> 的估計值（常駐約 403 tokens、呼叫時約 3.7k tokens）。參考檔與模板的數字，是把每個檔案各包成一個測試用 skill（只加 3 行 frontmatter），再以同一個指令估得。讀取時機見 <code>SKILL.md</code> 第 1、2、4、5 步與 § Process 開頭。</p>
 <p>用估計值算一次：專案模式的首次產出會讀 <code>SKILL.md</code>、<code>page-types.md</code>、<code>writing-rules.md</code>、<code>svg-recipes.md</code> 與模板，3.7k＋3.2k＋3.7k＋6.4k＋6.2k ≈ 23.2k tokens；文件或主題模式多讀 <code>sources-and-research.md</code>，約 28.9k tokens；全部檔案約 31.8k tokens。檔案大小不能代替 token 數：<code>writing-rules.md</code> 只有 9.8 KB，估計值卻和 11.8 KB 的 <code>SKILL.md</code> 一樣約 3.7k，因為各檔案中文與程式碼的比例不同。<code>CLAUDE.md</code> 也明文規定：修改規則時 <code>SKILL.md</code> 維持約 130 行以內，細節放進參考檔。</p>
 <p class="src">來源：圖 3 的估計值（加總為本頁計算）；檔案大小以 <code>wc -c</code> 量測；<code>CLAUDE.md</code> §「架構」最後一段</p>
 <div class="admonition warning"><p class="admonition-title">推論</p>
@@ -312,20 +312,20 @@ svg .dot { fill: var(--blue); } svg .dot.bad { fill: var(--red); } svg .dot.good
 
 <h2 id="install">怎麼安裝？</h2>
 <pre><code># Claude Code：以 plugin 安裝
-claude plugin marketplace add elliewlh2094/sphinx-style-notes-maker
-claude plugin install sphinx-style-notes-maker@sphinx-style-notes-maker
+claude plugin marketplace add elliewlh2094/explain-as-webpage
+claude plugin install explain-as-webpage@explain-as-webpage
 # Codex：以 plugin 安裝
-codex plugin marketplace add elliewlh2094/sphinx-style-notes-maker
-codex plugin add sphinx-style-notes-maker@sphinx-style-notes-maker
+codex plugin marketplace add elliewlh2094/explain-as-webpage
+codex plugin add explain-as-webpage@explain-as-webpage
 # 或直接複製 skill 資料夾
-cp -r skills/explain-as-webpage ~/.claude/skills/   # Claude Code
-cp -r skills/explain-as-webpage ~/.codex/skills/    # Codex</code></pre>
+cp -r skills/explainer-page skills/explainer-figure ~/.claude/skills/   # Claude Code
+cp -r skills/explainer-page skills/explainer-figure ~/.codex/skills/    # Codex</code></pre>
 <table>
 <tr><th>安裝方式</th><th>呼叫名稱</th></tr>
-<tr><td style="white-space:nowrap">Claude Code（plugin）</td><td><code>/sphinx-style-notes-maker:explain-as-webpage</code></td></tr>
-<tr><td style="white-space:nowrap">Claude Code（複製）</td><td><code>/explain-as-webpage</code></td></tr>
-<tr><td style="white-space:nowrap">Codex（plugin）</td><td><code>sphinx-style-notes-maker:explain-as-webpage</code></td></tr>
-<tr><td style="white-space:nowrap">Codex（複製）</td><td><code>@explain-as-webpage</code></td></tr>
+<tr><td style="white-space:nowrap">Claude Code（plugin）</td><td><code>/explain-as-webpage:explainer-page</code></td></tr>
+<tr><td style="white-space:nowrap">Claude Code（複製）</td><td><code>/explainer-page</code></td></tr>
+<tr><td style="white-space:nowrap">Codex（plugin）</td><td><code>explain-as-webpage:explainer-page</code></td></tr>
+<tr><td style="white-space:nowrap">Codex（複製）</td><td><code>@explainer-page</code></td></tr>
 </table>
 <p class="src">來源：<code>README.md</code> § Installation。安裝後要開新的工作階段，工具才會載入 skill。</p>
 
@@ -346,17 +346,17 @@ cp -r skills/explain-as-webpage ~/.codex/skills/    # Codex</code></pre>
 
 <h2 id="sources">來源</h2>
 <ul>
-<li><code>skills/explain-as-webpage/SKILL.md</code> — § Process 第 1–7 步、§ When to Use、§ Red Flags</li>
-<li><code>skills/explain-as-webpage/references/sources-and-research.md</code> — §1 模式、§2 取得全文、§7 查證、§8 來源等級、§9 高風險主題</li>
-<li><code>skills/explain-as-webpage/references/page-types.md</code> — 頁型表</li>
-<li><code>skills/explain-as-webpage/references/writing-rules.md</code> — § Length budget</li>
-<li><code>skills/explain-as-webpage/references/extending-pages.md</code> — §2 落點、§4 建置、§5 檢查、§6 首次就建頁面樹</li>
-<li><code>skills/explain-as-webpage/assets/template.html</code> — 模板（254 行）</li>
+<li><code>skills/explainer-page/SKILL.md</code> — § Process 第 1–7 步、§ When to Use、§ Red Flags</li>
+<li><code>skills/explainer-page/references/sources-and-research.md</code> — §1 模式、§2 取得全文、§7 查證、§8 來源等級、§9 高風險主題</li>
+<li><code>skills/explainer-page/references/page-types.md</code> — 頁型表</li>
+<li><code>skills/explainer-page/references/writing-rules.md</code> — § Length budget</li>
+<li><code>skills/explainer-page/references/extending-pages.md</code> — §2 落點、§4 建置、§5 檢查、§6 首次就建頁面樹</li>
+<li><code>skills/explainer-page/assets/template.html</code> — 模板（254 行）</li>
 <li><code>docs/specs/explain-as-webpage-v3.md</code> — §0 問題陳述與範圍</li>
 <li><code>tasks/plan.md</code> — §「T1（2026-10-03，Claude Code）」、§「T15 結果（2026-10-04）」；<code>tasks/todo.md</code></li>
 <li><code>README.md</code> — § Inspiration、§ What it produces、§ Examples、§ Installation</li>
 <li><code>CLAUDE.md</code> — § 架構</li>
-<li><code>.claude-plugin/plugin.json</code> — 版本 0.2.0；<code>claude --plugin-dir . plugin details sphinx-style-notes-maker</code> 的 token 估計</li>
+<li><code>.claude-plugin/plugin.json</code> — 版本 0.2.0；<code>claude --plugin-dir . plugin details explain-as-webpage</code> 的 token 估計</li>
 <li><code>examples/starship-reusability/starship-reusability.html</code>、<code>examples/autoresearch/</code> — 貫穿全頁的例子</li>
 </ul>
 </main></div>

@@ -2,7 +2,7 @@
 
 A pictorial figure draws a concrete object, a body, or a container, so the reader sees *where* the parts are: what goes in which layer of a backpack, where the water of the body is, what a game object holds. Use it when position or containment carries the meaning. For causes, flows, and steps, use a mechanism figure (`svg-recipes.md`).
 
-The object can be the real thing (a backpack) or a metaphor for an abstract one (a jar for a game object). A metaphor needs one sentence in the paragraph that says where it stops holding (`../explain-as-webpage/references/writing-rules.md` § Reader).
+The object can be the real thing (a backpack) or a metaphor for an abstract one (a jar for a game object). A metaphor needs one sentence in the paragraph that says where it stops holding (`../explainer-page/references/writing-rules.md` § Reader).
 
 ## Rules for every pictorial figure
 
@@ -14,7 +14,7 @@ These rules come from test drawings; each one prevents a failure that was seen.
 - **Colours:** the outline is `outline` (text colour). A part that is a key concept takes its concept class (`box c1`, `area c1`); other parts are `box` or `box muted`. Semantic colours (`bad`, `good`, `warn`) only mark a problem or a fix, as in any figure.
 - **Scale:** a drawing is a schematic. The caption says "示意，不按比例" / "Schematic, not to scale", unless the sizes come from data (then give the source, as for any number).
 - **Icons** may label a part (`icons.md`), but the object itself is drawn, not an icon.
-- **Notes stay in the figure.** The paragraph points to a part and says what to notice; it does not restate the notes (`../explain-as-webpage/references/writing-rules.md` § Figures and text, *Do not repeat the figure in the text*).
+- **Notes stay in the figure.** The paragraph points to a part and says what to notice; it does not restate the notes (`../explainer-page/references/writing-rules.md` § Figures and text, *Do not repeat the figure in the text*).
 - **Check the screenshot for text on shapes.** The text bounds of a figure can be inside the canvas and still cover a shape or a line. Only the figure screenshot (`SKILL.md` § Self-check) shows this; move the label or shorten it.
 
 ## Recipe P1 — Layered container
