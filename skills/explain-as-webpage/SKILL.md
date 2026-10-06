@@ -40,6 +40,7 @@ In document and topic modes, first read `references/sources-and-research.md`: ho
 - **Page type and spine**: pick the type in `references/page-types.md` (an argument, a roadmap, a practical guide, an evolution, code, or by default a mechanism). For a mechanism, the spine is the causal chain: cause → mechanism → consequence → fix → measured result. One line per link, each link backed by a fact or marked as inference.
 - **Counterfactual pairs**: the same project case without and with the technique, with real numbers. In document and topic modes, only if a source gives such a case.
 - **Key concepts**: at most 5 the reader must learn. Every other technical term still gets a one-clause definition at first use (see `writing-rules.md`).
+- **Figure briefs**: one per planned figure, in the format of `../explainer-figure/SKILL.md` § Figure brief: the question it answers, its type (mechanism, numeric, summary cards, pictorial), its facts with sources and units, and the concept colour of each key concept that appears in more than one figure.
 
 ### 3. Choose the presentation tier
 

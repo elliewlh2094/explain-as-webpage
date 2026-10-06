@@ -154,9 +154,9 @@
 **說明：** 讓編排者在學習摘要中為每張圖寫圖說明單，並在產出步驟交給 explainer-figure。
 
 **驗收條件：**
-- [ ] 編排者第 2 步加入圖說明單（格式在 explainer-figure）；第 5 步指向 `../explainer-figure/SKILL.md`；寫明兩個 skill 需並列安裝
-- [ ] `page-types.md` 標出各頁型可用的新圖型
-- [ ] 讀圖四問由兩邊互相引用，不重複
+- [x] 編排者第 2 步加入圖說明單（格式在 explainer-figure）；第 5 步指向 `../explainer-figure/SKILL.md`；寫明兩個 skill 需並列安裝
+- [x] `page-types.md` 標出各頁型可用的新圖型
+- [x] 讀圖四問由兩邊互相引用，不重複
 
 **驗證：** 編排者 `SKILL.md` ≤ 約 130 行；逐條比對新舊規則，沒有矛盾。
 
@@ -471,4 +471,21 @@
 | 模板大小、`SKILL.md` 行數 | 20,083 B；編排者 129、explainer-figure 111 |
 
 **觀察到的風險：** 測試頁重建後忘了重跑圖示同步指令，圖 3 的圖示就直接消失，畫面上沒有任何錯誤提示。`SKILL.md` 的自檢已要求同步指令必須沒有輸出；T10–T12 實際產頁時，要確認代理有執行這一步。
+
+### T9（2026-10-06）
+
+**結論：編排者第 2 步加入「圖說明單」，`page-types.md` 寫明歸納卡與具象插圖可用於任何頁型的單一問題。** 第 5 步指向 explainer-figure 與「兩個 skill 需並列安裝」已在 T3 完成，本任務不再修改。
+
+- `SKILL.md` 第 2 步新增一條：每張預計的圖寫一份圖說明單，格式見 `../explainer-figure/SKILL.md` § Figure brief，並列出圖型（機制、數值、歸納卡、具象）與概念色。行數 129 → 130，仍在約 130 行的上限內。
+- `page-types.md`：頁型表下方加一段。歸納卡與具象插圖不綁定頁型，各用於一個問題；具象插圖也可以當機制頁或實務指南頁的圖 1，條件是主要問題在問位置或容納關係。頁型表與各頁型的圖 1 不變。
+- 讀圖四問只定義在 `writing-rules.md` § Figures and text；`svg-recipes.md`、`cards.md` 與 explainer-figure `SKILL.md` 都引用它，沒有重寫（`grep` 確認）。
+
+驗證（測試腳本 `$CLAUDE_JOB_DIR/tmp/t9/test.sh`）：
+
+| 項目 | 結果 |
+|---|---|
+| 測試（實作前） | 第 2 步沒有圖說明單；`page-types.md` 沒有提到新圖型 |
+| 測試（實作後）：第 2 步引用 § Figure brief、並列安裝說明、`page-types.md` 提到 `cards.md` 與 `pictorial.md`、行數 ≤ 131、引用檢查 | `ok` |
+| `claude plugin validate .` | 通過（預期的 `CLAUDE.md` 警告） |
+| `plugin details` on-invoke | explain-as-webpage ~4.1k、explainer-figure ~2.4k（T3 時為 ~3.9k、~1.8k） |
 

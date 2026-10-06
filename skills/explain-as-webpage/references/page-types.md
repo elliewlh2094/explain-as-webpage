@@ -12,7 +12,7 @@ Pick one page type in SKILL.md step 2, from what the material is. The type decid
 | Practical guide | how to prepare for or decide something | decision tree or grouped checklist | 8 |
 | Evolution | an idea that changed through named stages | evolution of stages | 9 |
 
-A page has one type. If one question needs another shape (e.g. a mechanism inside a roadmap), give that section its own figure; Figure 1 stays the spine. The "counterfactual" in `writing-rules.md` is required only in project mode; each type below says what replaces it when the material gives no such case.
+A page has one type. If one question needs another shape (e.g. a mechanism inside a roadmap), give that section its own figure; Figure 1 stays the spine. Two figure types fit inside any page type, for one question each: **summary cards** when a section lists 4–6 parallel items with the same fields (the layers of a package, the stages of a plan with their checks; `../explainer-figure/references/cards.md`), and a **pictorial figure** when the answer is where things are in an object, a body, or a container (what goes in which layer of a bag, what a game object holds; `../explainer-figure/references/pictorial.md`). A pictorial figure can also be Figure 1 of a mechanism or practical-guide page whose main question is about position or containment. The "counterfactual" in `writing-rules.md` is required only in project mode; each type below says what replaces it when the material gives no such case.
 
 ## Mechanism (default)
 
