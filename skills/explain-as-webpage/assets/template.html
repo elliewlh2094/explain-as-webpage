@@ -13,6 +13,10 @@
   --rule: #e1e4e5; --code-bg: #f8f8f8; --row-alt: #f3f6f6;
   --blue: #2980b9; --blue-bg: #e7f2fa; --red: #c0392b; --red-bg: #fdf3f2;
   --green: #16a085; --green-bg: #dbfaf4; --orange: #e67e22; --orange-bg: #ffedcc; --grey-bg: #f0f0f0;
+  --green-text: #107360; /* --green is too light for text (3.2:1 on --bg) */
+  /* Concept colours: one per key concept, never for good/bad (explainer-figure: svg-recipes.md § Colour meaning) */
+  --c1: #7d3c98; --c1-bg: #f2ecf5; --c2: #56661a; --c2-bg: #eef0e8; --c3: #a61e6e; --c3-bg: #f6e8f0;
+  --c4: #7a5230; --c4-bg: #f2eeea; --c5: #4a3fa0; --c5-bg: #edecf6;
   --font: -apple-system, "Segoe UI", Roboto, "Noto Sans", "Liberation Sans", Arial, "DejaVu Sans", "Noto Sans CJK TC", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
   --mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, "Noto Sans Mono CJK TC", monospace;
 }
@@ -79,7 +83,7 @@ details > summary { cursor: pointer; font-weight: 700; }
 svg text { font-family: var(--font); font-size: 14px; fill: var(--text); }
 svg .sm { font-size: 12px; fill: var(--muted); }
 svg .b { font-weight: 700; }
-svg text.bad { fill: var(--red); } svg text.good { fill: var(--green); }
+svg text.bad { fill: var(--red); } svg text.good { fill: var(--green-text); }
 svg .box { fill: var(--blue-bg); stroke: var(--blue); stroke-width: 1.5; }
 svg .box.bad { fill: var(--red-bg); stroke: var(--red); }
 svg .box.good { fill: var(--green-bg); stroke: var(--green); }
@@ -89,6 +93,29 @@ svg .line { stroke: var(--text); stroke-width: 1.5; fill: none; }
 svg .line.bad { stroke: var(--red); } svg .line.good { stroke: var(--green); }
 svg .dash { stroke-dasharray: 5 4; }
 svg .dot { fill: var(--blue); } svg .dot.bad { fill: var(--red); } svg .dot.good { fill: var(--green); }
+/* Pictorial figures (explainer-figure: references/pictorial.md): container outline, leader line and pin,
+   silhouette = the same shapes drawn as .edge then .shape, filled regions as .area (concept colour optional) */
+svg .outline { fill: none; stroke: var(--text); stroke-width: 2; }
+svg .lead { fill: none; stroke: var(--muted); stroke-width: 1; } svg .pin { fill: var(--muted); }
+svg .edge { fill: var(--text); stroke: var(--text); stroke-width: 4; } svg .shape { fill: var(--grey-bg); stroke: none; }
+svg .area { fill: var(--cc, var(--blue)); opacity: .25; stroke: none; } /* group opacity: overlapping shapes do not darken; 10% tints are too faint */
+/* Concept colours: class c1-c5 on a box, line, dot, or text in SVG, or on a .chip in the text */
+.c1 { --cc: var(--c1); --cb: var(--c1-bg); } .c2 { --cc: var(--c2); --cb: var(--c2-bg); } .c3 { --cc: var(--c3); --cb: var(--c3-bg); }
+.c4 { --cc: var(--c4); --cb: var(--c4-bg); } .c5 { --cc: var(--c5); --cb: var(--c5-bg); }
+svg .box:is(.c1,.c2,.c3,.c4,.c5) { fill: var(--cb); stroke: var(--cc); }
+svg .line:is(.c1,.c2,.c3,.c4,.c5) { stroke: var(--cc); } svg .dot:is(.c1,.c2,.c3,.c4,.c5), svg text:is(.c1,.c2,.c3,.c4,.c5) { fill: var(--cc); }
+/* Icons: class icon on a <use> in SVG, or on an inline <svg> around a <use> in HTML (explainer-figure: references/icons.md) */
+.icon { fill: none; stroke: var(--cc, currentColor); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+svg.icon { display: inline-block; width: 1.15em; height: 1.15em; min-width: 0; margin: 0 .3em 0 0; vertical-align: -.2em; }
+.chip { display: inline-block; font-size: .85rem; line-height: 1.5; padding: 0 6px; border: 1px solid var(--cc, #999); border-radius: 3px; color: var(--cc, var(--text)); background: var(--cb, var(--grey-bg)); }
+
+/* Summary cards: a figure of 4-6 parallel items with the same fields (explainer-figure: references/cards.md) */
+.card-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.card-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+.card { min-width: 0; background: #fff; border: 1px solid var(--rule); border-top: 4px solid var(--cc, var(--blue)); padding: 8px 12px 10px; font-size: .875rem; line-height: 1.55; }
+.card .card-title { margin: 0 0 6px; font-size: 1rem; font-weight: 700; color: var(--cc, #2c2c2c); }
+.card dl { margin: 0; } .card dt { font-size: .8125rem; font-weight: 700; color: var(--muted); } .card dd { margin: 0 0 6px; }
+.card-legend { margin: 8px 0 0; font-size: .875rem; }
 
 /* Stepper (L2): controls are injected by the script below */
 .stepper-bar { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
@@ -105,6 +132,7 @@ svg .dot { fill: var(--blue); } svg .dot.bad { fill: var(--red); } svg .dot.good
   body.nav-open .side { display: block; }
   .main { margin-left: 0; }
   .content { padding: 16px 16px 48px; }
+  .card-grid, .card-grid.cols-3 { grid-template-columns: 1fr; }
 }
 @media print {
   .side, .topbar, .stepper-bar { display: none !important; }
@@ -113,11 +141,13 @@ svg .dot { fill: var(--blue); } svg .dot.bad { fill: var(--red); } svg .dot.good
 </style>
 </head>
 <body>
-<!-- Arrow markers shared by every SVG on the page: marker-end="url(#arr)" / url(#arr-bad) / url(#arr-good) -->
+<!-- Arrow markers shared by every SVG on the page: marker-end="url(#arr)" / url(#arr-bad) / url(#arr-good).
+     Icon symbols go between the icons markers; the command in explainer-figure references/icons.md fills them. -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
   <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#404040"/></marker>
   <marker id="arr-bad" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#c0392b"/></marker>
   <marker id="arr-good" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#16a085"/></marker>
+<!-- icons:start --><!-- icons:end -->
 </defs></svg>
 
 <div class="topbar"><button type="button" aria-label="Menu" onclick="document.body.classList.toggle('nav-open')">☰</button><span>FILL: Topic title</span></div>
@@ -186,6 +216,19 @@ svg .dot { fill: var(--blue); } svg .dot.bad { fill: var(--red); } svg .dot.good
 <figcaption>Figure 2. FILL: what the whole sequence shows.</figcaption>
 </figure>
 
+<!-- Summary cards demo: 4-6 parallel items, every card has the same fields in the same order.
+     No class (2 columns) for 4 cards, cols-3 for 5-6. Add a concept class (c1-c5) to a card only if the item is a key concept. -->
+<p>FILL: The paragraph that names <a href="#fig-3">Figure 3</a> and says what to compare across the cards.</p>
+<figure id="fig-3" class="cards">
+<div class="card-grid">
+  <div class="card"><p class="card-title">FILL: Item A</p><dl><dt>FILL: Field 1</dt><dd>FILL: one line</dd><dt>FILL: Field 2</dt><dd>FILL: one line</dd></dl></div>
+  <div class="card"><p class="card-title">FILL: Item B</p><dl><dt>FILL: Field 1</dt><dd>FILL: one line</dd><dt>FILL: Field 2</dt><dd>FILL: one line</dd></dl></div>
+  <div class="card"><p class="card-title">FILL: Item C</p><dl><dt>FILL: Field 1</dt><dd>FILL: one line</dd><dt>FILL: Field 2</dt><dd>FILL: one line</dd></dl></div>
+  <div class="card"><p class="card-title">FILL: Item D</p><dl><dt>FILL: Field 1</dt><dd>FILL: one line</dd><dt>FILL: Field 2</dt><dd>FILL: one line</dd></dl></div>
+</div>
+<figcaption>Figure 3. FILL: what the cards together show.</figcaption>
+</figure>
+
 <!-- 4. Counterfactual: the same project case without and with the technique, real numbers, with sources. -->
 <h2 id="q2">FILL: What changes if we do not use it?</h2>
 <table>
@@ -203,7 +246,7 @@ svg .dot { fill: var(--blue); } svg .dot.bad { fill: var(--red); } svg .dot.good
 <h2 id="terms">Terms</h2>
 <table>
 <tr><th>Term</th><th>Meaning in this project</th></tr>
-<tr><td>FILL</td><td>FILL (≤ 5 terms)</td></tr>
+<tr><td><span class="chip c1">FILL</span></td><td>FILL (≤ 5 terms; a key concept with a concept colour carries its chip here and in the text)</td></tr>
 </table>
 
 <h2 id="sources">Sources</h2>

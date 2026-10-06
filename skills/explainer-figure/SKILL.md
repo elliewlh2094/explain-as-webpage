@@ -26,6 +26,8 @@ explain-as-webpage writes one brief per figure in its learning brief:
 | Type | one row of the table in § Choosing the figure type |
 | Content | the facts it shows, each with its source and unit; "schematic" if no source gives values |
 | Form | static, slider (L1), or stepper (L2) |
+| Concept colours | which key concept gets which class `c1`–`c5`, the same on every figure; none if the page has no recurring concepts |
+| Icons | the icon name (`references/icons.md`) for each thing that gets one, the same on every figure; usually none |
 | Message | the one sentence the caption will state |
 
 If a field is missing, take it from the page's learning brief. Do not invent facts to fill a figure.
@@ -42,14 +44,16 @@ If a field is missing, take it from the page's learning brief. Do not invent fac
 | the spine of an argument, plan, guide, or evolution page | Recipes 6–9 | `../explain-as-webpage/references/page-types.md` picks one |
 | a process that runs in steps | stepper | § Stepper |
 | a result that depends on a parameter | slider | § Slider |
+| 4–6 parallel items with the same fields (layers, roles, options) | summary cards (HTML) | `references/cards.md` instead |
+| where the parts sit in a real object, a body, or a container metaphor | pictorial figure | `references/pictorial.md` instead |
 
 Draw a mechanism figure (what happens and why) by default. Draw a numeric figure only after the mechanism is clear, and only if it proves a claim on the page.
 
 ## Process
 
-1. Read the brief, then `references/svg-recipes.md`: the layout rules and the colour meaning first, then the recipe.
+1. Read the brief, then `references/svg-recipes.md`: the layout rules and the colour meaning first, then the recipe. If the brief names icons, also read `references/icons.md`.
 2. Draw on the grid. For a stepper, draw the final state first, check it, then split it into steps.
-3. Run the self-check below. Fix every failure by editing coordinates, not by adding CSS.
+3. If the page uses icons, run the copy command in `references/icons.md`. Then run the self-check below. Fix every failure by editing coordinates, not by adding CSS.
 4. Put the figure directly after the paragraph that introduces it. The paragraph, the caption, and the source line follow `../explain-as-webpage/references/writing-rules.md` § Figures and text.
 
 ## Self-check
@@ -60,6 +64,23 @@ Look at the figures after the page check of explain-as-webpage (its step 6), one
 - Every arrow starts and ends at a box edge.
 - Every number shows its unit, axis title, or legend inside the figure.
 - The figure has one message, and the caption can state it.
+- The icon copy command (`references/icons.md`) prints nothing.
+- Every text colour has a contrast of at least 4.5:1 (WCAG AA) on every background colour of the page. The check below reads the colours from the page's `:root` and prints nothing when all pairs pass:
+
+```bash
+python3 - "$F" <<'EOF'
+import re, sys
+v = dict(re.findall(r'--([\w-]+):\s*(#[0-9a-fA-F]{6})', open(sys.argv[1], encoding="utf-8").read().split('</style>')[0]))
+def lum(h):
+    c = [int(h[i:i+2], 16) / 255 for i in (1, 3, 5)]
+    r, g, b = [x / 12.92 if x <= 0.04045 else ((x + 0.055) / 1.055) ** 2.4 for x in c]
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b
+for f in ("text", "muted", "red", "green-text", "c1", "c2", "c3", "c4", "c5"):
+    for b in ["bg"] + [k for k in v if k.endswith("-bg") and k not in ("side-bg", "code-bg")]:
+        hi, lo = sorted((lum(v[f]), lum(v[b])), reverse=True)
+        if (hi + 0.05) / (lo + 0.05) < 4.5: print(f"--{f} on --{b}: {(hi + 0.05) / (lo + 0.05):.2f}")
+EOF
+```
 
 To look at every figure of a page at once (labels that crowd an arrow, text that leaves its box, a number whose meaning the figure, caption, and source line do not give), screenshot a temporary copy that hides everything but the figures and the source lines. Use Python for the edit: CSS and scripts contain characters that clash with `sed` delimiters.
 

@@ -17,6 +17,10 @@ All figures are inline `<svg>` inside a `<figure id="fig-N">`. The template alre
 
 ## Colour meaning (use consistently on the whole page)
 
+The page has two kinds of colour. **Semantic colours** say whether something is good or bad. **Concept colours** say which key concept something belongs to. Never use one kind for the other.
+
+### Semantic colours
+
 | Class | Meaning |
 |---|---|
 | `box bad`, `line bad`, `dot bad`, `#arr-bad` | the problem, a wrong value, a rejected item |
@@ -26,7 +30,21 @@ All figures are inline `<svg>` inside a `<figure id="fig-N">`. The template alre
 | `box muted` | background context, a panel, an inactive part |
 | `dash` | estimated, optional, or "would happen if" |
 
-Text in `class="sm"` is grey 12px: use it for units, sub-labels, and annotations. Colour text with `class="bad"` / `class="good"` (e.g. `class="b bad"`), never with a `fill` attribute: the template's CSS overrides `fill` on `<text>`.
+Text in `class="sm"` is grey 12px: use it for units, sub-labels, and annotations. Colour text with `class="bad"` / `class="good"` / `class="c1"` (e.g. `class="b bad"`), never with a `fill` attribute: the template's CSS overrides `fill` on `<text>`.
+
+### Concept colours
+
+Five classes, `c1`–`c5` (purple, olive, magenta, brown, indigo), one per key concept of the page (at most 5, the same limit as the key concepts). The figure brief says which concept gets which class; take `c1` first, so a page with two concepts uses `c1` and `c2`.
+
+| Use | Markup |
+|---|---|
+| A part that belongs to the concept | `box c1`, `line c1`, `dot c1` |
+| A label in the concept's colour | `<text class="b c1">` |
+| The concept's name in the paragraph, caption, or Terms table | `<span class="chip c1">name</span>` |
+
+- A concept keeps its class in every figure and in the text. The chip is the legend: the reader matches the word to the colour.
+- Do not put a concept class and a semantic class on the same element. If a part is both (concept A, and wrong), use the concept colour and mark the problem with a `bad` label or a `#arr-bad` arrow next to it.
+- A figure without key concepts uses semantic colours only. Do not colour parts just to make the figure lively.
 
 ## Recipe 1 — Causal chain (Figure 1 of a mechanism page)
 
