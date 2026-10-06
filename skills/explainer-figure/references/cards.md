@@ -33,6 +33,7 @@ The cards are HTML, not SVG. They use the CSS grid of the template (`../explain-
 - **Fields:** 2–4 `dt`/`dd` pairs. Each `dd` is at most 2 lines (~40 CJK characters or ~25 words). A field that needs more belongs in the text under the figure.
 - **Colour:** add a concept class (`c1`–`c5`) to a card only when the item is one of the page's key concepts and has that colour in other figures (`svg-recipes.md` § Concept colours). Otherwise use no class: the top border is the neutral blue. Do not use `bad` / `good` on cards; if one item is the problem, say so in its fields.
 - **Legend:** colours that are not explained by the card titles get a legend under the grid: `<p class="card-legend"><span class="chip c1">…</span> …</p>`.
+- **On a hub,** a card can stand for a child page: make its title a link (`<p class="card-title"><a href="<hub>--<child>.html">…</a></p>`), so the card figure is also the navigation.
 - **Numbers** in a field carry their unit and source, like numbers in any figure (`../explain-as-webpage/references/writing-rules.md` § Figures and text). The source line goes under the figure.
 
 ## Limits

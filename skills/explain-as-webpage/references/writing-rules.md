@@ -85,6 +85,8 @@ The confirmation (SKILL.md step 4, item 3) fixes the reader. Write every page of
 | Non-specialist university student | at most 5 key concepts | simple ones, each with a worked example | none, unless asked | welcome, with their limit |
 | Engineer or specialist (default in project mode) | as the topic needs | as needed | short excerpts | only where they save time |
 
+For a programming tutorial, a non-specialist reader may opt in to code in the confirmation: then show at most 1–2 excerpts of up to 5 lines per page, and explain every keyword at its first use.
+
 Every analogy says where it stops holding, in the same place: "Like a thermostat, the controller compares and corrects; unlike a thermostat, it also reacts to how fast the error changes."
 
 ## Ground the symbols in one running example
@@ -125,3 +127,5 @@ Do not use combining marks such as x̄, μ̄, or x̂ (a letter plus U+0304 or U+
 ## Code excerpts
 
 Show at most ~15 lines per excerpt, only the lines the explanation refers to, with the file path and line range above the block. Point at the key line in the text ("line 4 is where the threshold applies").
+
+Say where each excerpt comes from, in the source line under it: *quoted* from a file or from the material, or *reconstructed* from the material's description (lines the material only describes, or fragments you put together). Never present reconstructed code as the original.

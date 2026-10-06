@@ -72,17 +72,20 @@ for f in $H.html $H--*.html; do grep -qE "href=\"$f\"[^>]*aria-current=\"page\""
 grep -oh 'href="[^"#:]*\.html' $H.html $H--*.html | sed 's/href="//' | sort -u | while read -r p; do [ -e "$p" ] || echo "missing: $p"; done
 ```
 
-Prose length of one page (excludes tables, code, figures, and captions; compare with the budget in `writing-rules.md`). Run it before and after the change:
+Prose length of one page (only the `<main class="content">` part, without tables, code, figures, captions, and source lines; compare with the budget in `writing-rules.md`). Run it before and after the change:
 
 ```bash
 python3 - "$F" <<'EOF'
 import re, sys
-s = open(sys.argv[1], encoding="utf-8").read()
+s = open(sys.argv[1], encoding="utf-8").read().split('<main class="content">')[1].split("</main>")[0]
+s = re.sub(r'<p class="src">[\s\S]*?</p>', " ", s)
 s = re.sub(r"<(style|script|svg|pre|table|figcaption)[\s\S]*?</\1>", " ", s)
 t = re.sub(r"<[^>]+>", " ", s)
 print("CJK chars:", len(re.findall(r"[一-鿿]", t)), " English words:", len(re.findall(r"[A-Za-z][A-Za-z'-]*", t)))
 EOF
 ```
+
+Run checks over many pages from a script file (`bash check.sh`), not with `bash -c "$(…)"`: Claude Code's safety check cannot read a script passed to `bash -c` and may refuse to run it.
 
 ## 6. A tree from the first build (faithful guided reading)
 
@@ -92,7 +95,9 @@ When the user picks faithful guided reading for long material, or a page per sta
 
 - Map every section of the material to one page and one `h2`: a table "material section → page → `h2`". Neighbouring sections may share an `h2`. A section you leave out on purpose (an advert, a sign-up request, a repeated summary) gets the row "skipped" with the reason.
 - Group the sections into at most ~6 child pages, 3–5 questions each, and keep each page within its length budget (`writing-rules.md`). If the material needs more pages, propose question-driven coverage for part of it instead.
-- The hub carries the conclusion, Figure 1 as the structure of the whole material (the spine of its page type in `page-types.md`, one node per child page), and one short section per child: 2–4 sentences and a "More:" link. The hub's own questions are about the whole material ("What is the plan?", "Why this order?").
+- The hub carries the conclusion, Figure 1 as the structure of the whole material (the spine of its page type in `page-types.md`, one node per child page, each child's node a link to its page), and one short section per child: 2–4 sentences and a "More:" link. The hub's own questions are about the whole material ("What is the plan?", "Why this order?"). A summary card figure with one card per child, each title a link, can replace the short sections (`../explainer-figure/references/cards.md`).
+- Figure 1 of a child page lists that part's sections in the material's order (Recipe 7, three per row), each box a link to the `h2` that covers it. The reader sees where they are in the original and can jump to any section.
+- A recurring part of the material (a recap at the end of each chapter, a summary box per lesson) gets the same `h2` on every child page, in the same place. If the material lacks it for one part, keep the `h2` and say so; do not invent the missing content.
 
 **Confirm once.** In the single message of SKILL.md step 4, item 1 lists the planned tree: each page's file name (`<hub>.html`, `<hub>--<child-slug>.html`), the material sections it covers, and its questions. Item 2 gives the tier per page.
 

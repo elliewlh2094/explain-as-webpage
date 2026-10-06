@@ -173,3 +173,40 @@ An object drawn as a container with labelled parts inside, for "what is it made 
 - Part boxes are 200 × 44 with 10px between them; at most 5 parts. With more, group them, or use summary cards (`cards.md`).
 - Single-line notes (`sm` only) are enough when the part's label already names it.
 - The icons need their symbols on the page: run the copy command in `icons.md`.
+
+## Recipe P4 — Interface layout
+
+A software window drawn as a container: its panels as rectangles in their real positions, and the user's action as one dashed arrow. Use it for "which panel does what" and "where do I drag this" questions.
+
+```html
+<figure id="fig-5">
+<svg viewBox="0 0 720 360" role="img" aria-label="The Unity editor: Hierarchy on the left lists the objects in the scene, the Scene and Game view in the middle shows the result, the Inspector on the right shows the components of the selected object, and Project at the bottom holds the files. A dashed arrow drags bird.png from Project into the Sprite field in the Inspector.">
+  <rect class="box muted" x="10" y="20" width="700" height="30" rx="4"/>
+  <path class="box good" d="M352 28 L366 35 L352 42 Z"/><text x="380" y="40" class="sm">Play: test the game</text>
+  <rect class="box" x="10" y="50" width="160" height="200"/>
+  <text x="20" y="72" class="b">Hierarchy</text><text x="20" y="92" class="sm">objects in the scene</text>
+  <text x="30" y="122" class="sm">Main Camera</text><text x="30" y="144" class="b c1">bird</text>
+  <rect class="box" x="170" y="50" width="360" height="200"/>
+  <text x="180" y="72" class="b">Scene / Game View</text><text x="180" y="92" class="sm">editing view / what the camera sees</text>
+  <circle class="area c1" cx="350" cy="170" r="22"/>
+  <rect class="box" x="530" y="50" width="180" height="290"/>
+  <text x="540" y="72" class="b">Inspector</text><text x="540" y="92" class="sm">the selected object</text>
+  <text x="540" y="122" class="b c1">bird</text>
+  <rect class="box c2" x="540" y="134" width="160" height="30" rx="4"/><text x="550" y="154" class="sm">Transform</text>
+  <rect class="box c2" x="540" y="172" width="160" height="56" rx="4"/><text x="550" y="192" class="sm">Sprite Renderer</text>
+  <rect class="box muted" x="550" y="200" width="140" height="20" rx="3"/><text x="556" y="215" class="sm">Sprite: bird</text>
+  <text x="540" y="256" class="sm">+ Add Component</text>
+  <rect class="box" x="10" y="250" width="520" height="90"/>
+  <text x="20" y="272" class="b">Project</text><text x="20" y="292" class="sm">every file: images, sounds, scripts, fonts</text>
+  <use href="#i-image" class="icon" x="30" y="304" width="20" height="20"/><text x="56" y="320" class="sm">bird.png</text>
+  <path class="line dash" d="M60 328 H480 Q510 328 510 298 V210 H548" marker-end="url(#arr)"/>
+  <text x="340" y="320" text-anchor="middle" class="sm">drag into the Sprite field</text>
+</svg>
+<figcaption>Figure 5. Each panel does one job: Project holds files, Hierarchy lists objects, the Inspector changes the selected one, and the view shows the result. Schematic layout, not a screenshot.</figcaption>
+</figure>
+```
+
+- Put each panel's name and one `sm` line inside the panel, not on leader lines: the panels fill the canvas.
+- Panels are neutral `box`; the selected object and the field the action changes take their concept colours.
+- One action per figure, as one dashed arrow that does not cross any label.
+- The caption says "Schematic layout, not a screenshot" / "版面為示意，不是實際截圖". If the reader must find a real button, a screenshot is clearer: ask the user for one from their own copy of the program.

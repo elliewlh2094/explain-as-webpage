@@ -102,6 +102,7 @@ If the material is a plan (stages with tasks and checks, `page-types.md` § Road
 - Explain in your own words. Quote at most two sentences at a time, in quotation marks, with the source. Never reproduce whole sections.
 - An opinion in the material is the author's opinion. Write it as such ("Karpathy proposes …"), not as an established fact.
 - A number from the material is a fact with a source. A number you add from elsewhere is general background and is labelled so.
+- When you check a name (an API, a function, a standard) against a primary source and it has no entry for it, write what the source does list ("the 2021.3 documentation lists `FindWithTag`, which returns one active GameObject with the tag"), not that the name does not exist. A missing page is not proof.
 
 ## 5. Helper skills
 
