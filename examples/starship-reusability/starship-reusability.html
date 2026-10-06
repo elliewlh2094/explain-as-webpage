@@ -11,6 +11,10 @@
   --rule: #e1e4e5; --code-bg: #f8f8f8; --row-alt: #f3f6f6;
   --blue: #2980b9; --blue-bg: #e7f2fa; --red: #c0392b; --red-bg: #fdf3f2;
   --green: #16a085; --green-bg: #dbfaf4; --orange: #e67e22; --orange-bg: #ffedcc; --grey-bg: #f0f0f0;
+  --green-text: #107360; /* --green is too light for text (3.2:1 on --bg) */
+  /* Concept colours: one per key concept, never for good/bad (explainer-figure: svg-recipes.md § Colour meaning) */
+  --c1: #7d3c98; --c1-bg: #f2ecf5; --c2: #56661a; --c2-bg: #eef0e8; --c3: #a61e6e; --c3-bg: #f6e8f0;
+  --c4: #7a5230; --c4-bg: #f2eeea; --c5: #4a3fa0; --c5-bg: #edecf6;
   --font: -apple-system, "Segoe UI", Roboto, "Noto Sans", "Liberation Sans", Arial, "DejaVu Sans", "Noto Sans CJK TC", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
   --mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, "Noto Sans Mono CJK TC", monospace;
 }
@@ -73,11 +77,11 @@ figcaption { font-size: .9rem; color: var(--muted); margin-top: 6px; }
 details { border: 1px solid var(--rule); padding: 8px 12px; margin: 0 0 20px; background: #fff; }
 details > summary { cursor: pointer; font-weight: 700; }
 
-/* Shared SVG vocabulary (see references/svg-recipes.md) */
+/* Shared SVG vocabulary (see the explainer-figure skill, references/svg-recipes.md) */
 svg text { font-family: var(--font); font-size: 14px; fill: var(--text); }
 svg .sm { font-size: 12px; fill: var(--muted); }
 svg .b { font-weight: 700; }
-svg text.bad { fill: var(--red); } svg text.good { fill: var(--green); }
+svg text.bad { fill: var(--red); } svg text.good { fill: var(--green-text); }
 svg .box { fill: var(--blue-bg); stroke: var(--blue); stroke-width: 1.5; }
 svg .box.bad { fill: var(--red-bg); stroke: var(--red); }
 svg .box.good { fill: var(--green-bg); stroke: var(--green); }
@@ -87,6 +91,29 @@ svg .line { stroke: var(--text); stroke-width: 1.5; fill: none; }
 svg .line.bad { stroke: var(--red); } svg .line.good { stroke: var(--green); }
 svg .dash { stroke-dasharray: 5 4; }
 svg .dot { fill: var(--blue); } svg .dot.bad { fill: var(--red); } svg .dot.good { fill: var(--green); }
+/* Pictorial figures (explainer-figure: references/pictorial.md): container outline, leader line and pin,
+   silhouette = the same shapes drawn as .edge then .shape, filled regions as .area (concept colour optional) */
+svg .outline { fill: none; stroke: var(--text); stroke-width: 2; }
+svg .lead { fill: none; stroke: var(--muted); stroke-width: 1; } svg .pin { fill: var(--muted); }
+svg .edge { fill: var(--text); stroke: var(--text); stroke-width: 4; } svg .shape { fill: var(--grey-bg); stroke: none; }
+svg .area { fill: var(--cc, var(--blue)); opacity: .25; stroke: none; } /* group opacity: overlapping shapes do not darken; 10% tints are too faint */
+/* Concept colours: class c1-c5 on a box, line, dot, or text in SVG, or on a .chip in the text */
+.c1 { --cc: var(--c1); --cb: var(--c1-bg); } .c2 { --cc: var(--c2); --cb: var(--c2-bg); } .c3 { --cc: var(--c3); --cb: var(--c3-bg); }
+.c4 { --cc: var(--c4); --cb: var(--c4-bg); } .c5 { --cc: var(--c5); --cb: var(--c5-bg); }
+svg .box:is(.c1,.c2,.c3,.c4,.c5) { fill: var(--cb); stroke: var(--cc); }
+svg .line:is(.c1,.c2,.c3,.c4,.c5) { stroke: var(--cc); } svg .dot:is(.c1,.c2,.c3,.c4,.c5), svg text:is(.c1,.c2,.c3,.c4,.c5) { fill: var(--cc); }
+/* Icons: class icon on a <use> in SVG, or on an inline <svg> around a <use> in HTML (explainer-figure: references/icons.md) */
+.icon { fill: none; stroke: var(--cc, currentColor); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+svg.icon { display: inline-block; width: 1.15em; height: 1.15em; min-width: 0; margin: 0 .3em 0 0; vertical-align: -.2em; }
+.chip { display: inline-block; font-size: .85rem; line-height: 1.5; padding: 0 6px; border: 1px solid var(--cc, #999); border-radius: 3px; color: var(--cc, var(--text)); background: var(--cb, var(--grey-bg)); }
+
+/* Summary cards: a figure of 4-6 parallel items with the same fields (explainer-figure: references/cards.md) */
+.card-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.card-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+.card { min-width: 0; background: #fff; border: 1px solid var(--rule); border-top: 4px solid var(--cc, var(--blue)); padding: 8px 12px 10px; font-size: .875rem; line-height: 1.55; }
+.card .card-title { margin: 0 0 6px; font-size: 1rem; font-weight: 700; color: var(--cc, #2c2c2c); }
+.card dl { margin: 0; } .card dt { font-size: .8125rem; font-weight: 700; color: var(--muted); } .card dd { margin: 0 0 6px; }
+.card-legend { margin: 8px 0 0; font-size: .875rem; }
 
 /* Stepper (L2): controls are injected by the script below */
 .stepper-bar { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
@@ -103,6 +130,7 @@ svg .dot { fill: var(--blue); } svg .dot.bad { fill: var(--red); } svg .dot.good
   body.nav-open .side { display: block; }
   .main { margin-left: 0; }
   .content { padding: 16px 16px 48px; }
+  .card-grid, .card-grid.cols-3 { grid-template-columns: 1fr; }
 }
 @media print {
   .side, .topbar, .stepper-bar { display: none !important; }
@@ -111,16 +139,33 @@ svg .dot { fill: var(--blue); } svg .dot.bad { fill: var(--red); } svg .dot.good
 </style>
 </head>
 <body>
-<!-- Arrow markers shared by every SVG on the page: marker-end="url(#arr)" / url(#arr-bad) / url(#arr-good) -->
+<!-- Arrow markers shared by every SVG on the page: marker-end="url(#arr)" / url(#arr-bad) / url(#arr-good).
+     Icon symbols go between the icons markers; the command in explainer-figure references/icons.md fills them. -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
   <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#404040"/></marker>
   <marker id="arr-bad" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#c0392b"/></marker>
   <marker id="arr-good" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#16a085"/></marker>
+<!-- icons:start --><!-- Icons: Lucide (https://lucide.dev), lucide-static 1.52.0.
+ISC License
+Copyright (c) 2026 Lucide Icons and Contributors
+Permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted, provided that the above copyright notice and this permission notice appear in all copies.
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+Some icons are derived from Feather. The MIT License (MIT).
+Copyright (c) 2013-present Cole Bemis
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+-->
+<symbol id="i-fuel" viewBox="0 0 24 24"><path d="M14 13h2a2 2 0 0 1 2 2v2a2 2 0 0 0 4 0v-6.998a2 2 0 0 0-.59-1.42L18 5"/><path d="M14 21V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v16"/><path d="M2 21h13"/><path d="M3 9h11"/></symbol>
+<symbol id="i-recycle" viewBox="0 0 24 24"><path d="M7 19H4.815a1.83 1.83 0 0 1-1.57-.881 1.785 1.785 0 0 1-.004-1.784L7.196 9.5"/><path d="M11 19h8.203a1.83 1.83 0 0 0 1.556-.89 1.784 1.784 0 0 0 0-1.775l-1.226-2.12"/><path d="m14 16-3 3 3 3"/><path d="M8.293 13.596 7.196 9.5 3.1 10.598"/><path d="m9.344 5.811 1.093-1.892A1.83 1.83 0 0 1 11.985 3a1.784 1.784 0 0 1 1.546.888l3.943 6.843"/><path d="m13.378 9.633 4.096 1.098 1.097-4.096"/></symbol>
+<symbol id="i-satellite" viewBox="0 0 24 24"><path d="m13.5 6.5-3.148-3.148a1.205 1.205 0 0 0-1.704 0L6.352 5.648a1.205 1.205 0 0 0 0 1.704L9.5 10.5"/><path d="M16.5 7.5 19 5"/><path d="m17.5 10.5 3.148 3.148a1.205 1.205 0 0 1 0 1.704l-2.296 2.296a1.205 1.205 0 0 1-1.704 0L13.5 14.5"/><path d="M9 21a6 6 0 0 0-6-6"/><path d="M9.352 10.648a1.205 1.205 0 0 0 0 1.704l2.296 2.296a1.205 1.205 0 0 0 1.704 0l4.296-4.296a1.205 1.205 0 0 0 0-1.704l-2.296-2.296a1.205 1.205 0 0 0-1.704 0z"/></symbol>
+<symbol id="i-tower-control" viewBox="0 0 24 24"><path d="M18.2 12.27 20 6H4l1.8 6.27a1 1 0 0 0 .95.73h10.5a1 1 0 0 0 .96-.73Z"/><path d="M8 13v9"/><path d="M16 22v-9"/><path d="m9 6 1 7"/><path d="m15 6-1 7"/><path d="M12 6V2"/><path d="M13 2h-2"/></symbol>
+<!-- icons:end -->
 </defs></svg>
 
 <div class="topbar"><button type="button" aria-label="Menu" onclick="document.body.classList.toggle('nav-open')">☰</button><span>Starship 與可復用火箭</span></div>
 <nav class="side">
-  <div class="side-head"><span class="title">Starship 與可復用火箭</span><span class="meta">主題研究 · 2026-10-04</span></div>
+  <div class="side-head"><span class="title">Starship 與可復用火箭</span><span class="meta">主題研究 · 2026-10-06</span></div>
   <div class="toc" id="toc"><!-- built from h2/h3 by the script --></div>
 </nav>
 
@@ -129,10 +174,10 @@ svg .dot { fill: var(--blue); } svg .dot.bad { fill: var(--red); } svg .dot.good
 <h1>Starship 與可復用火箭：為什麼要把火箭接回來？</h1>
 
 <div class="admonition tip"><p class="admonition-title">結論</p>
-<p>火箭起飛時大約九成重量是推進劑，真正送進軌道的載荷只有百分之一到三，其餘的硬體過去用一次就丟，所以發射很貴。SpaceX 的 Starship 想讓兩節都回收再飛：第一節 Super Heavy 助推器飛回發射場、由發射塔的機械臂接住；第二節 Starship 飛船從軌道再入大氣層，再降落回收。截至 2026 年 10 月 4 日，助推器已被接住 3 次、回收後再飛 2 次；飛船在 2026 年 9 月 28 日的第 14 次試飛首次進入軌道，但還沒有被接住或再飛過。「完全可復用」能把成本降到多低，目前還沒有實測數字。</p></div>
+<p>火箭起飛時大約九成重量是推進劑，真正送進軌道的載荷（payload，火箭要運送的衛星或貨物）只有百分之一到三，其餘的硬體過去用一次就丟，所以發射很貴。SpaceX 的 Starship 想讓兩節都回收再飛：第一節 Super Heavy 助推器飛回發射場、由發射塔的機械臂接住；第二節 Starship 飛船從軌道再入大氣層，再降落回收。截至 2026 年 10 月 4 日，助推器已被接住 3 次、回收後再飛 2 次；飛船在 2026 年 9 月 28 日的第 14 次試飛首次進入軌道，但還沒有被接住或再飛過。「完全可復用」能把成本降到多低，目前還沒有實測數字。</p></div>
 
 <h2 id="chain">從推進劑到回收：整條因果鏈</h2>
-<p><a href="#fig-1">圖 1</a> 是本頁的主軸，後面的章節依序展開每一格。左上兩格是物理限制，第三格是過去的做法，第二列是 Starship 的對策、代價與目前的實測結果。</p>
+<p><a href="#fig-1">圖 1</a> 是本頁的主軸，後面的章節依序展開每一格。上排是物理限制與過去的做法，下排從右到左是 Starship 的對策、代價與目前的實測結果。紅框是限制，橘框是後果或代價，綠框是對策。</p>
 <figure id="fig-1">
 <svg viewBox="0 0 720 220" role="img" aria-label="因果鏈：火箭約九成重量是推進劑，載荷只占起飛質量的百分之一到三，所以過去每次發射都丟掉整枚火箭；Starship 讓兩節都回收再飛，代價是需要保留降落用的推進劑並翻修；截至 2026 年 10 月，助推器接住 3 次、再飛 2 次，飛船尚未回收。">
   <rect class="box bad" x="10" y="20" width="200" height="60" rx="6"/>
@@ -163,117 +208,158 @@ svg .dot { fill: var(--blue); } svg .dot.bad { fill: var(--red); } svg .dot.good
 <p>用 NASA Glenn 研究中心頁面上的例子實際算一次。下表把每個符號對到這個例子：</p>
 <table>
 <tr><th>符號</th><th>意思</th><th>本例的值</th></tr>
-<tr><td style="white-space:nowrap">Δu</td><td>需要增加的速度；進入約 320 公里（200 英里）高的圓軌道</td><td style="white-space:nowrap">約 7,600 m/s（17,000 英里/時）</td></tr>
-<tr><td style="white-space:nowrap">I<sub>sp</sub></td><td>比衝（specific impulse），衡量引擎效率；液氫液氧引擎的合理值</td><td style="white-space:nowrap">350 秒</td></tr>
-<tr><td style="white-space:nowrap">g<sub>0</sub></td><td>地表重力加速度，把比衝換成噴氣速度</td><td style="white-space:nowrap">9.81 m/s²</td></tr>
-<tr><td style="white-space:nowrap">m<sub>f</sub>、m<sub>e</sub></td><td>NASA 的記號：m<sub>f</sub> 是加滿推進劑的起飛質量（full），m<sub>e</sub> 是推進劑燒完後的空質量（empty）</td><td style="white-space:nowrap">求 MR</td></tr>
+<tr><td style="white-space:nowrap">Δu</td><td>需要增加的速度；進入約 320 公里（200 英里）高的圓軌道</td><td>約 7,600 m/s（17,000 英里/時）</td></tr>
+<tr><td style="white-space:nowrap">I<sub>sp</sub></td><td>比衝（specific impulse），衡量引擎效率；液氫液氧引擎的合理值</td><td>350 秒</td></tr>
+<tr><td style="white-space:nowrap">g<sub>0</sub></td><td>地表重力加速度，把比衝換成噴氣速度</td><td>9.81 m/s²</td></tr>
+<tr><td style="white-space:nowrap">m<sub>f</sub>、m<sub>e</sub></td><td>NASA 的記號：m<sub>f</sub> 是加滿推進劑的起飛質量（full），m<sub>e</sub> 是推進劑燒完後的空質量（empty）</td><td>求 MR</td></tr>
 </table>
 <p class="src">來源：NASA Glenn〈Ideal Rocket Equation〉</p>
-<p>噴氣速度是 350 × 9.81 ≈ 3,430 m/s，所以 ln(MR) = 7,600 ÷ 3,430 ≈ 2.21，MR = e<sup>2.21</sup> ≈ 9.1。也就是說，起飛質量約是燒完時的 9 倍，推進劑占了 1 − 1/9.1 ≈ 89%（NASA 取整數，寫作質量比約 10、推進劑約 90%）。剩下約一成要容納結構、引擎與載荷，NASA 的結論是載荷只占起飛重量的 1% 左右。這還沒算重力造成的損失；計入後，需要的推進劑更多。Starship 的數字也落在這個範圍：滿載起飛約 5,000 噸，SpaceX 為可復用設計標示的載荷是 100 到 150 噸，約占 2% 到 3%。</p>
-<p class="src">來源：NASA Glenn〈Ideal Rocket Equation〉；Wikipedia〈SpaceX Starship〉（起飛質量、SpaceX 標示的載荷）</p>
+<p>噴氣速度是 350 × 9.81 ≈ 3,430 m/s，所以 ln(MR) = 7,600 ÷ 3,430 ≈ 2.21，MR = e<sup>2.21</sup> ≈ 9.1。也就是說，起飛質量約是燒完時的 9 倍，推進劑占了 1 − 1/9.1 ≈ 89%（NASA 取整數，寫作質量比約 10、推進劑約 90%）。<a href="#fig-2">圖 2</a> 把這個比例畫成一枚火箭：剖面的每一層的高度，等於它占起飛質量的比例。最上面那條細線就是<span class="chip c3">載荷</span>，只有約 1%。這還沒算重力造成的損失；計入後，需要的推進劑更多。</p>
+<figure id="fig-2">
+<svg viewBox="0 0 720 400" role="img" aria-label="一枚火箭的剖面，層高等於占起飛質量的比例：推進劑約 89%，結構與引擎約 10%，載荷約 1%，只是最上面的一條細線。">
+  <line class="line" x1="90" y1="60" x2="90" y2="360"/>
+  <line class="line" x1="84" y1="60" x2="90" y2="60"/><text x="80" y="65" text-anchor="end" class="sm">100%</text>
+  <line class="line" x1="84" y1="210" x2="90" y2="210"/><text x="80" y="215" text-anchor="end" class="sm">50%</text>
+  <line class="line" x1="84" y1="360" x2="90" y2="360"/><text x="80" y="365" text-anchor="end" class="sm">0%</text>
+  <text x="90" y="390" text-anchor="middle" class="sm">占起飛質量（%）</text>
+  <path class="box muted" d="M150 60 Q200 0 250 60 Z"/>
+  <path class="box muted" d="M150 300 L120 360 L150 360 Z"/><path class="box muted" d="M250 300 L280 360 L250 360 Z"/>
+  <rect class="box" x="150" y="63" width="100" height="267"/>
+  <rect class="box muted" x="150" y="330" width="100" height="30"/>
+  <rect class="outline" x="150" y="60" width="100" height="300"/>
+  <rect class="box c3" x="150" y="60" width="100" height="3"/>
+  <text x="200" y="200" text-anchor="middle" class="b">推進劑</text><text x="200" y="220" text-anchor="middle" class="sm">約 89%</text>
+  <circle class="pin" cx="240" cy="62" r="3"/><line class="lead" x1="240" y1="62" x2="420" y2="62"/>
+  <text x="430" y="66" class="b c3">載荷　約 1%</text><text x="430" y="86" class="sm">Starship 標示的值約 2–3%</text>
+  <circle class="pin" cx="240" cy="200" r="3"/><line class="lead" x1="240" y1="200" x2="420" y2="200"/>
+  <text x="430" y="196" class="b">推進劑　約 89%</text><text x="430" y="216" class="sm">質量比 MR ≈ 9.1，1 − 1/9.1 ≈ 89%</text>
+  <circle class="pin" cx="240" cy="345" r="3"/><line class="lead" x1="240" y1="345" x2="420" y2="345"/>
+  <text x="430" y="341" class="b">結構與引擎　約 10%</text><text x="430" y="361" class="sm">燒完後剩下的質量，扣掉載荷</text>
+</svg>
+<figcaption>圖 2　起飛質量幾乎都是推進劑；要回收的硬體約占一成，載荷只是一條細線。層高按比例；火箭外形是示意，不代表燃料箱的實際位置。</figcaption>
+</figure>
+<p class="src">來源：NASA Glenn〈Ideal Rocket Equation〉（質量比、推進劑約 90%、載荷約 1%）；Wikipedia〈SpaceX Starship〉（SpaceX 標示的載荷）。比例由本頁依 MR ≈ 9.1 計算。</p>
+<p>Starship 的數字也落在這個範圍：滿載起飛約 5,000 噸，SpaceX 為可復用設計標示的載荷是 100 到 150 噸，約占 2% 到 3%。</p>
+<p class="src">來源：Wikipedia〈SpaceX Starship〉（起飛質量、SpaceX 標示的載荷）</p>
 <p>這就是過去用完就丟的原因。NASA Ames 研究員 Jones（2018）整理的文獻指出，早期火箭沿用彈道飛彈的設計，目標是最高性能與最輕重量，不是最低成本；而可復用火箭需要保留降落用的推進劑，載荷會因此變少。在載荷只有百分之一的情況下，多背一點降落推進劑就是很大的代價。</p>
 <p>可復用的好處，可以用「分攤」來理解：一枚火箭的造價若由 N 次飛行分攤，每次的硬體成本就變成原本的 1/N，再加上翻修與推進劑的費用。這像客機：如果每趟航班飛完就丟掉飛機，機票會貴到難以想像。這個比喻的限制是，火箭每次飛行承受的高溫與應力遠比客機嚴苛，翻修可能很貴。Jones 指出，太空梭雖然可復用，但每次發射約 15 億美元、每公斤約 54,500 美元，可復用反而可能推高了成本；Falcon 9 當時的公告價格則是每公斤約 2,720 美元，約是太空梭的二十分之一，而 Jones 認為可復用帶來的節省在當時還沒有實現。</p>
 <p class="src">來源：Jones（2018）摘要與正文。分攤的算式為一般背景知識。</p>
-<div class="admonition"><p class="admonition-title">新興說法</p>
-<p>Elon Musk 曾推測，Starship 一次軌道發射的成本最終可能只要 100 萬美元。歐洲太空產業協會 Eurospace 的研究主任 Pierre Lionnet 則在 2022 年表示，因為研發成本，賣給客戶的價格可能會更高。另一方面，Payload Research 估計一次性使用時每次約 1 億美元；若硬體能分攤到 10 次，每次的硬體成本就降為約 1,000 萬美元，但前提是翻修與推進劑的費用遠低於這個數字。這些都不是實測值。</p></div>
-<p class="src">來源：Wikipedia〈SpaceX Starship〉§ Cost and funding 與資訊欄（引用 Musk 的說法、Lionnet 的評論、Payload Research 的估計）</p>
+<div class="admonition warning"><p class="admonition-title">新興說法</p>
+<p>Elon Musk 曾推測，Starship 一次軌道發射的成本最終可能只要 100 萬美元。歐洲太空產業協會 Eurospace 的研究主任 Pierre Lionnet 則在 2022 年表示，因為研發成本，賣給客戶的價格可能會更高。另一方面，Payload Research 估計一次性使用時每次約 1 億美元；若硬體能分攤到 10 次，每次的硬體成本就降為約 1,000 萬美元，但前提是翻修與推進劑的費用遠低於這個數字。這些都不是實測值。</p>
+<p class="src">來源：Wikipedia〈SpaceX Starship〉§ Cost and funding 與資訊欄（引用 Musk 的說法、Lionnet 的評論、Payload Research 的估計）</p></div>
 
 <h2 id="q2">Starship 是什麼？兩節各做什麼？</h2>
-<p>Starship 是兩節式火箭，兩節都用 Raptor 引擎燃燒液態甲烷與液態氧，箭體由不鏽鋼圓筒焊接而成（<a href="#fig-2">圖 2</a>）。第一節 Super Heavy 助推器負責起飛後最初約兩分半的推進，把整枚火箭送到約 64 公里高，接著飛回發射場；第二節 Starship 飛船繼續加速進入軌道，送出載荷後再入大氣層。兩節分工不同，回收的難度也不同，分別是下兩節的主題。</p>
-<figure id="fig-2">
-<svg viewBox="0 0 720 230" role="img" aria-label="Starship 的兩節：左邊是 Super Heavy 助推器，33 具 Raptor 引擎、約 3,400 噸推進劑、高 72.3 公尺，上升約兩分半後分離並飛回發射場；右邊是 Starship 飛船，6 具 Raptor 引擎、約 1,500 噸推進劑，進入軌道後再入大氣層。">
-  <rect class="box" x="10" y="40" width="420" height="60" rx="6"/>
-  <text x="220" y="66" text-anchor="middle" class="b">Super Heavy 助推器（第一節）</text><text x="220" y="86" text-anchor="middle" class="sm">高 72.3 m（V3）・直徑 9 m</text>
-  <rect class="box good" x="430" y="40" width="240" height="60" rx="6"/>
-  <path class="box good" d="M670 40 L710 70 L670 100 Z"/>
-  <text x="550" y="66" text-anchor="middle" class="b">Starship 飛船（第二節）</text><text x="550" y="86" text-anchor="middle" class="sm">載荷艙在前端</text>
-  <text x="20" y="130" class="sm">• 33 具 Raptor 引擎</text>
-  <text x="20" y="150" class="sm">• 推進劑約 3,400 噸</text>
-  <text x="20" y="170" class="sm">• 上升約兩分半後分離</text>
-  <text x="20" y="190" class="sm">• 飛回發射場，由機械臂接住</text>
-  <text x="440" y="130" class="sm">• 6 具 Raptor：3 具海平面型、3 具真空型</text>
-  <text x="440" y="150" class="sm">• 推進劑約 1,500 噸</text>
-  <text x="440" y="170" class="sm">• 加速入軌、送出載荷</text>
-  <text x="440" y="190" class="sm">• 再入大氣層，靠隔熱瓦保護</text>
-  <text x="360" y="220" text-anchor="middle" class="sm">整枚火箭高約 124 m（V3），滿載約 5,000 噸</text>
+<p>Starship 是兩節式火箭，兩節都用 Raptor 引擎燃燒液態甲烷與液態氧，箭體由不鏽鋼圓筒焊接而成。第一節是<span class="chip c1">Super Heavy 助推器</span>，負責起飛後最初約兩分半的推進，把整枚火箭送到約 64 公里高，接著飛回發射場；第二節是<span class="chip c2">Starship 飛船</span>，繼續加速進入軌道，送出載荷後再入大氣層。本頁之後的圖都用紫色表示助推器、橄欖色表示飛船。<a href="#fig-3">圖 3</a> 按高度比例畫出兩節：助推器比飛船高，但飛船要飛得快得多，這決定了兩者回收方式的不同。</p>
+<figure id="fig-3">
+<svg viewBox="0 0 720 380" role="img" aria-label="Starship 兩節堆疊的剖面：上方是飛船，約 52 公尺、6 具引擎，前端是載荷艙；下方是助推器，72.3 公尺、33 具引擎，頂部有柵格翼。全高約 124 公尺。">
+  <line class="lead" x1="150" y1="40" x2="150" y2="350"/>
+  <line class="lead" x1="144" y1="40" x2="156" y2="40"/><line class="lead" x1="144" y1="350" x2="156" y2="350"/>
+  <text x="140" y="180" text-anchor="end" class="b">全高約 124 m</text><text x="140" y="200" text-anchor="end" class="sm">滿載約 5,000 噸</text>
+  <path class="box c2" d="M185 60 Q200 20 215 60 Z"/>
+  <rect class="box c3" x="185" y="60" width="30" height="30"/>
+  <rect class="box c2" x="185" y="90" width="30" height="79"/>
+  <rect class="box c2" x="179" y="70" width="6" height="16"/><rect class="box c2" x="215" y="70" width="6" height="16"/>
+  <rect class="box c2" x="179" y="148" width="6" height="18"/><rect class="box c2" x="215" y="148" width="6" height="18"/>
+  <rect class="box c1" x="185" y="169" width="30" height="181"/>
+  <rect class="box c1" x="177" y="176" width="8" height="10"/><rect class="box c1" x="215" y="176" width="8" height="10"/>
+  <circle class="pin" cx="210" cy="75" r="3"/><line class="lead" x1="210" y1="75" x2="420" y2="75"/>
+  <text x="430" y="71" class="b c3">載荷艙</text><text x="430" y="91" class="sm">在飛船前端，送出衛星或貨物</text>
+  <circle class="pin" cx="210" cy="130" r="3"/><line class="lead" x1="210" y1="130" x2="420" y2="130"/>
+  <text x="430" y="126" class="b c2">Starship 飛船（第二節）</text><text x="430" y="146" class="sm">約 52 m・6 具引擎・推進劑約 1,500 噸</text>
+  <circle class="pin" cx="219" cy="181" r="3"/><line class="lead" x1="219" y1="181" x2="420" y2="181"/>
+  <text x="430" y="177" class="b">柵格翼</text><text x="430" y="197" class="sm">下降時控制方向；V3 兼作被接住的掛點</text>
+  <circle class="pin" cx="210" cy="270" r="3"/><line class="lead" x1="210" y1="270" x2="420" y2="270"/>
+  <text x="430" y="266" class="b c1">Super Heavy 助推器（第一節）</text><text x="430" y="286" class="sm">72.3 m・33 具引擎・推進劑約 3,400 噸</text>
+  <text x="200" y="372" text-anchor="middle" class="sm">直徑 9 m</text>
 </svg>
-<figcaption>圖 2　助推器大而飛得低、慢；飛船小而要飛到軌道速度，這決定了兩者回收方式的不同。</figcaption>
+<figcaption>圖 3　助推器較高、裝的推進劑較多，但只把飛船推到約 64 公里高；飛船較小，卻要自己加速到軌道速度。高度按比例（V3），寬度放大以便標註。</figcaption>
 </figure>
-<p class="src">來源：SpaceX 第 8、14 次試飛頁（引擎數、分離時間）；Wikipedia〈SpaceX Starship〉（尺寸、推進劑量、材料、分離高度、V3 規格）</p>
+<p class="src">來源：SpaceX 第 8、14 次試飛頁（引擎數、分離時間）；Wikipedia〈SpaceX Starship〉（尺寸、推進劑量、材料、分離高度、V3 規格、柵格翼）。飛船高度由全高減去助推器高度計算。</p>
 <p>第一節和第二節之間採用熱分離（hot staging）：助推器先關掉大部分引擎，飛船在兩節還連在一起時就點火，把自己推離助推器。V3 是 2026 年起使用的第三代設計，第 12 次試飛（2026 年 5 月 22 日）是 V3 與 Raptor 3 引擎的首飛。</p>
 <p class="src">來源：SpaceX 第 8、12 次試飛頁</p>
 
 <h2 id="q3">助推器怎麼回來？為什麼用發射塔的機械臂接住？</h2>
-<p>助推器分離後，要在幾分鐘內把往外飛的速度抵銷、飛回發射場，再在發射塔旁減速到幾乎靜止。<a href="#fig-3">圖 3</a> 用五步呈現這個過程，按 ▶ 逐步播放；每一步的說明取自 SpaceX 的試飛報告。</p>
-<figure id="fig-3" class="stepper">
+<p>助推器分離後，要在幾分鐘內把往外飛的速度抵銷、飛回發射場，再在發射塔旁減速到幾乎靜止。<a href="#fig-4">圖 4</a> 用五步呈現這個過程，按 ▶ 逐步播放；紫色是助推器，橄欖色是飛船。每一步的說明取自 SpaceX 的試飛報告。</p>
+<figure id="fig-4" class="stepper">
 <svg viewBox="0 0 720 320" role="img" aria-label="助推器返回的五個步驟：熱分離、翻轉並折返點火、滑行下降並以柵格翼修正、降落點火、由發射塔機械臂接住。">
   <line class="line" x1="10" y1="290" x2="710" y2="290"/>
   <rect class="box muted" x="150" y="100" width="20" height="190"/>
   <text x="160" y="310" text-anchor="middle" class="sm">發射塔</text>
   <line class="line" x1="170" y1="150" x2="202" y2="150"/>
   <g data-step="1+" data-caption="第 1 步：上升約兩分半後熱分離。助推器只留少數引擎運轉，飛船點燃自己的 6 具引擎、推離助推器，繼續飛向軌道。">
-    <path class="line" d="M186 280 C 210 170, 300 90, 420 70" marker-end="url(#arr)"/>
-    <circle class="dot" cx="420" cy="70" r="5"/>
+    <path class="line c1" d="M186 280 C 210 170, 300 90, 420 70" marker-end="url(#arr)"/>
+    <circle class="dot c1" cx="420" cy="70" r="5"/>
     <text x="420" y="50" text-anchor="middle" class="sm">① 熱分離</text>
-    <line class="line good" x1="420" y1="70" x2="618" y2="40" marker-end="url(#arr)"/>
-    <text x="630" y="44" class="sm">飛船入軌</text>
+    <line class="line c2" x1="420" y1="70" x2="618" y2="40" marker-end="url(#arr)"/>
+    <text x="630" y="44" class="sm c2">飛船入軌</text>
   </g>
   <g data-step="2+" data-caption="第 2 步：助推器翻轉，重新點燃引擎做折返點火（boostback burn），抵銷往外飛的速度，改朝發射場飛回。">
-    <line class="line bad" x1="415" y1="90" x2="348" y2="90" marker-end="url(#arr)"/>
+    <line class="line c1" x1="415" y1="90" x2="348" y2="90" marker-end="url(#arr)"/>
     <text x="380" y="115" text-anchor="middle" class="sm">② 翻轉、折返點火</text>
   </g>
   <g data-step="3+" data-caption="第 3 步：引擎關閉，助推器沿彈道落回，靠柵格翼（grid fins）微調方向。下降時把機身斜一點迎風，阻力變大、速度變慢，降落點火就能少用推進劑。">
-    <path class="line dash" d="M340 90 C 290 60, 230 50, 188 80" marker-end="url(#arr)"/>
+    <path class="line c1 dash" d="M340 90 C 290 60, 230 50, 188 80" marker-end="url(#arr)"/>
     <text x="270" y="40" text-anchor="middle" class="sm">③ 滑行下降，柵格翼修正</text>
   </g>
   <g data-step="4" data-caption="第 4 步：接近發射塔時降落點火。V3 助推器先點燃中央 13 具引擎減速，再減為 5 具、最後 3 具做精細修正。">
-    <rect class="box" x="178" y="90" width="16" height="100"/>
+    <rect class="box c1" x="178" y="90" width="16" height="100"/>
     <path class="box warn" d="M180 190 L192 190 L186 215 Z"/>
     <text x="140" y="160" text-anchor="end" class="sm">④ 降落點火</text><text x="140" y="180" text-anchor="end" class="sm">引擎 13 → 5 → 3 具</text>
   </g>
   <g data-step="5" data-caption="第 5 步：中央的 3 具引擎把助推器移到發射塔的兩支機械臂（暱稱「筷子」）之間，機械臂夾住頂部的掛點，助推器直接回到發射台上。">
-    <rect class="box" x="178" y="150" width="16" height="100"/>
-    <line class="line good" x1="170" y1="150" x2="202" y2="150" style="stroke-width:4"/>
+    <rect class="box c1" x="178" y="150" width="16" height="100"/>
+    <line class="line" x1="170" y1="150" x2="202" y2="150" style="stroke-width:4"/>
     <text x="140" y="210" text-anchor="end" class="sm">⑤ 機械臂接住</text><text x="140" y="230" text-anchor="end" class="sm">頂部的掛點</text>
   </g>
 </svg>
-<figcaption>圖 3　助推器返回的五步。示意圖，距離與高度不按比例。</figcaption>
+<figcaption>圖 4　助推器返回的五步。示意圖，距離與高度不按比例。</figcaption>
 </figure>
 <p class="src">來源：SpaceX 第 5、8 次試飛頁（熱分離、折返點火、降落點火、機械臂接住）、第 9 次試飛頁（較大迎角減少降落推進劑）、第 14 次試飛頁（V3 的 13 → 5 → 3 具引擎）；Wikipedia〈SpaceX Starship〉（V3 的三片柵格翼兼作掛點）</p>
-<p>為什麼不像 Falcon 9 一樣裝降落支架？Wikipedia 整理的理由有兩個：省掉支架可以減輕質量與機構的複雜度，而且助推器被接住後直接回到發射台上，可以更快準備下一次發射。回到火箭方程式的結論：在載荷只占百分之幾的火箭上，每少帶一公斤結構，都能換成載荷或降落用的推進劑。</p>
+<p>為什麼不像 Falcon 9 一樣裝降落支架？Wikipedia 整理的理由有兩個：省掉支架可以減輕質量與機構的複雜度，而且助推器被接住後直接回到發射台上，可以更快準備下一次發射。回到圖 2：在載荷只占百分之幾的火箭上，每少帶一公斤結構，都能換成載荷或降落用的推進劑。</p>
 <p class="src">來源：Wikipedia〈SpaceX Starship〉§ Facilities</p>
-<p>這個方法已經成功三次：第 5 次試飛（2024 年 10 月 13 日）首次接住助推器，第 7、8 次試飛（2025 年 1 月、3 月）各再接住一次。之後 SpaceX 改測其他項目：第 9 次試飛讓曾在第 7 次飛過的助推器再飛一次，這是 Starship 計畫第一次重複使用助推器，但它在降落點火開始後解體。V3 助推器至今還沒有被接住：第 12、13 次試飛的助推器都在墨西哥灣硬著陸；第 14 次則刻意把折返點火燒到液氧幾乎用盡，測試性能極限，「為未來飛回發射場的任務做準備」，最後在海上濺落。</p>
-<p class="src">來源：SpaceX 第 5、7、8、9、12、13、14 次試飛頁</p>
 
 <h2 id="q4">飛船從軌道回來，為什麼比助推器難？</h2>
-<p>關鍵在速度。飛船要達到軌道速度約 7,600 m/s；助推器分離時的設計目標約 8,650 km/h，也就是約 2,400 m/s。每公斤物體的動能是 ½v²：助推器約 ½ × 2,400² ≈ 2.9 百萬焦耳，飛船約 ½ × 7,600² ≈ 28.9 百萬焦耳，大約 10 倍（<a href="#fig-4">圖 4</a> 上半）。回到地面前，這些能量大部分要在大氣中消耗掉。這像煞車把車速的能量變成熱；不同的是，煞車的熱來自煞車片的摩擦，再入的熱主要來自飛船前方被急劇壓縮的空氣，而且每公斤的能量大得多（一般背景知識）。</p>
-<figure id="fig-4">
+<p>關鍵在速度。飛船要達到軌道速度約 7,600 m/s；助推器分離時的設計目標約 8,650 km/h，也就是約 2,400 m/s。每公斤物體的動能是 ½v²：助推器約 ½ × 2,400² ≈ 2.9 百萬焦耳，飛船約 ½ × 7,600² ≈ 28.9 百萬焦耳，大約 10 倍（<a href="#fig-5">圖 5</a> 上半）。回到地面前，這些能量大部分要在大氣中消耗掉。這像煞車把車速的能量變成熱；不同的是，煞車的熱來自煞車片的摩擦，再入的熱主要來自飛船前方被急劇壓縮的空氣，而且每公斤的能量大得多（一般背景知識）。</p>
+<figure id="fig-5">
 <svg viewBox="0 0 720 260" role="img" aria-label="上半：每公斤的動能，助推器分離時約 2.9 MJ/kg，飛船在軌道速度約 28.9 MJ/kg，約 10 倍。下半：飛船回收的四步：隔熱瓦朝下再入、腹部朝下滑降並以四片襟翼控制、翻轉成直立、降落點火。">
-  <text x="10" y="30" class="sm">每公斤的動能（½v²）</text>
-  <text x="10" y="60" class="b">助推器</text>
-  <rect class="box" x="90" y="45" width="60" height="20"/><text x="160" y="60" class="sm">2.9 MJ/kg（約 2,400 m/s）</text>
-  <text x="10" y="100" class="b">飛船</text>
-  <rect class="box bad" x="90" y="85" width="580" height="20"/><text x="660" y="100" text-anchor="end" class="sm">28.9 MJ/kg（約 7,600 m/s）</text>
+  <text x="10" y="30" class="sm">每公斤的動能（½v²，單位 MJ/kg）</text>
+  <text x="10" y="60" class="b c1">助推器</text>
+  <rect class="box c1" x="90" y="45" width="60" height="20"/><text x="160" y="60" class="sm">2.9 MJ/kg（約 2,400 m/s）</text>
+  <text x="10" y="100" class="b c2">飛船</text>
+  <rect class="box c2" x="90" y="85" width="580" height="20"/><text x="660" y="100" text-anchor="end" class="sm">28.9 MJ/kg（約 7,600 m/s）</text>
   <rect class="box warn" x="10" y="160" width="150" height="60" rx="6"/>
   <text x="85" y="186" text-anchor="middle" class="b">再入大氣層</text><text x="85" y="206" text-anchor="middle" class="sm">隔熱瓦朝下</text>
   <line class="line" x1="160" y1="190" x2="198" y2="190" marker-end="url(#arr)"/>
-  <rect class="box" x="200" y="160" width="150" height="60" rx="6"/>
+  <rect class="box c2" x="200" y="160" width="150" height="60" rx="6"/>
   <text x="275" y="186" text-anchor="middle" class="b">腹部朝下滑降</text><text x="275" y="206" text-anchor="middle" class="sm">四片襟翼控制</text>
   <line class="line" x1="350" y1="190" x2="388" y2="190" marker-end="url(#arr)"/>
-  <rect class="box" x="390" y="160" width="150" height="60" rx="6"/>
+  <rect class="box c2" x="390" y="160" width="150" height="60" rx="6"/>
   <text x="465" y="186" text-anchor="middle" class="b">翻轉成直立</text><text x="465" y="206" text-anchor="middle" class="sm">landing flip</text>
   <line class="line" x1="540" y1="190" x2="568" y2="190" marker-end="url(#arr)"/>
-  <rect class="box good" x="570" y="160" width="140" height="60" rx="6"/>
+  <rect class="box c2" x="570" y="160" width="140" height="60" rx="6"/>
   <text x="640" y="186" text-anchor="middle" class="b">降落點火</text><text x="640" y="206" text-anchor="middle" class="sm">目前在海上濺落</text>
 </svg>
-<figcaption>圖 4　飛船每公斤要消耗的能量約是助推器的 10 倍，所以需要整片隔熱瓦；回收的最後兩步與助推器類似。</figcaption>
+<figcaption>圖 5　飛船每公斤要消耗的能量約是助推器的 10 倍，所以需要整片隔熱瓦；回收的最後兩步與助推器類似。長條長度與動能成正比。</figcaption>
 </figure>
 <p class="src">來源：NASA Glenn〈Ideal Rocket Equation〉（軌道速度）；Wikipedia〈SpaceX Super Heavy〉（分離速度的設計目標）、〈SpaceX Starship〉（襟翼與腹部朝下的姿態）；SpaceX 第 10、13、14 次試飛頁（四片襟翼、翻轉、降落點火）。動能為本頁計算。</p>
-<p>飛船朝下的一面鋪了約 18,000 片六角形的黑色隔熱瓦，可耐約 1,400 °C，設計目標是重複使用、只需少量維護。SpaceX 從第 10 次試飛起，連續幾次在再入時刻意加重隔熱瓦與結構的負荷，測試極限；第 13 次試飛的飛船在濺落後保持完整，SpaceX 稱這是第一次看到完整的隔熱瓦。第 11 到 13 次試飛的飛船也做了傾斜轉彎，模擬未來飛回 Starbase 發射場的路徑。到目前為止，飛船不是在海上濺落，就是在飛行中解體；還沒有一艘被發射塔接住或再飛過。</p>
+<p>飛船朝下的一面鋪了約 18,000 片六角形的黑色隔熱瓦，可耐約 1,400 °C，設計目標是重複使用、只需少量維護。SpaceX 從第 10 次試飛起，連續幾次在再入時刻意加重隔熱瓦與結構的負荷，測試極限；第 13 次試飛的飛船在濺落後保持完整，SpaceX 稱這是第一次看到完整的隔熱瓦。第 11 到 13 次試飛的飛船也做了傾斜轉彎，模擬未來飛回 Starbase 發射場的路徑。</p>
 <p class="src">來源：Wikipedia〈SpaceX Starship〉（隔熱瓦數量與耐溫）；SpaceX 第 10、11、12、13、14 次試飛頁</p>
 
 <h2 id="q5">截至目前做到哪裡？</h2>
-<p>下表列出和回收直接相關的里程碑，全部取自 SpaceX 的試飛報告（第 11 次的助推器再飛取自 Wikipedia）。</p>
+<p>「完全可復用」要做到六件事，<a href="#fig-6">圖 6</a> 逐一列出每件事的狀態與第一次做到的試飛。前三張卡片的事已經實測，後三張還沒有：<span class="chip c1">助推器</span>的接住與再飛都做到了，<span class="chip c2">飛船</span>只做到入軌。</p>
+<figure id="fig-6" class="cards">
+<div class="card-grid cols-3">
+  <div class="card c1"><p class="card-title"><svg class="icon" aria-hidden="true"><use href="#i-tower-control"/></svg>助推器接住</p><dl><dt>狀態</dt><dd>已做到 3 次</dd><dt>首次</dt><dd>第 5 次試飛（2024-10-13）</dd><dt>備註</dt><dd>V3 助推器還沒有被接住過</dd></dl></div>
+  <div class="card c1"><p class="card-title"><svg class="icon" aria-hidden="true"><use href="#i-recycle"/></svg>助推器再飛</p><dl><dt>狀態</dt><dd>已做到 2 次</dd><dt>首次</dt><dd>第 9 次試飛（2025-05-27）</dd><dt>備註</dt><dd>那一次在降落點火時解體；第 11 次再飛一次</dd></dl></div>
+  <div class="card c2"><p class="card-title"><svg class="icon" aria-hidden="true"><use href="#i-satellite"/></svg>飛船入軌</p><dl><dt>狀態</dt><dd>已做到 1 次</dd><dt>首次</dt><dd>第 14 次試飛（2026-09-28）</dd><dt>備註</dt><dd>送出 26 顆 Starlink V3，脫軌點火後在太平洋濺落</dd></dl></div>
+  <div class="card c2"><p class="card-title"><svg class="icon" aria-hidden="true"><use href="#i-tower-control"/></svg>飛船接住</p><dl><dt>狀態</dt><dd>尚未實測</dd><dt>首次</dt><dd>—</dd><dt>備註</dt><dd>第 11–13 次模擬了飛回發射場的轉彎</dd></dl></div>
+  <div class="card c2"><p class="card-title"><svg class="icon" aria-hidden="true"><use href="#i-recycle"/></svg>飛船再飛</p><dl><dt>狀態</dt><dd>尚未實測</dd><dt>首次</dt><dd>—</dd><dt>備註</dt><dd>第 13 次濺落後首次保持完整，隔熱瓦完整</dd></dl></div>
+  <div class="card"><p class="card-title"><svg class="icon" aria-hidden="true"><use href="#i-fuel"/></svg>軌道推進劑傳輸</p><dl><dt>狀態</dt><dd>尚未實測</dd><dt>首次</dt><dd>—</dd><dt>備註</dt><dd>NASA 估計一次登月約需 16 次補給發射</dd></dl></div>
+</div>
+<figcaption>圖 6　助推器的「接住」與「再飛」都已實測；飛船剛完成第一次入軌，其餘三件事還沒有實測。狀態截至 2026-10-04。</figcaption>
+</figure>
+<p class="src">來源：SpaceX 第 5、7、8、9、11、13、14 次試飛頁；Wikipedia〈SpaceX Starship〉§ Eleventh flight test、§ Planned launch and landing profile（NASA 的補給次數估計）</p>
+<details><summary>逐次試飛紀錄（第 5–14 次）</summary>
 <table>
 <tr><th>日期</th><th>試飛</th><th>和回收有關的結果</th></tr>
 <tr><td style="white-space:nowrap">2024-10-13</td><td style="white-space:nowrap">第 5 次</td><td>首次由發射塔機械臂接住助推器；飛船在印度洋濺落</td></tr>
@@ -287,8 +373,9 @@ svg .dot { fill: var(--blue); } svg .dot.bad { fill: var(--red); } svg .dot.good
 <tr><td style="white-space:nowrap">2026-09-28</td><td style="white-space:nowrap">第 14 次</td><td>首次進入軌道並送出 26 顆 Starlink V3；助推器依計畫海上濺落；飛船首次脫軌點火後在太平洋濺落</td></tr>
 </table>
 <p class="src">來源：SpaceX 第 5、7、8、9、10、11、12、13、14 次試飛頁；Wikipedia〈SpaceX Starship〉§ Eleventh flight test</p>
-<p>把表格對回圖 1：助推器的「接住」已經證明可行，「再飛」做過兩次，但 V3 助推器還沒有被接住過；飛船剛完成第一次入軌，還沒有被接住或再飛過。SpaceX 在第 11 次試飛的報告中說，下一代載具將用於首次軌道飛行、實際載荷任務與推進劑傳輸。前兩項已在第 14 次試飛做到；接住飛船、快速周轉與在軌道上傳輸推進劑，則還沒有實測。Wikipedia 也整理了 NASA 的估計：一次登月需要在短時間內發射約 16 次，為飛船補充推進劑。</p>
-<p class="src">來源：SpaceX 第 11、14 次試飛頁；Wikipedia〈SpaceX Starship〉§ Planned launch and landing profile</p>
+</details>
+<p>V3 助推器至今還沒有被接住：第 12、13 次試飛的助推器都在墨西哥灣硬著陸；第 14 次則刻意把折返點火燒到液氧幾乎用盡，測試性能極限，「為未來飛回發射場的任務做準備」，最後在海上濺落。SpaceX 在第 11 次試飛的報告中說，下一代載具將用於首次軌道飛行、實際載荷任務與推進劑傳輸；前兩項已在第 14 次試飛做到。</p>
+<p class="src">來源：SpaceX 第 11、12、13、14 次試飛頁</p>
 <div class="admonition warning"><p class="admonition-title">推論</p>
 <p>Jones（2018）的論點是：可復用本身不保證便宜，太空梭就是反例。Starship 的賭注是「完全、快速」可復用加上量產，也就是讓翻修與周轉的成本遠小於造一枚新火箭。這個前提要等飛船也能接住並多次再飛之後才能檢驗；在那之前，任何每公斤成本的數字都是估計，不是實測。</p></div>
 
@@ -296,13 +383,16 @@ svg .dot { fill: var(--blue); } svg .dot.bad { fill: var(--red); } svg .dot.good
 <ul>
 <li>本頁是輕量查證。試飛結果以 SpaceX 官方報告為準，規格與部分事件取自 Wikipedia（二手整理），兩者都會隨新試飛更新。</li>
 <li>SpaceX 官網需要 JavaScript，本頁以官網內容服務（content.spacex.com）回傳的試飛報告全文為準。</li>
-<li>火箭方程式的例子採用 NASA 的教學數字（液氫液氧引擎、比衝 350 秒），Starship 的 Raptor 引擎燃燒甲烷，比衝不同；例子用來說明數量級，不是 Starship 的實際計算。</li>
+<li>火箭方程式的例子採用 NASA 的教學數字（液氫液氧引擎、比衝 350 秒），Starship 的 Raptor 引擎燃燒甲烷，比衝不同；例子與圖 2 用來說明數量級，不是 Starship 的實際計算。</li>
 <li>成本數字（太空梭、Falcon 9）是 Jones 在 2018 年引用的公告價格，不含之後的變化。</li>
 </ul>
 
 <h2 id="terms">名詞</h2>
 <table>
 <tr><th>名詞</th><th>在本頁的意思</th></tr>
+<tr><td><span class="chip c1">Super Heavy 助推器</span></td><td>Starship 的第一節，負責起飛後約兩分半的推進，之後飛回發射場</td></tr>
+<tr><td><span class="chip c2">Starship 飛船</span></td><td>Starship 的第二節，加速入軌、送出載荷，再入大氣層後降落</td></tr>
+<tr><td><span class="chip c3">載荷（payload）</span></td><td>火箭要送上太空的衛星或貨物，不含火箭本身</td></tr>
 <tr><td>火箭方程式（ideal rocket equation）</td><td>速度增量與噴氣速度、質量比的關係：Δu = I<sub>sp</sub> · g<sub>0</sub> · ln(MR)</td></tr>
 <tr><td>比衝（specific impulse, I<sub>sp</sub>）</td><td>衡量引擎效率的量，單位是秒；乘上 g<sub>0</sub> 就是等效噴氣速度</td></tr>
 <tr><td>熱分離（hot staging）</td><td>第二節在兩節還連在一起時就點火、推離第一節</td></tr>
