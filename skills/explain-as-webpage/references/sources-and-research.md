@@ -12,7 +12,7 @@ How to read material that is not the user's project, how to research a topic the
 
 - The mode follows the material, not the current directory. A document read while the agent works inside some repo still uses the document path. If the sandbox cannot write to that path, still propose it and say that writing there needs the user's approval; do not move the output into a folder of the current repository.
 - If the user also asks questions the document does not answer, say so in the confirmation, and research them as in topic mode (§7), or leave them out.
-- A video URL is out of scope. Say so and stop; do not download subtitles.
+- Material you cannot read (a video, a paywalled paper, a login-only page) is not a reason to stop: propose a way to get its text (§2, *Material you cannot read*). Do not download subtitles or work around access yourself.
 
 ## 2. Get the full text
 
@@ -57,21 +57,42 @@ wc -w "$T"/*.txt                 # material length
 - Check that the text is complete: its last paragraph matches the end of the article, and the word count is plausible.
 - `pdftotext` can turn rare glyphs into `�` (e.g. the `@` in a handle). Check every quote against the PDF.
 
+### Material you cannot read
+
+When the user names material you cannot read (a video or a podcast, a paper behind an institution's paywall, a private or login-only page), say why in the confirmation and propose ways to get it, the highest fidelity first. Never try to get around a paywall or a login yourself; the user decides what they can legitimately access.
+
+| Order | The user provides | Example | Treat it as |
+|---|---|---|---|
+| 1 | The full text, obtained with their own access | the paper's PDF from their library; the page saved as PDF | the material itself (the table above) |
+| 2 | A transcript or an export of the original | a video's subtitle file; a meeting transcript | the material's text; the page says it is a transcript |
+| 3 | Notes made by an AI tool that can read the original | NotebookLM notes on a YouTube video or on a paper | secondary (grade g3, §8); the rules below |
+
+For order 3, give the user two or three prompts to ask the tool, so that the notes follow the original and keep positions. For example: "List each part of the video in order, with its title and timestamp." and "For each part, say what it covers; keep quotes, code, and numbers, with timestamps." Notes that only answer broad questions ("is it worth watching", "what is the main claim") repeat each other and cannot be cited.
+
+When the page is built from AI notes:
+
+- Put a note box (title Note / 說明) under the conclusion: the page is built from the tool's notes on the original, not from the original.
+- In Sources, grade the notes g3 and list the original with "not read directly".
+- Cite the notes by their section headings, and the original's positions (timestamps, pages) where the notes give them. If they give none, say so in the note box.
+- Keep the content apart: separate the tool's own judgements (e.g. "well worth watching", advice the notes do not attribute to the author) from the original's content. Leave them out, or list them under Limits as the tool's addition.
+- Check technical facts (API names, formulas, numbers) against primary sources, such as the official documentation or the paper, as a light pass (§7).
+
 ## 3. Outline, candidate questions, long material, and plans
 
 In document mode, the confirmation (SKILL.md step 4, item 1) always shows:
 
-- **The outline:** each section heading of the material with its approximate length.
+- **The outline:** each section of the material with its approximate length. Use the original's own structure: its chapters, sections, or the steps of a tutorial. When the text you read is an intermediary (AI notes, a summary) whose headings are its own questions, take the structure from what it reports about the original (e.g. "Step 1–5"), not from its headings. If it does not show the structure, say so and suggest the prompts in §2.
 - **5–8 candidate questions**, numbered, phrased as the reader would ask them and taken from the material's sections. Users often only say "make this easier to read", so let them pick questions instead of writing them.
+- **How to organise the page**, whatever the length:
 
-Put the numbered candidates inside the question itself: in the question text, or in the option descriptions. Text written before a structured question tool can go unseen, for example when the user interrupts the tool and answers in a message. A structured question tool allows few options per question (4 in `AskUserQuestion`), so do not spend one option per candidate: offer the recommended set (e.g. "1, 2, 3, 5"), one or two alternative sets, and let the user type their own numbers. This keeps the other questions free for tier, language and path, and helpers.
+  | Choice | Result | Suggest it when the request says |
+  |---|---|---|
+  | **The material's own order** | one `h2` per section of the original, in its order, so the reader can follow and review it: a single page for short material, a page tree for long material (below) | review, notes, guide me through, follow along |
+  | **Question-driven** | one page that answers the 3–5 chosen questions; everything else is a link to the original | "I don't understand X", "why does it …" |
 
-If the material is longer than about 3,000 words (about 6,000 CJK characters), it does not fit one page budget (`writing-rules.md`). Also offer two ways to cover it:
+Put the numbered candidates inside the question itself: in the question text, or in the option descriptions. Text written before a structured question tool can go unseen, for example when the user interrupts the tool and answers in a message. A structured question tool allows few options per question (4 in `AskUserQuestion`), so do not spend one option per candidate: offer the organisation choice and the question sets as options of one question (e.g. "In the material's order (7 sections)", "Questions 1, 2, 3, 5"), and let the user type their own numbers. This keeps the other questions free for tier, language and path, and helpers.
 
-| Choice | Result | Cost |
-|---|---|---|
-| **Question-driven** | One page answers the 3–5 chosen questions. Everything else is a link to the original | 1 page |
-| **Faithful guided reading** | A page tree from the first build: a hub page plus up to about 6 child pages, planned and built as in `extending-pages.md` §6. Every section of the material maps to a section of some page | 1 + children |
+If the material is longer than about 3,000 words (about 6,000 CJK characters), it does not fit one page budget (`writing-rules.md`). The material's own order then becomes **faithful guided reading**: a page tree from the first build, a hub page plus up to about 6 child pages, planned and built as in `extending-pages.md` §6. Every section of the material maps to a section of some page. Say the page count in the option (e.g. "In the material's order: hub + 5 pages").
 
 If the material is a plan (stages with tasks and checks, `page-types.md` § Roadmap and plan pages), offer one child page per stage whatever its length, and ask whether to expand its units into steps (§6). For a plan, the recommended answer to both is yes.
 

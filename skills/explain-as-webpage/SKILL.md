@@ -18,7 +18,7 @@ Each page is a single `.html` file. No build step, no external URLs, no extra fi
 - The user gives an article, PDF, or notes, or only names a topic, and wants a page that is easier to read.
 - The user asks for an explainer, primer, diagram, or "knowledge page".
 
-**When NOT to use:** a one-line answer is enough; the user wants project documentation that lives in the repo (write normal docs); the user wants a video, or gives a video as the material (out of scope: the agent cannot watch it, and the highest tier is an in-browser step animation).
+**When NOT to use:** a one-line answer is enough; the user wants project documentation that lives in the repo (write normal docs); the user wants a video as the output (the highest tier is an in-browser step animation). A video, a paywalled paper, or a login-only page as the material is fine: propose a way to get its text (`sources-and-research.md` §2).
 
 ## Process
 
@@ -58,7 +58,7 @@ Examples: a package's module responsibilities and data flow → L0. Real-time fa
 
 Send **one** message (use a structured question tool if the platform has one, e.g. `AskUserQuestion` in Claude Code, with at most 4 questions; otherwise a plain message) containing:
 
-1. The core questions — ask the user to add, remove, or reword. In document mode, also show the material's outline and 5–8 numbered candidate questions inside the question itself (text written before a question tool can go unseen), and, for long material or a plan, the coverage choice and whether to expand units into steps (`sources-and-research.md` §3, §6).
+1. The core questions — ask the user to add, remove, or reword. In document mode, also show the material's outline and 5–8 numbered candidate questions inside the question itself (text written before a question tool can go unseen), how to organise the page (in the material's own order, or by questions), and for a plan whether to expand units into steps (`sources-and-research.md` §3, §6).
 2. The proposed tier (and page count), why, and the cheaper alternative with what it would lose.
 3. The page language (the language the user asks for, otherwise the one the user writes in; one language per topic) and the reader: general public, non-specialist student, or engineer, which is the default in project mode (`writing-rules.md` § Reader). For a high-risk topic (health, safety, law, finance), say so; research is then required (`sources-and-research.md` §9).
 4. The output path, the research depth in topic mode (light or deep, `sources-and-research.md` §7), and any helper skill you plan to use and for which step (§5). Default path in project mode: `~/Documents/explainers/<repo-name>/<topic-slug>.html`, where `<repo-name>` is the basename of the git top-level directory; offer "inside the project" as an alternative. Document mode: `~/Documents/explainers/<topic-slug>/<topic-slug>.html`.

@@ -65,7 +65,7 @@ Do not add: scope/authority tables, "how to read this document" guides, change h
 |---|---|---|
 | Conclusion box title | Conclusion | 結論 |
 | Inference box title | Inference | 推論 |
-| Note box title (added content, `sources-and-research.md` §6) | Note | 說明 |
+| Note box title (added content or AI-notes material, `sources-and-research.md` §6, §2) | Note | 說明 |
 | Emerging view box title (`sources-and-research.md` §8) | Emerging view | 新興說法 |
 | Caution box title (high-risk topics) | Caution | 注意 |
 | Access date in Sources | Accessed | 存取日期 |

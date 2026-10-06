@@ -23,6 +23,7 @@ The tree has two levels only. A follow-up on a child page that needs a new page 
 | Asks for more detail on a question the page already answers, and the answer fits in ~150 words (~300 CJK characters) with no new figure | a `<details>` at the end of that section |
 | Is a new question: another mechanism, what a file or function does, a related method | a child page |
 | Shows that the page's conclusion or causal chain is wrong or incomplete | a revision of the existing page: conclusion, Figure 1, the affected section |
+| Asks to follow the material's order (a question-driven page should become a guided reading) | a re-plan: rebuild the topic as a §6 tree |
 
 Rules:
 
@@ -30,6 +31,7 @@ Rules:
 - A `<details>` holds text, a table, or a code excerpt. If the answer needs a figure, it is a child page.
 - Group related new questions: one child page answers 3–5 of them. Do not make one page per question.
 - If the topic would pass ~6 child pages, propose a new topic (a new hub) instead.
+- A re-plan keeps the topic's directory and the hub's file name. Copy the existing pages to a backup outside the output directory first. You may move figures to child pages and renumber them; the §4 rule against renumbering does not apply. An interactive figure that moves keeps working only if its element ids and the ids in its script (`f<n>-…`) are renamed with it. The confirmation for a re-plan is §6's.
 
 ## 3. Confirm once
 
