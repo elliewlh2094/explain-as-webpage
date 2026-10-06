@@ -1,12 +1,12 @@
 {
-  "name": "sphinx-style-notes-maker",
+  "name": "explain-as-webpage",
   "interface": {
-    "displayName": "Sphinx-style Notes Maker"
+    "displayName": "Explain As Webpage"
   },
   "plugins": [
     {
-      "name": "sphinx-style-notes-maker",
-      "version": "0.3.0",
+      "name": "explain-as-webpage",
+      "version": "0.4.0",
       "description": "Turn an unfamiliar technique in your project, a document, or a topic into a single Read the Docs-style HTML explainer page.",
       "source": {
         "source": "local",

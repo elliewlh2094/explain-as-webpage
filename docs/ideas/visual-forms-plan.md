@@ -89,7 +89,7 @@
 **相依：** T3　**檔案：** 本計畫檔　**規模：** XS
 
 ### 檢查點 A
-- [ ] 使用者檢視拆分 diff；提供提交建議（2026-10-06 使用者表示來不及檢視，先繼續 T6；T3–T6 的變更尚未提交）
+- [x] 使用者檢視拆分 diff；提供提交建議（2026-10-06 使用者表示來不及檢視，先繼續 T6；diff 未經使用者檢視，T3–T4 後來以分組提交收錄）
 
 ### 第 2 階段：視覺詞彙
 
@@ -269,23 +269,23 @@
 #### T13 Codex 實測（使用者手動）
 
 **驗收條件：**
-- [ ] 在 Codex 產出一頁時，編排者讀取了 explainer-figure
+- [x] 在 Codex 產出一頁時，編排者讀取了 explainer-figure（兩次 Codex 實測都讀了 `explainer-figure/SKILL.md`；Codex 的 skill 清單是否顯示 explainer-figure，使用者決定不測）
 
 **相依：** T9
 
 #### T14 打包
 
 **驗收條件：**
-- [ ] 三個 manifest 升為 0.4.0
-- [ ] 兩份 README：新 skill、並列安裝說明、目錄樹；`CLAUDE.md` 同步
-- [ ] `docs/ideas/visual-forms.md` 的 Open Questions 標註已決定的事項
+- [x] 四個 manifest 檔升為 0.4.0
+- [x] 兩份 README：新 skill、並列安裝說明、目錄樹；`CLAUDE.md` 同步
+- [x] `docs/ideas/visual-forms.md` 的 Open Questions 標註已決定的事項
 
 **驗證：** `CLAUDE.md` 的驗證指令全部通過。
 
 **相依：** 檢查點 C、T13　**規模：** M
 
 ### 檢查點 D
-- [ ] 全部驗收條件達成；提供最終提交建議
+- [x] 全部驗收條件達成；提供最終提交建議（2026-10-07；未完成項目見 T14 結果）
 
 ## Risks and Mitigations
 
@@ -866,4 +866,61 @@ Codex 實測（使用者，GPT-6.1-Sol high，材料：Ronin〈How to become a R
 | 測試（實作前） | 5 項失敗 |
 | 測試（實作後，路線圖檢查限定在子頁段落）＋引用檢查 | `ok` |
 | `claude plugin validate .` | 通過（預期的 `CLAUDE.md` 警告） |
+
+### T14 與檢查點 D（2026-10-07）
+
+**結論：第四輪打包完成，版本 0.4.0。兩份 README、`CLAUDE.md` 與構想文件都已同步；`CLAUDE.md` 列出的驗證指令全部通過。**
+
+| 檔案 | 修改 |
+|---|---|
+| 四個 manifest 檔 | `.claude-plugin/plugin.json`、`.claude-plugin/marketplace.json`、`.codex-plugin/plugin.json`、`.agents/plugins/marketplace.json` 的版本號 0.3.0 → 0.4.0 |
+| `README.md`、`README.zh-TW.md` | 說明兩個 skill；圖片改為「內嵌 SVG 與 HTML 卡片」；L0 改為「文字＋靜態圖（SVG 或卡片）」；新增「不只方框與箭頭」一項（歸納卡、具象插圖、概念色、Lucide 圖示，舉兩個繁中範例；英文版以路徑指出，因為英文 README 只列英文範例）；確認訊息會列出每頁的圖與整理方式；新增 NotebookLM 筆記的使用範例；目錄樹補上 `cards.md`、`pictorial.md`、`icons.md`、`assets/icons/`；「刻意不做的事」拆成「不產出影片」與「不直接讀取讀不到的材料」；授權段落註明內附的 Lucide 圖示 |
+| `CLAUDE.md` | 專案現況改為兩個 skill、0.4.0、讀不到的材料的取得管道；架構段補上模板的新 class 與圖示區塊、`cards.md`、`pictorial.md`、`icons.md`、`assets/icons/`；兩個繁中範例的說明 |
+| `docs/ideas/visual-forms.md` | Open Questions 中已決定的 4 項（圖示庫、skill 名稱、單獨呼叫、版本號）標註結果；`<slug>.assets/` 與 L3 仍留待以後 |
+
+驗證（測試腳本 `$CLAUDE_JOB_DIR/tmp/t14.sh` 與 `CLAUDE.md` 的驗證指令，寫成腳本檔執行）：
+
+| 項目 | 結果 |
+|---|---|
+| T14 測試（實作前） | 25 項失敗 |
+| T14 測試（實作後）：版本號、README 目錄樹、材料管道、L0、授權、`CLAUDE.md` 架構、Open Questions、引用檢查 | `ok` |
+| manifest `json.tool` | 4 檔都 ok |
+| `claude plugin validate .` | 通過（預期的 `CLAUDE.md` 警告） |
+| `plugin details` | 0.4.0；Skills (2)；always-on ~549 tok；on-invoke 4.2k／2.5k |
+| 模板外部資源 grep、寬版截圖、390px iframe | 無輸出；正常；`<title>ok` |
+| 7 個範例頁的外部資源 grep | 都是 0 |
+
+**本輪沒有完成、留待以後的項目：**
+
+- Codex 的 skill 清單是否顯示 explainer-figure（`disable-model-invocation` 在 Codex 是否有效）：使用者決定不測。
+- 插圖繪製規範，以及其中的瀏覽器量測壓線檢查腳本（T12 回饋第 9 項）。T10–T12 與兩次 Codex 實測都出現箭頭穿過文字或歪掉的情況。
+- 第二階段：cite-figure（引用圖片、`<slug>.assets/`）；未來的 L3（anime.js）。
+- 推送到 GitHub 後，把 Codex 的 marketplace 改回 GitHub 來源，並確認快取資料夾是 0.4.0。
+
+### 改名：plugin 名稱改為 explain-as-webpage（2026-10-07，併入 T14）
+
+**結論：plugin 名稱、marketplace 名稱、GitHub 網址與 Codex 的顯示名稱，都從 `sphinx-style-notes-maker`／「Sphinx-style Notes Maker」改為 `explain-as-webpage`／「Explain As Webpage」。** 使用者已先把 GitHub 儲存庫改名為 `elliewlh2094/explain-as-webpage`，本機 `origin` 也已指向新網址。安裝後的 skill 名稱變成 `explain-as-webpage:explain-as-webpage`。
+
+| 檔案 | 修改處數 |
+|---|---|
+| 四個 manifest 檔（`name`、`homepage`、`repository`、`displayName`） | 12 |
+| `README.md`、`README.zh-TW.md`（安裝指令、呼叫名稱） | 16 |
+| `CLAUDE.md`（`plugin details` 指令） | 1 |
+| `examples/explain-as-webpage/` 兩頁（麵包屑、安裝指令、呼叫名稱、來源行） | 22 |
+
+保留舊名稱的地方：`tasks/plan.md`、`docs/specs/explain-as-webpage-v3.md` 與本檔先前的結果記錄，這些是當時的歷史紀錄。本機的儲存庫資料夾仍叫 `sphinx-style-notes-maker`；改資料夾名稱會讓 Claude Code 的專案記憶路徑失效，沒有改。
+
+驗證：4 個 manifest 的 `json.tool` 都 ok；`claude plugin validate .` 通過；`claude --plugin-dir . plugin details explain-as-webpage` 顯示 `explain-as-webpage 0.4.0`、Skills (2)；模板與 7 個範例頁沒有外部資源；`examples/explain-as-webpage/` 兩頁的 390px 檢查都是 `ok`；T14 測試仍為 `ok`。
+
+### 改名：主 skill 改為 explainer-page（2026-10-07，併入 T14）
+
+**結論：plugin 維持 `explain-as-webpage`，主 skill 改名為 `explainer-page`，與 `explainer-figure`、第二階段的 `explainer-cite` 一致。安裝後的呼叫方式是 `/explain-as-webpage:explainer-page`。**
+
+- 資料夾 `skills/explain-as-webpage/` 以 `git mv` 改為 `skills/explainer-page/`；frontmatter `name`、標題（Explainer Page）與模板開頭的註解同步。
+- explainer-figure 的 4 個檔案共 18 處：相對路徑改為 `../explainer-page/…`，說明文字中的 skill 名稱一併改。
+- 兩份 README、`CLAUDE.md`、`examples/explain-as-webpage/` 兩頁：逐處判斷字串指的是 plugin 還是 skill，只改 skill 的部分（呼叫名稱、`cp -r` 安裝指令、檔案路徑、說明文字）；plugin 名稱、marketplace、GitHub 網址與範例資料夾名稱不變。
+- 順便修正：`examples/explain-as-webpage/` 兩頁的 `cp -r` 指令原本只複製一個資料夾，是 T3 拆分時漏改的；現在同時複製兩個 skill。這兩頁其餘內容仍停在 0.2 版的描述（例如「一個 skill」、模板 254 行），而它的開頭畫面是 README 的封面圖，所以沒有改寫。
+- 未改：歷史紀錄、`docs/ideas/visual-forms.md` 與 `figure-values.md` 中當時的名稱。
+
+驗證：引用檢查 `ok`；5 個具象插圖片段檢查 `ok`；4 個 manifest 的 `json.tool` ok；`claude plugin validate .` 通過；`plugin details` 顯示 `explain-as-webpage 0.4.0`、Skills (2) `explainer-figure, explainer-page`、always-on ~529 tok；模板無外部資源、390px `<title>ok`；兩個 `SKILL.md` 為 130、111 行。以 `claude --plugin-dir . -p "/explain-as-webpage:explainer-page …"` 實際呼叫：session 的 skill 清單與斜線指令都只有 `explain-as-webpage:explainer-page`（explainer-figure 仍隱藏），代理回覆正在使用該 skill，花費約 0.18 美元。
 

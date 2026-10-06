@@ -1,12 +1,12 @@
 {
-  "name": "sphinx-style-notes-maker",
-  "version": "0.3.0",
+  "name": "explain-as-webpage",
+  "version": "0.4.0",
   "description": "Turn an unfamiliar technique in your project, a document you give, or a topic you name into a single Read the Docs-style HTML explainer page, built from your project's code and reports, the document's full text, or graded sources.",
   "author": {
     "name": "Ellie Huang"
   },
-  "homepage": "https://github.com/elliewlh2094/sphinx-style-notes-maker",
-  "repository": "https://github.com/elliewlh2094/sphinx-style-notes-maker",
+  "homepage": "https://github.com/elliewlh2094/explain-as-webpage",
+  "repository": "https://github.com/elliewlh2094/explain-as-webpage",
   "license": "MIT",
   "skills": "./skills"
 }

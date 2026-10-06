@@ -14,7 +14,7 @@
 - [x] T4 觸發測試（7 個提示：explainer-figure 0 次；說明頁 2/2 觸發 explain-as-webpage）
 
 ### 檢查點 A
-- [ ] 使用者檢視拆分 diff；提供提交建議（使用者先跳過，T3–T6 尚未提交）
+- [x] 使用者檢視拆分 diff；提供提交建議（使用者跳過檢視；已分組提交）
 
 ## 第 2 階段：視覺詞彙
 - [x] T5 概念色與對比檢查（c1–c5、`.chip`、`--green-text`；全部 ≥ 4.5:1）
@@ -43,8 +43,8 @@
 - [x] T13c 讓代理用上新圖型、保住讀者的問題（Codex 實測的回饋）
 - [x] T13d 以同一份 PDF 重跑驗證（Claude 明顯改善；Codex 主頁改善、月份頁仍有模板標題）
 - [x] T13e 候選問題用 (1) 編號；路線圖子頁只有兩個固定標題、資源不獨立成節
-- [ ] T13 Codex 實測（使用者手動）
-- [ ] T14 manifest 0.4.0、README、`CLAUDE.md`、構想文件的 Open Questions
+- [x] T13 Codex 實測（使用者手動；編排者會讀 explainer-figure；skill 清單未測）
+- [x] T14 manifest 0.4.0、README、`CLAUDE.md`、構想文件的 Open Questions
 
 ### 檢查點 D
-- [ ] 全部驗收條件達成；提供最終提交建議
+- [x] 全部驗收條件達成；提供最終提交建議
