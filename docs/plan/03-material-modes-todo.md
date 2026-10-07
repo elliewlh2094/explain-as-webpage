@@ -1,6 +1,6 @@
 # Todo：explain-as-webpage 第三輪（材料模式）
 
-詳細驗收條件見 `tasks/plan.md`，規格見 `docs/specs/explain-as-webpage-v3.md`。第二輪的待辦已全部完成（見 git 歷史）。
+詳細驗收條件見 `docs/plan/03-material-modes-plan.md`，規格見 `docs/plan/03-material-modes-spec.md`。第二輪的待辦已全部完成（見 git 歷史）。
 
 ## 第 0 階段：風險探測
 - [x] T1 取得材料與環境探測（WebFetch 全文、`pdftotext`、可見的輔助 skill；Codex 延後到 T16）

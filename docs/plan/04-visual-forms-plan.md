@@ -1,6 +1,6 @@
 # 實作計畫：擴充視覺表現形式（第四輪）
 
-構想見 `docs/ideas/visual-forms.md`，待辦清單見 `docs/ideas/visual-forms-todo.md`。
+構想見 `docs/plan/04-visual-forms-idea.md`，待辦清單見 `docs/plan/04-visual-forms-todo.md`。
 
 ## Overview
 

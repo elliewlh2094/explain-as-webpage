@@ -1,6 +1,6 @@
 # 規格：explain-as-webpage 第三輪（材料模式）
 
-> 狀態：已實作（2026-10-04，plugin 版本 0.3.0；實作與驗證紀錄見 `tasks/plan.md`）。前兩輪的構想見 `docs/ideas/explain-as-webpage.md`、`docs/ideas/explain-as-webpage-v2.md`。實作時先依本規格以 `planning-and-task-breakdown` 拆成 `tasks/plan.md` 與 `tasks/todo.md`；需求有變動時，先更新本文件再實作。
+> 狀態：已實作（2026-10-04，plugin 版本 0.3.0；實作與驗證紀錄見 `docs/plan/03-material-modes-plan.md`）。前兩輪的構想見 `docs/plan/01-initial-skill-idea.md`、`docs/plan/02-english-page-tree-idea.md`。實作時先依本規格以 `planning-and-task-breakdown` 拆成 `docs/plan/03-material-modes-plan.md` 與 `docs/plan/03-material-modes-todo.md`；需求有變動時，先更新本文件再實作。
 
 ## 0. 問題陳述與範圍
 

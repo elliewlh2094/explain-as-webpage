@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 本儲存庫是 plugin `explain-as-webpage`（版本 0.4.0），提供兩個 agent skill：`explainer-page` 與它的繪圖輔助 skill `explainer-figure`。它讓代理把陌生的技術、設計或主題做成單一、RTD 風格的 HTML 知識網頁。材料分三種模式：使用者的專案（以真實程式碼、資料與報告為例）、使用者給的文件（網頁文章、PDF、Markdown，讀取全文），或只有主題（查證並為來源分級）；代理讀不到的材料（影片、需權限的論文）改由使用者提供全文、逐字稿或 NotebookLM 這類工具的筆記；使用者追問時，可補進原頁或延伸為「主頁＋子頁」的頁面樹。頁面可用英文或繁體中文產出。繪圖規則另放在 `explainer-figure` skill，只由 explainer-page 以相對路徑讀取，兩個 skill 資料夾必須並列。Claude Code 與 Codex 共用同一份 `skills/*/SKILL.md`，兩個平台只各自附 plugin manifest，格式仿照 addyosmani/agent-skills。
 
-需求與取捨記錄在 `docs/ideas/explain-as-webpage.md`（第一輪）、`docs/ideas/explain-as-webpage-v2.md`（第二輪）、`docs/specs/explain-as-webpage-v3.md`（第三輪規格：材料模式，已實作）與 `docs/ideas/figure-values.md`（圖中數值的意義），實作計畫與進度記錄在 `tasks/plan.md`、`tasks/todo.md`（第三輪）。第四輪（視覺表現形式）的構想、計畫與待辦在 `docs/ideas/visual-forms.md`、`visual-forms-plan.md`、`visual-forms-todo.md`。
+各輪的需求、取捨、實作計畫與進度記錄在 `docs/plan/`，索引見 `docs/plan/README.md`。命名規則見下方「計畫文件」。
 
 ## 架構
 
@@ -26,6 +26,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `.claude-plugin/`、`.codex-plugin/`、`.agents/plugins/`：plugin 與 marketplace manifest，版本號需同步。
 
 修改規則時，兩個 `SKILL.md` 都維持精簡（約 130 行以內），細節放進 references。跨 skill 的路徑從 skill 根目錄寫起，例如 `../explainer-figure/SKILL.md`。
+
+## 計畫文件
+
+本規則優先於規劃 skill（例如 `idea-refine`、`spec-driven-development`、`planning-and-task-breakdown`）的預設輸出路徑。不寫入 `docs/ideas/`、`docs/specs/`、`tasks/`。
+
+- 所有計畫文件直接放在 `docs/plan/`，不建立子目錄。
+- 檔名為 `<兩位數輪次>-<主題 slug>-<文件類型>.md`，例如 `05-citations-plan.md`。
+- 文件類型固定為 `idea`（構想）、`spec`（規格）、`plan`（實作計畫）、`todo`（待辦）。某一輪中途另外整理的構想，用描述性名稱取代文件類型，例如 `03-material-modes-figure-values.md`。
+- 開始新的一輪時，輪次取現有最大值加 1，並在 `docs/plan/README.md` 的表格新增一列；狀態改變時更新同一列。
+- 文件內互相引用時寫完整路徑，例如 `docs/plan/04-visual-forms-plan.md`。
 
 ## 驗證指令
 

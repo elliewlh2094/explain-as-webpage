@@ -1,6 +1,6 @@
 # 實作計畫：explain-as-webpage 第三輪（材料模式）
 
-> 第二輪（英文支援、頁面樹延伸、autoresearch 範例）已完成，內容見 git 歷史。本輪規格見 `docs/specs/explain-as-webpage-v3.md`。
+> 第二輪（英文支援、頁面樹延伸、autoresearch 範例）已完成，內容見 git 歷史。本輪規格見 `docs/plan/03-material-modes-spec.md`。
 
 ## Overview
 依 v3 規格擴充 `explain-as-webpage`，新增三項能力：

@@ -1,6 +1,6 @@
 # Todo：擴充視覺表現形式（第四輪）
 
-詳細驗收條件見 `docs/ideas/visual-forms-plan.md`，構想見 `docs/ideas/visual-forms.md`。
+詳細驗收條件見 `docs/plan/04-visual-forms-plan.md`，構想見 `docs/plan/04-visual-forms-idea.md`。
 
 ## 第 0 階段：風險探測
 - [x] T1 基準與圖示庫（token 基準、LICENSE、覆蓋率；建議 Lucide，兩套各缺 3/101）

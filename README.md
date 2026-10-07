@@ -151,10 +151,8 @@ examples/starship-reusability/  # Example (Traditional Chinese): a page from res
 .claude-plugin/                 # Claude Code plugin and marketplace manifests
 .codex-plugin/                  # Codex plugin manifest
 .agents/plugins/                # Codex marketplace manifest
-docs/ideas/                     # Idea one-pagers; the visual-forms round keeps its plan and task list here too
-docs/specs/                     # Specification of round 3 (material modes)
+docs/plan/                      # Idea, spec, plan, and task files of each round; index in docs/plan/README.md
 docs/images/                    # README images: covers, the post screenshot, the three tiers
-tasks/                          # Implementation plan and task list of the material-modes round
 ```
 
 ## What it does not do

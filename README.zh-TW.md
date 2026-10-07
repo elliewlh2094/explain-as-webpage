@@ -146,10 +146,8 @@ examples/starship-reusability/  # 範例（繁中）：由查證來源產出的�
 .claude-plugin/                 # Claude Code 的 plugin 與 marketplace manifest
 .codex-plugin/                  # Codex 的 plugin manifest
 .agents/plugins/                # Codex 的 marketplace manifest
-docs/ideas/                     # 構想摘要；視覺表現形式這一輪的計畫與待辦也放在這裡
-docs/specs/                     # 第三輪規格（材料模式）
+docs/plan/                      # 各輪的構想、規格、計畫與待辦；索引見 docs/plan/README.md
 docs/images/                    # README 用圖：封面、貼文截圖、三個層級截圖
-tasks/                          # 材料模式那一輪的實作計畫與待辦
 ```
 
 ## 刻意不做的事
