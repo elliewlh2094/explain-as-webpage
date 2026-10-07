@@ -309,8 +309,8 @@
 **說明：** `main` 已推送到 `origin`（`elliewlh2094/explain-as-webpage`）。使用者本機的 Codex marketplace 仍指向本機路徑。
 
 **驗收條件：**
-- [ ] `codex plugin marketplace add elliewlh2094/explain-as-webpage` 取代本機路徑來源
-- [ ] Codex 的 plugin 快取資料夾是 0.4.0，skill 清單中有 `explain-as-webpage:explainer-page`
+- [x] `codex plugin marketplace add elliewlh2094/explain-as-webpage` 取代本機路徑來源
+- [x] Codex 的 plugin 快取資料夾是 0.4.0，skill 清單中有 `explain-as-webpage:explainer-page`
 
 **相依：** 無
 
@@ -319,10 +319,10 @@
 **說明：** `examples/explain-as-webpage/` 的英文與繁中兩頁仍是第三輪的內容：模板寫「254 行」、manifest 寫「0.2.0」，沒有 explainer-figure、歸納卡、具象插圖與圖示。這兩頁的開頭畫面是 README 的封面圖。
 
 **驗收條件：**
-- [ ] 以 0.4.0 的 skill 重做兩頁，涵蓋兩個 skill 的分工、各檔案的讀取時機與 token 估計值（取自 `plugin details`）、新的圖型
-- [ ] 兩頁都通過 `SKILL.md` 第 6 步的檢查；390px iframe 為 `<title>ok`
-- [ ] 依 `CLAUDE.md` 的截圖參數重截 `docs/images/cover-process.png` 與 `cover-process.zh-TW.png`
-- [ ] 兩份 README 刪除「這一頁描述的是第三輪時的 skill」那一句，並依新內容更新範例說明
+- [x] 以 0.4.0 的 skill 重做兩頁，涵蓋兩個 skill 的分工、各檔案的讀取時機與 token 估計值（取自 `plugin details`）、新的圖型
+- [x] 兩頁都通過 `SKILL.md` 第 6 步的檢查；390px iframe 為 `<title>ok`
+- [x] 依 `CLAUDE.md` 的截圖參數重截 `docs/images/cover-process.png` 與 `cover-process.zh-TW.png`
+- [x] 兩份 README 刪除「這一頁描述的是第三輪時的 skill」那一句，並依新內容更新範例說明
 
 **驗證：** 第 6 步檢查、兩種寬度截圖、README 連結檢查、使用者判讀。
 
@@ -978,3 +978,51 @@ Codex 實測（使用者，GPT-6.1-Sol high，材料：Ronin〈How to become a R
 - 「token 成本沒有明顯增加」：每頁約 +1k tok（+13%），增加的部分是新功能（圖說明單與圖型表），拆分本身沒有增加成本，因此打勾；數字寫在同一行，供使用者重新判斷。
 
 驗證：逐項對照本檔 T1、T2、T3、T4、T10、T11、T12、T13、T13d 與檢查點 B、C 的紀錄；`grep` 計數為 8 個 `[x]`、0 個 `[ ]`。
+
+### T16（2026-10-07）
+
+**結論：Codex 已改用 GitHub 來源的 0.4.0。新發現：Codex 的 `$` 自動補全清單同時列出 `explain-as-webpage:explainer-page` 與 `explain-as-webpage:explainer-figure`，表示 explainer-figure 的 `user-invocable: false` 在 Codex 中沒有讓它從清單隱藏。** Claude Code 中 explainer-figure 仍隱藏（T4、T14）。Codex 是否會在一般繪圖需求中自動觸發 explainer-figure 沒有測；這一項移到第五輪的候選清單。
+
+| 檢查 | 結果 |
+|---|---|
+| `~/.codex/config.toml` | `source_type = "git"`，`source = "https://github.com/elliewlh2094/explain-as-webpage.git"` |
+| `codex plugin marketplace list` | ROOT 為 `~/.codex/.tmp/marketplaces/explain-as-webpage` |
+| marketplace 快照 | `8bdd0e8`，與當時的 `origin/main` 相同 |
+| `codex plugin list` | installed、enabled、0.4.0 |
+| plugin 快取資料夾 | 只有 `0.4.0` |
+| 新 Codex session 輸入 `$explain`（使用者手動） | 列出 explainer-figure 與 explainer-page |
+
+之後推送新的 commit 時，以 `codex plugin marketplace upgrade explain-as-webpage` 更新快照。
+
+### T17（2026-10-07）
+
+**結論：`examples/explain-as-webpage/` 的繁中與英文兩頁以 0.4.0 的規則重做（project 模式、套件頁型、L0、工程師讀者），兩張 README 封面圖已重截，兩份 README 的範例說明已更新並刪除暫時說明句。** 兩頁都改從目前的 `template.html` 開始，舊頁用的是第三輪的模板（沒有概念色、卡片與圖示的樣式）。
+
+確認回覆：照建議的 (1)–(4) 進行。
+
+| 圖 | 舊頁 | 新頁 |
+|---|---|---|
+| 1 | 7 步主流程，每格一行檔案 | 每格最多兩行：紫色 `c1` 是 explainer-page 的檔案，橄欖色 `c2` 是 explainer-figure 的規則；第 4 步改用 `user` 圖示標出，不再用 `warn` 色（`warn` 代表後果，語意不符） |
+| 2 | 層級選法 | 沿用；L0 改為「文字＋靜態圖」，並註明 SVG 或卡片 |
+| 3 | — | 新增歸納卡：機制圖、數值圖、歸納卡、具象插圖，欄位為「適用的問題」與「本儲存庫的例子」，各有圖示 |
+| 4 | 8 個檔案的 token 長條 | 13 個長條，依 skill 上色；explainer-figure 的描述以虛線表示（Claude Code 不載入，Codex 會列出） |
+| 5 | 追問落點 | 沿用 |
+
+token 估計值（`plugin details`，參考檔與模板逐一包成測試用 skill，2026-10-07）：explainer-page 描述約 390、`SKILL.md` 約 4.2k；explainer-figure `SKILL.md` 約 2.5k；`sources-and-research.md` 7.5k、`page-types.md` 3.9k、`writing-rules.md` 4.9k、`extending-pages.md` 3.6k、`template.html` 7.9k、`svg-recipes.md` 7.0k、`cards.md` 1.6k、`pictorial.md` 7.3k、`icons.md` 1.8k。專案模式不用新圖型的首次產出約 30.4k，三種新圖型都用到約 41.1k，全部約 52.2k。
+
+驗證：
+
+| 項目 | 繁中 | 英文 |
+|---|---|---|
+| `grep -c FILL`、外部資源 grep | 0；無輸出 | 0；無輸出 |
+| 檔案大小 | 51,059 B | 53,166 B |
+| 正文（`<p>`、`<li>`，不含表格、圖、來源行、名詞與來源） | 1,808 個漢字＋101 個英文字（舊頁 1,484 漢字；預算約 3,500） | 1,497 字（舊頁同法計 1,210；預算約 1,800） |
+| 圖示同步、對比檢查、頁內錨點 | 無輸出；5 個 symbol（`user`、`network`、`chart-column`、`files`、`image`）；全部錨點存在 | 同左 |
+| 390px iframe | `<title>ok` | `<title>ok` |
+| 只顯示圖的截圖 | 無溢出或壓線 | 同左；英文標籤較長，圖 1 第 4 步的標題右移 10px 避開圖示 |
+
+封面圖：在 1247px 寬視窗量測圖 1 圖說底端（英文 1,108 px、繁中 1,002 px），各加 16 px 後以 `--force-device-scale-factor=1.5` 截取：`cover-process.png` 1871×1686、`cover-process.zh-TW.png` 1871×1527。README 的連結檢查無缺漏。
+
+**使用者回饋（2026-10-07）：** 範例頁只說明專案現狀，不提開發歷程與重做經過。兩頁各改 6 處：Starship 實例表的引言與第 ①、④ 列改寫成單一請求；「解決什麼問題」一節刪除第三、四輪的句子，改為「沒有軟體專案也能用」；「現況與限制」第一項改為「0.4.0，可在 Claude Code 與 Codex 上使用」，來源行改指 `plugin.json` 與 T13d。來源行仍保留指向計畫檔章節的出處，因為每個事實都要有來源。修改後：繁中 50,776 B、正文 1,755 個漢字；英文 52,810 B、正文 1,441 字；兩頁 FILL 0、無外部資源、390px `<title>ok`。修改都在圖 1 之後，封面圖不需要重截。
+
+**使用者回饋（2026-10-07，來源）：** 範例頁不引用 `docs/ideas/` 與 `tasks/`。可改出處的條目改指 README、skill 檔案或 `CLAUDE.md`：拆分理由改依 `explainer-figure/SKILL.md` 的 frontmatter 與 § Overview 描述分工，「現況與限制」改指 README 三節並刪除引用圖片構想的指引。另外 3 處由使用者決定：Starship 實例表第 3 欄第 ①–⑤ 列只寫範例頁上看得到的事實（第 ④ 列改為頁面上的結果），第 ⑥、⑦ 列標為作者實測；WebFetch 實測表保留，段落補上 `sources-and-research.md` §2 的規則，數字標為作者實測；圖 4 的 Codex 虛線長條保留，標為作者實測。兩頁已無 `docs/ideas/`、`tasks/` 字串；繁中 50,635 B、正文 1,767 個漢字；英文 52,824 B、正文 1,453 字；FILL 0、無外部資源、390px `<title>ok`、頁內錨點都存在。

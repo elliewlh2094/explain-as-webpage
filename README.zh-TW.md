@@ -53,7 +53,7 @@
 
 ## 範例
 
-**本儲存庫。** [`examples/explain-as-webpage/explain-as-webpage.zh-TW.html`](examples/explain-as-webpage/explain-as-webpage.zh-TW.html) 以單一 L0 頁面說明這個 skill：一個請求怎麼變成一頁網頁（以一個實際請求貫穿）、材料不同時讀法與引用方式的差別、頁型與層級怎麼決定、各檔案在什麼時候被讀取（附 token 估計值）、追問時頁面怎麼延伸，以及安裝方式。上方的封面圖是這一頁的開頭：側欄、結論與圖 1。這一頁描述的是第三輪（材料模式）時的 skill，還沒有涵蓋 0.4.0 新增的繪圖 skill `explainer-figure`。
+**本儲存庫。** [`examples/explain-as-webpage/explain-as-webpage.zh-TW.html`](examples/explain-as-webpage/explain-as-webpage.zh-TW.html) 以單一 L0 頁面說明這兩個 skill：一個請求怎麼變成一頁網頁（以一個實際請求貫穿）、材料不同時讀法與引用方式的差別、頁型與層級怎麼決定、方框與箭頭以外還有哪些圖型（以歸納卡呈現）、哪個 skill 的哪個檔案在什麼時候被讀取（附 token 估計值）、追問時頁面怎麼延伸，以及安裝方式。上方的封面圖是這一頁的開頭：側欄、結論與圖 1。
 
 **文件：Karpathy 的〈LLM Wiki〉。** [`examples/llm-wiki/llm-wiki.html`](examples/llm-wiki/llm-wiki.html) 把 [LLM Wiki gist](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f) 做成一頁 L2 網頁（document 模式）：它和 RAG 的差別（以逐步動畫對兩者依序加入三份來源並提出一個問題）、五種適用情境（歸納卡）、三層結構（畫成一個資料夾，兩側的 LLM 與你以箭頭表示資訊流向）、Ingest、Query、Lint 三種操作、`index.md` 與 `log.md` 的內容示意，以及同一個問題用兩種做法回答的對照。每個事實都標出原文的段落。
 

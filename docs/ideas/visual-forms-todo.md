@@ -51,8 +51,8 @@
 
 ## 第 6 階段：收尾
 - [x] T15 `visual-forms.md` 的假設勾選框依探測結果更新（8 項都已驗證）
-- [ ] T16 Codex marketplace 改回 GitHub 來源，確認快取是 0.4.0（使用者手動）
-- [ ] T17 以 0.4.0 重做儲存庫說明頁（英、繁），重截 README 封面圖，刪除 README 的暫時說明
+- [x] T16 Codex marketplace 改回 GitHub 來源，確認快取是 0.4.0（使用者手動；Codex 的 `$` 清單也列出 explainer-figure）
+- [x] T17 以 0.4.0 重做儲存庫說明頁（英、繁），重截 README 封面圖，刪除 README 的暫時說明
 
 ### 檢查點 E
 - [ ] T15–T17 驗收條件達成；提供提交建議
