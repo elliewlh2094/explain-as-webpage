@@ -43,14 +43,14 @@ MVP 只做 B 類具象插圖、D 類歸納卡與圖示，不涉及點陣圖，�
 
 ## Key Assumptions to Validate
 
-- [ ] 兩個平台都會依編排者的指示載入 draw-figure —— 在 Claude Code 與 Codex 各產出一頁，檢查是否讀取了 draw-figure 的規則
-- [ ] draw-figure 的 description 不會搶走一般繪圖需求（本機另有 dataviz、artifact-diagramming）—— 用 5 個一般圖表的提示詞測試觸發
-- [ ] 拆分後每頁的 token 成本沒有明顯增加 —— 拆分前後各執行一次 `claude plugin details` 比較
-- [ ] 歸納卡取代文字後，頁面變短、沒有變長 —— 重做的範例比較字數與閱讀時間
-- [ ] 概念色與語意色並用時，讀者不會混淆 —— 重做範例的截圖由使用者判讀
-- [ ] 60–100 個圖示足以涵蓋需求 —— 統計 4 個範例加上新主題實際需要的圖示，缺少超過 2 成就改為從 npm 下載並鎖定版本
-- [ ] 代理能穩定畫出具象外形 —— 試畫背包、人體剪影；變形就限縮為「圖示組合＋簡單幾何容器」
-- [ ] Lucide／Tabler 的授權允許內嵌與重新散布 —— 查閱儲存庫中的 LICENSE 原文
+- [x] 兩個平台都會依編排者的指示載入 draw-figure —— 在 Claude Code 與 Codex 各產出一頁，檢查是否讀取了 draw-figure 的規則。**結果（T13、T13d）：** 兩次 Codex 實測都讀了 `explainer-figure/SKILL.md`；使用者在另一個 Claude Code session 重跑時，讀了 `cards.md`、`pictorial.md`、`icons.md`
+- [x] draw-figure 的 description 不會搶走一般繪圖需求（本機另有 dataviz、artifact-diagramming）—— 用 5 個一般圖表的提示詞測試觸發。**結果（T4）：** Claude Code 中 5 個圖表提示觸發 explainer-figure 0 次（dataviz 3 次、無 2 次），2 個說明頁提示都觸發編排者。Codex 的 skill 清單是否顯示 explainer-figure 未測（使用者決定不測）
+- [x] 拆分後每頁的 token 成本沒有明顯增加 —— 拆分前後各執行一次 `claude plugin details` 比較。**結果（T3）：** 實際 always-on 仍約 400 tok（explainer-figure 不載入）；產一頁時讀取的 `SKILL.md` 與繪圖規則從 30,087 B 增為 34,082 B（約 +1k tok、+13%），增加的部分是新功能（圖說明單與圖型表），不是拆分本身
+- [x] 歸納卡取代文字後，頁面變短、沒有變長 —— 重做的範例比較字數與閱讀時間。**結果（T10、T11）：** Starship 以卡片取代 9 列試飛表，散文 −5%；LLM Wiki 散文 +10%，來自使用者要求新增的適用情境卡片與引導段落，不是卡片取代文字造成
+- [x] 概念色與語意色並用時，讀者不會混淆 —— 重做範例的截圖由使用者判讀。**結果（檢查點 B、C）：** 使用者判讀色票容易分辨；三個主題的新版「效果很不錯」
+- [x] 60–100 個圖示足以涵蓋需求 —— 統計 4 個範例加上新主題實際需要的圖示，缺少超過 2 成就改為從 npm 下載並鎖定版本。**結果（T1、T12）：** 子集 106 個；T10–T12 三頁共用到 19 個不同的圖示，缺少 0%
+- [x] 代理能穩定畫出具象外形 —— 試畫背包、人體剪影；變形就限縮為「圖示組合＋簡單幾何容器」。**結果（T2）：** 背包、人體剪影、罐子都沒有變形，不需要限縮；問題只在標籤與線條的版面衝突，靠截圖修正。人體剪影接近人台模型
+- [x] Lucide／Tabler 的授權允許內嵌與重新散布 —— 查閱儲存庫中的 LICENSE 原文。**結果（T1）：** 兩套都允許。Lucide 為 ISC，衍生自 Feather 的圖示另受 MIT 約束；頁面用到圖示時附授權註解
 
 ## MVP Scope
 

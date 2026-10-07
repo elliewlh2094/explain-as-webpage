@@ -296,9 +296,9 @@
 **說明：** `docs/ideas/visual-forms.md` 的 Key Assumptions 有 8 項，都沒有打勾，但多數已在本檔的探測結果中驗證。
 
 **驗收條件：**
-- [ ] 已驗證的項目打勾，並在同一行附上結果與出處（例如「T4：explainer-figure 0 次觸發」）
-- [ ] 沒有驗證或只部分驗證的項目維持不勾，並寫明原因（例如 Codex 的 skill 清單：使用者決定不測）
-- [ ] 前幾輪的構想文件（`explain-as-webpage.md`、`explain-as-webpage-v2.md`、`figure-values.md`）不改，它們是當時的紀錄
+- [x] 已驗證的項目打勾，並在同一行附上結果與出處（例如「T4：explainer-figure 0 次觸發」）
+- [x] 沒有驗證或只部分驗證的項目維持不勾，並寫明原因（例如 Codex 的 skill 清單：使用者決定不測）
+- [x] 前幾輪的構想文件（`explain-as-webpage.md`、`explain-as-webpage-v2.md`、`figure-values.md`）不改，它們是當時的紀錄
 
 **驗證：** 逐項對照本檔「探測結果」中的出處。
 
@@ -968,3 +968,13 @@ Codex 實測（使用者，GPT-6.1-Sol high，材料：Ronin〈How to become a R
 
 驗證：引用檢查 `ok`；5 個具象插圖片段檢查 `ok`；4 個 manifest 的 `json.tool` ok；`claude plugin validate .` 通過；`plugin details` 顯示 `explain-as-webpage 0.4.0`、Skills (2) `explainer-figure, explainer-page`、always-on ~529 tok；模板無外部資源、390px `<title>ok`；兩個 `SKILL.md` 為 130、111 行。以 `claude --plugin-dir . -p "/explain-as-webpage:explainer-page …"` 實際呼叫：session 的 skill 清單與斜線指令都只有 `explain-as-webpage:explainer-page`（explainer-figure 仍隱藏），代理回覆正在使用該 skill，花費約 0.18 美元。
 
+### T15（2026-10-07）
+
+**結論：`docs/ideas/visual-forms.md` 的 8 項假設都已驗證，全部打勾，每項附上結果與出處。** 前幾輪的構想文件沒有改。
+
+兩項需要說明的判斷：
+
+- 「description 不會搶走一般繪圖需求」：假設寫的驗證方式（5 個一般圖表提示）在 Claude Code 完整執行並通過，因此打勾；Codex 的 skill 清單未測，寫在同一行。
+- 「token 成本沒有明顯增加」：每頁約 +1k tok（+13%），增加的部分是新功能（圖說明單與圖型表），拆分本身沒有增加成本，因此打勾；數字寫在同一行，供使用者重新判斷。
+
+驗證：逐項對照本檔 T1、T2、T3、T4、T10、T11、T12、T13、T13d 與檢查點 B、C 的紀錄；`grep` 計數為 8 個 `[x]`、0 個 `[ ]`。
