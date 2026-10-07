@@ -99,6 +99,8 @@ MVP 只做 B 類具象插圖、D 類歸納卡與圖示，不涉及點陣圖，�
 - draw-figure 是否開放使用者單獨呼叫（例如畫 README 封面）？這會決定它的 description 寫法，以及單獨使用時如何取得 `template.html` 的樣式。
   - **已決定（2026-10-06）**：只由編排者以相對路徑讀取；frontmatter 設 `disable-model-invocation: true`、`user-invocable: false`。T4 確認 Claude Code 不會自動觸發；Codex 的 skill 清單未測。
 - （第二階段）頁面樹的 `<slug>.assets/` 要每頁一個資料夾，還是整個主題共用一個？
+  - **已移交（2026-10-07）**：排入第 6 輪候選，見 `docs/plan/05-symbols-pictorial-idea.md`〈後續輪次〉。已決定只有引用點陣圖的頁面才允許 assets 資料夾；每頁或共用仍待決。
 - 版本號是否升為 0.4.0？
   - **已決定（2026-10-07）**：升為 0.4.0，四個 manifest 檔同步（T14）。
 - （未來）L3 層級：以 [anime.js](https://animejs.com)（MIT，v4 完整版約 24.5 KB，有 UMD 單檔版本，可內嵌）實作 SVG 描線、形狀變形、沿路徑移動。L0–L2 是依核心問題的類型定義的，L3 也要先定義它回答哪一類問題（例如連續變形、沿路徑的運動、兩狀態間的漸變），anime.js 只是實作手段；並要決定頁面大小上限如何容納這 24.5 KB。
+  - **已移交（2026-10-07）**：排入第 7 輪候選，見 `docs/plan/05-symbols-pictorial-idea.md`〈後續輪次〉。使用者決定直接使用 anime.js；範例頁最大 53 KB，加上 24.5 KB 仍在上限內。

@@ -8,5 +8,6 @@
 | 02 | 英文支援、頁面樹延伸、autoresearch 範例 | 2026-10-02 | 0.2.0 | 已完成 | [idea](02-english-page-tree-idea.md) |
 | 03 | 材料模式（project／document／topic） | 2026-10-03 | 0.3.0 | 已完成 | [spec](03-material-modes-spec.md)、[plan](03-material-modes-plan.md)、[todo](03-material-modes-todo.md)、[figure-values](03-material-modes-figure-values.md) |
 | 04 | 視覺表現形式：拆出 explainer-figure、歸納卡、具象插圖、圖示 | 2026-10-04 | 0.4.0 | 已完成 | [idea](04-visual-forms-idea.md)、[plan](04-visual-forms-plan.md)、[todo](04-visual-forms-todo.md) |
+| 05 | 符號對照圖、具象插圖品質（風格規範、Noto Emoji 子集、壓線檢查） | 2026-10-07 | — | 構想 | [idea](05-symbols-pictorial-idea.md) |
 
 第 1 輪的計畫與待辦曾放在 `tasks/plan.md`、`tasks/todo.md`，之後被第 3 輪覆寫，原內容見 commit `34156de`。第 2 輪沒有獨立的計畫檔。
