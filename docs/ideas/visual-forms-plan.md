@@ -287,6 +287,50 @@
 ### 檢查點 D
 - [x] 全部驗收條件達成；提供最終提交建議（2026-10-07；未完成項目見 T14 結果）
 
+### 第 6 階段：收尾（2026-10-07 新增）
+
+**說明：** T14 結果列出的未完成項目中，下列 3 項屬於本輪交付物的同步或驗證，在本輪收尾。在 Codex 上重跑 T13e 經使用者判斷不做（2026-10-07）。新功能與跨輪的驗證（explainer-cite、插圖繪製規範、C 類計算圖、L3 等）移到第五輪，不在本階段處理。
+
+#### T15 構想文件的假設勾選框
+
+**說明：** `docs/ideas/visual-forms.md` 的 Key Assumptions 有 8 項，都沒有打勾，但多數已在本檔的探測結果中驗證。
+
+**驗收條件：**
+- [ ] 已驗證的項目打勾，並在同一行附上結果與出處（例如「T4：explainer-figure 0 次觸發」）
+- [ ] 沒有驗證或只部分驗證的項目維持不勾，並寫明原因（例如 Codex 的 skill 清單：使用者決定不測）
+- [ ] 前幾輪的構想文件（`explain-as-webpage.md`、`explain-as-webpage-v2.md`、`figure-values.md`）不改，它們是當時的紀錄
+
+**驗證：** 逐項對照本檔「探測結果」中的出處。
+
+**相依：** 無　**檔案：** 1　**規模：** XS
+
+#### T16 Codex marketplace 改回 GitHub 來源（使用者手動）
+
+**說明：** `main` 已推送到 `origin`（`elliewlh2094/explain-as-webpage`）。使用者本機的 Codex marketplace 仍指向本機路徑。
+
+**驗收條件：**
+- [ ] `codex plugin marketplace add elliewlh2094/explain-as-webpage` 取代本機路徑來源
+- [ ] Codex 的 plugin 快取資料夾是 0.4.0，skill 清單中有 `explain-as-webpage:explainer-page`
+
+**相依：** 無
+
+#### T17 重做儲存庫說明頁與 README 封面圖
+
+**說明：** `examples/explain-as-webpage/` 的英文與繁中兩頁仍是第三輪的內容：模板寫「254 行」、manifest 寫「0.2.0」，沒有 explainer-figure、歸納卡、具象插圖與圖示。這兩頁的開頭畫面是 README 的封面圖。
+
+**驗收條件：**
+- [ ] 以 0.4.0 的 skill 重做兩頁，涵蓋兩個 skill 的分工、各檔案的讀取時機與 token 估計值（取自 `plugin details`）、新的圖型
+- [ ] 兩頁都通過 `SKILL.md` 第 6 步的檢查；390px iframe 為 `<title>ok`
+- [ ] 依 `CLAUDE.md` 的截圖參數重截 `docs/images/cover-process.png` 與 `cover-process.zh-TW.png`
+- [ ] 兩份 README 刪除「這一頁描述的是第三輪時的 skill」那一句，並依新內容更新範例說明
+
+**驗證：** 第 6 步檢查、兩種寬度截圖、README 連結檢查、使用者判讀。
+
+**相依：** 無（與 T15、T16 互不相依）　**檔案：** 6　**規模：** L
+
+### 檢查點 E
+- [ ] T15–T17 的驗收條件達成；提供提交建議
+
 ## Risks and Mitigations
 
 | 風險 | 影響 | 對策 |

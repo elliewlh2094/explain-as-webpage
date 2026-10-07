@@ -53,7 +53,7 @@
 
 ## 範例
 
-**本儲存庫。** [`examples/explain-as-webpage/explain-as-webpage.zh-TW.html`](examples/explain-as-webpage/explain-as-webpage.zh-TW.html) 以單一 L0 頁面說明這個 skill：一個請求怎麼變成一頁網頁（以一個實際請求貫穿）、材料不同時讀法與引用方式的差別、頁型與層級怎麼決定、各檔案在什麼時候被讀取（附 token 估計值）、追問時頁面怎麼延伸，以及安裝方式。上方的封面圖是這一頁的開頭：側欄、結論與圖 1。
+**本儲存庫。** [`examples/explain-as-webpage/explain-as-webpage.zh-TW.html`](examples/explain-as-webpage/explain-as-webpage.zh-TW.html) 以單一 L0 頁面說明這個 skill：一個請求怎麼變成一頁網頁（以一個實際請求貫穿）、材料不同時讀法與引用方式的差別、頁型與層級怎麼決定、各檔案在什麼時候被讀取（附 token 估計值）、追問時頁面怎麼延伸，以及安裝方式。上方的封面圖是這一頁的開頭：側欄、結論與圖 1。這一頁描述的是第三輪（材料模式）時的 skill，還沒有涵蓋 0.4.0 新增的繪圖 skill `explainer-figure`。
 
 **文件：Karpathy 的〈LLM Wiki〉。** [`examples/llm-wiki/llm-wiki.html`](examples/llm-wiki/llm-wiki.html) 把 [LLM Wiki gist](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f) 做成一頁 L2 網頁（document 模式）：它和 RAG 的差別（以逐步動畫對兩者依序加入三份來源並提出一個問題）、五種適用情境（歸納卡）、三層結構（畫成一個資料夾，兩側的 LLM 與你以箭頭表示資訊流向）、Ingest、Query、Lint 三種操作、`index.md` 與 `log.md` 的內容示意，以及同一個問題用兩種做法回答的對照。每個事實都標出原文的段落。
 
@@ -147,7 +147,7 @@ examples/starship-reusability/  # 範例（繁中）：由查證來源產出的�
 .codex-plugin/                  # Codex 的 plugin manifest
 .agents/plugins/                # Codex 的 marketplace manifest
 docs/ideas/                     # 構想摘要；視覺表現形式這一輪的計畫與待辦也放在這裡
-docs/specs/                     # 本輪規格（材料模式）
+docs/specs/                     # 第三輪規格（材料模式）
 docs/images/                    # README 用圖：封面、貼文截圖、三個層級截圖
 tasks/                          # 材料模式那一輪的實作計畫與待辦
 ```

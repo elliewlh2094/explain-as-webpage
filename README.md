@@ -46,14 +46,14 @@ Screenshots from the [autoresearch example](#examples).
 </details>
 
 - **Figures beyond boxes and arrows.** Besides causal chains and step animations, a page can use summary cards (4–6 parallel items with the same fields), pictorial figures (a container cut open, a silhouette with notes, an object and its parts, a software window), up to five concept colours that keep a key concept the same colour on every figure, and icons from a bundled Lucide subset (only the icons a page uses are copied into it). The Traditional Chinese examples in `examples/llm-wiki/` and `examples/starship-reusability/` use cards, pictorial figures, concept colours, and icons.
-- **Page's Language.** The page uses the language you ask for. If you do not ask, it uses the language you write in.
+- **Page language.** The page uses the language you ask for. If you do not ask, it uses the language you write in.
 - **Pages that grow with follow-up questions.** When you ask more about an existing page, the agent decides where each answer goes. A short answer to an existing question goes into a collapsible block on that page. A new question gets a child page, linked to and from the hub page. A finding that changes the main conclusion revises the hub page. Each page keeps its own length budget, so the hub page does not keep growing.
 
 The agent first lists the questions, the proposed tier with the planned figures of each page, and the output path (for a document, also whether to follow its own order), and **builds only after you confirm**. The default output path is outside your project: `~/Documents/explainers/<repo-name>/<topic>.html` for a project, or `~/Documents/explainers/<topic>/<topic>.html` for a document or a topic.
 
 ## Examples
 
-**This repository.** [`examples/explain-as-webpage/explain-as-webpage.html`](examples/explain-as-webpage/explain-as-webpage.html) explains this skill in one L0 page: how one request becomes a page (followed through a real request), how reading and citing change with the material, how the page type and tier are chosen, which file is read when (with token estimates), how pages grow with follow-up questions, and how to install it. The cover image above is the top of this page: the sidebar, the conclusion, and Figure 1.
+**This repository.** [`examples/explain-as-webpage/explain-as-webpage.html`](examples/explain-as-webpage/explain-as-webpage.html) explains this skill in one L0 page: how one request becomes a page (followed through a real request), how reading and citing change with the material, how the page type and tier are chosen, which file is read when (with token estimates), how pages grow with follow-up questions, and how to install it. The cover image above is the top of this page: the sidebar, the conclusion, and Figure 1. The page describes the skill as of round 3 (material modes); it does not yet cover the figure skill `explainer-figure` added in 0.4.0.
 
 **karpathy/autoresearch.** [`examples/autoresearch/`](examples/autoresearch/) explains [karpathy/autoresearch](https://github.com/karpathy/autoresearch) (commit `228791f`, MIT license) in three pages:
 
@@ -152,7 +152,7 @@ examples/starship-reusability/  # Example (Traditional Chinese): a page from res
 .codex-plugin/                  # Codex plugin manifest
 .agents/plugins/                # Codex marketplace manifest
 docs/ideas/                     # Idea one-pagers; the visual-forms round keeps its plan and task list here too
-docs/specs/                     # Specification of the current round (material modes)
+docs/specs/                     # Specification of round 3 (material modes)
 docs/images/                    # README images: covers, the post screenshot, the three tiers
 tasks/                          # Implementation plan and task list of the material-modes round
 ```
