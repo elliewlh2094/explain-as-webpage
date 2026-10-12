@@ -95,6 +95,7 @@ When a page explains a technique for a domain (EKF for robots, a codec for video
 
 - Early on, introduce one concrete example that the whole page reuses: a specific robot, file, or patient case, with what it knows and what it does not.
 - Give a table: symbol → general name → what it is in the example ("P: covariance: how unsure the robot is about where it is; drawn as an ellipse").
+- Label the same symbols on the figures, and give each key concept's symbol its concept colour in the formula, the figure, and the table (`../explainer-figure/references/svg-recipes.md` § Symbols).
 - Narrate every process step (a stepper, a table of steps) in the example's words, with numbers actually computed for the example, not invented. Say that the numbers are illustrative and where they come from.
 - Explain each formula once by intuition in the example's terms ("3 m of travel with 2° of heading doubt is about 10 cm of sideways doubt").
 

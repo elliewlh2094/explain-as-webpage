@@ -99,7 +99,7 @@ svg .outline { fill: none; stroke: var(--text); stroke-width: 2; }
 svg .lead { fill: none; stroke: var(--muted); stroke-width: 1; } svg .pin { fill: var(--muted); }
 svg .edge { fill: var(--text); stroke: var(--text); stroke-width: 4; } svg .shape { fill: var(--grey-bg); stroke: none; }
 svg .area { fill: var(--cc, var(--blue)); opacity: .25; stroke: none; } /* group opacity: overlapping shapes do not darken; 10% tints are too faint */
-/* Concept colours: class c1-c5 on a box, line, dot, or text in SVG, or on a .chip in the text */
+/* Concept colours: class c1-c5 on a box, line, dot, or text in SVG, or on a .chip or .sym in the text */
 .c1 { --cc: var(--c1); --cb: var(--c1-bg); } .c2 { --cc: var(--c2); --cb: var(--c2-bg); } .c3 { --cc: var(--c3); --cb: var(--c3-bg); }
 .c4 { --cc: var(--c4); --cb: var(--c4-bg); } .c5 { --cc: var(--c5); --cb: var(--c5-bg); }
 svg .box:is(.c1,.c2,.c3,.c4,.c5) { fill: var(--cb); stroke: var(--cc); }
@@ -107,6 +107,8 @@ svg .line:is(.c1,.c2,.c3,.c4,.c5) { stroke: var(--cc); } svg .dot:is(.c1,.c2,.c3
 /* Icons: class icon on a <use> in SVG, or on an inline <svg> around a <use> in HTML (explainer-figure: references/icons.md) */
 .icon { fill: none; stroke: var(--cc, currentColor); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 svg.icon { display: inline-block; width: 1.15em; height: 1.15em; min-width: 0; margin: 0 .3em 0 0; vertical-align: -.2em; }
+/* Formula symbol of a key concept: <span class="sym c1"> in the text, <tspan class="sym c1"> in SVG (explainer-figure: svg-recipes.md § Symbols) */
+.sym { color: var(--cc); fill: var(--cc); }
 .chip { display: inline-block; font-size: .85rem; line-height: 1.5; padding: 0 6px; border: 1px solid var(--cc, #999); border-radius: 3px; color: var(--cc, var(--text)); background: var(--cb, var(--grey-bg)); }
 
 /* Summary cards: a figure of 4-6 parallel items with the same fields (explainer-figure: references/cards.md) */
@@ -194,7 +196,7 @@ svg.icon { display: inline-block; width: 1.15em; height: 1.15em; min-width: 0; m
 
 <!-- 3. One h2 per core question. The heading IS the question. -->
 <h2 id="q1">FILL: Question 1, phrased as the reader would ask it?</h2>
-<p>FILL: Short answer first. Then the explanation, referring to <a href="#fig-2">Figure 2</a> step by step.</p>
+<p>FILL: Short answer first. Then the explanation, referring to <a href="#fig-2">Figure 2</a> step by step. A formula symbol of a key concept, such as <span class="sym c1">x&#x302;<sub>k</sub></span>, has the same colour here, in the figure, and in the Terms table.</p>
 
 <!-- L2 stepper demo. Each <g data-step> is one frame. "n" = only at step n; "n+" = from step n on.
      data-caption is shown under the figure for that step. Elements without data-step are always visible. -->
@@ -202,7 +204,7 @@ svg.icon { display: inline-block; width: 1.15em; height: 1.15em; min-width: 0; m
 <svg viewBox="0 0 720 200" role="img" aria-label="FILL: text equivalent of all steps">
   <rect class="box muted" x="10" y="20" width="700" height="160" rx="6"/>
   <g data-step="1+" data-caption="Step 1: FILL — the starting state.">
-    <circle class="dot" cx="120" cy="100" r="8"/><text x="120" y="130" text-anchor="middle" class="sm">A</text>
+    <circle class="dot" cx="120" cy="100" r="8"/><text x="120" y="130" text-anchor="middle"><tspan class="sym c1">x&#x302;ₖ</tspan> FILL: estimate</text>
   </g>
   <g data-step="2+" data-caption="Step 2: FILL — something is added.">
     <line class="line" x1="130" y1="100" x2="340" y2="100" marker-end="url(#arr)"/>

@@ -27,6 +27,7 @@ explainer-page writes one brief per figure in its learning brief:
 | Content | the facts it shows, each with its source and unit; "schematic" if no source gives values |
 | Form | static, slider (L1), or stepper (L2) |
 | Concept colours | which key concept gets which class `c1`–`c5`, the same on every figure; none if the page has no recurring concepts |
+| Symbols | each formula symbol on the figure, the part it labels, and its concept class (`references/svg-recipes.md` § Symbols); none if the page has no formula |
 | Icons | the icon name (`references/icons.md`) for each thing that gets one, the same on every figure; usually none |
 | Message | the one sentence the caption will state |
 

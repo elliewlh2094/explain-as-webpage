@@ -46,6 +46,22 @@ Five classes, `c1`–`c5` (purple, olive, magenta, brown, indigo), one per key c
 - Do not put a concept class and a semantic class on the same element. If a part is both (concept A, and wrong), use the concept colour and mark the problem with a `bad` label or a `#arr-bad` arrow next to it.
 - A figure without key concepts uses semantic colours only. Do not colour parts just to make the figure lively.
 
+### Symbols
+
+When the page has a formula, label each part of the figure that a formula symbol stands for. The reader then finds the symbol in the figure without going back to the symbol table.
+
+- Put the symbol next to its part, then plain words: `x̂ₖ estimate`. Follow the layout rules: the label crosses no line.
+- Write the label at 14px, not in `sm`: a Unicode subscript is about 60% of the font size, so at 12px it is too small to read.
+- Use Unicode subscripts where they exist (`₀`–`₉`, `ₖ`, `ₜ`, `ₙ`, `ᵢ`, `ⱼ`). For others (capitals, `k|k−1`), nest `<tspan baseline-shift="sub" font-size="12">` inside the symbol. Do not give that `tspan` the class `sm`: its grey fill would replace the concept colour.
+- Write a hat as the letter plus U+0302 (`x&#x302;` gives x̂), in the SVG and in the text alike.
+- Colour only the symbols of key concepts, so at most 5 on a page. Give each one `sym` and its concept class, the same in the formula, the figure, and the symbol table. Write the other symbols in the normal text colour.
+
+| Where | Markup |
+|---|---|
+| In an SVG label | `<text x="…" y="…"><tspan class="sym c1">x&#x302;ₖ</tspan> estimate</text>` |
+| A subscript without a Unicode character | `<tspan class="sym c2">P<tspan baseline-shift="sub" font-size="12">k\|k−1</tspan></tspan>` |
+| In a formula or paragraph | `<span class="sym c1">x&#x302;<sub>k</sub></span>` |
+
 ## Recipe 1 — Causal chain (Figure 1 of a mechanism page)
 
 Use the four-box chain in `../explainer-page/assets/template.html` as the base. Each box: bold name on line 1, a short measured fact on line 2 (`sm`). Colour the boxes by meaning (cause `bad`, consequence `warn`, fix `good`). If a link is an inference, draw its arrow with `dash`.

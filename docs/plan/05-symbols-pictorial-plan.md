@@ -15,7 +15,7 @@
 - [x] 使用者判讀 emoji 與自繪風格是否搭配、試畫結果、腳本準確度、Codex 結果 —— 2026-10-10 除 T4 外都已判讀；2026-10-12 T4 觸發 0 次，依外部 skill 調查修訂規格（R3、R6、R7）；2026-10-13 T14 結果已記錄
 
 ### 第 1 階段：符號對照規則（R1）
-- [ ] T5 `.sym`、圖說明單的 Symbols 欄、符號標註規則、`writing-rules.md` 引用
+- [x] T5 `.sym`、圖說明單的 Symbols 欄、符號標註規則、`writing-rules.md` 引用 —— 2026-10-13：x̂ 在 SVG 與 HTML 中都正確顯示；`explainer-figure/SKILL.md` 112 行
 
 #### 檢查點 A
 - [ ] 使用者確認 T5 的示範截圖；提供提交建議
@@ -177,16 +177,16 @@
 **說明：** 依規格 R1 加入公式符號的上色與圖上的符號標註。
 
 **驗收條件：**
-- [ ] `template.html` 新增 `.sym`（或實作時確定的名稱），只使用 `--cc`
-- [ ] `explainer-figure/SKILL.md` 圖說明單加入 Symbols 欄
-- [ ] `svg-recipes.md` 加入符號標註的寫法：Unicode 下標、`<tspan>` 的退路、上色範圍（最多 5 個）
-- [ ] `writing-rules.md` § Ground the symbols 加一行，指向 explainer-figure
-- [ ] 在模板示範內容中放一個上色符號，截圖確認組合字元（x̂）在 SVG 與 HTML 中都正確顯示
+- [x] `template.html` 新增 `.sym`（或實作時確定的名稱），只使用 `--cc`
+- [x] `explainer-figure/SKILL.md` 圖說明單加入 Symbols 欄
+- [x] `svg-recipes.md` 加入符號標註的寫法：Unicode 下標、`<tspan>` 的退路、上色範圍（最多 5 個）
+- [x] `writing-rules.md` § Ground the symbols 加一行，指向 explainer-figure
+- [x] 在模板示範內容中放一個上色符號，截圖確認組合字元（x̂）在 SVG 與 HTML 中都正確顯示
 
 **驗證：**
-- [ ] `CLAUDE.md` 的模板驗證指令全部通過（外部資源、兩種寬度）
-- [ ] 對比檢查不印出任何內容
-- [ ] `wc -l skills/explainer-figure/SKILL.md` 不超過約 130
+- [x] `CLAUDE.md` 的模板驗證指令全部通過（外部資源、兩種寬度）
+- [x] 對比檢查不印出任何內容
+- [x] `wc -l skills/explainer-figure/SKILL.md` 不超過約 130
 
 **相依：** 檢查點 0　**檔案：** `template.html`、`explainer-figure/SKILL.md`、`svg-recipes.md`、`writing-rules.md`　**規模：** M
 
@@ -404,7 +404,7 @@
 ## Open Questions
 
 - 驗收用的新主題：使用者在 T12 開始前指定。
-- `.sym` 與風格 class 的正式名稱：T5、T8 實作時確定。
+- ~~`.sym` 的正式名稱~~：T5 確定為 `.sym`（2026-10-13）。風格 class 的名稱：T8 實作時確定。
 - 零件函式庫的子指令名稱、基本形清單，以及機器人與無人機的視角參數：T8 實作時確定。
 
 ## 結果
@@ -660,3 +660,38 @@
 - 其他觀察：session 開始時讀取 Codex 記憶檔 `~/.codex/memories/MEMORY.md` 中先前 explainer-page 工作的摘要。T17 重測時，這份記憶仍會存在，兩次的條件相同。使用者在確認前問過一次「你好像卡住」，與本測試的判讀無關。
 
 **截圖。** 以 Chrome 截取 (a) 全圖與 (b) 圖 1（隱藏圖以外的內容），存於本 session 暫存目錄 `t14/a.png`、`t14/b.png`。暫存目錄被清除後，可從 `~/Downloads/` 的產物重新截取。
+
+### T5 符號對照規則（2026-10-13）
+
+**結論：R1 已寫入 skill。組合字元 x̂（x 加 U+0302）在 SVG 與 HTML 中都正確顯示，所以不需要改用 `<tspan>` 疊加符號。實作時改了一個細節：沒有 Unicode 下標字時，退路 `<tspan>` 不能使用 `class="sm"`。**
+
+修改的檔案：
+
+| 檔案 | 修改 |
+|---|---|
+| `skills/explainer-page/assets/template.html` | 新增 `.sym { color: var(--cc); fill: var(--cc); }`，同一個 class 用在 HTML 的 `<span>` 與 SVG 的 `<tspan>`；概念色的 CSS 註解加上 `.sym`；示範內容：Q1 段落加入 `<span class="sym c1">x̂<sub>k</sub></span>`，圖 2 第 1 步的標籤改為 `<tspan class="sym c1">x̂ₖ</tspan> FILL: estimate`（14px，移除 `sm`） |
+| `skills/explainer-figure/SKILL.md` | 圖說明單加入 Symbols 欄（111 → 112 行） |
+| `skills/explainer-figure/references/svg-recipes.md` | § Colour meaning 下新增 § Symbols：標註位置、14px、Unicode 下標與退路、U+0302、上色範圍，以及 3 種寫法的對照表 |
+| `skills/explainer-page/references/writing-rules.md` | § Ground the symbols 加一行，指向 svg-recipes.md § Symbols |
+
+**`.sym` 同時設定 `color` 與 `fill` 的原因。** 模板的 `svg text` 規則把 `<text>` 的 `fill` 設為 `--text`，`<tspan>` 繼承的是這個已計算的顏色，所以只在 `<tspan>` 加上 `c1` 不會變色。`.sym` 直接設定 `fill`，在 `<tspan>` 上生效；在 HTML 中則由 `color` 生效。`.sym` 沒有搭配概念 class 時，`var(--cc)` 無效，兩個屬性都退回繼承值，文字維持原本的顏色。
+
+**探測頁（`$SCRATCH` 為本 session 暫存目錄 `/tmp/claude-1000/-home-starlab-wenli-sphinx-style-notes-maker/b7d1ff2d-4add-4dc6-8e3c-c1f12617d051/scratchpad/`，`t5/t5-zoom.png`，2 倍解析度）：**
+
+- HTML 中的 x̂ₖ、Pₖ、Kₖ（`<sub>`）與只有組合字元的 x̂、ŷ、P̂：帽子都在字母正上方。
+- SVG 中的 x̂ₖ（Unicode 下標）、粗體的 x̂ₖ：正確，下標使用 `c1` 的顏色。
+- 退路寫法 `P<tspan baseline-shift="sub" font-size="12">k|k−1</tspan>`：位置正確，內層 `<tspan>` 繼承外層的概念色。
+- 放在 12px `sm` 標籤中時，Unicode 下標只剩約 7px，難以閱讀。所以規則要求符號標籤使用 14px，模板示範標籤也移除 `sm`。
+
+**對規格 R1 第 2 點的修改。** 原寫法 `<tspan baseline-shift="sub" class="sm">` 中的 `sm` 會把下標設為灰色的 `--muted`，取代概念色。改為巢狀 `<tspan baseline-shift="sub" font-size="12">`。規格已同步修改。
+
+**驗證：**
+
+1. 外部資源：`grep` 沒有輸出。
+2. 1280px 截圖：`$SCRATCH/t5/wide.png`。
+3. 390px iframe：`<title>ok`，整頁沒有水平溢出；截圖 `$SCRATCH/t5/narrow.png`。
+4. 對比檢查：沒有輸出。`.sym` 只使用 `--cc`，也就是 `c1`–`c5`。
+5. `svg-recipes.md` 對照表的每一列都是 2 欄（`k|k−1` 中的 `|` 已跳脫）。
+6. 模板圖 2 與 Q1 段落的截圖：`$SCRATCH/t5/template-demo.png`。
+
+觀察：HTML 段落中的 `<sub>` 讓所在行的行高略增。這是瀏覽器的預設行為，本任務沒有修改。
