@@ -99,6 +99,13 @@ svg .outline { fill: none; stroke: var(--text); stroke-width: 2; }
 svg .lead { fill: none; stroke: var(--muted); stroke-width: 1; } svg .pin { fill: var(--muted); }
 svg .edge { fill: var(--text); stroke: var(--text); stroke-width: 4; } svg .shape { fill: var(--grey-bg); stroke: none; }
 svg .area { fill: var(--cc, var(--blue)); opacity: .25; stroke: none; } /* group opacity: overlapping shapes do not darken; 10% tints are too faint */
+/* Drawn objects (explainer-figure: pictorial.md § Drawn objects, scripts/parts.py). No "svg " prefix:
+   rules with an ancestor never reach the shapes inside a <use>. ink-edge + ink-fill = one outer outline. */
+.ink { fill: var(--cb, var(--bg)); stroke: var(--text); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+.ink.dark { fill: var(--text); } .ink.glass { fill: var(--blue-bg); }
+.ink-edge { fill: var(--text); stroke: var(--text); stroke-width: 8; stroke-linejoin: round; } .ink-fill { fill: var(--cb, var(--bg)); stroke: none; }
+.ink-shade { fill: var(--cc, var(--text)); opacity: .18; stroke: none; }
+.ink-track { fill: none; stroke: var(--muted); stroke-width: 2; stroke-dasharray: 6 6; }
 /* Concept colours: class c1-c5 on a box, line, dot, or text in SVG, or on a .chip or .sym in the text */
 .c1 { --cc: var(--c1); --cb: var(--c1-bg); } .c2 { --cc: var(--c2); --cb: var(--c2-bg); } .c3 { --cc: var(--c3); --cb: var(--c3-bg); }
 .c4 { --cc: var(--c4); --cb: var(--c4-bg); } .c5 { --cc: var(--c5); --cb: var(--c5-bg); }

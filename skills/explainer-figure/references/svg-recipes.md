@@ -82,13 +82,49 @@ Two panels side by side, same scale, same project case:
 
 Put the key number under each panel in `bad` / `good` colour. The reader's eye should go left → right and see one difference.
 
-## Recipe 3 — Components and data flow (L0, e.g. a package)
+## Recipe 3 — Components and data flow (L0, e.g. a package or a system)
 
-- Boxes = modules/files (label with the file name in `code` style: use the file name as bold text and its one-line job as `sm`).
+- A component that is a concrete thing with a familiar shape (a browser, a database, a robot, a person) is drawn as that thing (`pictorial.md` § Drawn objects). A module, a file, a service, or a layer stays a box. Do not draw every node as an object: when all nodes are the same kind of thing, boxes say as much.
+- Boxes = modules/files (label with the file name in `code` style: use the file name as bold text and its one-line job as `sm`). An object's label goes below it: bold name, then its job in `sm`, 20px apart.
+- An arrow to or from an object ends on the object's bounding rectangle, 2px outside the outline, on the same y as the arrow from the box beside it.
 - Arrows = data or calls, labelled with the data type in `sm` text placed 8px above the arrow's midpoint.
 - Group boxes that belong to one layer inside a `box muted` panel with the layer name at its top-left (`sm`, `text-anchor="start"`).
 - Draw the main path left → right or top → bottom; side paths (logs, audit) in `dash`.
 - At most ~8 boxes. If the package has more, draw the main path only and list the rest in a table.
+
+A browser drawn from basic shapes, an API server kept as a box, and a database drawn as a cylinder:
+
+```bash
+P=<this skill's folder>/scripts/parts.py
+python3 $P rect --w 110 --h 80 --r "8 8 8 8" --at 90,80                 # browser: window
+python3 $P rect --w 110 --h 20 --r "8 8 0 0" --at 90,50                 # title bar
+python3 $P pill --w 6 --h 6 --fill dark --at 50,50                      # three dots, 17px apart (50, 67, 84)
+python3 $P rect --w 90 --h 40 --r "4 4 4 4" --fill glass --at 90,92     # page
+python3 $P cylinder --w 70 --h 80 --cls c1 --at 620,80                  # database
+```
+
+```html
+<figure id="fig-2">
+<svg viewBox="0 0 720 180" role="img" aria-label="The browser sends requests to the API server; only the API server queries the database.">
+  <g id="f2-browser">
+    <g class="ink" transform="translate(90 80)"><path d="M-47 -40 H47 A8 8 0 0 1 55 -32 V32 A8 8 0 0 1 47 40 H-47 A8 8 0 0 1 -55 32 V-32 A8 8 0 0 1 -47 -40 Z"/></g>
+    <g class="ink" transform="translate(90 50)"><path d="M-47 -10 H47 A8 8 0 0 1 55 -2 V10 H-55 V-2 A8 8 0 0 1 -47 -10 Z"/></g>
+    <g class="ink dark" transform="translate(50 50)"><rect x="-3" y="-3" width="6" height="6" rx="3"/></g>
+    <g class="ink dark" transform="translate(67 50)"><rect x="-3" y="-3" width="6" height="6" rx="3"/></g>
+    <g class="ink dark" transform="translate(84 50)"><rect x="-3" y="-3" width="6" height="6" rx="3"/></g>
+    <g class="ink glass" transform="translate(90 92)"><path d="M-41 -20 H41 A4 4 0 0 1 45 -16 V16 A4 4 0 0 1 41 20 H-41 A4 4 0 0 1 -45 16 V-16 A4 4 0 0 1 -41 -20 Z"/></g>
+  </g>
+  <text x="90" y="146" text-anchor="middle" class="b">Browser</text><text x="90" y="166" text-anchor="middle" class="sm">shows the page</text>
+  <line class="line" x1="147" y1="80" x2="270" y2="80" marker-end="url(#arr)"/><text x="208" y="72" text-anchor="middle" class="sm">HTTPS request</text>
+  <rect class="box" x="270" y="50" width="160" height="60" rx="6"/>
+  <text x="350" y="76" text-anchor="middle" class="b">API server</text><text x="350" y="96" text-anchor="middle" class="sm">checks, then decides</text>
+  <line class="line" x1="430" y1="80" x2="583" y2="80" marker-end="url(#arr)"/><text x="506" y="72" text-anchor="middle" class="sm">query</text>
+  <g id="f2-database" class="ink c1" transform="translate(620 80)"><path d="M-35 -30.2 V30.2 A35 9.8 0 0 0 35 30.2 V-30.2 Z"/><ellipse cx="0" cy="-30.2" rx="35" ry="9.8"/></g>
+  <text x="620" y="146" text-anchor="middle" class="b c1">Database</text><text x="620" y="166" text-anchor="middle" class="sm">keeps the records</text>
+</svg>
+<figcaption>Figure 2. Only the API server reaches the database.</figcaption>
+</figure>
+```
 
 ## Recipe 4 — Two time axes / timeline
 

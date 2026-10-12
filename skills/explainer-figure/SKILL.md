@@ -46,26 +46,29 @@ If a field is missing, take it from the page's learning brief. Do not invent fac
 | a process that runs in steps | stepper | § Stepper |
 | a result that depends on a parameter | slider | § Slider |
 | 4–6 parallel items with the same fields (layers, roles, options) | summary cards (HTML) | `references/cards.md` instead |
-| where the parts sit in a real object, a body, or a container metaphor | pictorial figure | `references/pictorial.md` instead |
+| where the parts sit in a real object, a body, or a container metaphor; an object's poses along a path | pictorial figure (P1–P5) | `references/pictorial.md` instead |
 
 Go down the table for each brief and note every row that fits. When summary cards or a pictorial figure fits, use it: a reader takes in cards and drawn objects faster than boxes and arrows. For causes and processes, a mechanism figure (what happens and why) stays the default. Draw a numeric figure only after the mechanism is clear, and only if it proves a claim on the page.
+
+The table picks the figure; the thing a node stands for picks how the node looks. In any figure, draw a node that stands for a concrete thing with a familiar shape (a person, a robot, a browser, a database, a rocket) as that thing (`references/pictorial.md` § Drawn objects). Keep a box for an abstract idea, and for nodes that are all the same kind of thing, where a shape adds nothing to the label. Test: with all text hidden, the reader still recognises the concrete nodes, and the structure still shows the brief's Message.
 
 ## Process
 
 1. Read the brief, then `references/svg-recipes.md`: the layout rules and the colour meaning first, then the recipe. If the brief names icons, also read `references/icons.md`.
 2. Draw on the grid. For a stepper, draw the final state first, check it, then split it into steps.
+   Draw objects (a person, a robot, a backpack) with the parts library, not with coordinates written by hand: `python3 <this skill's folder>/scripts/parts.py -h`, styles and examples in `references/pictorial.md` § Drawn objects.
 3. If the page uses icons, run the copy command in `references/icons.md`. Then run the self-check below. Fix every failure by editing coordinates, not by adding CSS.
 4. Put the figure directly after the paragraph that introduces it. The paragraph, the caption, and the source line follow `../explainer-page/references/writing-rules.md` § Figures and text.
 
 ## Self-check
 
-Look at the figures after the page check of explainer-page (its step 6), one figure at a time if needed.
+Check the intent first, then the defects. First screenshot the figures with every word hidden (the figure-only command below, with `H` set) and compare each figure with its brief's Message: the concrete nodes are recognisable by their shape, and the structure still shows the relation. If not, redraw it before fixing details. Then, after the page check of explainer-page (its step 6), go through the list below, one figure at a time if needed. After every fix, take the screenshots again until both pass. For drawn objects, also run the two checks in `references/pictorial.md` § Check drawn objects.
 
 - Every label fits inside its box, and no label crosses a line or another label.
 - Every arrow starts and ends at a box edge.
 - Every number shows its unit, axis title, or legend inside the figure.
 - The figure has one message, and the caption can state it.
-- The icon copy command (`references/icons.md`) prints nothing.
+- The icon copy command (`references/icons.md`) and the overlap check below print nothing.
 - Every text colour has a contrast of at least 4.5:1 (WCAG AA) on every background colour of the page. The check below reads the colours from the page's `:root` and prints nothing when all pairs pass:
 
 ```bash
@@ -83,14 +86,23 @@ for f in ("text", "muted", "red", "green-text", "c1", "c2", "c3", "c4", "c5"):
 EOF
 ```
 
+The overlap check prints one line per text over text, line through text, or text across a shape's edge, in every stepper frame, and nothing when all figures pass. Add `data-touch` to a line that must touch a label (a leader's end). It does not see a line through an object or an object on an object: look for those in the screenshot.
+
+```bash
+J=<this skill's folder>/scripts/check-overlap.js; T=$(mktemp --suffix=.html)
+python3 -c 'import sys; p, j = (open(f, encoding="utf-8").read() for f in sys.argv[1:]); i = p.rindex("</body>"); sys.stdout.write(p[:i] + "<script>" + j + "</script>" + p[i:])' "$F" "$J" > "$T"
+google-chrome --headless=new --disable-gpu --window-size=1280,1000 --virtual-time-budget=5000 --dump-dom "file://$T" 2>/dev/null | python3 -c 'import sys, re, html; m = re.search(r"<pre id=\"overlap-report\">(.*?)</pre>", sys.stdin.read(), re.S); print(html.unescape(m.group(1)) if m else "no report: the check did not run", end="")'; rm "$T"
+```
+
 To look at every figure of a page at once (labels that crowd an arrow, text that leaves its box, a number whose meaning the figure, caption, and source line do not give), screenshot a temporary copy that hides everything but the figures and the source lines. Use Python for the edit: CSS and scripts contain characters that clash with `sed` delimiters.
 
 ```bash
-python3 - "$F" <<'EOF'
+H=""   # intent check: H="figure svg text,figure p,figcaption,.src{visibility:hidden}" hides every word
+python3 - "$F" "$H" <<'EOF'
 import sys
 s = open(sys.argv[1], encoding="utf-8").read()
 s = s.replace("</body>", "<style>.side,.topbar{display:none!important}.main{margin-left:0}"
-              ".content>*:not(figure):not(.src){display:none}</style></body>")
+              ".content>*:not(figure):not(.src){display:none}" + sys.argv[2] + "</style></body>")
 open("/tmp/figures.html", "w", encoding="utf-8").write(s)
 EOF
 google-chrome --headless=new --disable-gpu --hide-scrollbars --window-size=900,2400 --screenshot=/tmp/figures.png file:///tmp/figures.html; rm /tmp/figures.html

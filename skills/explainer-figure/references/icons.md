@@ -52,7 +52,7 @@ open(sys.argv[1], "w", encoding="utf-8").write(head + "<!-- icons:start -->" + b
 EOF
 ```
 
-If a name is missing, choose another icon from the table, or leave the label without an icon. Do not draw an icon by hand in the icon style.
+If a name is missing, choose another icon from the table, or leave the label without an icon. Do not fake a missing icon by drawing a small one next to a label. A thing that the reader must recognise at the size of a node is drawn as an object instead (`pictorial.md` § Drawn objects).
 
 ## Adding icons to the set (maintainers)
 

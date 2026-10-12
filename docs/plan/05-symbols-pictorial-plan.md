@@ -18,18 +18,18 @@
 - [x] T5 `.sym`、圖說明單的 Symbols 欄、符號標註規則、`writing-rules.md` 引用 —— 2026-10-13：x̂ 在 SVG 與 HTML 中都正確顯示；`explainer-figure/SKILL.md` 112 行
 
 #### 檢查點 A
-- [ ] 使用者確認 T5 的示範截圖；提供提交建議
+- [x] 使用者確認 T5 的示範截圖；提供提交建議 —— 2026-10-13：使用者確認並提交（`72d22c9`）
 
 ### 第 2 階段：繪圖基礎（R2、R3、R6、R7）
-- [ ] T7 壓線檢查進入 `scripts/`，加入 Self-check 指令
-- [ ] T8 風格規範與零件函式庫（人體、機器人、無人機、姿態計算、零件總覽圖）
+- [x] T7 壓線檢查進入 `scripts/`，加入 Self-check 指令 —— 2026-10-13：7 個重建缺陷全部抓到；7 個範例頁與 24 個使用者頁面 0 個回報；`SKILL.md` 120 行
+- [x] T8 風格規範與零件函式庫（人體、機器人、無人機、姿態計算、零件總覽圖）—— 2026-10-13：`parts.py` 9 個子指令；零件總覽圖 68 個形狀的外框都是 4px；`SKILL.md` 121 行
 - ~~T9 Noto Emoji 子集、`emoji.md`、同步指令~~（2026-10-10 隨 R4 取消）
 - ~~T10 若 T4 有觸發：改寫 explainer-figure 的 description 或隱藏方式~~（2026-10-12 取消：T4 觸發 0 次）
-- [ ] T15 節點外觀原則：`SKILL.md` 段落、`pictorial.md` 開頭、`icons.md` 禁令範圍、Recipe 3 片段
-- [ ] T16 意圖檢查：遮住文字的截圖、與零件總覽圖並排、放大截圖
+- [x] T15 節點外觀原則：`SKILL.md` 段落、`pictorial.md` 開頭、`icons.md` 禁令範圍、Recipe 3 片段 —— 2026-10-13：遮住文字後，瀏覽器與資料庫仍可辨認，API server 維持方框
+- [x] T16 意圖檢查：遮住文字的截圖、與零件總覽圖並排、放大截圖 —— 2026-10-13：3 項指令在 Recipe 3 暫存頁與 Starship 範例頁都執行過；`SKILL.md` 124 行
 
 #### 檢查點 B
-- [ ] 使用者判讀零件總覽圖與 Recipe 3 的片段截圖；提供提交建議
+- [x] 使用者判讀零件總覽圖與 Recipe 3 的片段截圖；提供提交建議 —— 2026-10-13：人體腿寬修正後通過
 
 ### 第 3 階段：驗證案例
 - [ ] T6 EKF 頁 v2（V1）
@@ -192,8 +192,8 @@
 
 #### 檢查點 A
 
-- [ ] 使用者確認 T5 的示範截圖（組合字元 x̂ 在 SVG 與 HTML 中都正確顯示）
-- [ ] 提供 `git add` 範圍與提交訊息
+- [x] 使用者確認 T5 的示範截圖（組合字元 x̂ 在 SVG 與 HTML 中都正確顯示）
+- [x] 提供 `git add` 範圍與提交訊息
 
 ### 第 2 階段：繪圖基礎（R2、R3、R6、R7）
 
@@ -202,13 +202,13 @@
 **說明：** 把 T3 的原型整理成 `scripts/check-overlap.js`，並在 Self-check 加入執行指令。
 
 **驗收條件：**
-- [ ] `skills/explainer-figure/scripts/check-overlap.js` 支援 `data-touch` 排除
-- [ ] `explainer-figure/SKILL.md` § Self-check 加入執行指令，指令中的腳本路徑從 skill 根目錄寫起
-- [ ] 指令已實際執行一次
+- [x] `skills/explainer-figure/scripts/check-overlap.js` 支援 `data-touch` 排除
+- [x] `explainer-figure/SKILL.md` § Self-check 加入執行指令，指令中的腳本路徑從 skill 根目錄寫起
+- [x] 指令已實際執行一次
 
 **驗證：**
-- [ ] V4 的兩個條件仍成立
-- [ ] `wc -l skills/explainer-figure/SKILL.md` 不超過約 130
+- [x] V4 的兩個條件仍成立
+- [x] `wc -l skills/explainer-figure/SKILL.md` 不超過約 130
 
 **相依：** 檢查點 0　**檔案：** `scripts/check-overlap.js`（新增）、`explainer-figure/SKILL.md`　**規模：** S
 
@@ -217,22 +217,22 @@
 **說明：** 依規格 R3，把 T2 的結果寫成 `pictorial.md` 的規範，並建立零件函式庫。
 
 **驗收條件：**
-- [ ] `skills/explainer-figure/scripts/parts.py`：只使用 Python 3 標準函式庫；以子指令輸出 SVG 片段；依尺寸參數直接輸出幾何，不使用 `scale()`
-- [ ] 基本形（清單實作時確定）與 3 個組合物件：人體（規格 R3 第 2 點的 4 條）、機器人（不限定俯視，能表示朝向）、無人機（四旋翼）
-- [ ] 姿態子指令：依軌跡計算每一步的位置與角度，輸出 P5 的 `<use>`
-- [ ] 零件總覽圖子指令
-- [ ] `pictorial.md` 加入「粗外框＋平塗色」的規範：線寬 4px、填色、陰影，只使用模板變數
-- [ ] `pictorial.md` 加入函式庫的用法、背包與車的基本形組合示範、新配方 P5（每步一個姿態、淡色軌跡、組合物件的分離寫法）
-- [ ] `pictorial.md` 寫明 P5 的 CSS 限制（不加 `svg ` 前綴、不用 `scale()`、P5 物件中不用 `box` 等既有 class）
-- [ ] `explainer-figure/SKILL.md` 圖型表的具象插圖列提到物件與姿態，指向 P5（不新增列）；加入函式庫的執行指令
-- [ ] `template.html` 新增需要的 class（不加 `svg ` 前綴）
+- [x] `skills/explainer-figure/scripts/parts.py`：只使用 Python 3 標準函式庫；以子指令輸出 SVG 片段；依尺寸參數直接輸出幾何，不使用 `scale()`
+- [x] 基本形（清單實作時確定）與 3 個組合物件：人體（規格 R3 第 2 點的 4 條）、機器人（不限定俯視，能表示朝向）、無人機（四旋翼）
+- [x] 姿態子指令：依軌跡計算每一步的位置與角度，輸出 P5 的 `<use>`
+- [x] 零件總覽圖子指令
+- [x] `pictorial.md` 加入「粗外框＋平塗色」的規範：線寬 4px、填色、陰影，只使用模板變數
+- [x] `pictorial.md` 加入函式庫的用法、背包與車的基本形組合示範、新配方 P5（每步一個姿態、淡色軌跡、組合物件的分離寫法）
+- [x] `pictorial.md` 寫明 P5 的 CSS 限制（不加 `svg ` 前綴、不用 `scale()`、P5 物件中不用 `box` 等既有 class）
+- [x] `explainer-figure/SKILL.md` 圖型表的具象插圖列提到物件與姿態，指向 P5（不新增列）；加入函式庫的執行指令
+- [x] `template.html` 新增需要的 class（不加 `svg ` 前綴）
 
 **驗證：**
-- [ ] V3：零件總覽圖截圖，外形正確；人體的軀幹與腿之間沒有缺口（放大截圖）；不同尺寸的外框都是 4px
-- [ ] 同一組參數執行兩次，輸出相同（`diff` 無輸出）
-- [ ] `SKILL.md` 中的指令已實際執行一次
-- [ ] 壓線檢查與對比檢查都不印出任何內容
-- [ ] `CLAUDE.md` 的模板驗證指令全部通過
+- [x] V3：零件總覽圖截圖，外形正確；人體的軀幹與腿之間沒有缺口（放大截圖）；不同尺寸的外框都是 4px
+- [x] 同一組參數執行兩次，輸出相同（`diff` 無輸出）
+- [x] `SKILL.md` 中的指令已實際執行一次
+- [x] 壓線檢查與對比檢查都不印出任何內容
+- [x] `CLAUDE.md` 的模板驗證指令全部通過
 
 **相依：** T7　**檔案：** `scripts/parts.py`（新增）、`pictorial.md`、`template.html`、`explainer-figure/SKILL.md`　**規模：** L
 
@@ -258,16 +258,16 @@
 **說明：** 依規格 R6，把「畫成物件」從圖型層級移到節點層級，並刪改體現舊做法的句子。
 
 **驗收條件：**
-- [ ] `explainer-figure/SKILL.md` 圖型表後的段落寫入規格 R6 第 1 點
-- [ ] `pictorial.md` 開頭：圖型依問題選擇、節點外觀依東西決定；風格規範適用於任何圖中的物件；P1–P5 是整張具象插圖的版面配方
-- [ ] `icons.md` 第 55 行的禁令限縮為「不要在標籤旁假造 Lucide 沒有的小圖示」，並指向 `pictorial.md`
-- [ ] `svg-recipes.md` Recipe 3：具體元件畫成物件、抽象元件保留方框；附一段可複製的片段，示範兩者並存與箭頭接在外接框的邊上
-- [ ] 外形依據的規則（規格 R6 第 4 點）寫進 `pictorial.md`
-- [ ] 不加入元件清單、連線配色、雙向平行箭頭
+- [x] `explainer-figure/SKILL.md` 圖型表後的段落寫入規格 R6 第 1 點
+- [x] `pictorial.md` 開頭：圖型依問題選擇、節點外觀依東西決定；風格規範適用於任何圖中的物件；P1–P5 是整張具象插圖的版面配方
+- [x] `icons.md` 第 55 行的禁令限縮為「不要在標籤旁假造 Lucide 沒有的小圖示」，並指向 `pictorial.md`
+- [x] `svg-recipes.md` Recipe 3：具體元件畫成物件、抽象元件保留方框；附一段可複製的片段，示範兩者並存與箭頭接在外接框的邊上
+- [x] 外形依據的規則（規格 R6 第 4 點）寫進 `pictorial.md`
+- [x] 不加入元件清單、連線配色、雙向平行箭頭
 
 **驗證：**
-- [ ] Recipe 3 的片段貼進暫存頁截圖；壓線檢查與對比檢查都不印出任何內容
-- [ ] `wc -l skills/explainer-figure/SKILL.md` 不超過約 130
+- [x] Recipe 3 的片段貼進暫存頁截圖；壓線檢查與對比檢查都不印出任何內容
+- [x] `wc -l skills/explainer-figure/SKILL.md` 不超過約 130
 
 **相依：** T8　**檔案：** `explainer-figure/SKILL.md`、`pictorial.md`、`icons.md`、`svg-recipes.md`　**規模：** M
 
@@ -276,21 +276,21 @@
 **說明：** 依規格 R7，在 Self-check 加入意圖檢查。
 
 **驗收條件：**
-- [ ] Self-check 寫明順序：先對照圖說明單的 Message 欄確認意圖，再找缺陷；修正後重新截圖
-- [ ] 遮住文字的截圖指令（在只看圖的截圖中隱藏圖內的 SVG 文字）
-- [ ] 與零件總覽圖並排比較的指令
-- [ ] 放大截圖指令（`--force-device-scale-factor=4`，截取物件的交接處）
+- [x] Self-check 寫明順序：先對照圖說明單的 Message 欄確認意圖，再找缺陷；修正後重新截圖
+- [x] 遮住文字的截圖指令（在只看圖的截圖中隱藏圖內的 SVG 文字）
+- [x] 與零件總覽圖並排比較的指令
+- [x] 放大截圖指令（`--force-device-scale-factor=4`，截取物件的交接處）
 
 **驗證：**
-- [ ] V9：3 項指令都在 T15 的 Recipe 3 暫存頁與一個既有範例頁上實際執行一次
-- [ ] `wc -l skills/explainer-figure/SKILL.md` 不超過約 130；超過時把指令細節移到 references
+- [x] V9：3 項指令都在 T15 的 Recipe 3 暫存頁與一個既有範例頁上實際執行一次
+- [x] `wc -l skills/explainer-figure/SKILL.md` 不超過約 130；超過時把指令細節移到 references
 
 **相依：** T8、T15　**檔案：** `explainer-figure/SKILL.md`（必要時 `svg-recipes.md` 或 `pictorial.md`）　**規模：** S
 
 #### 檢查點 B
 
-- [ ] 使用者判讀零件總覽圖、Recipe 3 片段的截圖與它遮住文字的截圖
-- [ ] 提供 `git add` 範圍與提交訊息
+- [x] 使用者判讀零件總覽圖、Recipe 3 片段的截圖與它遮住文字的截圖 —— 2026-10-13：人體的腿外緣改為與軀幹切齊，其餘通過（〈結果〉檢查點 B）
+- [x] 提供 `git add` 範圍與提交訊息
 
 ### 第 3 階段：驗證案例
 
@@ -404,8 +404,8 @@
 ## Open Questions
 
 - 驗收用的新主題：使用者在 T12 開始前指定。
-- ~~`.sym` 的正式名稱~~：T5 確定為 `.sym`（2026-10-13）。風格 class 的名稱：T8 實作時確定。
-- 零件函式庫的子指令名稱、基本形清單，以及機器人與無人機的視角參數：T8 實作時確定。
+- ~~`.sym` 的正式名稱~~：T5 確定為 `.sym`（2026-10-13）。~~風格 class 的名稱~~：T8 確定為 `ink` 系列（2026-10-13）。
+- ~~零件函式庫的子指令名稱、基本形清單，以及機器人與無人機的視角參數~~：T8 確定（見〈結果〉T8）。
 
 ## 結果
 
@@ -695,3 +695,113 @@
 6. 模板圖 2 與 Q1 段落的截圖：`$SCRATCH/t5/template-demo.png`。
 
 觀察：HTML 段落中的 `<sub>` 讓所在行的行高略增。這是瀏覽器的預設行為，本任務沒有修改。
+
+### T7 壓線檢查進入 skill（2026-10-13）
+
+**結論：依〈結果〉T3 的記錄重寫 `check-overlap.js`（128 行），結果與 T3 相同：7 個重建缺陷全部抓到；乾淨頁面、7 個範例頁、`~/Documents/explainers/` 的 24 個頁面（含 EKF 頁）都沒有回報。**
+
+**腳本與指令。**
+
+- `skills/explainer-figure/scripts/check-overlap.js`：3 個類別、`data-touch` 排除、重畫文字的排除、`<use>` 的點擊測試，都依 T3 的設計。stepper 先按 ◀ 退回第 1 幀，再逐幀按 ▶；每幀檢查前把圖捲進視窗，因為 `elementsFromPoint` 只能測視窗內的點。字型載入後（`document.fonts.ready`）才量測。
+- `SKILL.md` § Self-check 新增一段說明與 3 行指令：把腳本插在最後一個 `</body>` 前、存成 `mktemp` 暫存檔、以 Chrome `--dump-dom` 讀出報告。找不到報告元素時印出 `no report: the check did not run`，避免腳本沒有執行卻被當成通過。清單中「圖示同步指令不印出任何內容」一項改為同時包含壓線檢查。
+
+**重寫時發現的問題。** 第一版腳本開頭的註解含有報告元素的完整標籤文字，`--dump-dom` 的輸出中，指令的正規表示式先比對到註解，把整支腳本當成報告印出。註解改寫後解決。
+
+**驗證**（暫存檔在本 session 暫存目錄的 `t7/`）：
+
+| 測試 | 結果 |
+|---|---|
+| 乾淨頁面（`pictorial.md` 的 5 個配方片段） | 沒有回報 |
+| D1–D7（放入方式同 T3） | 7 個都抓到；回報的類別與 T3 相同 |
+| D6 的引線加上 `data-touch` | 不再回報 |
+| 文字放在旋轉 −35° 的 `<use>` 物件邊緣 | 回報 `text-on-edge` |
+| 模板圖 2 第 3 幀加入一個與第 1 步標籤重疊的文字 | 回報 `fig-2 [frame 3] text-overlap` |
+| 模板 | 沒有回報 |
+| 7 個範例頁 | 沒有回報；每頁 0.58–1.35 秒（含啟動 Chrome） |
+| `~/Documents/explainers/` 的 24 個頁面 | 沒有回報 |
+| 從 `SKILL.md` 取出指令區塊原樣執行（只替換 skill 路徑） | 結果同上，`/tmp` 沒有留下暫存檔 |
+
+### T8 風格規範與零件函式庫（2026-10-13）
+
+**結論：`scripts/parts.py`（只用 Python 3 標準函式庫）以 9 個子指令印出 SVG 片段；模板新增 `ink` 系列 class；`pictorial.md` 新增 § Drawn objects 與 Recipe P5。零件總覽圖中 68 個 `ink` 形狀的外框都是 4px，同一組參數兩次輸出相同，輸出中沒有 `scale()`。**
+
+**決定的名稱與清單（原為待決問題）：**
+
+| 項目 | 決定 |
+|---|---|
+| 模板 class（不加 `svg ` 前綴） | `ink`（外框＋淺色填色：`--cb`，沒有概念色時為 `--bg`）、`ink dark`、`ink glass`、`ink-edge`＋`ink-fill`（單一外輪廓）、`ink-shade`（`--cc` 18%）、`ink-track`（P5 的淡色虛線軌跡） |
+| 組合物件 | `person --height`（≥ 100）、`robot --size --view top\|side`、`drone --size --view top\|side` |
+| 基本形 | `pill`、`rect --r "左上 右上 右下 左下"`、`cylinder`（資料庫、儲槽）、`ogive`（尖頭朝 +x 的長形，火箭級段等）；`--fill light\|dark\|glass` |
+| 其他 | `pose`（依軌跡計算位置與角度，輸出 P5 的軌跡與 `<use data-step>`；路徑支援絕對座標的 M、L、H、V、Q、C；`--angles` 可為 `t`、`t+90`、`t-90` 或固定角度）、`sheet`（零件總覽圖，獨立 SVG 檔，內嵌模板的 CSS） |
+| 共同參數 | `--id`、`--cls`（概念色）、`--at X,Y[,角度]`（直接輸出擺好位置的一份；不加時輸出放進 `<defs>` 的 `<g id>`） |
+
+**與規格不同或規格沒有寫到的細節：**
+
+1. **人體最小高度 100。** 外框固定 4px，頭與軀幹、兩腿之間必須保持 ≥ 11px（R3 第 1 點）。高度低於 100 時，腿的寬度與間距放不進軀幹的寬度，所以指令直接報錯。圖中需要更小的人時，改用 Lucide 的 `user` 圖示標在標籤旁。
+2. **肩點改為 (±13, 軀幹頂 + 9)。** 規格沿用檢查點 0 的 (±15, −29)。實測時手臂的圓頭超出軀幹的肩角約 1px，形成小突起；內移 2px、下移 2px 後消失（放大截圖 `$SCRATCH/t8/zoom-person.png`）。
+3. **陰影只畫在主體上。** 每個組合物件的陰影是主體再畫一次、以物件自己的 `clipPath`（id 為 `<物件 id>-shade`）裁到背光側：人體在 +x 側，朝 +x 的俯視與側視物件在 +y 側。基本形不畫陰影。
+4. **`--at` 與 `--angles` 接受負值。** argparse 會把 `-32,-27` 當成選項名稱；`parts.py` 在解析前把這兩個參數與其後的負值合併。
+5. **零件總覽圖的 `<style>` 包在 CDATA 中。** 模板 CSS 註解中的 `<span>`、`<tspan>` 範例會讓獨立 SVG 的 XML 解析失敗。
+
+**驗證**（暫存檔在本 session 暫存目錄的 `t8/`）：
+
+| 測試 | 結果 |
+|---|---|
+| V3：零件總覽圖（`sheet.png`） | 基本形、3 種尺寸的人體、俯視與側視的機器人和無人機（含旋轉）、4 步姿態都正確 |
+| V3：人體放大 4 倍（`zoom-person.png`、`zoom-person100.png`） | 軀幹與腿之間沒有圓弧缺口；肩膀平順；150、120、100 的外框粗細相同 |
+| V3：總覽圖中 `.ink` 形狀的計算後線寬 | 68 個全部是 4px |
+| 同一組參數執行兩次（`sheet` 與文件中的全部指令） | `diff` 沒有輸出 |
+| 輸出中的 `scale(` | 0 處 |
+| `pictorial.md` 與 `SKILL.md` 中所有含 `parts.py` 的指令區塊原樣執行（只替換 skill 路徑） | 15 個指令都以 0 結束；`parts.py -h` 正常 |
+| `person --height 90` | 印出錯誤訊息，結束碼 1 |
+| 背包、車與 P5 範例的測試頁（`objects.html`、`p5.html`）與模板 | 壓線檢查、對比檢查都沒有輸出；P5 第 1、3、4 幀截圖中物件落在軌跡上 |
+| `CLAUDE.md` 的模板驗證指令 | 外部資源無輸出；1280px 截圖正常；390px 為 `<title>ok` |
+
+**觀察（留給檢查點 B 判讀）：** 無人機俯視圖中，旋翼大到幾乎碰到機身，機臂只露出很短一段。
+
+### 檢查點 B（2026-10-13）
+
+使用者判讀：
+
+1. 人體的軀幹與腿交接處有段差：腿的外緣比軀幹內縮 1.5px。改為雙腿外緣與軀幹兩側切齊（`parts.py` 移除內縮），規格 R3 同步修改。修改後重新放大截圖（`t8/zoom-person.png`、`t8/zoom-person100.png`），150、120、100 三種尺寸的外側邊線都從軀幹直線延伸到腿，沒有段差。
+2. 無人機維持現狀。
+3. 陰影的分界維持現狀。
+4. 其他截圖（零件總覽圖、Recipe 3 片段與它遮住文字的截圖、P5 第 3 幀）沒有問題。
+
+修改後的驗證：3 種高度的腿外緣座標與軀幹側邊相同（±20、±16、±13.3）；文件中 20 個 `parts.py` 指令都以 0 結束；`sheet` 兩次輸出相同；總覽圖 68 個 `ink` 形狀的線寬都是 4px。
+
+### T15 節點外觀原則（2026-10-13）
+
+**結論：R6 已寫入 4 個檔案。Recipe 3 的新片段把瀏覽器與資料庫畫成物件、API server 保留方框；遮住所有文字後，兩個物件仍可辨認，結構仍表達「只有 API server 連到資料庫」。**
+
+| 檔案 | 修改 |
+|---|---|
+| `explainer-figure/SKILL.md` | 圖型表後新增一段：圖型依問題選擇，節點外觀依它代表的東西決定；具體東西畫成物件，抽象概念與同類節點用方框；判準是遮住文字後的辨識（R6 第 1、2 點） |
+| `pictorial.md` 開頭 | 改寫為兩部分：§ Drawn objects 適用於任何圖中的物件；P1–P5 是整張具象插圖的版面配方 |
+| `pictorial.md` § Drawn objects | 新增「特定實物依資料繪製」的規則（R6 第 4 點） |
+| `icons.md` 第 55 行 | 禁令限縮為「不要在標籤旁假造缺少的圖示」；需要在節點大小被認出的東西，畫成物件 |
+| `svg-recipes.md` Recipe 3 | 標題加上「or a system」；新增 3 條規則（具體元件畫成物件、物件的標籤在下方、箭頭端點在物件外接矩形外 2px）；附 `parts.py` 指令與可複製的片段 |
+
+沒有加入元件清單、連線配色、雙向平行箭頭（R6 第 6 點）。
+
+**實作時的調整：** 瀏覽器標題列的 3 個圓點原本相距 12px。每個圓點含外框寬 10px，間距不足 § Drawn objects 的 11px 規則，所以改為相距 17px。
+
+**驗證**（暫存檔在本 session 暫存目錄的 `t15/`、`t16/`）：Recipe 3 片段貼進模板暫存頁（`r3.html`），截圖 `t15/r3.png`；壓線檢查與對比檢查都沒有輸出；`svg-recipes.md` 中的片段與測試頁中的片段逐字相同；7 個範例頁的壓線檢查仍沒有輸出。
+
+### T16 意圖檢查（2026-10-13）
+
+**結論：Self-check 改為先比對意圖、再找缺陷。3 項指令都在 Recipe 3 暫存頁與 Starship 範例頁上實際執行過（V9）。`SKILL.md` 為 124 行；並排與放大兩段指令放在 `pictorial.md` § Check drawn objects，依架構決策第 1 點把細節移出。**
+
+- **順序（`SKILL.md` § Self-check 開頭）：** 先截取遮住文字的圖，對照圖說明單的 Message 欄；不符合時先重畫。之後才逐項檢查缺陷。每次修正後重新截圖，直到兩者都通過。
+- **遮住文字：** 既有的只看圖截圖指令新增變數 `H`。設為 `figure svg text,figure p,figcaption,.src{visibility:hidden}` 時，隱藏圖中所有文字、stepper 說明、圖說與來源行，版面不變。
+- **與零件總覽圖並排：** `parts.py sheet` 輸出總覽圖，再與 `/tmp/figures.png` 並排截圖。
+- **放大截圖：** 把指定圖的 `viewBox` 改為要檢查的區域，以 `--force-device-scale-factor=4` 截圖。第一次執行時，區域在頁寬下高約 548px，超過 500px 的視窗，下緣被切掉；改為固定 SVG 高度 440px 後，約 3:2 的區域都能完整放進視窗。
+
+**V9 執行結果：**
+
+| 頁面 | 遮住文字 | 並排 | 放大 |
+|---|---|---|---|
+| Recipe 3 暫存頁（`t15/r3.html`） | `t16/r3-hidden.png`：瀏覽器與資料庫可辨認，API server 是方框 | `t16/r3-side.png` | `t16/r3-zoom.png`（瀏覽器，3600 × 2000）：圓點分開，外框粗細一致 |
+| `examples/starship-reusability/starship-reusability.html` | `t16/starship-hidden.png`：圖 1 的因果鏈維持方框；圖 2、3 的火箭是細線外框，遮住文字後只能勉強認出 | `t16/starship-side.png` | `t16/starship-zoom.png`（圖 4） |
+
+Starship 範例頁的遮住文字截圖，可作為 T11 改版前的對照。

@@ -1,8 +1,100 @@
 # Pictorial Figures
 
-A pictorial figure draws a concrete object, a body, or a container, so the reader sees *where* the parts are: what goes in which layer of a backpack, where the water of the body is, what a game object holds. Use it when position or containment carries the meaning. For causes, flows, and steps, use a mechanism figure (`svg-recipes.md`).
+The figure type follows the question (`SKILL.md` § Choosing the figure type); how a node looks follows the thing it stands for. This file has two parts:
+
+- **§ Drawn objects**: the one style for every object drawn in any figure, such as a robot in a data-flow figure or a person in a timeline, and the parts library that draws them.
+- **Recipes P1–P5**: layouts for a whole pictorial figure, which shows *where* the parts are: what goes in which layer of a backpack, where the water of the body is, what a game object holds, where an object moves. Use one when position, containment, or pose carries the meaning. For causes, flows, and steps, use a mechanism figure (`svg-recipes.md`), with its concrete nodes drawn as objects.
 
 The object can be the real thing (a backpack) or a metaphor for an abstract one (a jar for a game object). A metaphor needs one sentence in the paragraph that says where it stops holding (`../explainer-page/references/writing-rules.md` § Reader).
+
+## Drawn objects
+
+Every object drawn in a figure (a person, a robot, a backpack) has one style: a 4px outline and flat fills. The template's `ink` classes carry it.
+
+| Class | Use |
+|---|---|
+| `ink` | outline and light fill: the concept colour's `--cb` when the object or its `<use>` has `c1`–`c5`, the page background otherwise |
+| `ink dark` | dark parts: wheels, nozzles, hubs |
+| `ink glass` | windows, lenses, sensors, rotors |
+| `ink-edge`, then `ink-fill` | several shapes with one outer outline (a person): the same shapes twice, first with an 8px outline, then filled without one |
+| `ink-shade` | at most one shade layer: the body again, clipped to the side away from the light (the light comes from the top left) |
+| `ink-track` | the faint dashed path of an object's poses (Recipe P5) |
+
+These rules come from test drawings; each one prevents a failure that was seen.
+
+- **Fills come only from these classes.** No gradients, no new colours.
+- **Keep separate parts at least 11px apart** (2 × 4px + 3px). Closer, the outlines join them into one blob.
+- **Draw at the needed size; never use `scale()`.** It makes the outline thinner, and `vector-effect` does not reach inside a `<use>`.
+- **Inside an object that a `<use>` shows, use only the `ink` classes.** A rule with an ancestor (`svg .box`, `.c1 .ink`) never reaches the shapes inside a `<use>`, so `box`, `line`, and `outline` turn black there. Put the concept class on the object's `<g>` or on the `<use>`.
+- **An object with a front faces +x.** Turn it with `rotate()`; do not mirror it.
+- **Draw a specific real thing from sources.** A named rocket, a product, or a building gets its recognisable features (proportions, fins, engines, windows) from what you can read about it: official descriptions, dimensions, descriptions of photos. Build them from basic shapes; do not use a generic shape in its place. In the report, list the features and their sources. If the sources are not enough, ask the user (`../explainer-page/references/sources-and-research.md`).
+
+### Parts library
+
+`scripts/parts.py` prints the geometry of an object; do not write the coordinates of a whole object by hand. It needs only Python 3.
+
+```bash
+P=<this skill's folder>/scripts/parts.py
+python3 $P person --id f2-person --height 150 --cls c1    # front view, 100 tall or more
+python3 $P robot --id f3-robot --size 80 --view top       # wheeled robot, top or side view
+python3 $P drone --id f3-drone --size 120 --view side     # quadcopter, top or side view
+python3 $P cylinder --w 60 --h 70 --cls c2 --at 400,120   # also pill, rect --r "16 16 0 0", ogive; --fill dark|glass
+python3 $P pose --ref f6-robot --path "M70 140 H190 Q230 140 250 100" --at 0,0.5,1 --angles t,t,90
+python3 $P sheet > /tmp/parts.svg                         # every part on one sheet (SKILL.md § Self-check)
+```
+
+- `person`, `robot`, and `drone` print a `<g id>` for the figure's `<defs>`. Show it with `<use href="#f3-robot" transform="translate(x y) rotate(a)"/>`.
+- `--at X,Y[,ANGLE]` prints the object placed instead, for one copy.
+- Basic shapes print centred on (0, 0). `rect --r` gives the four corner radii: top-left, top-right, bottom-right, bottom-left.
+
+### Combining basic shapes
+
+For an object the library does not have, combine basic shapes: one command per part, in drawing order (back to front), inside one `<g>`. A backpack (front view) and a car (top view, facing +x):
+
+```bash
+P=<this skill's folder>/scripts/parts.py
+python3 $P pill --w 44 --h 16 --at 0,-72                                  # backpack: handle
+python3 $P rect --w 100 --h 130 --r "34 34 12 12" --cls c1                # body
+python3 $P rect --w 64 --h 44 --r "8 8 10 10" --at 0,28                   # front pocket
+python3 $P rect --w 26 --h 12 --r "4 4 4 4" --fill dark --at -32,-27      # car: one of four wheels (±32, ±27)
+python3 $P rect --w 120 --h 56 --r "18 18 18 18" --cls c2                 # body
+python3 $P rect --w 16 --h 42 --r "6 6 6 6" --fill glass --at 22,0       # windscreen
+python3 $P rect --w 12 --h 38 --r "5 5 5 5" --fill glass --at -40,0      # rear window
+```
+
+```html
+<g id="f1-backpack" transform="translate(170 120)">
+  <g class="ink" transform="translate(0 -72)"><rect x="-22" y="-8" width="44" height="16" rx="8"/></g>
+  <g class="ink c1"><path d="M-16 -65 H16 A34 34 0 0 1 50 -31 V53 A12 12 0 0 1 38 65 H-38 A12 12 0 0 1 -50 53 V-31 A34 34 0 0 1 -16 -65 Z"/></g>
+  <g class="ink" transform="translate(0 28)"><path d="M-24 -22 H24 A8 8 0 0 1 32 -14 V12 A10 10 0 0 1 22 22 H-22 A10 10 0 0 1 -32 12 V-14 A8 8 0 0 1 -24 -22 Z"/></g>
+</g>
+```
+
+### Check drawn objects
+
+Run these after the screenshots in `SKILL.md` § Self-check, for every figure with drawn objects.
+
+1. **Next to the parts sheet.** Outlines, fills, and proportions match the sheet; an object combined from basic shapes looks like the objects of the library. The command puts `/tmp/figures.png` (the figure-only screenshot) next to the sheet:
+
+```bash
+python3 <this skill's folder>/scripts/parts.py sheet > /tmp/parts.svg
+printf '<body style="margin:0;display:flex;align-items:flex-start"><img src="figures.png" style="width:900px"><img src="parts.svg" style="width:720px"></body>' > /tmp/side.html
+google-chrome --headless=new --disable-gpu --hide-scrollbars --window-size=1620,1200 --screenshot=/tmp/side.png file:///tmp/side.html; rm /tmp/side.html
+```
+
+2. **Zoomed in where shapes meet**: a joint, a wheel under a body, the place where two stages separate. No gap, no stray corner, no outline thinner than the rest. The command sets the figure's `viewBox` to the region (x y width height in the figure's own coordinates) and takes the screenshot at 4× pixels; a region of about 3:2 fits the window (here: Figure 4):
+
+```bash
+python3 - "$F" 4 "300 40 120 80" <<'EOF'
+import re, sys
+s = open(sys.argv[1], encoding="utf-8").read()
+n, box = sys.argv[2], sys.argv[3]
+s = re.sub(r'(<figure id="fig-%s".*?<svg[^>]*?viewBox=")[^"]*' % n, lambda m: m.group(1) + box, s, count=1, flags=re.S)
+s = s.replace("</body>", "<style>.side,.topbar{display:none!important}.main{margin-left:0}.content>*:not(#fig-%s){display:none}#fig-%s svg{width:auto;min-width:0;height:440px}</style></body>" % (n, n))
+open("/tmp/zoom.html", "w", encoding="utf-8").write(s)
+EOF
+google-chrome --headless=new --disable-gpu --hide-scrollbars --force-device-scale-factor=4 --window-size=900,500 --screenshot=/tmp/zoom.png file:///tmp/zoom.html; rm /tmp/zoom.html
+```
 
 ## Rules for every pictorial figure
 
@@ -210,3 +302,43 @@ A software window drawn as a container: its panels as rectangles in their real p
 - Panels are neutral `box`; the selected object and the field the action changes take their concept colours.
 - One action per figure, as one dashed arrow that does not cross any label.
 - The caption says "Schematic layout, not a screenshot" / "版面為示意，不是實際截圖". If the reader must find a real button, a screenshot is clearer: ask the user for one from their own copy of the program.
+
+## Recipe P5 — Object and poses
+
+One object at several poses along a path: a robot avoiding a box, a booster turning back. Use a stepper (L2): each frame shows only the current pose, and the whole path stays as a faint track, so the reader sees where on the path the object is.
+
+```bash
+P=<this skill's folder>/scripts/parts.py
+python3 $P robot --id f6-robot --size 60 --view top --cls c1
+python3 $P pose --ref f6-robot --path "M70 140 H190 Q230 140 250 100 Q270 50 360 50 Q450 50 470 100 Q490 140 530 140 H650" --at 0,0.25,0.5,0.75,1
+```
+
+```html
+<figure id="fig-6" class="stepper">
+<svg viewBox="0 0 720 200" role="img" aria-label="A robot drives around a box in five steps; the dashed track shows its whole path.">
+  <defs>
+  <g id="f6-robot" class="c1">
+    <g class="ink dark"><path d="M-10.8 -27 H10.8 A2.4 2.4 0 0 1 13.2 -24.6 V24.6 A2.4 2.4 0 0 1 10.8 27 H-10.8 A2.4 2.4 0 0 1 -13.2 24.6 V-24.6 A2.4 2.4 0 0 1 -10.8 -27 Z"/></g>
+    <g class="ink"><path d="M-21.6 -21 H21.6 A8.4 8.4 0 0 1 30 -12.6 V12.6 A8.4 8.4 0 0 1 21.6 21 H-21.6 A8.4 8.4 0 0 1 -30 12.6 V-12.6 A8.4 8.4 0 0 1 -21.6 -21 Z"/></g>
+    <clipPath id="f6-robot-shade"><rect x="-60" y="0" width="120" height="60"/></clipPath>
+    <g class="ink-shade" clip-path="url(#f6-robot-shade)"><path d="M-21.6 -21 H21.6 A8.4 8.4 0 0 1 30 -12.6 V12.6 A8.4 8.4 0 0 1 21.6 21 H-21.6 A8.4 8.4 0 0 1 -30 12.6 V-12.6 A8.4 8.4 0 0 1 -21.6 -21 Z"/></g>
+    <g class="ink glass"><circle cx="-4.8" cy="0" r="8.4"/></g>
+    <g class="ink dark"><polygon points="24 0 14.4 -6.6 14.4 6.6"/></g>
+  </g>
+  </defs>
+  <rect class="box muted" x="300" y="110" width="120" height="80" rx="6"/><text x="360" y="155" text-anchor="middle" class="sm">box</text>
+  <path class="ink-track" d="M70 140 H190 Q230 140 250 100 Q270 50 360 50 Q450 50 470 100 Q490 140 530 140 H650"/>
+  <use href="#f6-robot" data-step="1" data-caption="Step 1: the robot starts on the left." transform="translate(70 140) rotate(0)"/>
+  <use href="#f6-robot" data-step="2" data-caption="Step 2: it turns before the box." transform="translate(229.5 126.7) rotate(-39.1)"/>
+  <use href="#f6-robot" data-step="3" data-caption="Step 3: it passes above the box." transform="translate(360 50) rotate(-0.1)"/>
+  <use href="#f6-robot" data-step="4" data-caption="Step 4: it turns back down." transform="translate(490.5 126.7) rotate(39.1)"/>
+  <use href="#f6-robot" data-step="5" data-caption="Step 5: it is past the box." transform="translate(650 140) rotate(0)"/>
+</svg>
+<figcaption>Figure 6. The robot leaves its straight line only to pass the box. Schematic, not to scale.</figcaption>
+</figure>
+```
+
+- Define the object once in the figure's `<defs>`. `pose` prints the track and one `<use>` per step; add a `data-caption` to each.
+- `pose` takes each position and angle from the track, so the object sits on it. `--angles` gives each step `t` (along the track), `t+90`, `t-90`, or a fixed angle: a booster flies tail first.
+- Split a turn of more than 90° into steps. A stepper has at most 8 steps (`../explainer-page/references/writing-rules.md` § Length budget).
+- Two objects that fly together and then separate: put both in one `<g transform>` until the step they separate, then give each its own pose.
