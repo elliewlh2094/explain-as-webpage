@@ -8,6 +8,6 @@
 | 02 | 英文支援、頁面樹延伸、autoresearch 範例 | 2026-10-02 | 0.2.0 | 已完成 | [idea](02-english-page-tree-idea.md) |
 | 03 | 材料模式（project／document／topic） | 2026-10-03 | 0.3.0 | 已完成 | [spec](03-material-modes-spec.md)、[plan](03-material-modes-plan.md)、[todo](03-material-modes-todo.md)、[figure-values](03-material-modes-figure-values.md) |
 | 04 | 視覺表現形式：拆出 explainer-figure、歸納卡、具象插圖、圖示 | 2026-10-04 | 0.4.0 | 已完成 | [idea](04-visual-forms-idea.md)、[plan](04-visual-forms-plan.md)、[todo](04-visual-forms-todo.md) |
-| 05 | 符號對照圖、具象插圖品質（節點外觀、零件函式庫、物件與姿態、壓線檢查、意圖檢查） | 2026-10-07 | — | 第 0 階段（檢查點 0：規格已依外部 skill 調查修訂，待 T14 基準測試） | [idea](05-symbols-pictorial-idea.md)、[spec](05-symbols-pictorial-spec.md)、[plan](05-symbols-pictorial-plan.md)、[skill-survey](05-symbols-pictorial-skill-survey.md) |
+| 05 | 符號對照圖、具象插圖品質（節點外觀、零件函式庫、物件與姿態、壓線檢查、意圖檢查） | 2026-10-07 | — | 第 1 階段（檢查點 0 已通過，T5 待開始） | [idea](05-symbols-pictorial-idea.md)、[spec](05-symbols-pictorial-spec.md)、[plan](05-symbols-pictorial-plan.md)、[skill-survey](05-symbols-pictorial-skill-survey.md) |
 
 第 1 輪的計畫與待辦曾放在 `tasks/plan.md`、`tasks/todo.md`，之後被第 3 輪覆寫，原內容見 commit `34156de`。第 2 輪沒有獨立的計畫檔。
