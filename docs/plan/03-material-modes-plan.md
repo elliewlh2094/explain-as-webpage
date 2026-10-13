@@ -82,7 +82,7 @@
 - 檔案：`SKILL.md`、`references/sources-and-research.md`（新增）、`references/writing-rules.md`、`references/svg-recipes.md`
 
 **T3（M）V1：Karpathy LLM Wiki gist**
-- 說明：以一般使用者的請求執行 skill，輸出到 `~/Documents/explainers/llm-wiki/`。
+- 說明：以一般使用者的請求執行 skill，輸出到預設輸出目錄的 `llm-wiki/`。
 - 驗收：
   - [ ] 確認訊息只發一次，最多 4 題，且包含候選疑問與輔助 skill 清單
   - [ ] 通過第 6 步的全部自我檢查
@@ -127,7 +127,7 @@
 - 檔案：`references/extending-pages.md`、`SKILL.md`
 
 **T6（M）V2：Ronin PDF，忠實導讀，使用 PDF 輔助 skill**
-- 說明：輸出到 `~/Documents/explainers/robotics-engineer-6-months/`。這個案例用來驗證 R8 的「使用輔助 skill」情況。
+- 說明：輸出到預設輸出目錄的 `robotics-engineer-6-months/`。這個案例用來驗證 R8 的「使用輔助 skill」情況。
 - 驗收：
   - [ ] 確認訊息事先列出 PDF 輔助 skill
   - [ ] 主頁使用路線圖主軸
@@ -144,7 +144,7 @@
 **T7（S）V8 的前提：與使用者互動產出 C++ 學習計畫**
 - 說明：
   - 依序執行 `idea-refine` 與 `planning-and-task-breakdown`，對象是有 Python 基礎的 C++ 初學者。
-  - 輸出到 `~/Documents/explainers/cpp-learning/plan.md`。
+  - 輸出到預設輸出目錄的 `cpp-learning/plan.md`。
   - 必須指定這個輸出路徑，不可寫入儲存庫的 `tasks/`。
   - 這個步驟不屬於 skill 的流程。
 - 驗收：
@@ -190,7 +190,7 @@
 - 檔案：`references/sources-and-research.md`、`assets/template.html`、`references/writing-rules.md`、`SKILL.md`
 
 **T10（M）V3：EKF，輕量查證，拒絕輔助 skill**
-- 說明：輸出到 `~/Documents/explainers/extended-kalman-filter/`。確認時拒絕輔助 skill，驗證 R8 的內建退路。
+- 說明：輸出到預設輸出目錄的 `extended-kalman-filter/`。確認時拒絕輔助 skill，驗證 R8 的內建退路。
 - 驗收：
   - [ ] 原始來源優先：論文、教科書或官方文件
   - [ ] 用 L2 stepper 呈現預測與更新迴圈
@@ -204,7 +204,7 @@
 - 檔案：無
 
 **T11（M）V7：first principle**
-- 說明：輸出到 `~/Documents/explainers/first-principles/`。
+- 說明：輸出到預設輸出目錄的 `first-principles/`。
 - 驗收：
   - [ ] 使用論點地圖主軸
   - [ ] 每句引述 Musk 的話都有出處與等級
@@ -234,7 +234,7 @@
 - 檔案：`references/writing-rules.md`、`references/sources-and-research.md`、`SKILL.md`
 
 **T13（M）V4：甲狀腺衛教，繁中，一般大眾，深度研究（使用者選擇不用輔助 skill）**
-- 說明：輸出到 `~/Documents/explainers/thyroid-health/`。原本要驗證 R8 的「使用研究類 skill」情況；使用者在確認時選擇不用輔助 skill，該情況已由 T10（deep-research）驗證，本題改為驗證內建做法的深度研究。
+- 說明：輸出到預設輸出目錄的 `thyroid-health/`。原本要驗證 R8 的「使用研究類 skill」情況；使用者在確認時選擇不用輔助 skill，該情況已由 T10（deep-research）驗證，本題改為驗證內建做法的深度研究。
 - 驗收：
   - [x] 頁面有「注意」框與「何時就醫」段落
   - [x] 來源都是權威來源，台灣讀者優先採用台灣資料
@@ -247,7 +247,7 @@
 - 檔案：無
 
 **T14（M）V6：緊急避難包（台灣）**
-- 說明：輸出到 `~/Documents/explainers/emergency-go-bag/`。
+- 說明：輸出到預設輸出目錄的 `emergency-go-bag/`。
 - 驗收：
   - [x] 使用實務指南主軸，即決策樹或檢查清單
   - [x] 頁面有「注意」框
@@ -260,7 +260,7 @@
 - 檔案：無
 
 **T15（M）V5：SpaceX Starship 與可復用火箭**
-- 說明：讀者設定為非本科大學生，輸出到 `~/Documents/explainers/starship-reusability/`。
+- 說明：讀者設定為非本科大學生，輸出到預設輸出目錄的 `starship-reusability/`。
 - 驗收：
   - [x] 結論寫明「截至 <日期>」
   - [x] 每個類比都說明在哪裡不成立
@@ -440,7 +440,7 @@
     - 建議：路線圖子頁的骨架（見第 3 點）要寫明「除了本階段路線圖，至少再加一張說明機制的圖」。
 11. **暫存目錄在工作階段中途失效。**
     - V2 的組裝腳本與內容檔留在已失效的 scratchpad 中，無法再使用或清理。
-    - V8 改用儲存庫外的 `~/Documents/explainers/.work-cpp/`，檢查點 B 結束後以字面路徑刪除。
+    - V8 改用儲存庫外的預設輸出目錄的 `.work-cpp/`，檢查點 B 結束後以字面路徑刪除。
 
 **檢查點 B 的處理結果（2026-10-03）：**使用者判讀 V2、V8 可讀。同意第 1、3、4、6、9、10 點，均已實作。第 7、8 點經回顧兩個「計畫類」頁面的實際做法後，整理成規則 A–D，使用者全部同意並已實作：
 
@@ -462,7 +462,7 @@
    - 改由 T11 在確認時提供選項，由使用者決定。
 2. **deep-research skill 的設計與本 skill 的規則衝突。**
    - 它會把研究筆記與報告寫進目前的工作目錄（也就是儲存庫），會派出多個子代理，子代理也會在 `/tmp` 留下下載的原始資料。
-   - 這次的處理：把工作目錄改到儲存庫外的 `~/Documents/explainers/.work-ekf/`；頁面完成後，刪除該資料夾與子代理在 `/tmp` 留下的 `ekfr*` 資料夾（刪除前已確認是本次研究期間建立的）。
+   - 這次的處理：把工作目錄改到儲存庫外的預設輸出目錄的 `.work-ekf/`；頁面完成後，刪除該資料夾與子代理在 `/tmp` 留下的 `ekfr*` 資料夾（刪除前已確認是本次研究期間建立的）。
    - 建議：`sources-and-research.md` §5／§7 補上兩條規則。一是研究類輔助 skill 的工作目錄要指向暫存資料夾，結束後連同下載檔一併刪除；二是在確認訊息中預告它會派出子代理、需要較長時間（這次約 13 分鐘）。
 3. **輔助 skill 的輸出中有數字前後不一致。**
    - 研究者回報手寫骨架的模擬誤差是 0.052 m，彙整報告卻寫 0.023 m。頁面沒有引用這個數字。
@@ -499,9 +499,9 @@
 
 ### T13 結果（2026-10-04）
 
-- 確認結果：疑問 1、2、3、5、6、8；L0；繁中、一般大眾；深度研究，不用輔助 skill。輸出路徑 `~/Documents/explainers/thyroid-health/thyroid-health.html`。
+- 確認結果：疑問 1、2、3、5、6、8；L0；繁中、一般大眾；深度研究，不用輔助 skill。輸出路徑預設輸出目錄的 `thyroid-health/thyroid-health.html`。
 - 自我檢查：FILL 0、外部資源 0、約 32 KB、來源等級與存取日期 awk 無輸出、劑量 grep 無輸出、正文 2,517 個 CJK 字（預算 3,500）、390px 為 ok；3 張圖。截圖發現原因表第一欄（每列標籤）斷成每行兩字，已加 `nowrap` 修正，這是 `writing-rules.md` § Label tables 已有的規則，屬執行疏漏而非規則缺口。
-- 查證：每個關鍵主張至少兩個權威來源。原始檔暫存於 `~/Documents/explainers/.work-thy/`，頁面完成後已刪除（先列出內容再以字面路徑刪除）。國健署在頁面上標為 g2（政府機關屬「權威」，依 §8 表格）。
+- 查證：每個關鍵主張至少兩個權威來源。原始檔暫存於預設輸出目錄的 `.work-thy/`，頁面完成後已刪除（先列出內容再以字面路徑刪除）。國健署在頁面上標為 g2（政府機關屬「權威」，依 §8 表格）。
   - 美國 NIDDK：亢進、低下、葛瑞夫茲病、橋本氏病（g2）。
   - 英國 NHS：亢進、低下、亢進併發症（甲狀腺風暴警訊）、亢進治療（服用抗甲狀腺藥物期間出現發燒、喉嚨痛要立即就醫）（g2）。
   - 國健署〈碘攝取不足只跟甲狀腺腫大有關？〉2020/03/19：認明碘鹽、孕婦需碘量大增（g1）。
@@ -515,7 +515,7 @@
 ### T14 結果（2026-10-04）
 
 - 確認結果：主頁回答疑問 1、2、3、4、6；疑問 7（地震、颱風、空襲的差別）依使用者要求做成子頁；L0；繁中、一般大眾；輕量查證，不用輔助 skill。這是第一次在確認時由使用者指定「某題做子頁」，流程不需要新規則：照 `extending-pages.md` §6 第一次產出就建立頁面樹即可。
-- 輸出：`~/Documents/explainers/emergency-go-bag/emergency-go-bag.html`（主頁，2 張圖、4 張表）與 `emergency-go-bag--scenarios.html`（子頁，1 張圖、3 張表）。
+- 輸出：預設輸出目錄的 `emergency-go-bag/emergency-go-bag.html`（主頁，2 張圖、4 張表）與 `emergency-go-bag--scenarios.html`（子頁，1 張圖、3 張表）。
 - 自我檢查：兩頁 FILL 0、外部資源 0、約 31 KB 與 27 KB、來源等級 awk 無輸出、正文 2,103 與 2,171 個 CJK 字、390px 皆為 ok；頁面樹三項檢查（一致、標示目前頁、連結存在）皆無錯誤。
 - 來源：消防署〈緊急避難包準備清單〉（2025-06-26，含 1、2、3 天版）、國防部《臺灣全民安全指引》PDF（2025-11）、消防防災館 6 篇、臺北市與高雄市消防局，共 10 個，全為 g2。研究暫存檔放在工作階段暫存目錄，完成後已刪除。
 - 逐句核對來源時修正 5 處超出來源的敘述：電子支付失效（來源只寫提款機）、哨子用途、以「箱」換算瓶裝水（改為瓶數）、颱風「數天預報」、表格「為什麼」欄的推論。後兩類改為標示「一般背景說明／依官方建議推論」。實務指南的「為什麼」欄與「常見錯誤」表天生含推論，`page-types.md` 可考慮規定在表下標示（檢查點 D 討論）。
@@ -525,7 +525,7 @@
 ### T15 結果（2026-10-04）
 
 - 確認結果：疑問 1、2、3、4、5；使用者選 L2（第 3 題「助推器怎麼回來」用 stepper，其餘 L0）；繁中、非本科大學生；輕量查證，不用輔助 skill。
-- 輸出：`~/Documents/explainers/starship-reusability/starship-reusability.html`。4 張圖：圖 1 因果鏈（兩列蛇形）、圖 2 兩節結構、圖 3 助推器返回 stepper（5 步）、圖 4 每公斤動能比較＋飛船回收四步。
+- 輸出：預設輸出目錄的 `starship-reusability/starship-reusability.html`。4 張圖：圖 1 因果鏈（兩列蛇形）、圖 2 兩節結構、圖 3 助推器返回 stepper（5 步）、圖 4 每公斤動能比較＋飛船回收四步。
 - 自我檢查：FILL 0、外部資源 0、約 37 KB、來源等級 awk 無輸出、無組合附加符號、正文 2,760 個 CJK 字＋247 個英文詞、390px 為 ok。stepper 逐格截圖發現第 4、5 步的標籤離助推器太遠且隔著上升軌跡，已把發射塔右移、標籤移到塔左側。
 - 貫穿例子：用 NASA Glenn 頁面的數字實算火箭方程式（比衝 350 秒、7,600 m/s → MR ≈ 9.1、推進劑約 89%），再對照 Starship 的載荷比例（約 2–3%）；第 4 題用 ½v² 算出飛船每公斤能量約為助推器的 10 倍。
 - 來源（8 筆）：SpaceX 試飛報告第 5、7–14 次（g1）、NASA Glenn 與 NASA Ames 的 Jones（2018）（g2）、Wikipedia 兩篇（g3）。成本的個人說法（Musk）放入「新興說法」框；Jones「可復用不保證便宜」與 Starship 的目標並列，放入「推論」框。
@@ -543,7 +543,7 @@
 - 使用者決定把 LLM Wiki（以新模板產出的版本）與 Starship 收進 `examples/llm-wiki/`、`examples/starship-reusability/` 作為繁中範例。規格 §0「第三方頁面不公開」已加註這個例外；README 兩個語言版本的範例段落與目錄結構已加入兩個範例。EKF 仍不公開。
 - 使用者調整了 README 的「靈感來源」段落（改放貼文截圖）。調整後，下一段開頭的「This skill implements the first three.／本 skill 實作前三項」失去指涉對象，留給使用者決定，T17 一併處理。
 - 使用者要求以最新版 skill 重做儲存庫說明頁，且不參考 `examples/explain-as-webpage/`：
-  - 確認結果：疑問 1、2、3、4、5、7，安裝方式以小表放在頁尾；L0 單頁（套件頁型）；繁中、工程師；輸出 `~/Documents/explainers/sphinx-style-notes-maker/explain-as-webpage.html`。
+  - 確認結果：疑問 1、2、3、4、5、7，安裝方式以小表放在頁尾；L0 單頁（套件頁型）；繁中、工程師；輸出預設輸出目錄的 `sphinx-style-notes-maker/explain-as-webpage.html`。
   - 貫穿例子用 Starship 請求走完 7 步；反事實用 T1 的「WebFetch 與 `curl` 讀同一篇文章」實測；圖 3 以 `wc -c` 與 `claude plugin details` 的數字畫出各檔案的載入時機。
   - 自我檢查：FILL 0（正文原本提到這個標記本身，造成計數 1，已改寫）、外部資源 0、約 37 KB、390px 為 ok。截圖發現兩個問題並修正：決策樹中間分支的標籤壓在線上、安裝表的指令在字中間斷行（改為程式碼區塊）。
   - 使用者回饋：圖 3 原本以位元組數畫長條，只有前兩列標 token 數，單位混用且會誤導（`writing-rules.md` 9.8 KB 與 `SKILL.md` 11.8 KB 的 token 估計值同為約 3.7k）。改為全部用 token 估計值：把每個參考檔與模板各包成測試用 skill，以 `claude plugin details` 估得，頁面標明是估計值。使用者決定這條規則屬於 skill 而非本儲存庫：已寫入 `writing-rules.md` § Figures and text（依問題選圖表單位、一張圖一種單位、代理指標要說明、在圖說或來源行與回報中說明單位與理由、估計值要標明），並在 `SKILL.md` 第 7 步的回報項目加上「每張數值圖的單位與理由」。
@@ -573,7 +573,7 @@
   - 依序讀了 `SKILL.md`、`sources-and-research.md`、`page-types.md`、`extending-pages.md`（plugin 快取）。
   - 先用 `web__run` 開啟 gist 看大綱，再用 `curl -fSL …/raw` 下載全文；sandbox 內 DNS 失敗，Codex 請求在 sandbox 外執行，使用者核准後成功。追問結果：全文 1,921 個英文字、以空白分隔 1,959 個、最後一段以「This document is intentionally abstract.」開頭，經 Claude Code 另行下載核對完全一致。規格 §6「Codex 有可用的網路工具」成立。
   - 確認訊息符合第 4 步：單次確認、大綱附各節篇幅、6 個編號候選疑問（建議 1–5）、L0 與更省做法的取捨、繁中、不使用輔助 skill、發現同主題既有頁面並提供「沿用並修訂」。讀者只直接選定「沒有相關背景的讀者」，沒有列出三種讓使用者選。
-  - 偏離：因 sandbox 只能寫入目前的工作目錄（本儲存庫），Codex 建議輸出到儲存庫內的 `output/llm-wiki/`，把預設的 `~/Documents/explainers/llm-wiki/` 列為「需另行授權」。也因為在儲存庫內執行，它找到的既有頁面是 `examples/llm-wiki/`，不是輸出目錄。修正：`sources-and-research.md` §1 補上「sandbox 不能寫入預設路徑時，仍提議預設路徑並說明需要核准，不改到目前儲存庫的資料夾」（使用者同意）。儲存庫內沒有留下 `output/`。
+  - 偏離：因 sandbox 只能寫入目前的工作目錄（本儲存庫），Codex 建議輸出到儲存庫內的 `output/llm-wiki/`，把預設輸出目錄的 `llm-wiki/` 列為「需另行授權」。也因為在儲存庫內執行，它找到的既有頁面是 `examples/llm-wiki/`，不是輸出目錄。修正：`sources-and-research.md` §1 補上「sandbox 不能寫入預設路徑時，仍提議預設路徑並說明需要核准，不改到目前儲存庫的資料夾」（使用者同意）。儲存庫內沒有留下 `output/`。
 - 未測：完全沒有網路工具時的退路（測試 C）、shell 可直接連網的情況（測試 D）。使用者判斷不需要再測其他執行位置。
 - 自動觸發（不指定 skill 名稱）在 Codex 上沒有測。
 - `SKILL.md` 仍為 130 行。
@@ -603,4 +603,4 @@
    - `SKILL.md` 第 6 步的 `rm "$P"` 屬於同一種寫法。先前照原樣執行時沒有被擋，但其他代理在不同寫法下可能會被擋。
    - 使用者決定在 T18 處理，處理方向見 T18 的說明。
 
-檢查點 A 判定通過（2026-10-03）。比較用的頁面 `~/Documents/explainers/llm-wiki/llm-wiki-new-template.html` 以新模板產出，在 390 px 下的溢出檢查為 ok。
+檢查點 A 判定通過（2026-10-03）。比較用的頁面預設輸出目錄的 `llm-wiki/llm-wiki-new-template.html` 以新模板產出，在 390 px 下的溢出檢查為 ok。

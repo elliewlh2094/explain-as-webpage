@@ -604,7 +604,7 @@
 
 ### T10（2026-10-06）
 
-**結論：以新 skill 重做的 Starship 頁在 `~/Documents/explainers/starship-reusability/starship-reusability-v2.html`（49,511 B），通過編排者第 6 步的全部檢查。新頁用了 2 張具象插圖、1 組歸納卡、3 個概念色與 4 個圖示；散文少了約 5%，圖從 4 張增為 6 張。** 新舊並排截圖在 `~/Documents/explainers/visual-forms-review/`。
+**結論：以新 skill 重做的 Starship 頁在預設輸出目錄的 `starship-reusability/starship-reusability-v2.html`（49,511 B），通過編排者第 6 步的全部檢查。新頁用了 2 張具象插圖、1 組歸納卡、3 個概念色與 4 個圖示；散文少了約 5%，圖從 4 張增為 6 張。** 新舊並排截圖在預設輸出目錄的 `visual-forms-review/`。
 
 確認訊息（第 4 步）的回覆：沿用 5 個核心問題；L2，6 張圖；繁中、非專業大學生；沿用舊頁 8 筆來源（存取日期 2026-10-04），不重新查證。
 
@@ -648,7 +648,7 @@
 
 ### T11（2026-10-06）
 
-**結論：以新 skill 重做的 LLM Wiki 頁在 `~/Documents/explainers/llm-wiki/llm-wiki-v2.html`（42,689 B），通過第 6 步的檢查。新頁用了 2 張具象插圖、1 組歸納卡、3 個概念色與 5 個圖示。散文多了約 10%，原因是依使用者選擇新增了「適用情境」歸納卡與它的引導段落；不計新增內容時，散文與舊頁相當。** 並排截圖在 `~/Documents/explainers/visual-forms-review/llm-wiki-side-by-side-*.png`。
+**結論：以新 skill 重做的 LLM Wiki 頁在預設輸出目錄的 `llm-wiki/llm-wiki-v2.html`（42,689 B），通過第 6 步的檢查。新頁用了 2 張具象插圖、1 組歸納卡、3 個概念色與 5 個圖示。散文多了約 10%，原因是依使用者選擇新增了「適用情境」歸納卡與它的引導段落；不計新增內容時，散文與舊頁相當。** 並排截圖在預設輸出目錄的 `visual-forms-review/llm-wiki-side-by-side-*.png`。
 
 確認訊息的回覆：沿用 5 個核心問題；圖 1–4，**加上**適用情境歸納卡（我原本建議不加，因為 5 個問題中沒有 4–6 個欄位相同的平行項目）；繁中、非專業大學生。document 模式依規則重讀 gist 全文（`curl` 取得 raw，11,985 B），內容與舊頁依據的版本一致，存取日期更新為 2026-10-06。
 
@@ -711,11 +711,11 @@
 
 ### T12（2026-10-06）
 
-**結論：新主題頁在 `~/Documents/explainers/unity-beginner/unity-beginner.html`（42,355 B），通過第 6 步的全部檢查。頁面用了 1 張具象插圖（GameObject 罐子）、1 組歸納卡、1 個滑桿（L1）、3 個概念色與 10 個圖示。**
+**結論：新主題頁在預設輸出目錄的 `unity-beginner/unity-beginner.html`（42,355 B），通過第 6 步的全部檢查。頁面用了 1 張具象插圖（GameObject 罐子）、1 組歸納卡、1 個滑桿（L1）、3 個概念色與 10 個圖示。**
 
 材料與確認：
 
-- 使用者指定 YouTube 影片〈The Unity Tutorial For Complete Beginners〉，提供用 NotebookLM 整理的 `~/Downloads/Unity 新手指南.md`（30,354 B，約 5,860 個漢字，5 段從不同角度整理同一部影片）。以 document 模式處理。
+- 使用者指定 YouTube 影片〈The Unity Tutorial For Complete Beginners〉，提供用 NotebookLM 整理的 `temp/round-04/Unity 新手指南.md`（30,354 B，約 5,860 個漢字，5 段從不同角度整理同一部影片）。以 document 模式處理。
 - 確認回覆：問題 1–5（三步學習法、GameObject 與 Component、五個步驟、引用、Time.deltaTime）；問題導向單頁、L1；非本科大學生，允許短程式片段；**加上**輕量核對 Unity 官方文件。
 - 核對了 12 個 API 與 2 篇 Manual（Unity 2021.3，影片使用的版本）。11 個的官方說明與整理稿一致。`FindGameObjectWithTag` 在 2021.3、2022.3、6000.0 的個別頁面都回傳 404，GameObject 類別的方法清單中只有 `FindWithTag`（「回傳一個帶有該 Tag、啟用中的 GameObject」）。頁面照實寫出，並建議找不到時改用 `FindWithTag`；沒有斷言舊名稱不能用。
 
@@ -842,7 +842,7 @@ README 中「影片不接受為材料」的說法（`README.md` 第 154 行、`R
 
 **結論：五項規則修正都已寫入。依原材料順序整理時，標題仍是讀者的問題；路線圖頁型改用卡片與具象插圖；確認訊息會列出每頁的圖型；圖型選擇改為逐列對照。是否真的改善，要由 T13d 以同一份 PDF 重跑判斷。**
 
-Codex 實測（使用者，GPT-6.1-Sol high，材料：Ronin〈How to become a Robotics Engineer in 6 months〉PDF，對話紀錄 `~/Downloads/codex-session-01a11140-…md`，產出 `~/Documents/explainers/robotics-engineer-6-months/`，舊版移到 `~/Downloads/robotics-engineer-6-months/`）的發現：
+Codex 實測（使用者，GPT-6.1-Sol high，材料：Ronin〈How to become a Robotics Engineer in 6 months〉PDF，對話紀錄 `codex-session-01a11140-…md`（未保存），產出在預設輸出目錄的 `robotics-engineer-6-months/`，舊版另外移出（未保存））的發現：
 
 | 觀察 | 證據 |
 |---|---|
@@ -876,7 +876,7 @@ Codex 實測（使用者，GPT-6.1-Sol high，材料：Ronin〈How to become a R
 
 **結論：T13c 有效，但效果因代理而異。Claude（Opus 5.5 high）這版標題全是讀者的具體問題，並用了卡片、具象插圖與滑桿；Codex（GPT-6.1-Sol high）的主頁明顯改善，月份頁仍有三個模板標題，也沒有具象插圖。** 兩者都在 Plan mode 執行，提示詞與材料相同。
 
-注意：使用者提供的 `~/Downloads/robotics-engineer-6-months-codex-t13/` 是第一次 Codex 實測的產出（檔案時間 2026-10-06 21:40）。這次 Codex 改用 slug `robotics-engineer-six-months`，實際產出在 `~/Downloads/robotics-engineer-six-months-codex-t13c/`，以下比較用的是後者。
+注意：使用者提供的 `temp/round-04/robotics-engineer-6-months-codex-t13/` 是第一次 Codex 實測的產出（檔案時間 2026-10-06 21:40）。這次 Codex 改用 slug `robotics-engineer-six-months`，實際產出在 `temp/round-04/robotics-engineer-six-months-codex-t13c/`，以下比較用的是後者。
 
 | | 第一次 Codex | Codex（T13c 後） | Claude（T13c 後） |
 |---|---|---|---|

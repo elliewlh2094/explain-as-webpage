@@ -13,7 +13,7 @@
 | 例子 | 現況的問題 | 主要缺少的能力 | 連續動畫的必要性 |
 |---|---|---|---|
 | `examples/starship-reusability/` 圖 4（助推器返回） | 只畫軌跡線，沒有畫助推器本身，看不到「翻轉、折返」的姿態變化 | 物件與姿態 | 高：沿路徑移動並旋轉 |
-| 使用者的 EKF 頁（`~/Documents/explainers/extended-kalman-filter/`）圖 3 | stepper 結構正確，但機器人只是一個點，圖上沒有 x̂、P、z、K | 符號對照 | 中：不確定性橢圓隨行走連續變大 |
+| 使用者的 EKF 頁（預設輸出目錄的 `extended-kalman-filter/`）圖 3 | stepper 結構正確，但機器人只是一個點，圖上沒有 x̂、P、z、K | 符號對照 | 中：不確定性橢圓隨行走連續變大 |
 | 機器人導航課程的 Motion Planning 單元（使用者的課程影片截圖） | 投影片有圖，但 Path Planning → Curve Interpolation → Trajectory Planning → Feedback Control 四個階段的圖彼此沒有連結 | 同一個場景（同一張地圖、同一台車）貫穿各階段 | 中到高：Feedback Control 的偏差修正是連續運動 |
 | 教科書與課程的公式（例如 Kalman Filter 的預測與更新式） | 符號只出現在公式裡，圖上找不到它對應的部位 | 符號對照 | 低 |
 
