@@ -349,7 +349,7 @@ def main():
     p.add_argument("--h", type=float, required=True, help="diameter")
     p.add_argument("--nose", type=float, required=True, help="nose length")
     for p in [sub.choices[c] for c in ("pill", "rect", "cylinder", "ogive")]:
-        p.add_argument("--fill", choices=("light", "dark", "glass"), default="light")
+        p.add_argument("--fill", choices=("light", "dark", "glass", "hollow"), default="light")
     p = sub.add_parser("pose", help="<use> elements along a path, one per stepper step")
     p.add_argument("--ref", required=True, help="the id of the object in <defs>")
     p.add_argument("--path", required=True, help="the track: absolute M L H V Q C")
@@ -378,7 +378,7 @@ def main():
             el = "".join(cylinder(a.w, a.h))
         else:
             el = ogive(a.w, a.h, a.nose)
-        cls = "ink" + {"light": "", "dark": " dark", "glass": " glass"}[a.fill] + (" " + a.cls if a.cls else "")
+        cls = "ink" + {"light": "", "dark": " dark", "glass": " glass", "hollow": " hollow"}[a.fill] + (" " + a.cls if a.cls else "")
         idattr = f' id="{a.id}"' if a.id else ""
         print(f'<g{idattr} class="{cls}"{place(a.at)}>{el}</g>')
     elif a.cmd == "pose":

@@ -16,16 +16,18 @@ Every object drawn in a figure (a person, a robot, a backpack) has one style: a 
 | `ink` | outline and light fill: the concept colour's `--cb` when the object or its `<use>` has `c1`–`c5`, the page background otherwise |
 | `ink dark` | dark parts: wheels, nozzles, hubs |
 | `ink glass` | windows, lenses, sensors, rotors |
+| `ink hollow` | the outline only: a cut-open container's outline, drawn over its clipped layers (Recipe P1) |
 | `ink-edge`, then `ink-fill` | several shapes with one outer outline (a person): the same shapes twice, first with an 8px outline, then filled without one |
 | `ink-shade` | at most one shade layer: the body again, clipped to the side away from the light (the light comes from the top left) |
 | `ink-track` | the faint dashed path of an object's poses (Recipe P5) |
+| `ink-level` | with `c1`–`c5`, on a second copy of an object clipped at a level: a deeper fill for the filled part (water in a body, fuel in a tank; Recipe P2) |
 
 These rules come from test drawings; each one prevents a failure that was seen.
 
 - **Fills come only from these classes.** No gradients, no new colours.
 - **Keep separate parts at least 11px apart** (2 × 4px + 3px). Closer, the outlines join them into one blob.
 - **Draw at the needed size; never use `scale()`.** It makes the outline thinner, and `vector-effect` does not reach inside a `<use>`.
-- **Inside an object that a `<use>` shows, use only the `ink` classes.** A rule with an ancestor (`svg .box`, `.c1 .ink`) never reaches the shapes inside a `<use>`, so `box`, `line`, and `outline` turn black there. Put the concept class on the object's `<g>` or on the `<use>`.
+- **Inside an object that a `<use>` shows, use only the `ink` classes.** A rule with an ancestor (`svg .box`, `.c1 .ink`) never reaches the shapes inside a `<use>`, so `box` and `line` turn black there. Put the concept class on the object's `<g>` or on the `<use>`.
 - **An object with a front faces +x.** Turn it with `rotate()`; do not mirror it.
 - **Draw a specific real thing from sources.** A named rocket, a product, or a building gets its recognisable features (proportions, fins, engines, windows) from what you can read about it: official descriptions, dimensions, descriptions of photos. Build them from basic shapes; do not use a generic shape in its place. In the report, list the features and their sources. If the sources are not enough, ask the user (`../explainer-page/references/sources-and-research.md`).
 
@@ -38,7 +40,7 @@ P=<this skill's folder>/scripts/parts.py
 python3 $P person --id f2-person --height 150 --cls c1    # front view, 100 tall or more
 python3 $P robot --id f3-robot --size 80 --view top       # wheeled robot, top or side view
 python3 $P drone --id f3-drone --size 120 --view side     # quadcopter, top or side view
-python3 $P cylinder --w 60 --h 70 --cls c2 --at 400,120   # also pill, rect --r "16 16 0 0", ogive; --fill dark|glass
+python3 $P cylinder --w 60 --h 70 --cls c2 --at 400,120   # also pill, rect --r "16 16 0 0", ogive; --fill dark|glass|hollow
 python3 $P pose --ref f6-robot --path "M70 140 H190 Q230 140 250 100" --at 0,0.5,1 --angles t,t,90
 python3 $P sheet > /tmp/parts.svg                         # every part on one sheet (SKILL.md § Self-check)
 ```
@@ -100,10 +102,11 @@ google-chrome --headless=new --disable-gpu --hide-scrollbars --force-device-scal
 
 These rules come from test drawings; each one prevents a failure that was seen.
 
-- **Build the object from simple shapes**: rounded rectangles, circles, ellipses, and paths with straight lines and `Q` curves. Do not trace a detailed outline by hand: the shapes drift and the object looks broken. The label, not the detail, tells the reader what the object is.
+- **Build the object from the parts library's shapes** (§ Parts library): rounded rectangles, pills, circles, cylinders. Do not trace a detailed outline by hand: the shapes drift and the object looks broken. The label, not the detail, tells the reader what the object is.
 - **Drawing left, notes right.** Put the object at x = 10–380 and the notes at x ≥ 430. Each note is one leader: a `pin` (r = 3) on the part, a horizontal `lead` line to x = 420, and the text at x = 430 (a bold line, and an `sm` line 20px below). Keep notes at least 40px apart vertically, one note per part, and never let two leaders cross.
 - **Every `id` stays inside the figure's own `<svg><defs>`** and starts with the figure number (`f2-…`). A `clipPath` in the page's shared, hidden `<svg>` works in the browser, but the figure-only screenshot commands hide that block, and Chrome then ignores the clip: the drawing disappears.
-- **Colours:** the outline is `outline` (text colour). A part that is a key concept takes its concept class (`box c1`, `area c1`); other parts are `box` or `box muted`. Semantic colours (`bad`, `good`, `warn`) only mark a problem or a fix, as in any figure.
+- **Colours:** the object and its parts are drawn objects (§ Drawn objects): `ink` shapes, the parts that are key concepts with their concept class (`ink c1`). Content inside the object that is not a physical part (a list of components, a field in a panel) stays `box`, as in any figure. Semantic colours (`bad`, `good`, `warn`) only mark a problem or a fix, next to the part, as in any figure.
+- **Clip in a wrapper `<g>`.** Put `clip-path` on a `<g>` around the shapes, not on an element that has a `transform`: the clip then moves with the transform, and the clipped part ends up in the wrong place or disappears.
 - **Scale:** a drawing is a schematic. The caption says "示意，不按比例" / "Schematic, not to scale", unless the sizes come from data (then give the source, as for any number).
 - **Icons** may label a part (`icons.md`), but the object itself is drawn, not an icon.
 - **Notes stay in the figure.** The paragraph points to a part and says what to notice; it does not restate the notes (`../explainer-page/references/writing-rules.md` § Figures and text, *Do not repeat the figure in the text*).
@@ -111,21 +114,27 @@ These rules come from test drawings; each one prevents a failure that was seen.
 
 ## Recipe P1 — Layered container
 
-A container cut open to show its layers: what goes where, and why. Clip the layers to the container's shape, then draw the outline on top.
+A container cut open to show its layers: what goes where, and why. Draw each layer as an `ink` rectangle with its concept class, exactly over the container's bounding box and clipped to the container's shape; then draw the container's outline on top with `ink hollow`. The layers' outer edges then lie under that outline, and the edges between layers become lines of the same 4px.
+
+```bash
+P=<this skill's folder>/scripts/parts.py
+python3 $P pill --w 56 --h 18 --at 250,62                               # handle
+python3 $P rect --w 40 --h 100 --r "10 10 10 10" --at 130,280           # side pocket
+python3 $P rect --w 220 --h 290 --r "30 30 30 30" --fill hollow --at 250,215   # body outline; the same path is the clip
+```
 
 ```html
 <figure id="fig-1">
 <svg viewBox="0 0 720 380" role="img" aria-label="A backpack cut open in three layers: daily items on top, heavy items in the middle against the back, light bulky items at the bottom.">
-  <defs><clipPath id="f1-body"><rect x="140" y="70" width="220" height="290" rx="30"/></clipPath></defs>
-  <path class="outline" d="M225 54 Q250 22 275 54"/>
-  <path class="box muted" d="M150 76 Q250 34 350 76 Z"/>
-  <rect class="box muted" x="110" y="230" width="40" height="100" rx="10"/>
+  <defs><clipPath id="f1-body"><path transform="translate(250 215)" d="M-80 -145 H80 A30 30 0 0 1 110 -115 V115 A30 30 0 0 1 80 145 H-80 A30 30 0 0 1 -110 115 V-115 A30 30 0 0 1 -80 -145 Z"/></clipPath></defs>
+  <g class="ink" transform="translate(250 62)"><rect x="-28" y="-9" width="56" height="18" rx="9"/></g>
+  <g class="ink" transform="translate(130 280)"><path d="M-10 -50 H10 A10 10 0 0 1 20 -40 V40 A10 10 0 0 1 10 50 H-10 A10 10 0 0 1 -20 40 V-40 A10 10 0 0 1 -10 -50 Z"/></g>
   <g clip-path="url(#f1-body)">
-    <rect class="box c1" x="140" y="70" width="220" height="80"/>
-    <rect class="box c2" x="140" y="150" width="220" height="110"/>
-    <rect class="box c3" x="140" y="260" width="220" height="100"/>
+    <rect class="ink c1" x="140" y="70" width="220" height="80"/>
+    <rect class="ink c2" x="140" y="150" width="220" height="110"/>
+    <rect class="ink c3" x="140" y="260" width="220" height="100"/>
   </g>
-  <rect class="outline" x="140" y="70" width="220" height="290" rx="30"/>
+  <g class="ink hollow" transform="translate(250 215)"><path d="M-80 -145 H80 A30 30 0 0 1 110 -115 V115 A30 30 0 0 1 80 145 H-80 A30 30 0 0 1 -110 115 V-115 A30 30 0 0 1 -80 -145 Z"/></g>
   <text x="250" y="106" text-anchor="middle" class="b">Daily items</text><text x="250" y="126" text-anchor="middle" class="sm">torch, whistle, ID</text>
   <text x="250" y="201" text-anchor="middle" class="b">Heavy items</text><text x="250" y="221" text-anchor="middle" class="sm">water, canned food</text>
   <text x="250" y="306" text-anchor="middle" class="b">Light, bulky</text><text x="250" y="326" text-anchor="middle" class="sm">clothes, blanket</text>
@@ -151,14 +160,21 @@ When the question asks both where things sit and who reads or writes them, draw 
 ```html
 <figure id="fig-4">
 <svg viewBox="0 0 720 360" role="img" aria-label="A git repo folder in three layers: schema, wiki, and raw sources. On the left, the LLM follows the schema, reads the raw sources, and writes the wiki. On the right, you read the wiki, pick the raw sources, and revise the schema with the LLM.">
-  <defs><clipPath id="f4-body"><rect x="240" y="60" width="240" height="280" rx="10"/></clipPath></defs>
-  <path class="outline" d="M250 60 V46 Q250 36 260 36 H330 L346 60"/><text x="260" y="53" class="sm">git repo</text>
-  <g clip-path="url(#f4-body)">
-    <rect class="box c3" x="240" y="60" width="240" height="60"/>
-    <rect class="box c1" x="240" y="120" width="240" height="130"/>
-    <rect class="box c2" x="240" y="250" width="240" height="90"/>
+  <defs><clipPath id="f4-body"><path transform="translate(360 200)" d="M-110 -140 H110 A10 10 0 0 1 120 -130 V130 A10 10 0 0 1 110 140 H-110 A10 10 0 0 1 -120 130 V-130 A10 10 0 0 1 -110 -140 Z"/></clipPath>
+  <g id="f4-you">
+    <g class="ink-edge"><circle cx="0" cy="-44.7" r="10.3"/><path d="M-7.3 -23.5 H7.3 A7.3 7.3 0 0 1 14.7 -16.1 V8.8 H-14.7 V-16.1 A7.3 7.3 0 0 1 -7.3 -23.5 Z"/><path d="M-14.7 4.4 H-5.5 V50.4 A4.6 4.6 0 0 1 -14.7 50.4 Z"/><path d="M5.5 4.4 H14.7 V50.4 A4.6 4.6 0 0 1 5.5 50.4 Z"/><rect x="-4.4" y="-4.4" width="8.8" height="41.1" rx="4.4" transform="translate(-9.5 -16.9) rotate(25)"/><rect x="-4.4" y="-4.4" width="8.8" height="41.1" rx="4.4" transform="translate(9.5 -16.9) rotate(-25)"/></g>
+    <g class="ink-fill"><circle cx="0" cy="-44.7" r="10.3"/><path d="M-7.3 -23.5 H7.3 A7.3 7.3 0 0 1 14.7 -16.1 V8.8 H-14.7 V-16.1 A7.3 7.3 0 0 1 -7.3 -23.5 Z"/><path d="M-14.7 4.4 H-5.5 V50.4 A4.6 4.6 0 0 1 -14.7 50.4 Z"/><path d="M5.5 4.4 H14.7 V50.4 A4.6 4.6 0 0 1 5.5 50.4 Z"/><rect x="-4.4" y="-4.4" width="8.8" height="41.1" rx="4.4" transform="translate(-9.5 -16.9) rotate(25)"/><rect x="-4.4" y="-4.4" width="8.8" height="41.1" rx="4.4" transform="translate(9.5 -16.9) rotate(-25)"/></g>
+    <clipPath id="f4-you-shade"><rect x="0" y="-110" width="110" height="220"/></clipPath>
+    <g class="ink-shade" clip-path="url(#f4-you-shade)"><circle cx="0" cy="-44.7" r="10.3"/><path d="M-7.3 -23.5 H7.3 A7.3 7.3 0 0 1 14.7 -16.1 V8.8 H-14.7 V-16.1 A7.3 7.3 0 0 1 -7.3 -23.5 Z"/><path d="M-14.7 4.4 H-5.5 V50.4 A4.6 4.6 0 0 1 -14.7 50.4 Z"/><path d="M5.5 4.4 H14.7 V50.4 A4.6 4.6 0 0 1 5.5 50.4 Z"/><rect x="-4.4" y="-4.4" width="8.8" height="41.1" rx="4.4" transform="translate(-9.5 -16.9) rotate(25)"/><rect x="-4.4" y="-4.4" width="8.8" height="41.1" rx="4.4" transform="translate(9.5 -16.9) rotate(-25)"/></g>
   </g>
-  <rect class="outline" x="240" y="60" width="240" height="280" rx="10"/>
+  </defs>
+  <g class="ink" transform="translate(298 49)"><path d="M-40 -13 H40 A8 8 0 0 1 48 -5 V13 H-48 V-5 A8 8 0 0 1 -40 -13 Z"/></g><text x="262" y="54" class="sm">git repo</text>
+  <g clip-path="url(#f4-body)">
+    <rect class="ink c3" x="240" y="60" width="240" height="60"/>
+    <rect class="ink c1" x="240" y="120" width="240" height="130"/>
+    <rect class="ink c2" x="240" y="250" width="240" height="90"/>
+  </g>
+  <g class="ink hollow" transform="translate(360 200)"><path d="M-110 -140 H110 A10 10 0 0 1 120 -130 V130 A10 10 0 0 1 110 140 H-110 A10 10 0 0 1 -120 130 V-130 A10 10 0 0 1 -110 -140 Z"/></g>
   <text x="360" y="86" text-anchor="middle" class="b c3">schema</text><text x="360" y="106" text-anchor="middle" class="sm">CLAUDE.md / AGENTS.md</text>
   <text x="360" y="156" text-anchor="middle" class="b c1">wiki</text><text x="360" y="176" text-anchor="middle" class="sm">summary, entity, concept pages</text>
   <text x="360" y="196" text-anchor="middle" class="sm">index.md, log.md</text><text x="360" y="226" text-anchor="middle" class="sm">written only by the LLM</text>
@@ -166,48 +182,48 @@ When the question asks both where things sit and who reads or writes them, draw 
   <text x="360" y="321" text-anchor="middle" class="sm">read only; the source of truth</text>
   <rect class="box" x="10" y="150" width="120" height="60" rx="6"/>
   <text x="70" y="176" text-anchor="middle" class="b">LLM</text><text x="70" y="196" text-anchor="middle" class="sm">follows schema</text>
-  <path class="line" d="M240 90 H70 V148" marker-end="url(#arr)"/><text x="155" y="82" text-anchor="middle" class="sm">rules</text>
-  <path class="line" d="M240 300 H70 V212" marker-end="url(#arr)"/><text x="155" y="292" text-anchor="middle" class="sm">reads</text>
-  <line class="line" x1="130" y1="180" x2="238" y2="180" marker-end="url(#arr)"/><text x="184" y="172" text-anchor="middle" class="sm">writes</text>
-  <rect class="box" x="590" y="150" width="120" height="60" rx="6"/>
-  <text x="650" y="176" text-anchor="middle" class="b">You</text><text x="650" y="196" text-anchor="middle" class="sm">pick, ask, judge</text>
-  <line class="line" x1="480" y1="180" x2="588" y2="180" marker-end="url(#arr)"/><text x="534" y="172" text-anchor="middle" class="sm">reads</text>
-  <path class="line" d="M650 212 V300 H482" marker-end="url(#arr)"/><text x="566" y="292" text-anchor="middle" class="sm">picks sources</text>
-  <path class="line" d="M650 148 V90 H482" marker-end="url(#arr)"/><text x="566" y="82" text-anchor="middle" class="sm">revises with the LLM</text>
+  <path class="line" d="M236 90 H70 V148" marker-end="url(#arr)"/><text x="155" y="82" text-anchor="middle" class="sm">rules</text>
+  <path class="line" d="M236 300 H70 V212" marker-end="url(#arr)"/><text x="155" y="292" text-anchor="middle" class="sm">reads</text>
+  <line class="line" x1="130" y1="180" x2="236" y2="180" marker-end="url(#arr)"/><text x="184" y="172" text-anchor="middle" class="sm">writes</text>
+  <use href="#f4-you" transform="translate(650 180)"/>
+  <text x="604" y="218" text-anchor="end" class="b">You</text><text x="604" y="236" text-anchor="end" class="sm">pick, ask, judge</text>
+  <line class="line" x1="484" y1="180" x2="609" y2="180" marker-end="url(#arr)"/><text x="540" y="172" text-anchor="middle" class="sm">reads</text>
+  <path class="line" d="M650 241 V300 H484" marker-end="url(#arr)"/><text x="566" y="292" text-anchor="middle" class="sm">picks sources</text>
+  <path class="line" d="M650 119 V90 H484" marker-end="url(#arr)"/><text x="566" y="82" text-anchor="middle" class="sm">revises with the LLM</text>
 </svg>
 <figcaption>Figure 4. Information flows from the raw sources through the LLM into the wiki and on to you; the only arrow into the wiki comes from the LLM. Folder names are illustrative.</figcaption>
 </figure>
 ```
 
-- The container keeps the P1 coordinates, moved to x = 240–480; one actor box (120 × 60) on each side at x = 10 and x = 590.
+- The container keeps the P1 coordinates, moved to x = 240–480; one actor on each side. An abstract actor (the LLM) is a box (120 × 60) at x = 10; a person (you) is drawn: `parts.py person --height 110`, centred at x = 650, with its label to the left of its feet.
 - At most 3 arrows per side. Route them so they never cross: the top one leaves above the actor, the middle one is straight, the bottom one leaves below.
-- Each arrow ends at a layer edge and has one verb in `sm` above its horizontal part.
+- Each arrow ends 2px outside the container's outline (x = 236 or 484) or the person's bounding rectangle, and has one verb in `sm` above its horizontal part.
 - The paragraph says which arrows to compare ("only one arrow reaches the wiki"), not what each arrow says.
 
 ## Recipe P2 — Silhouette with leaders
 
-A figure of a person (or an animal, a vehicle) with a filled region and notes. Define the shapes once in `<defs>` and draw them three times:
+A figure of a person (or an animal, a vehicle) with a filled region and notes. Draw the person once in `<defs>` with the parts library, show it with `<use>`, then show it again with a concept class and `ink-level`, inside a `<g>` clipped by a rectangle: the clipped copy is the filled region (a level, a zone).
 
-1. `<use class="edge">`: every shape with a thick outline;
-2. `<use class="shape">`: the same shapes filled, without outline. This covers the inner lines where shapes overlap, so only the outer edge of the whole figure stays;
-3. `<use class="area">` clipped by a rectangle: the filled region (a level, a zone).
+```bash
+python3 <this skill's folder>/scripts/parts.py person --id f2-person --height 340
+```
 
 ```html
 <figure id="fig-2">
 <svg viewBox="0 0 720 400" role="img" aria-label="A person filled with water to about 60 percent of the height; a bar splits the body water into intracellular fluid, about two thirds, and interstitial fluid and plasma, about one third.">
   <defs>
-    <g id="f2-person">
-      <circle cx="150" cy="60" r="28"/><rect x="105" y="95" width="90" height="150" rx="20"/>
-      <rect x="78" y="100" width="24" height="135" rx="12"/><rect x="198" y="100" width="24" height="135" rx="12"/>
-      <rect x="108" y="230" width="38" height="150" rx="16"/><rect x="154" y="230" width="38" height="150" rx="16"/>
-    </g>
-    <clipPath id="f2-level"><rect x="70" y="170" width="160" height="220"/></clipPath>
+  <g id="f2-person">
+    <g class="ink-edge"><circle cx="0" cy="-138.3" r="31.7"/><path d="M-22.7 -81.6 H22.7 A22.7 22.7 0 0 1 45.3 -58.9 V27.2 H-45.3 V-58.9 A22.7 22.7 0 0 1 -22.7 -81.6 Z"/><path d="M-45.3 13.6 H-13.6 V154.1 A15.9 15.9 0 0 1 -45.3 154.1 Z"/><path d="M13.6 13.6 H45.3 V154.1 A15.9 15.9 0 0 1 13.6 154.1 Z"/><rect x="-13.6" y="-13.6" width="27.2" height="126.9" rx="13.6" transform="translate(-29.5 -61.2) rotate(25)"/><rect x="-13.6" y="-13.6" width="27.2" height="126.9" rx="13.6" transform="translate(29.5 -61.2) rotate(-25)"/></g>
+    <g class="ink-fill"><circle cx="0" cy="-138.3" r="31.7"/><path d="M-22.7 -81.6 H22.7 A22.7 22.7 0 0 1 45.3 -58.9 V27.2 H-45.3 V-58.9 A22.7 22.7 0 0 1 -22.7 -81.6 Z"/><path d="M-45.3 13.6 H-13.6 V154.1 A15.9 15.9 0 0 1 -45.3 154.1 Z"/><path d="M13.6 13.6 H45.3 V154.1 A15.9 15.9 0 0 1 13.6 154.1 Z"/><rect x="-13.6" y="-13.6" width="27.2" height="126.9" rx="13.6" transform="translate(-29.5 -61.2) rotate(25)"/><rect x="-13.6" y="-13.6" width="27.2" height="126.9" rx="13.6" transform="translate(29.5 -61.2) rotate(-25)"/></g>
+    <clipPath id="f2-person-shade"><rect x="0" y="-340" width="340" height="680"/></clipPath>
+    <g class="ink-shade" clip-path="url(#f2-person-shade)"><circle cx="0" cy="-138.3" r="31.7"/><path d="M-22.7 -81.6 H22.7 A22.7 22.7 0 0 1 45.3 -58.9 V27.2 H-45.3 V-58.9 A22.7 22.7 0 0 1 -22.7 -81.6 Z"/><path d="M-45.3 13.6 H-13.6 V154.1 A15.9 15.9 0 0 1 -45.3 154.1 Z"/><path d="M13.6 13.6 H45.3 V154.1 A15.9 15.9 0 0 1 13.6 154.1 Z"/><rect x="-13.6" y="-13.6" width="27.2" height="126.9" rx="13.6" transform="translate(-29.5 -61.2) rotate(25)"/><rect x="-13.6" y="-13.6" width="27.2" height="126.9" rx="13.6" transform="translate(29.5 -61.2) rotate(-25)"/></g>
+  </g>
+  <clipPath id="f2-level"><rect x="30" y="172" width="250" height="220"/></clipPath>
   </defs>
-  <use href="#f2-person" class="edge"/>
-  <use href="#f2-person" class="shape"/>
-  <use href="#f2-person" class="area" clip-path="url(#f2-level)"/>
-  <line class="line dash" x1="70" y1="170" x2="250" y2="170"/>
-  <text x="260" y="166" class="b">Body water ≈ 60%</text><text x="260" y="186" class="sm">of body weight (adult)</text>
+  <use href="#f2-person" transform="translate(150 206)"/>
+  <g clip-path="url(#f2-level)"><use href="#f2-person" class="c5 ink-level" transform="translate(150 206)"/></g>
+  <line class="line dash" x1="30" y1="172" x2="250" y2="172"/>
+  <text x="260" y="168" class="b c5">Body water ≈ 60%</text><text x="260" y="188" class="sm">of body weight (adult)</text>
   <path class="lead" d="M440 110 V100 H610 V110"/><text x="525" y="92" text-anchor="middle" class="sm">2/3 of body water</text>
   <path class="lead" d="M610 110 V100 H700 V110"/><text x="655" y="92" text-anchor="middle" class="sm">1/3</text>
   <rect class="box c1" x="440" y="120" width="170" height="60"/>
@@ -218,16 +234,16 @@ A figure of a person (or an animal, a vehicle) with a filled region and notes. D
   <text x="645" y="240" text-anchor="middle" class="b">Interstitial</text><text x="645" y="260" text-anchor="middle" class="sm">≈ 15%</text>
   <circle class="pin" cx="690" cy="150" r="3"/><line class="lead" x1="690" y1="150" x2="690" y2="290"/>
   <text x="700" y="310" text-anchor="end" class="b">Plasma</text><text x="700" y="330" text-anchor="end" class="sm">≈ 5%</text>
-  <path class="line dash" d="M230 320 H525 V184" marker-end="url(#arr)"/>
-  <text x="380" y="312" text-anchor="middle" class="sm">split the 60%</text>
+  <path class="line dash" d="M250 320 H525 V184" marker-end="url(#arr)"/>
+  <text x="390" y="312" text-anchor="middle" class="sm">split the 60%</text>
 </svg>
 <figcaption>Figure 2. Most of the body's water is inside the cells; the plasma in the blood vessels is a small part. Schematic; shares are textbook approximations.</figcaption>
 </figure>
 ```
 
-- The clip rectangle sets the level: here its top is at y = 170, about 60% of the figure's height (y = 32 to 380).
+- The clip rectangle sets the level: here its top is at y = 172, 60% of the figure's height up from the feet (y = 36 to 376).
 - Here the notes sit on a bar to the right instead of single leaders, because the three parts are shares of one whole. The bar widths follow the shares (2/3, 1/4 and 3/4 of the remaining 1/3, rounded to the 10px grid).
-- The figure has no face, hands, or clothes. A person drawn from rounded rectangles reads like a mannequin; that is enough for an explainer and stays stable.
+- The figure has no face, hands, or clothes. The library's person reads like a mannequin; that is enough for an explainer and stays stable.
 
 ## Recipe P3 — Object and its parts
 
@@ -236,9 +252,10 @@ An object drawn as a container with labelled parts inside, for "what is it made 
 ```html
 <figure id="fig-3">
 <svg viewBox="0 0 720 380" role="img" aria-label="A jar stands for a GameObject: the lid holds its name; inside are a Transform, a Mesh Renderer, a Box Collider, and a script, each with one job.">
-  <rect class="box muted" x="160" y="40" width="180" height="30" rx="6"/>
+  <g class="ink" transform="translate(250 78)"><path d="M-75 -15 H75 V15 H-75 V-15 Z"/></g>
+  <g class="ink" transform="translate(250 225)"><path d="M-94 -135 H94 A36 36 0 0 1 130 -99 V107 A28 28 0 0 1 102 135 H-102 A28 28 0 0 1 -130 107 V-99 A36 36 0 0 1 -94 -135 Z"/></g>
+  <g class="ink" transform="translate(250 55)"><path d="M-89 -16 H89 A6 6 0 0 1 95 -10 V10 A6 6 0 0 1 89 16 H-89 A6 6 0 0 1 -95 10 V-10 A6 6 0 0 1 -89 -16 Z"/></g>
   <text x="250" y="60" text-anchor="middle" class="b">GameObject: Player</text>
-  <path class="outline" d="M170 70 V90 Q120 90 120 130 V330 Q120 360 150 360 H350 Q380 360 380 330 V130 Q380 90 330 90 V70"/>
   <rect class="box" x="150" y="120" width="200" height="44" rx="6"/>
   <use href="#i-move-3d" class="icon" x="162" y="132" width="20" height="20"/><text x="194" y="147" class="b">Transform</text>
   <rect class="box" x="150" y="174" width="200" height="44" rx="6"/>
@@ -247,7 +264,7 @@ An object drawn as a container with labelled parts inside, for "what is it made 
   <use href="#i-square-dashed" class="icon" x="162" y="240" width="20" height="20"/><text x="194" y="255" class="b">Box Collider</text>
   <rect class="box c1" x="150" y="282" width="200" height="44" rx="6"/>
   <use href="#i-file-code" class="icon c1" x="162" y="294" width="20" height="20"/><text x="194" y="309" class="b c1">PlayerMove.cs</text>
-  <circle class="pin" cx="340" cy="55" r="3"/><line class="lead" x1="340" y1="55" x2="420" y2="55"/>
+  <circle class="pin" cx="336" cy="55" r="3"/><line class="lead" x1="336" y1="55" x2="420" y2="55"/>
   <text x="430" y="59" class="sm">name, tag, layer (the lid)</text>
   <circle class="pin" cx="340" cy="142" r="3"/><line class="lead" x1="340" y1="142" x2="420" y2="142"/>
   <text x="430" y="146" class="sm">position, rotation, scale</text>
@@ -262,7 +279,7 @@ An object drawn as a container with labelled parts inside, for "what is it made 
 </figure>
 ```
 
-- Part boxes are 200 × 44 with 10px between them; at most 5 parts. With more, group them, or use summary cards (`cards.md`).
+- The jar, its neck, and its lid are drawn objects (`parts.py rect`); the components inside are abstract, so they stay boxes. Part boxes are 200 × 44 with 10px between them; at most 5 parts. With more, group them, or use summary cards (`cards.md`).
 - Single-line notes (`sm` only) are enough when the part's label already names it.
 - The icons need their symbols on the page: run the copy command in `icons.md`.
 
@@ -273,22 +290,22 @@ A software window drawn as a container: its panels as rectangles in their real p
 ```html
 <figure id="fig-5">
 <svg viewBox="0 0 720 360" role="img" aria-label="The Unity editor: Hierarchy on the left lists the objects in the scene, the Scene and Game view in the middle shows the result, the Inspector on the right shows the components of the selected object, and Project at the bottom holds the files. A dashed arrow drags bird.png from Project into the Sprite field in the Inspector.">
-  <rect class="box muted" x="10" y="20" width="700" height="30" rx="4"/>
-  <path class="box good" d="M352 28 L366 35 L352 42 Z"/><text x="380" y="40" class="sm">Play: test the game</text>
-  <rect class="box" x="10" y="50" width="160" height="200"/>
+  <g class="ink" transform="translate(360 35)"><path d="M-344 -15 H344 A6 6 0 0 1 350 -9 V15 H-350 V-9 A6 6 0 0 1 -344 -15 Z"/></g>
+  <g class="ink" transform="translate(90 150)"><path d="M-80 -100 H80 V100 H-80 V-100 Z"/></g>
+  <g class="ink" transform="translate(350 150)"><path d="M-180 -100 H180 V100 H-180 V-100 Z"/></g>
+  <g class="ink" transform="translate(620 195)"><path d="M-90 -145 H90 V139 A6 6 0 0 1 84 145 H-90 V-145 Z"/></g>
+  <g class="ink" transform="translate(270 295)"><path d="M-260 -45 H260 V45 H-254 A6 6 0 0 1 -260 39 V-45 Z"/></g>
+  <g class="ink dark" transform="translate(358 35)"><polygon points="7 0 -5 -7 -5 7"/></g><text x="380" y="40" class="sm">Play: test the game</text>
   <text x="20" y="72" class="b">Hierarchy</text><text x="20" y="92" class="sm">objects in the scene</text>
   <text x="30" y="122" class="sm">Main Camera</text><text x="30" y="144" class="b c1">bird</text>
-  <rect class="box" x="170" y="50" width="360" height="200"/>
   <text x="180" y="72" class="b">Scene / Game View</text><text x="180" y="92" class="sm">editing view / what the camera sees</text>
-  <circle class="area c1" cx="350" cy="170" r="22"/>
-  <rect class="box" x="530" y="50" width="180" height="290"/>
+  <g class="ink c1"><circle cx="350" cy="170" r="22"/></g>
   <text x="540" y="72" class="b">Inspector</text><text x="540" y="92" class="sm">the selected object</text>
   <text x="540" y="122" class="b c1">bird</text>
   <rect class="box c2" x="540" y="134" width="160" height="30" rx="4"/><text x="550" y="154" class="sm">Transform</text>
   <rect class="box c2" x="540" y="172" width="160" height="56" rx="4"/><text x="550" y="192" class="sm">Sprite Renderer</text>
   <rect class="box muted" x="550" y="200" width="140" height="20" rx="3"/><text x="556" y="215" class="sm">Sprite: bird</text>
   <text x="540" y="256" class="sm">+ Add Component</text>
-  <rect class="box" x="10" y="250" width="520" height="90"/>
   <text x="20" y="272" class="b">Project</text><text x="20" y="292" class="sm">every file: images, sounds, scripts, fonts</text>
   <use href="#i-image" class="icon" x="30" y="304" width="20" height="20"/><text x="56" y="320" class="sm">bird.png</text>
   <path class="line dash" d="M60 328 H480 Q510 328 510 298 V210 H548" marker-end="url(#arr)"/>
@@ -299,7 +316,7 @@ A software window drawn as a container: its panels as rectangles in their real p
 ```
 
 - Put each panel's name and one `sm` line inside the panel, not on leader lines: the panels fill the canvas.
-- Panels are neutral `box`; the selected object and the field the action changes take their concept colours.
+- The window and its panels are `ink` rectangles (`parts.py rect`) that share their edges; the round corners are only on the outside. The content of a panel (component rows, a field) stays `box`. The selected object and the field the action changes take their concept colours.
 - One action per figure, as one dashed arrow that does not cross any label.
 - The caption says "Schematic layout, not a screenshot" / "版面為示意，不是實際截圖". If the reader must find a real button, a screenshot is clearer: ask the user for one from their own copy of the program.
 

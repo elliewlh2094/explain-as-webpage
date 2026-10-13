@@ -107,7 +107,7 @@
    - 姿態變化大的段落（例如轉向超過 90°）拆成中間步驟。每個 stepper 仍不超過 8 步（`writing-rules.md` § Length budget）。
    - 多個物件組合後再分離時（例如飛船與助推器），分離前把兩個物件放在同一個 `<g transform>` 中，分離後各自擺放。
 4. **既有規則維持**：`pictorial.md` 的「物件要自己畫，不用圖示；圖示只標部件」不變；R6 擴大物件的使用範圍，不改變這條規則。外形複雜的有機物件（胃、大陸輪廓）仍不以手寫座標描繪，改用簡單形狀的示意或留給 explainer-cite。
-5. **既有配方 P1–P4 改用同一種風格**（2026-10-13 檢查點 C 新增）：第 1 點的風格適用於任何圖中的物件，所以 P1–P4 的物件外框與部件也改用 `ink` 系列，不再使用 2px 的 `outline` 與 `box` 部件。剖開容器的分層寫法在 T18 實作時確定。
+5. **既有配方 P1–P4 改用同一種風格**（2026-10-13 檢查點 C 新增）：第 1 點的風格適用於任何圖中的物件，所以 P1–P4 的物件外框與部件也改用 `ink` 系列，不再使用 2px 的 `outline` 與 `box` 部件。T18 確定的寫法：分層畫成 `ink cN` 矩形，剛好蓋住容器的外接框並裁切到容器形狀內，最後以只有外框的 `ink hollow` 畫容器外框；物件內的填色區域（水位）以第二份物件加上概念色與 `ink-level`，放在裁切的 `<g>` 中；模板移除不再使用的 `outline`、`edge`、`shape`、`area`。
 
 ### ~~R4 Noto Emoji 子集~~（2026-10-10 取消）
 
@@ -174,7 +174,7 @@ wc -l skills/*/SKILL.md                       # 各約 130 行以內
 | `skills/explainer-figure/references/icons.md` | R6 | 第 55 行的禁令限縮範圍 |
 | `skills/explainer-figure/scripts/parts.py`（新增） | R3 | 見 R3 第 2 點 |
 | `skills/explainer-figure/scripts/check-overlap.js`（新增） | R2 | 見 R2 |
-| `skills/explainer-page/assets/template.html` | R1、R3 | `.sym`、風格 class（不加 `svg ` 前綴） |
+| `skills/explainer-page/assets/template.html` | R1、R3 | `.sym`、風格 class（不加 `svg ` 前綴）；T18 新增 `ink hollow`、`ink-level`，移除 `outline`、`edge`、`shape`、`area` |
 | `skills/explainer-page/references/writing-rules.md` | R1 | § Ground the symbols 加一行引用 |
 | `.claude-plugin/*.json`、`.codex-plugin/plugin.json`、`.agents/plugins/marketplace.json` | — | 版本升為 0.5.0 |
 | `CLAUDE.md`、`README.md`、`README.zh-TW.md` | — | 架構段落加入 `scripts/check-overlap.js` 與 `scripts/parts.py` |

@@ -93,22 +93,19 @@ svg .line { stroke: var(--text); stroke-width: 1.5; fill: none; }
 svg .line.bad { stroke: var(--red); } svg .line.good { stroke: var(--green); }
 svg .dash { stroke-dasharray: 5 4; }
 svg .dot { fill: var(--blue); } svg .dot.bad { fill: var(--red); } svg .dot.good { fill: var(--green); }
-/* Pictorial figures (explainer-figure: references/pictorial.md): container outline, leader line and pin,
-   silhouette = the same shapes drawn as .edge then .shape, filled regions as .area (concept colour optional) */
-svg .outline { fill: none; stroke: var(--text); stroke-width: 2; }
+/* Pictorial figures (explainer-figure: references/pictorial.md): leader line and pin */
 svg .lead { fill: none; stroke: var(--muted); stroke-width: 1; } svg .pin { fill: var(--muted); }
-svg .edge { fill: var(--text); stroke: var(--text); stroke-width: 4; } svg .shape { fill: var(--grey-bg); stroke: none; }
-svg .area { fill: var(--cc, var(--blue)); opacity: .25; stroke: none; } /* group opacity: overlapping shapes do not darken; 10% tints are too faint */
 /* Drawn objects (explainer-figure: pictorial.md § Drawn objects, scripts/parts.py). No "svg " prefix:
    rules with an ancestor never reach the shapes inside a <use>. ink-edge + ink-fill = one outer outline. */
 .ink { fill: var(--cb, var(--bg)); stroke: var(--text); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
-.ink.dark { fill: var(--text); } .ink.glass { fill: var(--blue-bg); }
+.ink.dark { fill: var(--text); } .ink.glass { fill: var(--blue-bg); } .ink.hollow { fill: none; } /* hollow: a cut-open container's outline, over its clipped layers */
 .ink-edge { fill: var(--text); stroke: var(--text); stroke-width: 8; stroke-linejoin: round; } .ink-fill { fill: var(--cb, var(--bg)); stroke: none; }
 .ink-shade { fill: var(--cc, var(--text)); opacity: .18; stroke: none; }
 .ink-track { fill: none; stroke: var(--muted); stroke-width: 2; stroke-dasharray: 6 6; }
 /* Concept colours: class c1-c5 on a box, line, dot, or text in SVG, or on a .chip or .sym in the text */
 .c1 { --cc: var(--c1); --cb: var(--c1-bg); } .c2 { --cc: var(--c2); --cb: var(--c2-bg); } .c3 { --cc: var(--c3); --cb: var(--c3-bg); }
 .c4 { --cc: var(--c4); --cb: var(--c4-bg); } .c5 { --cc: var(--c5); --cb: var(--c5-bg); }
+.ink-level { --cb: color-mix(in srgb, var(--cc) 35%, var(--bg)); } /* with c1-c5 on a second, clipped copy of an object: a filled region (a water level) */
 svg .box:is(.c1,.c2,.c3,.c4,.c5) { fill: var(--cb); stroke: var(--cc); }
 svg .line:is(.c1,.c2,.c3,.c4,.c5) { stroke: var(--cc); } svg .dot:is(.c1,.c2,.c3,.c4,.c5), svg text:is(.c1,.c2,.c3,.c4,.c5) { fill: var(--cc); }
 /* Icons: class icon on a <use> in SVG, or on an inline <svg> around a <use> in HTML (explainer-figure: references/icons.md) */
