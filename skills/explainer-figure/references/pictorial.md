@@ -305,7 +305,7 @@ A software window drawn as a container: its panels as rectangles in their real p
 
 ## Recipe P5 — Object and poses
 
-One object at several poses along a path: a robot avoiding a box, a booster turning back. Use a stepper (L2): each frame shows only the current pose, and the whole path stays as a faint track, so the reader sees where on the path the object is.
+One object at several poses along a path: a robot avoiding a box, a booster turning back. Use a stepper (L2): each frame shows only the current pose, and the faint track grows with the steps: each step adds the part from the previous pose to this one. The reader sees where the object came from, and the path still ahead does not distract.
 
 ```bash
 P=<this skill's folder>/scripts/parts.py
@@ -315,7 +315,7 @@ python3 $P pose --ref f6-robot --path "M70 140 H190 Q230 140 250 100 Q270 50 360
 
 ```html
 <figure id="fig-6" class="stepper">
-<svg viewBox="0 0 720 200" role="img" aria-label="A robot drives around a box in five steps; the dashed track shows its whole path.">
+<svg viewBox="0 0 720 200" role="img" aria-label="A robot drives around a box in five steps; the dashed track shows the path so far.">
   <defs>
   <g id="f6-robot" class="c1">
     <g class="ink dark"><path d="M-10.8 -27 H10.8 A2.4 2.4 0 0 1 13.2 -24.6 V24.6 A2.4 2.4 0 0 1 10.8 27 H-10.8 A2.4 2.4 0 0 1 -13.2 24.6 V-24.6 A2.4 2.4 0 0 1 -10.8 -27 Z"/></g>
@@ -327,18 +327,21 @@ python3 $P pose --ref f6-robot --path "M70 140 H190 Q230 140 250 100 Q270 50 360
   </g>
   </defs>
   <rect class="box muted" x="300" y="110" width="120" height="80" rx="6"/><text x="360" y="155" text-anchor="middle" class="sm">box</text>
-  <path class="ink-track" d="M70 140 H190 Q230 140 250 100 Q270 50 360 50 Q450 50 470 100 Q490 140 530 140 H650"/>
   <use href="#f6-robot" data-step="1" data-caption="Step 1: the robot starts on the left." transform="translate(70 140) rotate(0)"/>
+  <path class="ink-track" data-step="2+" d="M70 140 L190 140 Q213.1 140 229.5 126.7"/>
   <use href="#f6-robot" data-step="2" data-caption="Step 2: it turns before the box." transform="translate(229.5 126.7) rotate(-39.1)"/>
+  <path class="ink-track" data-step="3+" d="M229.5 126.7 Q241.5 116.9 250 100 Q270 50 360 50"/>
   <use href="#f6-robot" data-step="3" data-caption="Step 3: it passes above the box." transform="translate(360 50) rotate(-0.1)"/>
+  <path class="ink-track" data-step="4+" d="M360 50 Q450 50 470 100 Q478.5 116.9 490.5 126.7"/>
   <use href="#f6-robot" data-step="4" data-caption="Step 4: it turns back down." transform="translate(490.5 126.7) rotate(39.1)"/>
+  <path class="ink-track" data-step="5+" d="M490.5 126.7 Q506.9 140 530 140 L650 140"/>
   <use href="#f6-robot" data-step="5" data-caption="Step 5: it is past the box." transform="translate(650 140) rotate(0)"/>
 </svg>
 <figcaption>Figure 6. The robot leaves its straight line only to pass the box. Schematic, not to scale.</figcaption>
 </figure>
 ```
 
-- Define the object once in the figure's `<defs>`. `pose` prints the track and one `<use>` per step; add a `data-caption` to each.
+- Define the object once in the figure's `<defs>`. `pose` prints one `<use>` per step, and before each one the part of the track that step adds (`data-step="k+"`); add a `data-caption` to each `<use>`.
 - `pose` takes each position and angle from the track, so the object sits on it. `--angles` gives each step `t` (along the track), `t+90`, `t-90`, or a fixed angle: a booster flies tail first.
 - Split a turn of more than 90° into steps. A stepper has at most 8 steps (`../explainer-page/references/writing-rules.md` § Length budget).
-- Two objects that fly together and then separate: put both in one `<g transform>` until the step they separate, then give each its own pose.
+- Two objects that fly together and then separate: put both in one `<g transform>` until the step they separate, then give each its own pose. For an object that first appears at step k (the booster after separation), give `pose --first k`, so its poses and track parts get the right step numbers.

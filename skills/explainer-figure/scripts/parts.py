@@ -187,9 +187,10 @@ def drone(size, view):
 # ---- pose ----
 
 def parse_path(d):
-    """Absolute M, L, H, V, Q, C only. Returns a list of points sampled along the path."""
+    """Absolute M, L, H, V, Q, C only. Returns the control points of each command, and points
+    sampled along the path, each as (x, y, command index, t within the command)."""
     toks = re.findall(r"[MLHVQCZ]|-?\d*\.?\d+(?:e-?\d+)?", d)
-    out, i, cmd, cur = [], 0, None, (0.0, 0.0)
+    cmds, out, i, cmd, cur = [], [], 0, None, (0.0, 0.0)
     while i < len(toks):
         if toks[i] in "MLHVQCZ":
             cmd = toks[i]
@@ -201,7 +202,7 @@ def parse_path(d):
         i += need
         if cmd == "M":
             cur = (v[0], v[1])
-            out.append(cur)
+            out.append((*cur, 0, 0.0))
             cmd = "L"
             continue
         if cmd in "LHV":
@@ -209,35 +210,60 @@ def parse_path(d):
             ctrl = [cur, end]
         else:
             ctrl = [cur] + [(v[j], v[j + 1]) for j in range(0, need, 2)]
+        cmds.append(ctrl)
         for s in range(1, 201):
-            t = s / 200
-            pts_ = ctrl
-            while len(pts_) > 1:  # de Casteljau
-                pts_ = [(a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t) for a, b in zip(pts_, pts_[1:])]
-            out.append(pts_[0])
+            out.append((*split(ctrl, s / 200)[1][0], len(cmds) - 1, s / 200))
         cur = ctrl[-1]
-    return out
+    return cmds, out
 
 
-def pose(ref, d, at, angles, cls, track):
-    samples = parse_path(d)
+def split(ctrl, t):
+    """de Casteljau: the control points of the curve before and after t."""
+    left, right, pts_ = [ctrl[0]], [ctrl[-1]], ctrl
+    while len(pts_) > 1:
+        pts_ = [(a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t) for a, b in zip(pts_, pts_[1:])]
+        left.append(pts_[0])
+        right.append(pts_[-1])
+    return left, right[::-1]
+
+
+def sub_path(cmds, a, b):
+    """The track from position a to position b, each (command index, t), as a path."""
+    d = ""
+    for ci in range(a[0], b[0] + 1):
+        t0, t1 = (a[1] if ci == a[0] else 0.0), (b[1] if ci == b[0] else 1.0)
+        if t1 - t0 < 1e-9 and a[0] != b[0]:  # a pose at the very end or start of a command
+            continue
+        c = split(cmds[ci], t1)[0]
+        c = split(c, t0 / t1)[1] if t1 else [c[0]] * len(c)
+        d = d or "M" + pts(*c[0])
+        d += " " + "LQC"[len(c) - 2] + pts(*[v for q in c[1:] for v in q])
+    return d
+
+
+def pose(ref, d, at, angles, cls, track, first=1):
+    cmds, samples = parse_path(d)
     lengths = [0.0]
     for a, b in zip(samples, samples[1:]):
-        lengths.append(lengths[-1] + math.dist(a, b))
+        lengths.append(lengths[-1] + math.dist(a[:2], b[:2]))
     total = lengths[-1]
     fr = [float(v) for v in at.split(",")]
     ang = angles.split(",") if angles else ["t"] * len(fr)
     if len(ang) != len(fr):
         sys.exit("pose: --angles needs one value per --at value")
-    out = [f'<path class="ink-track" d="{d}"/>'] if track else []
-    for k, (f, a) in enumerate(zip(fr, ang), 1):
+    out, prev = [], (0, 0.0)
+    for k, (f, a) in enumerate(zip(fr, ang), first):
         target = max(0.0, min(1.0, f)) * total
         j = next((i for i, L in enumerate(lengths) if L >= target), len(lengths) - 1)
         j = max(j, 1)
-        (x0, y0), (x1, y1) = samples[j - 1], samples[j]
+        (x0, y0, c0, t0), (x1, y1, c1, t1) = samples[j - 1], samples[j]
         span = lengths[j] - lengths[j - 1] or 1
         u = (target - lengths[j - 1]) / span
         x, y = x0 + (x1 - x0) * u, y0 + (y1 - y0) * u
+        here = (c1, (t0 if c0 == c1 else 0.0) + (t1 - (t0 if c0 == c1 else 0.0)) * u)
+        if track and here != prev:  # the track grows with the steps: the part up to this pose appears now
+            out.append(f'<path class="ink-track" data-step="{k}+" d="{sub_path(cmds, prev, here)}"/>')
+        prev = here
         tangent = math.degrees(math.atan2(y1 - y0, x1 - x0))
         m = re.fullmatch(r"t([+-]\d+(?:\.\d+)?)?", a.strip())
         rot = tangent + float(m.group(1) or 0) if m else float(a)
@@ -330,6 +356,7 @@ def main():
     p.add_argument("--at", required=True, help="positions along the track, 0-1, comma-separated")
     p.add_argument("--angles", default="", help="per step: t (tangent), t+90, t-90, or degrees")
     p.add_argument("--cls", default="")
+    p.add_argument("--first", type=int, default=1, help="the stepper step of the first pose (default 1)")
     p.add_argument("--no-track", action="store_true", help="do not print the faint track")
     sub.add_parser("sheet", help="the overview sheet of every part, as an SVG file")
     argv = sys.argv[1:]  # let "--at -30,20" through: argparse takes a value that starts with "-" for an option
@@ -355,7 +382,7 @@ def main():
         idattr = f' id="{a.id}"' if a.id else ""
         print(f'<g{idattr} class="{cls}"{place(a.at)}>{el}</g>')
     elif a.cmd == "pose":
-        print(pose(a.ref, a.path, a.at, a.angles, a.cls, not a.no_track))
+        print(pose(a.ref, a.path, a.at, a.angles, a.cls, not a.no_track, a.first))
     else:
         sys.stdout.write(sheet())
 
