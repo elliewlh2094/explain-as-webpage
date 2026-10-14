@@ -104,6 +104,7 @@
 - 第 4 步的確認改為逐圖描述預期效果：圖的形式（例如「stepper 6 步」或「連續動畫約 4 秒」）、讀者會看到什麼、降一級會失去什麼。使用者希望維持「代理建議、使用者修改」，但代理要描述得更清楚，讓使用者能判斷是否調整。
 - L3：使用者決定直接使用 anime.js（MIT，v4 完整版約 24.5 KB，可內嵌 UMD 單檔），仍是單一 HTML 檔。24.5 KB 加上目前最大的範例頁（53 KB）仍在 150 KB 上限內。動工前要定義 L3 回答哪一類核心問題（例如沿路徑的運動與姿態變化、連續變形）。
 - 自檢：連續動畫無法只看單一畫面，要讓動畫停在多個時間點分別截圖。
+- 第 4 步的確認目前沒有被遵守的部分：第 5 輪 T14 (b) 與 T17 的 Codex 確認訊息都只寫「一張內嵌 SVG」，沒有寫出第 2 項要求的圖型（機制、數值、卡片、具象）。改寫第 4 步時一併處理。出處：`docs/plan/05-symbols-pictorial-plan.md`〈結果〉T17。
 - 驗證案例：Starship 助推器返回、Motion Planning 的 Feedback Control。
 - 出處：`docs/plan/04-visual-forms-idea.md` Open Questions；本文件〈Problem Statement〉。
 
@@ -117,6 +118,7 @@
 
 - Codex 不指定 skill 名稱時能否觸發 explainer-page。出處：`docs/plan/03-material-modes-plan.md` T16。
 - 代理在第 7 步是否主動列出每張數值圖的單位與理由（讀圖四問）。出處：`docs/plan/03-material-modes-figure-values.md`。
+- 第 7 步的回報缺項：第 5 輪 T14 (b) 與 T17 的 Codex 回報都沒有開啟指令（`xdg-open`）、頁面回答的問題與使用的輔助 skill。若再次出現，檢查第 7 步的寫法是否需要改成逐項清單。出處：`docs/plan/05-symbols-pictorial-plan.md`〈結果〉T17。
 - 第 3 輪未驗證的情境：Paul Graham 長文、Harness Engineering 的演進、LightGlue。出處：`docs/plan/03-material-modes-spec.md` §10。
 - 輔助 skill 自帶的提問或輸出檔是否破壞「只確認一次、只輸出一個檔案」。出處：`docs/plan/03-material-modes-spec.md` §6。
 - 沒有網路工具時的退路（使用者在第 3 輪決定不測，列出備查）。出處：`docs/plan/03-material-modes-plan.md` T16。

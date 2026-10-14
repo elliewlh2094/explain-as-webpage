@@ -86,7 +86,7 @@ Put the key number under each panel in `bad` / `good` colour. The reader's eye s
 
 - A component that is a concrete thing with a familiar shape (a browser, a database, a robot, a person) is drawn as that thing (`pictorial.md` § Drawn objects). A module, a file, a service, or a layer stays a box. Do not draw every node as an object: when all nodes are the same kind of thing, boxes say as much.
 - Boxes = modules/files (label with the file name in `code` style: use the file name as bold text and its one-line job as `sm`). An object's label goes below it: bold name, then its job in `sm`, 20px apart.
-- An arrow to or from an object ends on the object's bounding rectangle, 2px outside the outline, on the same y as the arrow from the box beside it.
+- An arrow to or from an object ends 2px outside its outline: 4px outside the coordinates of its bounding rectangle (`pictorial.md` § Drawn objects), on the same y as the arrow from the box beside it.
 - Arrows = data or calls, labelled with the data type in `sm` text placed 8px above the arrow's midpoint.
 - Group boxes that belong to one layer inside a `box muted` panel with the layer name at its top-left (`sm`, `text-anchor="start"`).
 - Draw the main path left → right or top → bottom; side paths (logs, audit) in `dash`.
@@ -115,10 +115,10 @@ python3 $P cylinder --w 70 --h 80 --cls c1 --at 620,80                  # databa
     <g class="ink glass" transform="translate(90 92)"><path d="M-41 -20 H41 A4 4 0 0 1 45 -16 V16 A4 4 0 0 1 41 20 H-41 A4 4 0 0 1 -45 16 V-16 A4 4 0 0 1 -41 -20 Z"/></g>
   </g>
   <text x="90" y="146" text-anchor="middle" class="b">Browser</text><text x="90" y="166" text-anchor="middle" class="sm">shows the page</text>
-  <line class="line" x1="147" y1="80" x2="270" y2="80" marker-end="url(#arr)"/><text x="208" y="72" text-anchor="middle" class="sm">HTTPS request</text>
+  <line class="line" x1="149" y1="80" x2="270" y2="80" marker-end="url(#arr)"/><text x="210" y="72" text-anchor="middle" class="sm">HTTPS request</text>
   <rect class="box" x="270" y="50" width="160" height="60" rx="6"/>
   <text x="350" y="76" text-anchor="middle" class="b">API server</text><text x="350" y="96" text-anchor="middle" class="sm">checks, then decides</text>
-  <line class="line" x1="430" y1="80" x2="583" y2="80" marker-end="url(#arr)"/><text x="506" y="72" text-anchor="middle" class="sm">query</text>
+  <line class="line" x1="430" y1="80" x2="581" y2="80" marker-end="url(#arr)"/><text x="506" y="72" text-anchor="middle" class="sm">query</text>
   <g id="f2-database" class="ink c1" transform="translate(620 80)"><path d="M-35 -30.2 V30.2 A35 9.8 0 0 0 35 30.2 V-30.2 Z"/><ellipse cx="0" cy="-30.2" rx="35" ry="9.8"/></g>
   <text x="620" y="146" text-anchor="middle" class="b c1">Database</text><text x="620" y="166" text-anchor="middle" class="sm">keeps the records</text>
 </svg>

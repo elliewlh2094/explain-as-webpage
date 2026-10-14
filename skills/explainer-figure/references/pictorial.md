@@ -9,7 +9,7 @@ The object can be the real thing (a backpack) or a metaphor for an abstract one 
 
 ## Drawn objects
 
-Every object drawn in a figure (a person, a robot, a backpack) has one style: a 4px outline and flat fills. The template's `ink` classes carry it.
+Every object drawn in a figure (a person, a robot, a backpack) has one style: a 3px outline and flat fills. The template's `ink` classes carry it.
 
 | Class | Use |
 |---|---|
@@ -17,7 +17,7 @@ Every object drawn in a figure (a person, a robot, a backpack) has one style: a 
 | `ink dark` | dark parts: wheels, nozzles, hubs |
 | `ink glass` | windows, lenses, sensors, rotors |
 | `ink hollow` | the outline only: a cut-open container's outline, drawn over its clipped layers (Recipe P1) |
-| `ink-edge`, then `ink-fill` | several shapes with one outer outline (a person): the same shapes twice, first with an 8px outline, then filled without one |
+| `ink-edge`, then `ink-fill` | several shapes with one outer outline (a person): the same shapes twice, first with a 6px outline, then filled without one |
 | `ink-shade` | at most one shade layer: the body again, clipped to the side away from the light (the light comes from the top left) |
 | `ink-track` | the faint dashed path of an object's poses (Recipe P5) |
 | `ink-level` | with `c1`–`c5`, on a second copy of an object clipped at a level: a deeper fill for the filled part (water in a body, fuel in a tank; Recipe P2) |
@@ -25,7 +25,8 @@ Every object drawn in a figure (a person, a robot, a backpack) has one style: a 
 These rules come from test drawings; each one prevents a failure that was seen.
 
 - **Fills come only from these classes.** No gradients, no new colours.
-- **Keep separate parts at least 11px apart** (2 × 4px + 3px). Closer, the outlines join them into one blob.
+- **Keep separate parts at least 9px apart** (2 × 3px + 3px). Closer, the outlines join them into one blob.
+- **An arrow to or from an object ends 2px outside its outline.** Half of the outline lies outside the shape's coordinates, so end the arrow 4px outside the coordinates of an `ink` shape (1.5px of outline, then 2.5px) and 5px outside those of an `ink-edge` shape such as a person (3px of outline, then 2px).
 - **Draw at the needed size; never use `scale()`.** It makes the outline thinner, and `vector-effect` does not reach inside a `<use>`.
 - **Inside an object that a `<use>` shows, use only the `ink` classes.** A rule with an ancestor (`svg .box`, `.c1 .ink`) never reaches the shapes inside a `<use>`, so `box` and `line` turn black there. Put the concept class on the object's `<g>` or on the `<use>`.
 - **An object with a front faces +x.** Turn it with `rotate()`; do not mirror it.
@@ -114,7 +115,7 @@ These rules come from test drawings; each one prevents a failure that was seen.
 
 ## Recipe P1 — Layered container
 
-A container cut open to show its layers: what goes where, and why. Draw each layer as an `ink` rectangle with its concept class, exactly over the container's bounding box and clipped to the container's shape; then draw the container's outline on top with `ink hollow`. The layers' outer edges then lie under that outline, and the edges between layers become lines of the same 4px.
+A container cut open to show its layers: what goes where, and why. Draw each layer as an `ink` rectangle with its concept class, exactly over the container's bounding box and clipped to the container's shape; then draw the container's outline on top with `ink hollow`. The layers' outer edges then lie under that outline, and the edges between layers become lines of the same 3px.
 
 ```bash
 P=<this skill's folder>/scripts/parts.py
@@ -162,10 +163,10 @@ When the question asks both where things sit and who reads or writes them, draw 
 <svg viewBox="0 0 720 360" role="img" aria-label="A git repo folder in three layers: schema, wiki, and raw sources. On the left, the LLM follows the schema, reads the raw sources, and writes the wiki. On the right, you read the wiki, pick the raw sources, and revise the schema with the LLM.">
   <defs><clipPath id="f4-body"><path transform="translate(360 200)" d="M-110 -140 H110 A10 10 0 0 1 120 -130 V130 A10 10 0 0 1 110 140 H-110 A10 10 0 0 1 -120 130 V-130 A10 10 0 0 1 -110 -140 Z"/></clipPath>
   <g id="f4-you">
-    <g class="ink-edge"><circle cx="0" cy="-44.7" r="10.3"/><path d="M-7.3 -23.5 H7.3 A7.3 7.3 0 0 1 14.7 -16.1 V8.8 H-14.7 V-16.1 A7.3 7.3 0 0 1 -7.3 -23.5 Z"/><path d="M-14.7 4.4 H-5.5 V50.4 A4.6 4.6 0 0 1 -14.7 50.4 Z"/><path d="M5.5 4.4 H14.7 V50.4 A4.6 4.6 0 0 1 5.5 50.4 Z"/><rect x="-4.4" y="-4.4" width="8.8" height="41.1" rx="4.4" transform="translate(-9.5 -16.9) rotate(25)"/><rect x="-4.4" y="-4.4" width="8.8" height="41.1" rx="4.4" transform="translate(9.5 -16.9) rotate(-25)"/></g>
-    <g class="ink-fill"><circle cx="0" cy="-44.7" r="10.3"/><path d="M-7.3 -23.5 H7.3 A7.3 7.3 0 0 1 14.7 -16.1 V8.8 H-14.7 V-16.1 A7.3 7.3 0 0 1 -7.3 -23.5 Z"/><path d="M-14.7 4.4 H-5.5 V50.4 A4.6 4.6 0 0 1 -14.7 50.4 Z"/><path d="M5.5 4.4 H14.7 V50.4 A4.6 4.6 0 0 1 5.5 50.4 Z"/><rect x="-4.4" y="-4.4" width="8.8" height="41.1" rx="4.4" transform="translate(-9.5 -16.9) rotate(25)"/><rect x="-4.4" y="-4.4" width="8.8" height="41.1" rx="4.4" transform="translate(9.5 -16.9) rotate(-25)"/></g>
+    <g class="ink-edge"><circle cx="0" cy="-45.7" r="9.3"/><path d="M-6.7 -27.3 H6.7 A6.7 6.7 0 0 1 13.3 -20.7 V13.8 H-13.3 V-20.7 A6.7 6.7 0 0 1 -6.7 -27.3 Z"/><path d="M-13.3 9.8 H-4.5 V50.6 A4.4 4.4 0 0 1 -13.3 50.6 Z"/><path d="M4.5 9.8 H13.3 V50.6 A4.4 4.4 0 0 1 4.5 50.6 Z"/><rect x="-4" y="-4" width="8" height="37.3" rx="4" transform="translate(-8.7 -21.3) rotate(25)"/><rect x="-4" y="-4" width="8" height="37.3" rx="4" transform="translate(8.7 -21.3) rotate(-25)"/></g>
+    <g class="ink-fill"><circle cx="0" cy="-45.7" r="9.3"/><path d="M-6.7 -27.3 H6.7 A6.7 6.7 0 0 1 13.3 -20.7 V13.8 H-13.3 V-20.7 A6.7 6.7 0 0 1 -6.7 -27.3 Z"/><path d="M-13.3 9.8 H-4.5 V50.6 A4.4 4.4 0 0 1 -13.3 50.6 Z"/><path d="M4.5 9.8 H13.3 V50.6 A4.4 4.4 0 0 1 4.5 50.6 Z"/><rect x="-4" y="-4" width="8" height="37.3" rx="4" transform="translate(-8.7 -21.3) rotate(25)"/><rect x="-4" y="-4" width="8" height="37.3" rx="4" transform="translate(8.7 -21.3) rotate(-25)"/></g>
     <clipPath id="f4-you-shade"><rect x="0" y="-110" width="110" height="220"/></clipPath>
-    <g class="ink-shade" clip-path="url(#f4-you-shade)"><circle cx="0" cy="-44.7" r="10.3"/><path d="M-7.3 -23.5 H7.3 A7.3 7.3 0 0 1 14.7 -16.1 V8.8 H-14.7 V-16.1 A7.3 7.3 0 0 1 -7.3 -23.5 Z"/><path d="M-14.7 4.4 H-5.5 V50.4 A4.6 4.6 0 0 1 -14.7 50.4 Z"/><path d="M5.5 4.4 H14.7 V50.4 A4.6 4.6 0 0 1 5.5 50.4 Z"/><rect x="-4.4" y="-4.4" width="8.8" height="41.1" rx="4.4" transform="translate(-9.5 -16.9) rotate(25)"/><rect x="-4.4" y="-4.4" width="8.8" height="41.1" rx="4.4" transform="translate(9.5 -16.9) rotate(-25)"/></g>
+    <g class="ink-shade" clip-path="url(#f4-you-shade)"><circle cx="0" cy="-45.7" r="9.3"/><path d="M-6.7 -27.3 H6.7 A6.7 6.7 0 0 1 13.3 -20.7 V13.8 H-13.3 V-20.7 A6.7 6.7 0 0 1 -6.7 -27.3 Z"/><path d="M-13.3 9.8 H-4.5 V50.6 A4.4 4.4 0 0 1 -13.3 50.6 Z"/><path d="M4.5 9.8 H13.3 V50.6 A4.4 4.4 0 0 1 4.5 50.6 Z"/><rect x="-4" y="-4" width="8" height="37.3" rx="4" transform="translate(-8.7 -21.3) rotate(25)"/><rect x="-4" y="-4" width="8" height="37.3" rx="4" transform="translate(8.7 -21.3) rotate(-25)"/></g>
   </g>
   </defs>
   <g class="ink" transform="translate(298 49)"><path d="M-40 -13 H40 A8 8 0 0 1 48 -5 V13 H-48 V-5 A8 8 0 0 1 -40 -13 Z"/></g><text x="262" y="54" class="sm">git repo</text>
@@ -187,9 +188,9 @@ When the question asks both where things sit and who reads or writes them, draw 
   <line class="line" x1="130" y1="180" x2="236" y2="180" marker-end="url(#arr)"/><text x="184" y="172" text-anchor="middle" class="sm">writes</text>
   <use href="#f4-you" transform="translate(650 180)"/>
   <text x="604" y="218" text-anchor="end" class="b">You</text><text x="604" y="236" text-anchor="end" class="sm">pick, ask, judge</text>
-  <line class="line" x1="484" y1="180" x2="609" y2="180" marker-end="url(#arr)"/><text x="540" y="172" text-anchor="middle" class="sm">reads</text>
-  <path class="line" d="M650 241 V300 H484" marker-end="url(#arr)"/><text x="566" y="292" text-anchor="middle" class="sm">picks sources</text>
-  <path class="line" d="M650 119 V90 H484" marker-end="url(#arr)"/><text x="566" y="82" text-anchor="middle" class="sm">revises with the LLM</text>
+  <line class="line" x1="484" y1="180" x2="618" y2="180" marker-end="url(#arr)"/><text x="551" y="172" text-anchor="middle" class="sm">reads</text>
+  <path class="line" d="M650 240 V300 H484" marker-end="url(#arr)"/><text x="566" y="292" text-anchor="middle" class="sm">picks sources</text>
+  <path class="line" d="M650 120 V90 H484" marker-end="url(#arr)"/><text x="566" y="82" text-anchor="middle" class="sm">revises with the LLM</text>
 </svg>
 <figcaption>Figure 4. Information flows from the raw sources through the LLM into the wiki and on to you; the only arrow into the wiki comes from the LLM. Folder names are illustrative.</figcaption>
 </figure>
@@ -197,7 +198,7 @@ When the question asks both where things sit and who reads or writes them, draw 
 
 - The container keeps the P1 coordinates, moved to x = 240–480; one actor on each side. An abstract actor (the LLM) is a box (120 × 60) at x = 10; a person (you) is drawn: `parts.py person --height 110`, centred at x = 650, with its label to the left of its feet.
 - At most 3 arrows per side. Route them so they never cross: the top one leaves above the actor, the middle one is straight, the bottom one leaves below.
-- Each arrow ends 2px outside the container's outline (x = 236 or 484) or the person's bounding rectangle, and has one verb in `sm` above its horizontal part.
+- Each arrow ends outside the container's outline (x = 236 or 484) or the person's bounding rectangle (x = 618, y = 120 or 240), as in § Drawn objects, and has one verb in `sm` above its horizontal part.
 - The paragraph says which arrows to compare ("only one arrow reaches the wiki"), not what each arrow says.
 
 ## Recipe P2 — Silhouette with leaders
@@ -213,10 +214,10 @@ python3 <this skill's folder>/scripts/parts.py person --id f2-person --height 34
 <svg viewBox="0 0 720 400" role="img" aria-label="A person filled with water to about 60 percent of the height; a bar splits the body water into intracellular fluid, about two thirds, and interstitial fluid and plasma, about one third.">
   <defs>
   <g id="f2-person">
-    <g class="ink-edge"><circle cx="0" cy="-138.3" r="31.7"/><path d="M-22.7 -81.6 H22.7 A22.7 22.7 0 0 1 45.3 -58.9 V27.2 H-45.3 V-58.9 A22.7 22.7 0 0 1 -22.7 -81.6 Z"/><path d="M-45.3 13.6 H-13.6 V154.1 A15.9 15.9 0 0 1 -45.3 154.1 Z"/><path d="M13.6 13.6 H45.3 V154.1 A15.9 15.9 0 0 1 13.6 154.1 Z"/><rect x="-13.6" y="-13.6" width="27.2" height="126.9" rx="13.6" transform="translate(-29.5 -61.2) rotate(25)"/><rect x="-13.6" y="-13.6" width="27.2" height="126.9" rx="13.6" transform="translate(29.5 -61.2) rotate(-25)"/></g>
-    <g class="ink-fill"><circle cx="0" cy="-138.3" r="31.7"/><path d="M-22.7 -81.6 H22.7 A22.7 22.7 0 0 1 45.3 -58.9 V27.2 H-45.3 V-58.9 A22.7 22.7 0 0 1 -22.7 -81.6 Z"/><path d="M-45.3 13.6 H-13.6 V154.1 A15.9 15.9 0 0 1 -45.3 154.1 Z"/><path d="M13.6 13.6 H45.3 V154.1 A15.9 15.9 0 0 1 13.6 154.1 Z"/><rect x="-13.6" y="-13.6" width="27.2" height="126.9" rx="13.6" transform="translate(-29.5 -61.2) rotate(25)"/><rect x="-13.6" y="-13.6" width="27.2" height="126.9" rx="13.6" transform="translate(29.5 -61.2) rotate(-25)"/></g>
+    <g class="ink-edge"><circle cx="0" cy="-141.2" r="28.8"/><path d="M-20.6 -89.6 H20.6 A20.6 20.6 0 0 1 41.2 -69 V40.2 H-41.2 V-69 A20.6 20.6 0 0 1 -20.6 -89.6 Z"/><path d="M-41.2 27.8 H-12.4 V155.6 A14.4 14.4 0 0 1 -41.2 155.6 Z"/><path d="M12.4 27.8 H41.2 V155.6 A14.4 14.4 0 0 1 12.4 155.6 Z"/><rect x="-12.4" y="-12.4" width="24.7" height="115.4" rx="12.4" transform="translate(-26.8 -71.1) rotate(25)"/><rect x="-12.4" y="-12.4" width="24.7" height="115.4" rx="12.4" transform="translate(26.8 -71.1) rotate(-25)"/></g>
+    <g class="ink-fill"><circle cx="0" cy="-141.2" r="28.8"/><path d="M-20.6 -89.6 H20.6 A20.6 20.6 0 0 1 41.2 -69 V40.2 H-41.2 V-69 A20.6 20.6 0 0 1 -20.6 -89.6 Z"/><path d="M-41.2 27.8 H-12.4 V155.6 A14.4 14.4 0 0 1 -41.2 155.6 Z"/><path d="M12.4 27.8 H41.2 V155.6 A14.4 14.4 0 0 1 12.4 155.6 Z"/><rect x="-12.4" y="-12.4" width="24.7" height="115.4" rx="12.4" transform="translate(-26.8 -71.1) rotate(25)"/><rect x="-12.4" y="-12.4" width="24.7" height="115.4" rx="12.4" transform="translate(26.8 -71.1) rotate(-25)"/></g>
     <clipPath id="f2-person-shade"><rect x="0" y="-340" width="340" height="680"/></clipPath>
-    <g class="ink-shade" clip-path="url(#f2-person-shade)"><circle cx="0" cy="-138.3" r="31.7"/><path d="M-22.7 -81.6 H22.7 A22.7 22.7 0 0 1 45.3 -58.9 V27.2 H-45.3 V-58.9 A22.7 22.7 0 0 1 -22.7 -81.6 Z"/><path d="M-45.3 13.6 H-13.6 V154.1 A15.9 15.9 0 0 1 -45.3 154.1 Z"/><path d="M13.6 13.6 H45.3 V154.1 A15.9 15.9 0 0 1 13.6 154.1 Z"/><rect x="-13.6" y="-13.6" width="27.2" height="126.9" rx="13.6" transform="translate(-29.5 -61.2) rotate(25)"/><rect x="-13.6" y="-13.6" width="27.2" height="126.9" rx="13.6" transform="translate(29.5 -61.2) rotate(-25)"/></g>
+    <g class="ink-shade" clip-path="url(#f2-person-shade)"><circle cx="0" cy="-141.2" r="28.8"/><path d="M-20.6 -89.6 H20.6 A20.6 20.6 0 0 1 41.2 -69 V40.2 H-41.2 V-69 A20.6 20.6 0 0 1 -20.6 -89.6 Z"/><path d="M-41.2 27.8 H-12.4 V155.6 A14.4 14.4 0 0 1 -41.2 155.6 Z"/><path d="M12.4 27.8 H41.2 V155.6 A14.4 14.4 0 0 1 12.4 155.6 Z"/><rect x="-12.4" y="-12.4" width="24.7" height="115.4" rx="12.4" transform="translate(-26.8 -71.1) rotate(25)"/><rect x="-12.4" y="-12.4" width="24.7" height="115.4" rx="12.4" transform="translate(26.8 -71.1) rotate(-25)"/></g>
   </g>
   <clipPath id="f2-level"><rect x="30" y="172" width="250" height="220"/></clipPath>
   </defs>

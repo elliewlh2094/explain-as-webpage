@@ -3,7 +3,7 @@
 
 Each subcommand prints an SVG fragment that uses the template's object classes (ink, ink-edge,
 ink-fill, ink-shade, ink-track). Sizes go straight into the coordinates; nothing uses scale(), so
-every outline stays 4px. Objects are centred on (0, 0); objects with a front face +x.
+every outline stays 3px. Objects are centred on (0, 0); objects with a front face +x.
 
   parts.py person --id f2-person --height 150 --cls c1     a person, front view, one outer outline
   parts.py robot  --id f3-robot --size 80 --view top       a wheeled robot, top or side view
@@ -115,22 +115,23 @@ def group(oid, cls, at, parts, shade=None):
 
 
 def person(height):
-    """Front view. Height = 5 head diameters. One outer outline: every part drawn as an 8px ink-edge
-    layer, then covered by an ink-fill layer. Parts that must stay apart (head and torso, the two legs)
-    keep a gap of at least 11px (2 × 4px outline + 3px), or the outline joins them."""
+    """Front view. Height = about 6 head diameters; the torso is as tall as its bottom is above the
+    soles. One outer outline: every part drawn as a 6px ink-edge layer, then covered by an ink-fill
+    layer. Parts that must stay apart (head and torso, the two legs) keep a gap of at least 9px
+    (2 × 3px outline + 3px), or the outline joins them."""
     if height < 100:
         sys.exit("person: --height must be at least 100; below that the legs and the neck join")
-    k = height / 150
-    r, cy = 14 * k, -61 * k
-    top = cy + r + max(11 * k, 11)
-    tw, bottom = 40 * k, 12 * k
+    k = height / 165
+    r, cy, sole = 14 * k, -68.5 * k, 82.5 * k
+    top = cy + r + max(11 * k, 9)
+    tw, bottom = 40 * k, (top + sole) / 2
     torso = rect(-tw / 2, top, tw, bottom - top, (10 * k, 10 * k, 0, 0))
-    gap = max(12 * k, 11)
+    gap = max(12 * k, 9)
     lw = (tw - gap) / 2  # the outer edges of the legs line up with the sides of the torso
     legs = []
     for side in (-1, 1):
         x0 = gap / 2 if side > 0 else -gap / 2 - lw
-        ly, foot = bottom - 6 * k, 75 * k - lw / 2
+        ly, foot = bottom - 6 * k, sole - lw / 2
         legs.append(f'<path d="M{pts(x0, ly)} H{n(x0 + lw)} V{n(foot)} A{pts(lw / 2, lw / 2)} 0 0 1 {pts(x0, foot)} Z"/>')
     aw, al, sy = 12 * k, 56 * k, top + 9 * k
     arms = []
@@ -296,7 +297,7 @@ def sheet():
                  + label(615, 140, "dark · glass"))
     cells.append('<text x="10" y="194" class="b">Person 150 · 120 · 100</text>')
     cells.append(obj("s-p150", "70,300", person(150), "c1") + obj("s-p120", "180,315", person(120)) + obj("s-p100", "270,325", person(100), "c3"))
-    cells.append(label(170, 410, "", "one outer outline; 4px at every size"))
+    cells.append(label(170, 410, "", "one outer outline; 3px at every size"))
     cells.append('<text x="370" y="194" class="b">Robot, facing +x</text>')
     cells.append(obj("s-rt", "440,280", robot(100, "top"), "c2") + obj("s-rt2", "610,280,-35", robot(70, "top")))
     cells.append(obj("s-rs", "440,400", robot(100, "side"), "c2") + obj("s-rs2", "610,410", robot(70, "side")))

@@ -54,6 +54,27 @@ google-chrome --headless=new --disable-gpu --window-size=1280,1400 --screenshot=
 printf '<iframe id="f" src="file://%s" width="390" height="1600" style="border:0"></iframe><script>f.onload=function(){var d=f.contentDocument.documentElement;document.title=d.scrollWidth>d.clientWidth?"OVERFLOW":"ok"}</script>' "$F" > /tmp/explainer-page-narrow.html
 google-chrome --headless=new --disable-gpu --allow-file-access-from-files --virtual-time-budget=3000 --dump-dom file:///tmp/explainer-page-narrow.html | grep -o '<title>[^<]*'   # 應為 <title>ok
 google-chrome --headless=new --disable-gpu --allow-file-access-from-files --window-size=500,1600 --screenshot=/tmp/narrow.png file:///tmp/explainer-page-narrow.html; rm /tmp/explainer-page-narrow.html
+
+# 模板的文字對比：每個顯示中的文字元素對它實際的底色都要 ≥ 4.5:1。暫存頁補上示範內容沒有的提示框與連結；
+# 700px 時顯示窄版 topbar。SVG 中的文字由 explainer-figure 的對比檢查負責；hover 狀態不在掃描範圍內
+python3 - "$F" <<'EOF'
+import sys
+s = open(sys.argv[1], encoding="utf-8").read()
+extra = "".join(f'<div class="admonition {k}"><p class="admonition-title">T</p><p><code>c</code> <a href="#">a</a></p></div>' for k in ("", "tip", "warning", "danger"))
+extra += '<table><tr><th><a href="#">a</a></th></tr><tr><td>a</td></tr><tr><td><a href="#">a</a></td></tr></table>'
+js = """<script>(function(){
+function c(s){return s.slice(s.indexOf('(')+1,-1).split(',').map(parseFloat)}
+function L(v){v=v.slice(0,3).map(function(x){x/=255;return x<=.04045?x/12.92:Math.pow((x+.055)/1.055,2.4)});return .2126*v[0]+.7152*v[1]+.0722*v[2]}
+function B(e){for(;e;e=e.parentElement){var v=c(getComputedStyle(e).backgroundColor);if(v.length<4||v[3]>0)return v}return [255,255,255]}
+var o=[];document.querySelectorAll('body *').forEach(function(e){
+ if(e.closest('svg')||!e.getClientRects().length||getComputedStyle(e).visibility=='hidden')return;
+ if(![].some.call(e.childNodes,function(n){return n.nodeType==3&&n.textContent.trim()}))return;
+ var a=L(c(getComputedStyle(e).color)),b=L(B(e)),r=(Math.max(a,b)+.05)/(Math.min(a,b)+.05);
+ if(r<4.5)o.push(e.tagName.toLowerCase()+'.'+e.className+' '+r.toFixed(2))});
+document.title=o.join(' | ')||'none'})()</script>"""
+open("/tmp/explainer-page-contrast.html", "w", encoding="utf-8").write(s.replace('<main class="content">', '<main class="content">' + extra, 1).replace("</body>", js + "</body>"))
+EOF
+for w in 1280 700; do google-chrome --headless=new --disable-gpu --window-size=$w,1000 --virtual-time-budget=3000 --dump-dom file:///tmp/explainer-page-contrast.html | grep -o '<title>[^<]*'; done; rm /tmp/explainer-page-contrast.html   # 兩行都應為 <title>none
 ```
 
 修改 `SKILL.md` 中的 shell 範例後，要實際執行一次。曾發生 sed 分隔字元與內容衝突，導致範例無法執行的問題。

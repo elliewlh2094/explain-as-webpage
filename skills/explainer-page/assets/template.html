@@ -8,8 +8,8 @@
 <title>FILL: Topic title</title>
 <style>
 :root {
-  --text: #404040; --muted: #6a6a6a; --link: #2980b9; --link-visited: #9b59b6;
-  --bg: #fcfcfc; --side-bg: #343131; --side-head: #2980b9; --side-text: #d9d9d9;
+  --text: #404040; --muted: #6a6a6a; --link: #2470a2; --link-visited: #934daf;
+  --bg: #fcfcfc; --side-bg: #343131; --side-head: #2470a2; --side-text: #d9d9d9;
   --rule: #e1e4e5; --code-bg: #f8f8f8; --row-alt: #f3f6f6;
   --blue: #2980b9; --blue-bg: #e7f2fa; --red: #c0392b; --red-bg: #fdf3f2;
   --green: #16a085; --green-bg: #dbfaf4; --orange: #e67e22; --orange-bg: #ffedcc; --grey-bg: #f0f0f0;
@@ -31,9 +31,9 @@ body { font: 16px/1.7 var(--font); color: var(--text); background: var(--bg); }
 .side-head .meta { font-size: .8rem; opacity: .85; }
 .toc a { display: block; color: var(--side-text); text-decoration: none; padding: 6px 18px; font-size: .9rem; line-height: 1.4; }
 .toc a:hover { background: #4e4a4a; }
-.toc a.h3 { padding-left: 34px; font-size: .85rem; color: #b3b3b3; }
+.toc a.h3 { padding-left: 34px; font-size: .85rem; color: #bcbcbc; }
 .pages { padding: 8px 0; border-bottom: 1px solid #4e4a4a; }
-.pages .label { display: block; padding: 4px 18px; font-size: .75rem; letter-spacing: .05em; text-transform: uppercase; color: #8a8a8a; }
+.pages .label { display: block; padding: 4px 18px; font-size: .75rem; letter-spacing: .05em; text-transform: uppercase; color: #9b9b9b; }
 .pages a { display: block; color: var(--side-text); text-decoration: none; padding: 6px 18px; font-size: .9rem; line-height: 1.4; }
 .pages a.sub { padding-left: 34px; }
 .pages a:hover { background: #4e4a4a; }
@@ -51,7 +51,7 @@ a { color: var(--link); } a:visited { color: var(--link-visited); }
 .content a { overflow-wrap: anywhere; }
 p, ul, ol { margin: 0 0 16px; }
 li { margin-bottom: 4px; }
-code { font: .88em var(--mono); color: #e74c3c; background: #fff; border: 1px solid var(--rule); padding: 0 4px; overflow-wrap: anywhere; }
+code { font: .88em var(--mono); color: var(--red); background: #fff; border: 1px solid var(--rule); padding: 0 4px; overflow-wrap: anywhere; }
 th code, td code { overflow-wrap: normal; }
 pre { font: .85rem/1.5 var(--mono); background: var(--code-bg); border: 1px solid var(--rule); padding: 12px; overflow-x: auto; }
 pre code { color: inherit; border: 0; padding: 0; background: none; }
@@ -66,11 +66,11 @@ table.kv td:first-child { white-space: nowrap; } /* label column of a label-cont
 
 /* Admonitions: note / tip / warning / danger */
 .admonition { margin: 0 0 20px; background: var(--blue-bg); }
-.admonition > .admonition-title { margin: 0; padding: 6px 12px; font-weight: 700; color: #fff; background: #6ab0de; }
+.admonition > .admonition-title { margin: 0; padding: 6px 12px; font-weight: 700; color: #fff; background: var(--link); }
 .admonition > :not(.admonition-title) { margin: 0; padding: 10px 12px; }
-.admonition.tip { background: var(--green-bg); } .admonition.tip > .admonition-title { background: #1abc9c; }
-.admonition.warning { background: var(--orange-bg); } .admonition.warning > .admonition-title { background: #f0b37e; }
-.admonition.danger { background: var(--red-bg); } .admonition.danger > .admonition-title { background: #f29f97; }
+.admonition.tip { background: var(--green-bg); } .admonition.tip > .admonition-title { background: var(--green-text); }
+.admonition.warning { background: var(--orange-bg); } .admonition.warning > .admonition-title { background: #b35e15; }
+.admonition.danger { background: var(--red-bg); } .admonition.danger > .admonition-title { background: var(--red); }
 
 /* Figures. SVG keeps a readable minimum width; the figure scrolls sideways on phones, never the page. */
 figure { margin: 8px 0 24px; overflow-x: auto; }
@@ -97,9 +97,9 @@ svg .dot { fill: var(--blue); } svg .dot.bad { fill: var(--red); } svg .dot.good
 svg .lead { fill: none; stroke: var(--muted); stroke-width: 1; } svg .pin { fill: var(--muted); }
 /* Drawn objects (explainer-figure: pictorial.md § Drawn objects, scripts/parts.py). No "svg " prefix:
    rules with an ancestor never reach the shapes inside a <use>. ink-edge + ink-fill = one outer outline. */
-.ink { fill: var(--cb, var(--bg)); stroke: var(--text); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+.ink { fill: var(--cb, var(--bg)); stroke: var(--text); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
 .ink.dark { fill: var(--text); } .ink.glass { fill: var(--blue-bg); } .ink.hollow { fill: none; } /* hollow: a cut-open container's outline, over its clipped layers */
-.ink-edge { fill: var(--text); stroke: var(--text); stroke-width: 8; stroke-linejoin: round; } .ink-fill { fill: var(--cb, var(--bg)); stroke: none; }
+.ink-edge { fill: var(--text); stroke: var(--text); stroke-width: 6; stroke-linejoin: round; } .ink-fill { fill: var(--cb, var(--bg)); stroke: none; }
 .ink-shade { fill: var(--cc, var(--text)); opacity: .18; stroke: none; }
 .ink-track { fill: none; stroke: var(--muted); stroke-width: 2; stroke-dasharray: 6 6; }
 /* Concept colours: class c1-c5 on a box, line, dot, or text in SVG, or on a .chip or .sym in the text */
