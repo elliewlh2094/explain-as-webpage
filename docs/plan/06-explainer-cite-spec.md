@@ -1,6 +1,6 @@
 # 規格：引用既有圖片（explainer-cite）與第 5 輪留下的修正（第六輪）
 
-> 狀態：規格（2026-10-16）。構想見 `docs/plan/05-symbols-pictorial-idea.md`〈後續輪次〉的「第 6 輪候選：explainer-cite」與「第 5 輪留下的項目」；實作計畫與待辦見 `docs/plan/06-explainer-cite-plan.md`。需求有變動時，先更新本文件再實作。
+> 狀態：規格（2026-10-16；同日依檢查點 0 修訂 R2、R3、R4、R5、R7）。構想見 `docs/plan/05-symbols-pictorial-idea.md`〈後續輪次〉的「第 6 輪候選：explainer-cite」與「第 5 輪留下的項目」；實作計畫與待辦見 `docs/plan/06-explainer-cite-plan.md`。需求有變動時，先更新本文件再實作。
 
 ## 0. 問題陳述與範圍
 
@@ -23,6 +23,11 @@
 - 引用的點陣圖允許加上引線與符號標籤，做法是以 `<svg>` 包住 `<image>`（2026-10-16）。
 - 需要登入的頁面維持現行做法，請使用者存成 PDF，不另外支援使用者提供的截圖（2026-10-16）。
 - arXiv 論文的圖依摘要頁標示的授權分類；預設授權（arXiv non-exclusive license）不允許改作，屬於受限，在確認步驟逐張列出，由使用者決定（2026-10-16）。
+- 檢查點 0（2026-10-16），依 T1–T3 的探測結果決定：
+  - 大小上限：單張 ≤ 200 KB、顯示高度 ≤ 540 CSS px、每個主題的 `<hub>.assets/` ≤ 1 MB。
+  - 程式庫中的圖依程式庫的授權（MIT、Apache-2.0、BSD）視為自由；程式庫沒有另外標示圖的授權時，圖說註明「依程式庫授權」，這是推論。
+  - 壓線檢查新增一類「文字落在 `<image>` 範圍內」，併入 T6a。
+  - 層級示意圖的重截條件改為：寬度、幀數、每幀時間、滑桿值與裁切規則與舊檔相同，高度隨版面。
 
 **範圍檢查**：R1–R5 都屬於「引用一張圖」這一個流程：取得、查授權、處理、放進資產資料夾、標註、列入確認與自檢。它們不能分開出貨，所以採用單一規格加上需求編號。R6–R8 是第 5 輪留下的修正，與 R1–R5 沒有共用的介面，可以獨立出貨；放進同一份規格是為了共用驗證流程與版本號。各需求的相依如下：
 
@@ -57,12 +62,12 @@
 
 | 來源 | 取得方式 | 授權資訊從哪裡來 |
 |---|---|---|
-| 開放授權圖庫 | Wikimedia Commons API（`prop=imageinfo`、`iiprop=url|size|extmetadata`、`iiurlwidth`）；Openverse API；公有領域機構（例如 NASA Image and Video Library API） | API 回傳的作者、授權名稱與授權連結欄位 |
+| 開放授權圖庫 | Wikimedia Commons API（`prop=imageinfo`、`iiprop=url|size|extmetadata`、`iiurlwidth`；下載 API 回傳的 `thumburl`，自組的寬度會回 HTTP 400）；Openverse API（`license=cc0,pdm,by,by-sa` 只取自由授權）；公有領域機構（例如 NASA Image and Video Library API） | API 回傳的作者、授權名稱與授權連結欄位。NASA 沒有授權欄位：`description` 的 `Credits:` 不是 NASA 時，視為授權不明 |
 | 公開網頁截圖 | headless Chrome 截取指定的視窗大小與區域 | 網站的著作權聲明；沒有開放授權時視為受限 |
-| 使用者材料中的圖 | PDF：`pdftoppm -f N -l N -r <dpi> -x -y -W -H` 裁切，或 `pdfimages` 取出內嵌圖；專案：直接複製儲存庫中的圖檔 | PDF：材料本身或其出版頁面標示的授權（例如 arXiv 摘要頁、期刊文章頁）；專案：使用者自己的專案視為使用者擁有 |
+| 使用者材料中的圖 | PDF：`pdftoppm -f N -l N -r <dpi> -x -y -W -H` 裁切，或 `pdfimages` 取出內嵌圖；專案：直接複製儲存庫中的圖檔 | PDF：材料本身或其出版頁面標示的授權（例如 arXiv 摘要頁、期刊文章頁）；有 DOI 的論文先查 Crossref API 的 `license`（期刊網頁常擋 `curl`）；專案：使用者自己的專案視為使用者擁有 |
 
 2. **授權分兩類**：
-   - **自由**：CC0、公有領域、CC BY、CC BY-SA。可以裁切、縮放與標註。圖說與 Sources 寫出作者、授權與連結。
+   - **自由**：CC0、公有領域、CC BY、CC BY-SA，以及程式庫中依程式庫授權（MIT、Apache-2.0、BSD）散布的圖。可以裁切、縮放與標註。圖說與 Sources 寫出作者、授權與連結。程式庫沒有另外標示圖的授權時，圖說寫「依程式庫授權」，這是推論。
    - **受限**：CC BY-NC 系列、CC BY-ND 系列、保留所有權利、授權不明。只在使用者於第 4 步確認中同意後使用。
 3. **受限圖的處理**：
    - 第 4 步的確認逐張列出受限圖：出處、授權、用途、本頁會做的修改。
@@ -78,10 +83,10 @@
 2. **只在需要時建立**：頁面沒有引用點陣圖時不建立資料夾。
 3. **圖檔命名**：小寫 kebab-case，描述圖的內容，例如 `robot-sensors.webp`。不使用圖號，因為圖號會隨頁面修訂而改變。
 4. **格式與尺寸**：
-   - 照片：WebP 有損壓縮。
-   - 截圖、線條圖、含文字的圖：WebP 無損壓縮或 PNG，以較小者為準。
+   - 照片：WebP 有損壓縮，品質 80。
+   - 截圖、線條圖、PDF 圖：同時輸出 WebP 品質 80 與無損，留較小的一個（T2：PDF 圖無損較小，線條圖有損較小）。
    - 寬度最大 1440px（內容寬 720px 的 2 倍，對應高解析度螢幕）。
-   - 單張圖與整個資料夾的大小上限由 T2 探測決定，寫進 explainer-cite。
+   - 單張 ≤ 200 KB；顯示高度 ≤ 540 CSS px（像素 1080），超過時裁切到頁面討論的部分；每個主題的 `<hub>.assets/` ≤ 1 MB（檢查點 0 決定，依據見實作計畫〈結果〉T2）。
 5. **HTML 大小**：150 KB 上限只計算 HTML 檔本身。圖不以 base64 內嵌。
 6. **處理工具**：Pillow（`PIL`）為選用。缺少 Pillow 時，PDF 用 `pdftoppm` 的裁切參數、網頁用 Chrome 的視窗大小輸出 PNG，並在確認中說明檔案會較大。安裝 Pillow 由使用者決定，比照 `sources-and-research.md` §5 的輔助 skill 規則。
 7. **暫存檔**：下載的原圖與中間檔放在輸出目錄以外的暫存目錄，產頁後刪除。資產資料夾只留頁面引用的檔案。
@@ -91,8 +96,10 @@
 1. **不標註時**：`<figure>` 中放 `<img src="<hub>.assets/…" alt="…" width="…" height="…">`，加上圖說與來源行。`alt` 描述圖的內容，不重複圖說。
 2. **標註時**：`<figure>` 中放一個 `<svg viewBox="0 0 720 H">`，以 `<image href="<hub>.assets/…">` 放圖，再以 explainer-figure 既有的 `lead`、`pin`、概念色與符號標註規則（`svg-recipes.md` § Symbols）畫引線與標籤。
 3. **標籤位置**：標籤放在圖片範圍外，引線從標籤指到圖上的部位。原因：照片的底色不固定，標籤放在圖上無法保證 4.5:1 的對比。
-4. **圖說**：寫明「標註為本頁加上」／「Annotations added by this page」。
-5. **檢查**：壓線檢查（`check-overlap.js`）與只看圖、遮住文字的截圖照常適用。T2 確認 `<image>` 在這些檢查中能正常顯示，且不產生誤報。
+4. **引線**：在照片上的引線段先以較粗的 `--bg` 畫一次底線，再畫 `lead`。原因：T2 中 1px 的 `--muted` 引線在深色物體上幾乎看不見。
+5. **原圖已有標籤時**：沿用原圖的標籤，只加本頁需要的符號，不重複標同一個部位。
+6. **圖說**：寫明「標註為本頁加上」／「Annotations added by this page」。
+7. **檢查**：壓線檢查（`check-overlap.js`）與只看圖、遮住文字的截圖照常適用；T2 確認 `<image>` 在這些檢查中能正常顯示，且不產生誤報。壓線檢查新增一類「文字落在 `<image>` 範圍內」，讓第 3 點由腳本檢查（檢查點 0 決定）。遮住文字的截圖只隱藏本頁加上的文字，原圖本身的文字仍會顯示。
 
 ### R5 explainer-page 的規則整合
 
@@ -106,7 +113,7 @@
 2. **資產檢查**（全部通過時不印出任何內容）：
    - 頁面中每個 `<img src>` 與 `<image href>` 指向的檔案都存在。
    - `<hub>.assets/` 中每個檔案都被主題中的某一頁引用。
-   - 頁面中沒有指向外部 URL 的 `src` 或 `href`（既有的外部資源檢查，需確認也涵蓋 `<image href>`）。
+   - 頁面中沒有指向外部 URL 的 `src` 或 `<image href>`。既有的外部資源檢查不比對 `href`（T2），所以加上 `grep -nE '<image\b[^>]*href=["'\'']?https?://'`；它同時抓 `href` 與 `xlink:href`，不會抓到 Sources 的 `<a href>`。
    - 每張引用圖的圖說或來源行都有作者與授權。
 3. **`references/extending-pages.md`**：頁面樹的子頁共用 `<hub>.assets/`；§5 的頁面樹檢查加入資產檢查。
 4. **`references/writing-rules.md`**：圖片來源行的格式（作者、標題、授權、連結、本頁的修改），以及固定標籤的中英對照（例如 Image source／圖片來源、License／授權）。
@@ -123,7 +130,7 @@
 
 1. `examples/autoresearch/` 的 3 頁把 `<style>` 換成目前模板的版本，做法比照第 5 輪檢查點 D 的 explain-as-webpage 兩頁（`docs/plan/05-symbols-pictorial-plan.md`〈結果〉檢查點 D）。文字、圖與圖說不變。
 2. 換 CSS 後，DOM 對比掃描（`CLAUDE.md`〈驗證指令〉）在 1280px 與 700px 都沒有低於 4.5:1 的組合。
-3. 重截 README 的三張層級示意圖：`docs/images/tier-l0-figure.png`、`docs/images/tier-l1-slider.gif`、`docs/images/tier-l2-stepper.gif`。尺寸、幀數與裁切範圍沿用現有檔案。重截前先以舊頁重產一次，確認做法能重現現有檔案（比照封面圖的做法）。
+3. 重截 README 的三張層級示意圖：`docs/images/tier-l0-figure.png`、`docs/images/tier-l1-slider.gif`、`docs/images/tier-l2-stepper.gif`。寬度 1239px、GIF 各 8 幀、每幀 800 ms（最後一幀 1600 ms）、L1 的滑桿值（1、2、3、5、8、13、19、28 分鐘）與裁切規則沿用現有檔案；高度隨版面（檢查點 0 決定）。T3 已以舊頁重產，確認做法可以重現；原因與差異見實作計畫〈結果〉T3。
 
 ### R8 `ink-shade` 不再染到外框
 
@@ -162,6 +169,7 @@ command -v pdftoppm pdfimages google-chrome               # 必要：PDF 裁切�
 | `skills/explainer-cite/references/`（新增） | R2、R4 | 來源與授權的細節；標註引用圖的配方。檔名在 T6a 確定 |
 | `skills/explainer-cite/scripts/`（新增） | R2、R3 | 授權查詢與裁切壓縮。檔名與子指令在 T6a 確定 |
 | `skills/explainer-figure/SKILL.md` | R1 | 圖型表新增「引用圖」一列 |
+| `skills/explainer-figure/scripts/check-overlap.js` | R4 | 新增一類「文字落在 `<image>` 範圍內」（檢查點 0 加入） |
 | `skills/explainer-page/SKILL.md` | R5 | 見 R5 第 1 點 |
 | `skills/explainer-page/references/extending-pages.md` | R5 | 共用資產與頁面樹檢查 |
 | `skills/explainer-page/references/writing-rules.md` | R5 | 圖片來源行、固定標籤 |
@@ -204,11 +212,11 @@ V1–V4 共同的檢查：資產檢查沒有輸出、`FILL` 為 0、沒有外部
 
 ### 待驗證的假設
 
-- [ ] Wikimedia Commons、Openverse 與 NASA 的 API 在本機可以用 `curl` 存取，且回傳可用的作者與授權欄位（T1）。
-- [ ] `<svg>` 中的 `<image href="<hub>.assets/…">` 在 `file://` 開啟、390px iframe、只看圖與遮住文字的截圖中都能顯示（T2）。
-- [ ] 壓線檢查對 `<image>` 沒有誤報（T2）。
-- [ ] 一張 1440px 寬的照片以 WebP 壓縮後，在可接受的畫質下小於 200 KB（T2 決定實際上限）。
-- [ ] 現有的層級示意圖可以用本機的工具重現（T3）。
+- [x] Wikimedia Commons、Openverse 與 NASA 的 API 在本機可以用 `curl` 存取，且回傳可用的作者與授權欄位（T1）。**成立**，NASA 例外：它沒有授權欄位，規則見 R2 第 1 點。
+- [x] `<svg>` 中的 `<image href="<hub>.assets/…">` 在 `file://` 開啟、390px iframe、只看圖與遮住文字的截圖中都能顯示（T2）。**成立。**
+- [x] 壓線檢查對 `<image>` 沒有誤報（T2）。**成立**；但它看不到壓在照片上的文字，R4 第 7 點新增一類檢查。
+- [x] 一張 1440px 寬的照片以 WebP 壓縮後，在可接受的畫質下小於 200 KB（T2 決定實際上限）。**成立**：q80 為 39–91 KB。
+- [x] 現有的層級示意圖可以用本機的工具重現（T3）。**部分成立**：裁切規則與幀設定可以重現，控制項外觀隨 Chrome 版本改變，R7 第 3 點改為高度隨版面。
 - [ ] Codex 會依相對路徑讀取 `explainer-cite/SKILL.md`（列入〈跨輪驗證〉，下次在 Codex 產頁時觀察）。
 
 ## 6. 邊界
@@ -253,7 +261,7 @@ V1–V4 共同的檢查：資產檢查沒有輸出、`FILL` 為 0、沒有外部
 ## 9. 待決問題
 
 - V3、V4 的主題（使用者在 T9、T10 開始前指定）。
-- 單張圖與資產資料夾的大小上限（T2 決定）。
+- ~~單張圖與資產資料夾的大小上限~~：檢查點 0 決定（R3 第 4 點）。
 - explainer-cite 的 references 檔名、scripts 的檔名與子指令（T6a 決定）。
 - `ink-shade` 的修正做法（T4 比較後決定）。
-- 層級示意圖的重製工具與參數（T3 決定）。
+- ~~層級示意圖的重製工具與參數~~：T3 決定（實作計畫〈結果〉T3）。
