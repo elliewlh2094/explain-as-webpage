@@ -6,8 +6,8 @@
 <title>explain-as-webpage</title>
 <style>
 :root {
-  --text: #404040; --muted: #6a6a6a; --link: #2980b9; --link-visited: #9b59b6;
-  --bg: #fcfcfc; --side-bg: #343131; --side-head: #2980b9; --side-text: #d9d9d9;
+  --text: #404040; --muted: #6a6a6a; --link: #2470a2; --link-visited: #934daf;
+  --bg: #fcfcfc; --side-bg: #343131; --side-head: #2470a2; --side-text: #d9d9d9;
   --rule: #e1e4e5; --code-bg: #f8f8f8; --row-alt: #f3f6f6;
   --blue: #2980b9; --blue-bg: #e7f2fa; --red: #c0392b; --red-bg: #fdf3f2;
   --green: #16a085; --green-bg: #dbfaf4; --orange: #e67e22; --orange-bg: #ffedcc; --grey-bg: #f0f0f0;
@@ -29,9 +29,9 @@ body { font: 16px/1.7 var(--font); color: var(--text); background: var(--bg); }
 .side-head .meta { font-size: .8rem; opacity: .85; }
 .toc a { display: block; color: var(--side-text); text-decoration: none; padding: 6px 18px; font-size: .9rem; line-height: 1.4; }
 .toc a:hover { background: #4e4a4a; }
-.toc a.h3 { padding-left: 34px; font-size: .85rem; color: #b3b3b3; }
+.toc a.h3 { padding-left: 34px; font-size: .85rem; color: #bcbcbc; }
 .pages { padding: 8px 0; border-bottom: 1px solid #4e4a4a; }
-.pages .label { display: block; padding: 4px 18px; font-size: .75rem; letter-spacing: .05em; text-transform: uppercase; color: #8a8a8a; }
+.pages .label { display: block; padding: 4px 18px; font-size: .75rem; letter-spacing: .05em; text-transform: uppercase; color: #9b9b9b; }
 .pages a { display: block; color: var(--side-text); text-decoration: none; padding: 6px 18px; font-size: .9rem; line-height: 1.4; }
 .pages a.sub { padding-left: 34px; }
 .pages a:hover { background: #4e4a4a; }
@@ -49,7 +49,7 @@ a { color: var(--link); } a:visited { color: var(--link-visited); }
 .content a { overflow-wrap: anywhere; }
 p, ul, ol { margin: 0 0 16px; }
 li { margin-bottom: 4px; }
-code { font: .88em var(--mono); color: #e74c3c; background: #fff; border: 1px solid var(--rule); padding: 0 4px; overflow-wrap: anywhere; }
+code { font: .88em var(--mono); color: var(--red); background: #fff; border: 1px solid var(--rule); padding: 0 4px; overflow-wrap: anywhere; }
 th code, td code { overflow-wrap: normal; }
 pre { font: .85rem/1.5 var(--mono); background: var(--code-bg); border: 1px solid var(--rule); padding: 12px; overflow-x: auto; }
 pre code { color: inherit; border: 0; padding: 0; background: none; }
@@ -64,11 +64,11 @@ table.kv td:first-child { white-space: nowrap; } /* label column of a label-cont
 
 /* Admonitions: note / tip / warning / danger */
 .admonition { margin: 0 0 20px; background: var(--blue-bg); }
-.admonition > .admonition-title { margin: 0; padding: 6px 12px; font-weight: 700; color: #fff; background: #6ab0de; }
+.admonition > .admonition-title { margin: 0; padding: 6px 12px; font-weight: 700; color: #fff; background: var(--link); }
 .admonition > :not(.admonition-title) { margin: 0; padding: 10px 12px; }
-.admonition.tip { background: var(--green-bg); } .admonition.tip > .admonition-title { background: #1abc9c; }
-.admonition.warning { background: var(--orange-bg); } .admonition.warning > .admonition-title { background: #f0b37e; }
-.admonition.danger { background: var(--red-bg); } .admonition.danger > .admonition-title { background: #f29f97; }
+.admonition.tip { background: var(--green-bg); } .admonition.tip > .admonition-title { background: var(--green-text); }
+.admonition.warning { background: var(--orange-bg); } .admonition.warning > .admonition-title { background: #b35e15; }
+.admonition.danger { background: var(--red-bg); } .admonition.danger > .admonition-title { background: var(--red); }
 
 /* Figures. SVG keeps a readable minimum width; the figure scrolls sideways on phones, never the page. */
 figure { margin: 8px 0 24px; overflow-x: auto; }
@@ -91,20 +91,26 @@ svg .line { stroke: var(--text); stroke-width: 1.5; fill: none; }
 svg .line.bad { stroke: var(--red); } svg .line.good { stroke: var(--green); }
 svg .dash { stroke-dasharray: 5 4; }
 svg .dot { fill: var(--blue); } svg .dot.bad { fill: var(--red); } svg .dot.good { fill: var(--green); }
-/* Pictorial figures (explainer-figure: references/pictorial.md): container outline, leader line and pin,
-   silhouette = the same shapes drawn as .edge then .shape, filled regions as .area (concept colour optional) */
-svg .outline { fill: none; stroke: var(--text); stroke-width: 2; }
+/* Pictorial figures (explainer-figure: references/pictorial.md): leader line and pin */
 svg .lead { fill: none; stroke: var(--muted); stroke-width: 1; } svg .pin { fill: var(--muted); }
-svg .edge { fill: var(--text); stroke: var(--text); stroke-width: 4; } svg .shape { fill: var(--grey-bg); stroke: none; }
-svg .area { fill: var(--cc, var(--blue)); opacity: .25; stroke: none; } /* group opacity: overlapping shapes do not darken; 10% tints are too faint */
-/* Concept colours: class c1-c5 on a box, line, dot, or text in SVG, or on a .chip in the text */
+/* Drawn objects (explainer-figure: pictorial.md § Drawn objects, scripts/parts.py). No "svg " prefix:
+   rules with an ancestor never reach the shapes inside a <use>. ink-edge + ink-fill = one outer outline. */
+.ink { fill: var(--cb, var(--bg)); stroke: var(--text); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.ink.dark { fill: var(--text); } .ink.glass { fill: var(--blue-bg); } .ink.hollow { fill: none; } /* hollow: a cut-open container's outline, over its clipped layers */
+.ink-edge { fill: var(--text); stroke: var(--text); stroke-width: 6; stroke-linejoin: round; } .ink-fill { fill: var(--cb, var(--bg)); stroke: none; }
+.ink-shade { fill: var(--cc, var(--text)); opacity: .18; stroke: none; }
+.ink-track { fill: none; stroke: var(--muted); stroke-width: 2; stroke-dasharray: 6 6; }
+/* Concept colours: class c1-c5 on a box, line, dot, or text in SVG, or on a .chip or .sym in the text */
 .c1 { --cc: var(--c1); --cb: var(--c1-bg); } .c2 { --cc: var(--c2); --cb: var(--c2-bg); } .c3 { --cc: var(--c3); --cb: var(--c3-bg); }
 .c4 { --cc: var(--c4); --cb: var(--c4-bg); } .c5 { --cc: var(--c5); --cb: var(--c5-bg); }
+.ink-level { --cb: color-mix(in srgb, var(--cc) 35%, var(--bg)); } /* with c1-c5 on a second, clipped copy of an object: a filled region (a water level) */
 svg .box:is(.c1,.c2,.c3,.c4,.c5) { fill: var(--cb); stroke: var(--cc); }
 svg .line:is(.c1,.c2,.c3,.c4,.c5) { stroke: var(--cc); } svg .dot:is(.c1,.c2,.c3,.c4,.c5), svg text:is(.c1,.c2,.c3,.c4,.c5) { fill: var(--cc); }
 /* Icons: class icon on a <use> in SVG, or on an inline <svg> around a <use> in HTML (explainer-figure: references/icons.md) */
 .icon { fill: none; stroke: var(--cc, currentColor); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 svg.icon { display: inline-block; width: 1.15em; height: 1.15em; min-width: 0; margin: 0 .3em 0 0; vertical-align: -.2em; }
+/* Formula symbol of a key concept: <span class="sym c1"> in the text, <tspan class="sym c1"> in SVG (explainer-figure: svg-recipes.md § Symbols) */
+.sym { color: var(--cc); fill: var(--cc); }
 .chip { display: inline-block; font-size: .85rem; line-height: 1.5; padding: 0 6px; border: 1px solid var(--cc, #999); border-radius: 3px; color: var(--cc, var(--text)); background: var(--cb, var(--grey-bg)); }
 
 /* Summary cards: a figure of 4-6 parallel items with the same fields (explainer-figure: references/cards.md) */
@@ -166,7 +172,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 <div class="topbar"><button type="button" aria-label="Menu" onclick="document.body.classList.toggle('nav-open')">☰</button><span>explain-as-webpage</span></div>
 <nav class="side">
-  <div class="side-head"><span class="title">explain-as-webpage</span><span class="meta">Project guide · 2026-10-07</span></div>
+  <div class="side-head"><span class="title">explain-as-webpage</span><span class="meta">Project guide · 2026-10-16</span></div>
   <div class="toc" id="toc"><!-- built from h2/h3 by the script --></div>
 </nav>
 
@@ -198,7 +204,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   <text x="360" y="172" text-anchor="middle" class="b">⑤ Build</text><text x="360" y="192" text-anchor="middle" class="sm c1">template + writing rules</text><text x="360" y="210" text-anchor="middle" class="sm c2">svg-recipes.md and others</text>
   <line class="line" x1="260" y1="185" x2="212" y2="185" marker-end="url(#arr)"/>
   <rect class="box" x="10" y="150" width="200" height="70" rx="6"/>
-  <text x="110" y="172" text-anchor="middle" class="b">⑥ Self-check</text><text x="110" y="192" text-anchor="middle" class="sm">commands, 2 screenshots</text><text x="110" y="210" text-anchor="middle" class="sm c2">figure shots + contrast</text>
+  <text x="110" y="172" text-anchor="middle" class="b">⑥ Self-check</text><text x="110" y="192" text-anchor="middle" class="sm">commands, 2 screenshots</text><text x="110" y="210" text-anchor="middle" class="sm c2">intent, overlap, contrast</text>
   <line class="line" x1="110" y1="220" x2="110" y2="258" marker-end="url(#arr)"/>
   <rect class="box" x="10" y="260" width="200" height="70" rx="6"/>
   <text x="110" y="291" text-anchor="middle" class="b">⑦ Report</text><text x="110" y="311" text-anchor="middle" class="sm">path, units, unverified</text>

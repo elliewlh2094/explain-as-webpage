@@ -6,8 +6,8 @@
 <title>LLM Wiki 導讀</title>
 <style>
 :root {
-  --text: #404040; --muted: #6a6a6a; --link: #2980b9; --link-visited: #9b59b6;
-  --bg: #fcfcfc; --side-bg: #343131; --side-head: #2980b9; --side-text: #d9d9d9;
+  --text: #404040; --muted: #6a6a6a; --link: #2470a2; --link-visited: #934daf;
+  --bg: #fcfcfc; --side-bg: #343131; --side-head: #2470a2; --side-text: #d9d9d9;
   --rule: #e1e4e5; --code-bg: #f8f8f8; --row-alt: #f3f6f6;
   --blue: #2980b9; --blue-bg: #e7f2fa; --red: #c0392b; --red-bg: #fdf3f2;
   --green: #16a085; --green-bg: #dbfaf4; --orange: #e67e22; --orange-bg: #ffedcc; --grey-bg: #f0f0f0;
@@ -29,9 +29,9 @@ body { font: 16px/1.7 var(--font); color: var(--text); background: var(--bg); }
 .side-head .meta { font-size: .8rem; opacity: .85; }
 .toc a { display: block; color: var(--side-text); text-decoration: none; padding: 6px 18px; font-size: .9rem; line-height: 1.4; }
 .toc a:hover { background: #4e4a4a; }
-.toc a.h3 { padding-left: 34px; font-size: .85rem; color: #b3b3b3; }
+.toc a.h3 { padding-left: 34px; font-size: .85rem; color: #bcbcbc; }
 .pages { padding: 8px 0; border-bottom: 1px solid #4e4a4a; }
-.pages .label { display: block; padding: 4px 18px; font-size: .75rem; letter-spacing: .05em; text-transform: uppercase; color: #8a8a8a; }
+.pages .label { display: block; padding: 4px 18px; font-size: .75rem; letter-spacing: .05em; text-transform: uppercase; color: #9b9b9b; }
 .pages a { display: block; color: var(--side-text); text-decoration: none; padding: 6px 18px; font-size: .9rem; line-height: 1.4; }
 .pages a.sub { padding-left: 34px; }
 .pages a:hover { background: #4e4a4a; }
@@ -49,7 +49,7 @@ a { color: var(--link); } a:visited { color: var(--link-visited); }
 .content a { overflow-wrap: anywhere; }
 p, ul, ol { margin: 0 0 16px; }
 li { margin-bottom: 4px; }
-code { font: .88em var(--mono); color: #e74c3c; background: #fff; border: 1px solid var(--rule); padding: 0 4px; overflow-wrap: anywhere; }
+code { font: .88em var(--mono); color: var(--red); background: #fff; border: 1px solid var(--rule); padding: 0 4px; overflow-wrap: anywhere; }
 th code, td code { overflow-wrap: normal; }
 pre { font: .85rem/1.5 var(--mono); background: var(--code-bg); border: 1px solid var(--rule); padding: 12px; overflow-x: auto; }
 pre code { color: inherit; border: 0; padding: 0; background: none; }
@@ -64,11 +64,11 @@ table.kv td:first-child { white-space: nowrap; } /* label column of a label-cont
 
 /* Admonitions: note / tip / warning / danger */
 .admonition { margin: 0 0 20px; background: var(--blue-bg); }
-.admonition > .admonition-title { margin: 0; padding: 6px 12px; font-weight: 700; color: #fff; background: #6ab0de; }
+.admonition > .admonition-title { margin: 0; padding: 6px 12px; font-weight: 700; color: #fff; background: var(--link); }
 .admonition > :not(.admonition-title) { margin: 0; padding: 10px 12px; }
-.admonition.tip { background: var(--green-bg); } .admonition.tip > .admonition-title { background: #1abc9c; }
-.admonition.warning { background: var(--orange-bg); } .admonition.warning > .admonition-title { background: #f0b37e; }
-.admonition.danger { background: var(--red-bg); } .admonition.danger > .admonition-title { background: #f29f97; }
+.admonition.tip { background: var(--green-bg); } .admonition.tip > .admonition-title { background: var(--green-text); }
+.admonition.warning { background: var(--orange-bg); } .admonition.warning > .admonition-title { background: #b35e15; }
+.admonition.danger { background: var(--red-bg); } .admonition.danger > .admonition-title { background: var(--red); }
 
 /* Figures. SVG keeps a readable minimum width; the figure scrolls sideways on phones, never the page. */
 figure { margin: 8px 0 24px; overflow-x: auto; }
@@ -91,20 +91,26 @@ svg .line { stroke: var(--text); stroke-width: 1.5; fill: none; }
 svg .line.bad { stroke: var(--red); } svg .line.good { stroke: var(--green); }
 svg .dash { stroke-dasharray: 5 4; }
 svg .dot { fill: var(--blue); } svg .dot.bad { fill: var(--red); } svg .dot.good { fill: var(--green); }
-/* Pictorial figures (explainer-figure: references/pictorial.md): container outline, leader line and pin,
-   silhouette = the same shapes drawn as .edge then .shape, filled regions as .area (concept colour optional) */
-svg .outline { fill: none; stroke: var(--text); stroke-width: 2; }
+/* Pictorial figures (explainer-figure: references/pictorial.md): leader line and pin */
 svg .lead { fill: none; stroke: var(--muted); stroke-width: 1; } svg .pin { fill: var(--muted); }
-svg .edge { fill: var(--text); stroke: var(--text); stroke-width: 4; } svg .shape { fill: var(--grey-bg); stroke: none; }
-svg .area { fill: var(--cc, var(--blue)); opacity: .25; stroke: none; } /* group opacity: overlapping shapes do not darken; 10% tints are too faint */
-/* Concept colours: class c1-c5 on a box, line, dot, or text in SVG, or on a .chip in the text */
+/* Drawn objects (explainer-figure: pictorial.md § Drawn objects, scripts/parts.py). No "svg " prefix:
+   rules with an ancestor never reach the shapes inside a <use>. ink-edge + ink-fill = one outer outline. */
+.ink { fill: var(--cb, var(--bg)); stroke: var(--text); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.ink.dark { fill: var(--text); } .ink.glass { fill: var(--blue-bg); } .ink.hollow { fill: none; } /* hollow: a cut-open container's outline, over its clipped layers */
+.ink-edge { fill: var(--text); stroke: var(--text); stroke-width: 6; stroke-linejoin: round; } .ink-fill { fill: var(--cb, var(--bg)); stroke: none; }
+.ink-shade { fill: var(--cc, var(--text)); opacity: .18; stroke: none; }
+.ink-track { fill: none; stroke: var(--muted); stroke-width: 2; stroke-dasharray: 6 6; }
+/* Concept colours: class c1-c5 on a box, line, dot, or text in SVG, or on a .chip or .sym in the text */
 .c1 { --cc: var(--c1); --cb: var(--c1-bg); } .c2 { --cc: var(--c2); --cb: var(--c2-bg); } .c3 { --cc: var(--c3); --cb: var(--c3-bg); }
 .c4 { --cc: var(--c4); --cb: var(--c4-bg); } .c5 { --cc: var(--c5); --cb: var(--c5-bg); }
+.ink-level { --cb: color-mix(in srgb, var(--cc) 35%, var(--bg)); } /* with c1-c5 on a second, clipped copy of an object: a filled region (a water level) */
 svg .box:is(.c1,.c2,.c3,.c4,.c5) { fill: var(--cb); stroke: var(--cc); }
 svg .line:is(.c1,.c2,.c3,.c4,.c5) { stroke: var(--cc); } svg .dot:is(.c1,.c2,.c3,.c4,.c5), svg text:is(.c1,.c2,.c3,.c4,.c5) { fill: var(--cc); }
 /* Icons: class icon on a <use> in SVG, or on an inline <svg> around a <use> in HTML (explainer-figure: references/icons.md) */
 .icon { fill: none; stroke: var(--cc, currentColor); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 svg.icon { display: inline-block; width: 1.15em; height: 1.15em; min-width: 0; margin: 0 .3em 0 0; vertical-align: -.2em; }
+/* Formula symbol of a key concept: <span class="sym c1"> in the text, <tspan class="sym c1"> in SVG (explainer-figure: svg-recipes.md § Symbols) */
+.sym { color: var(--cc); fill: var(--cc); }
 .chip { display: inline-block; font-size: .85rem; line-height: 1.5; padding: 0 6px; border: 1px solid var(--cc, #999); border-radius: 3px; color: var(--cc, var(--text)); background: var(--cb, var(--grey-bg)); }
 
 /* Summary cards: a figure of 4-6 parallel items with the same fields (explainer-figure: references/cards.md) */
@@ -289,15 +295,21 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 <p>原文說 wiki「夾在你與原始來源之間」。<a href="#fig-4">圖 4</a> 把三層畫成一個資料夾的上中下三層：<span class="chip c3">schema</span>、<span class="chip c1">wiki</span>、<span class="chip c2">原始來源</span>（raw sources），左邊是 LLM，右邊是你，箭頭是資訊流動的方向。請看中間那一層：指向它的箭頭只有一條，來自 LLM；你的箭頭只指向上下兩層。作者說，有了 schema，LLM 才會是「守紀律的 wiki 維護者」，而不是一般的聊天機器人。</p>
 <figure id="fig-4">
 <svg viewBox="0 0 720 360" role="img" aria-label="一個 git repo 資料夾分成三層：schema、wiki、raw 原始來源。左邊的 LLM 依 schema 的規則讀取原始來源，再寫入、更新 wiki；右邊的你閱讀 wiki、挑選原始來源，並與 LLM 一起修訂 schema。">
-  <defs><clipPath id="f4-body"><rect x="240" y="60" width="240" height="280" rx="10"/></clipPath></defs>
-  <path class="outline" d="M250 60 V46 Q250 36 260 36 H330 L346 60"/>
-  <text x="260" y="53" class="sm">git repo</text>
+  <defs><clipPath id="f4-body"><path transform="translate(360 200)" d="M-110 -140 H110 A10 10 0 0 1 120 -130 V130 A10 10 0 0 1 110 140 H-110 A10 10 0 0 1 -120 130 V-130 A10 10 0 0 1 -110 -140 Z"/></clipPath>
+  <g id="f4-you">
+  <g class="ink-edge"><circle cx="0" cy="-45.7" r="9.3"/><path d="M-6.7 -27.3 H6.7 A6.7 6.7 0 0 1 13.3 -20.7 V13.8 H-13.3 V-20.7 A6.7 6.7 0 0 1 -6.7 -27.3 Z"/><path d="M-13.3 9.8 H-4.5 V50.6 A4.4 4.4 0 0 1 -13.3 50.6 Z"/><path d="M4.5 9.8 H13.3 V50.6 A4.4 4.4 0 0 1 4.5 50.6 Z"/><rect x="-4" y="-4" width="8" height="37.3" rx="4" transform="translate(-8.7 -21.3) rotate(25)"/><rect x="-4" y="-4" width="8" height="37.3" rx="4" transform="translate(8.7 -21.3) rotate(-25)"/></g>
+  <g class="ink-fill"><circle cx="0" cy="-45.7" r="9.3"/><path d="M-6.7 -27.3 H6.7 A6.7 6.7 0 0 1 13.3 -20.7 V13.8 H-13.3 V-20.7 A6.7 6.7 0 0 1 -6.7 -27.3 Z"/><path d="M-13.3 9.8 H-4.5 V50.6 A4.4 4.4 0 0 1 -13.3 50.6 Z"/><path d="M4.5 9.8 H13.3 V50.6 A4.4 4.4 0 0 1 4.5 50.6 Z"/><rect x="-4" y="-4" width="8" height="37.3" rx="4" transform="translate(-8.7 -21.3) rotate(25)"/><rect x="-4" y="-4" width="8" height="37.3" rx="4" transform="translate(8.7 -21.3) rotate(-25)"/></g>
+  <clipPath id="f4-you-shade"><rect x="0" y="-110" width="110" height="220"/></clipPath>
+  <g class="ink-shade" clip-path="url(#f4-you-shade)"><circle cx="0" cy="-45.7" r="9.3"/><path d="M-6.7 -27.3 H6.7 A6.7 6.7 0 0 1 13.3 -20.7 V13.8 H-13.3 V-20.7 A6.7 6.7 0 0 1 -6.7 -27.3 Z"/><path d="M-13.3 9.8 H-4.5 V50.6 A4.4 4.4 0 0 1 -13.3 50.6 Z"/><path d="M4.5 9.8 H13.3 V50.6 A4.4 4.4 0 0 1 4.5 50.6 Z"/><rect x="-4" y="-4" width="8" height="37.3" rx="4" transform="translate(-8.7 -21.3) rotate(25)"/><rect x="-4" y="-4" width="8" height="37.3" rx="4" transform="translate(8.7 -21.3) rotate(-25)"/></g>
+</g>
+  </defs>
+  <g class="ink" transform="translate(298 49)"><path d="M-40 -13 H40 A8 8 0 0 1 48 -5 V13 H-48 V-5 A8 8 0 0 1 -40 -13 Z"/></g><text x="262" y="54" class="sm">git repo</text>
   <g clip-path="url(#f4-body)">
-    <rect class="box c3" x="240" y="60" width="240" height="60"/>
-    <rect class="box c1" x="240" y="120" width="240" height="130"/>
-    <rect class="box c2" x="240" y="250" width="240" height="90"/>
+    <rect class="ink c3" x="240" y="60" width="240" height="60"/>
+    <rect class="ink c1" x="240" y="120" width="240" height="130"/>
+    <rect class="ink c2" x="240" y="250" width="240" height="90"/>
   </g>
-  <rect class="outline" x="240" y="60" width="240" height="280" rx="10"/>
+  <g class="ink hollow" transform="translate(360 200)"><path d="M-110 -140 H110 A10 10 0 0 1 120 -130 V130 A10 10 0 0 1 110 140 H-110 A10 10 0 0 1 -120 130 V-130 A10 10 0 0 1 -110 -140 Z"/></g>
   <text x="360" y="86" text-anchor="middle" class="b c3">schema</text><text x="360" y="106" text-anchor="middle" class="sm">CLAUDE.md／AGENTS.md</text>
   <text x="360" y="156" text-anchor="middle" class="b c1">wiki</text><text x="360" y="176" text-anchor="middle" class="sm">摘要頁、實體頁、概念頁</text>
   <text x="360" y="196" text-anchor="middle" class="sm">index.md、log.md</text><text x="360" y="226" text-anchor="middle" class="sm">只有 LLM 寫入</text>
@@ -305,14 +317,14 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   <text x="360" y="321" text-anchor="middle" class="sm">唯讀・事實的最終依據</text>
   <rect class="box" x="10" y="150" width="120" height="60" rx="6"/>
   <text x="70" y="176" text-anchor="middle" class="b">LLM</text><text x="70" y="196" text-anchor="middle" class="sm">依 schema 工作</text>
-  <path class="line" d="M240 90 H70 V148" marker-end="url(#arr)"/><text x="155" y="82" text-anchor="middle" class="sm">依規則</text>
-  <path class="line" d="M240 300 H70 V212" marker-end="url(#arr)"/><text x="155" y="292" text-anchor="middle" class="sm">讀</text>
-  <line class="line" x1="130" y1="180" x2="238" y2="180" marker-end="url(#arr)"/><text x="184" y="172" text-anchor="middle" class="sm">寫入、更新</text>
-  <rect class="box" x="590" y="150" width="120" height="60" rx="6"/>
-  <text x="650" y="176" text-anchor="middle" class="b">你</text><text x="650" y="196" text-anchor="middle" class="sm">挑來源、提問</text>
-  <line class="line" x1="480" y1="180" x2="588" y2="180" marker-end="url(#arr)"/><text x="534" y="172" text-anchor="middle" class="sm">閱讀</text>
-  <path class="line" d="M650 212 V300 H482" marker-end="url(#arr)"/><text x="566" y="292" text-anchor="middle" class="sm">挑選來源</text>
-  <path class="line" d="M650 148 V90 H482" marker-end="url(#arr)"/><text x="566" y="82" text-anchor="middle" class="sm">與 LLM 一起修訂</text>
+  <path class="line" d="M236 90 H70 V148" marker-end="url(#arr)"/><text x="155" y="82" text-anchor="middle" class="sm">依規則</text>
+  <path class="line" d="M236 300 H70 V212" marker-end="url(#arr)"/><text x="155" y="292" text-anchor="middle" class="sm">讀</text>
+  <line class="line" x1="130" y1="180" x2="236" y2="180" marker-end="url(#arr)"/><text x="184" y="172" text-anchor="middle" class="sm">寫入、更新</text>
+  <use href="#f4-you" transform="translate(650 180)"/>
+  <text x="604" y="218" text-anchor="end" class="b">你</text><text x="604" y="236" text-anchor="end" class="sm">挑來源、提問</text>
+  <line class="line" x1="484" y1="180" x2="618" y2="180" marker-end="url(#arr)"/><text x="551" y="172" text-anchor="middle" class="sm">閱讀</text>
+  <path class="line" d="M650 240 V300 H484" marker-end="url(#arr)"/><text x="566" y="292" text-anchor="middle" class="sm">挑選來源</text>
+  <path class="line" d="M650 120 V90 H484" marker-end="url(#arr)"/><text x="566" y="82" text-anchor="middle" class="sm">與 LLM 一起修訂</text>
 </svg>
 <figcaption>圖 4　資訊從原始來源經 LLM 流進 wiki，再到你；你的箭頭只指向上下兩層，寫入 wiki 的只有 LLM。資料夾名稱為示意，原文不規定目錄結構。</figcaption>
 </figure>
@@ -336,14 +348,14 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 <figure id="fig-5">
 <svg viewBox="0 0 720 340" role="img" aria-label="兩個檔案的內容示意。index.md 依類別分組，每一筆是頁面連結與一行摘要，每次 ingest 時更新，回答問題時先讀它。log.md 每一筆以日期與操作開頭，只往後追加，每次操作都記一筆。">
   <text x="170" y="22" text-anchor="middle" class="b c1">index.md：依類別</text>
-  <path class="box" d="M20 40 H300 L320 60 V260 H20 Z"/><path class="line" d="M300 40 V60 H320"/>
+  <path class="ink" d="M20 40 H300 L320 60 V260 H20 Z"/><path class="ink-shade" d="M300 40 V60 H320 Z"/><path class="ink hollow" d="M300 40 V60 H320"/>
   <text x="36" y="72" class="b">## 實體</text><text x="36" y="94" class="sm">- [[Andrej Karpathy]]：一行摘要</text>
   <text x="36" y="124" class="b">## 概念</text><text x="36" y="146" class="sm">- [[RAG]]：一行摘要（3 份來源）</text>
   <text x="36" y="176" class="b">## 來源</text><text x="36" y="198" class="sm">- [[文章 A]]：一行摘要（2026-04-02）</text>
   <text x="36" y="236" class="sm">⋯ 每一頁都列在某個類別下</text>
   <text x="20" y="290" class="sm">更新：每次 ingest</text><text x="20" y="310" class="sm">用途：回答問題時先讀它，找出要細讀的頁面</text>
   <text x="550" y="22" text-anchor="middle" class="b c1">log.md：依時間</text>
-  <path class="box" d="M380 40 H660 L680 60 V260 H380 Z"/><path class="line" d="M660 40 V60 H680"/>
+  <path class="ink" d="M380 40 H660 L680 60 V260 H380 Z"/><path class="ink-shade" d="M660 40 V60 H680 Z"/><path class="ink hollow" d="M660 40 V60 H680"/>
   <text x="396" y="76" class="sm">## [2026-04-01] ingest | 文章 A</text>
   <text x="396" y="106" class="sm">## [2026-04-02] ingest | Article Title</text>
   <text x="396" y="136" class="sm">## [2026-04-02] query | 比較 A 與 B</text>

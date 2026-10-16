@@ -108,6 +108,12 @@
 - 驗證案例：Starship 助推器返回、Motion Planning 的 Feedback Control。
 - 出處：`docs/plan/04-visual-forms-idea.md` Open Questions；本文件〈Problem Statement〉。
 
+### 第 5 輪留下的項目（2026-10-16 檢查點 D）
+
+- EKF 頁加一張機器人的圖：在〈本頁的例子〉段落以引線標出機器人的部位，或畫成差速運動學圖，把幾何符號連到機器人的部位。使用者的參考圖存於 `temp/round-05/`（`sensors-25-03553-g001-550.jpg`、`Differential_Drive_Kinematics_of_a_Wheeled_Mobile_Robot.png`、`differential-3582cb59.png`）。出處：`docs/plan/05-symbols-pictorial-plan.md`〈結果〉檢查點 C。
+- `examples/autoresearch/` 的 3 頁仍內嵌第 4 輪的 CSS，DOM 對比掃描有低於 4.5:1 的組合（提示框標題 1.83、2.41，側欄頁面樹標籤 3.73，`code` 3.82，連結 4.19，側欄標題 4.30）。改用目前模板的 CSS 後，README 的三張層級示意圖（`docs/images/tier-*.png`、`tier-*.gif`）取自這些頁面，需要重截。出處：`docs/plan/05-symbols-pictorial-plan.md`〈結果〉檢查點 D。
+- `ink-shade` 是不加外框的同一形狀，會蓋住外框內側的一半，放大時那一側的外框帶有概念色。零件函式庫的所有物件都是這種畫法，正常大小看不出來。出處：`docs/plan/05-symbols-pictorial-plan.md`〈結果〉T19。
+
 ### 之後：C 類計算圖
 
 - 內容：以假設範例在頁面內實際運算後畫出的圖（例如 Welch Labs 的雜訊到影像），不用方框代替。
