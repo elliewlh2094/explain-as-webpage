@@ -9,5 +9,6 @@
 | 03 | 材料模式（project／document／topic） | 2026-10-03 | 0.3.0 | 已完成 | [spec](03-material-modes-spec.md)、[plan](03-material-modes-plan.md)、[todo](03-material-modes-todo.md)、[figure-values](03-material-modes-figure-values.md) |
 | 04 | 視覺表現形式：拆出 explainer-figure、歸納卡、具象插圖、圖示 | 2026-10-04 | 0.4.0 | 已完成 | [idea](04-visual-forms-idea.md)、[plan](04-visual-forms-plan.md)、[todo](04-visual-forms-todo.md) |
 | 05 | 符號對照圖、具象插圖品質（節點外觀、零件函式庫、物件與姿態、壓線檢查、意圖檢查） | 2026-10-07 | 0.5.0 | 已完成 | [idea](05-symbols-pictorial-idea.md)、[spec](05-symbols-pictorial-spec.md)、[plan](05-symbols-pictorial-plan.md)、[skill-survey](05-symbols-pictorial-skill-survey.md) |
+| 06 | 引用既有圖片（explainer-cite、`<hub>.assets/`）、第 5 輪留下的修正（`ink-shade`、autoresearch CSS、EKF 機器人圖） | 2026-10-16 | 0.6.0 | 規劃中 | [spec](06-explainer-cite-spec.md)、[plan](06-explainer-cite-plan.md)；構想見 [05 idea](05-symbols-pictorial-idea.md)〈後續輪次〉 |
 
 第 1 輪的計畫與待辦曾放在 `tasks/plan.md`、`tasks/todo.md`，之後被第 3 輪覆寫，原內容見 commit `34156de`。第 2 輪沒有獨立的計畫檔。
