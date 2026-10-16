@@ -103,6 +103,29 @@ cp -r skills/explainer-page skills/explainer-figure ~/.codex/skills/
 
 安裝後請開新的 session，讓工具重新載入 skill。
 
+### 更新
+
+有新版本時，已安裝的 plugin 不會自動更新。先更新 marketplace 的快照，再更新 plugin，最後開新的 session。
+
+Claude Code：
+
+```bash
+claude plugin marketplace update explain-as-webpage
+claude plugin update explain-as-webpage@explain-as-webpage
+claude plugin list   # explain-as-webpage@explain-as-webpage 應顯示新的版本號
+```
+
+Codex：
+
+```bash
+codex plugin marketplace upgrade explain-as-webpage
+codex plugin list    # explain-as-webpage@explain-as-webpage 應顯示新的版本號
+```
+
+如果 `codex plugin list` 仍顯示舊的版本號，再執行一次 `codex plugin add explain-as-webpage@explain-as-webpage`。
+
+以複製資料夾的方式安裝時，先更新本儲存庫（例如 `git pull`），再執行一次上面的 `cp` 指令。
+
 ## 使用方式
 
 直接描述你想看懂的東西，或明確呼叫 skill。例如：

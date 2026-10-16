@@ -108,6 +108,29 @@ cp -r skills/explainer-page skills/explainer-figure ~/.codex/skills/
 
 After you install it, start a new session so that the tool loads the skill.
 
+### Update
+
+An installed plugin does not update itself when a new version is released. Update the marketplace snapshot first, then the plugin, and then start a new session.
+
+Claude Code:
+
+```bash
+claude plugin marketplace update explain-as-webpage
+claude plugin update explain-as-webpage@explain-as-webpage
+claude plugin list   # explain-as-webpage@explain-as-webpage shows the new version
+```
+
+Codex:
+
+```bash
+codex plugin marketplace upgrade explain-as-webpage
+codex plugin list    # explain-as-webpage@explain-as-webpage shows the new version
+```
+
+If `codex plugin list` still shows the old version, run `codex plugin add explain-as-webpage@explain-as-webpage` again.
+
+If you installed it by copying the folders, update this repository first (for example with `git pull`), then run the `cp` command above again.
+
 ## Usage
 
 Describe what you want to understand, or call the skill by name. For example:
