@@ -1,6 +1,6 @@
 {
   "name": "explain-as-webpage",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Turn an unfamiliar technique in your project, a document you give, or a topic you name into a single Read the Docs-style HTML explainer page, built from your project's code and reports, the document's full text, or graded sources.",
   "author": {
     "name": "Ellie Huang"

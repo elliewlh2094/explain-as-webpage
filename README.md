@@ -45,7 +45,9 @@ Screenshots from the [autoresearch example](#examples).
 
 </details>
 
-- **Figures beyond boxes and arrows.** Besides causal chains and step animations, a page can use summary cards (4–6 parallel items with the same fields), pictorial figures (a container cut open, a silhouette with notes, an object and its parts, a software window), up to five concept colours that keep a key concept the same colour on every figure, and icons from a bundled Lucide subset (only the icons a page uses are copied into it). The Traditional Chinese examples in `examples/llm-wiki/` and `examples/starship-reusability/` use cards, pictorial figures, concept colours, and icons.
+- **Figures beyond boxes and arrows.** Besides causal chains and step animations, a page can use summary cards (4–6 parallel items with the same fields), pictorial figures (a container cut open, a silhouette with notes, an object and its parts, a software window, one object in poses along a path), up to five concept colours that keep a key concept the same colour on every figure, and icons from a bundled Lucide subset (only the icons a page uses are copied into it). The Traditional Chinese examples in `examples/llm-wiki/` and `examples/starship-reusability/` use cards, pictorial figures, concept colours, and icons.
+- **Concrete things are drawn as objects.** In any figure, a node with a familiar shape (a person, a robot, a browser, a database, a rocket) is drawn as that thing; an abstract idea stays a box. Objects are built from basic shapes by the bundled parts library (`parts.py`), all with a 3px outline and flat fills. When the page has a formula, the symbol of each key concept has the same colour in the formula, the figure, and the symbol table, and is labelled next to the part it stands for.
+- **Every figure is checked.** First a screenshot with all text hidden: the objects must still be recognisable, and the structure must still show the figure's message. Then an overlap check finds, frame by frame, text over text, lines through text, and text across a shape's edge.
 - **Page language.** The page uses the language you ask for. If you do not ask, it uses the language you write in.
 - **Pages that grow with follow-up questions.** When you ask more about an existing page, the agent decides where each answer goes. A short answer to an existing question goes into a collapsible block on that page. A new question gets a child page, linked to and from the hub page. A finding that changes the main conclusion revises the hub page. Each page keeps its own length budget, so the hub page does not keep growing.
 
@@ -135,12 +137,15 @@ skills/explainer-page/
 └── assets/
     └── template.html           # Single-file Read the Docs-style template
 skills/explainer-figure/        # Draws the figures; read only by explainer-page
-├── SKILL.md                    # Figure brief, figure type choice, self-check (incl. a contrast check)
+├── SKILL.md                    # Figure brief, figure type and node look, self-check (intent, contrast, overlap)
 ├── references/
-│   ├── svg-recipes.md          # SVG layout rules, semantic and concept colors, figure recipes, axes, step animation and slider
+│   ├── svg-recipes.md          # SVG layout rules, semantic and concept colors, formula symbols, figure recipes, axes, step animation and slider
 │   ├── cards.md                # Summary cards: when to use them, structure, limits
-│   ├── pictorial.md            # Pictorial figures: layered container, silhouette, object and parts, interface layout
+│   ├── pictorial.md            # Drawn-object style and the parts library; pictorial figures: layered container, silhouette, object and parts, interface layout, object and poses
 │   └── icons.md                # Icon names and the command that copies used icons into a page
+├── scripts/
+│   ├── parts.py                # Parts library: person, robot, drone, basic shapes, poses, overview sheet (Python 3 standard library only)
+│   └── check-overlap.js        # Overlap check: finds text over lines or other text, frame by frame, in headless Chrome
 └── assets/icons/
     ├── lucide.svg              # Lucide icon subset (106 icons)
     └── LICENSE                 # Lucide license (ISC; some icons MIT)

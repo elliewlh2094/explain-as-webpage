@@ -214,15 +214,20 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 <table>
 <tr><th>Step</th><th>What it does</th><th>What happened for the Starship page</th></tr>
 <tr><td style="white-space:nowrap">① Gather material</td><td>Picks the mode from the material; in topic mode, researches and grades the sources</td><td>The page ends with 8 sources, each with a grade (four g1, two g2, two g3) and an access date</td></tr>
-<tr><td style="white-space:nowrap">② Learning brief</td><td>3–5 core questions, the page type and its spine, at most 5 key concepts, one figure brief per figure</td><td>Mechanism page, so Figure 1 is a causal chain; the booster, the ship, and the payload each have a concept colour</td></tr>
-<tr><td style="white-space:nowrap">③ Choose a tier</td><td>The lowest tier that answers every question</td><td>Only the section "How does the booster come back?" uses a stepper (Figure 4); the other figures are static</td></tr>
+<tr><td style="white-space:nowrap">② Learning brief</td><td>3–5 core questions, the page type and its spine, at most 5 key concepts, one figure brief per figure</td><td>Mechanism page, so Figure 1 is a causal chain; the booster, the ship, the payload, and the structure and engines each have a concept colour</td></tr>
+<tr><td style="white-space:nowrap">③ Choose a tier</td><td>The lowest tier that answers every question</td><td>Only the booster's return (Figure 4) and the ship's recovery (lower half of Figure 5) are steppers; the other figures are static</td></tr>
 <tr><td style="white-space:nowrap">④ Confirm once</td><td>At most 4 questions: core questions, tier and the figures of each page, language and reader, path and research depth</td><td>Each of the 5 questions is a section with the question as its heading; the page is in Traditional Chinese, at L2, with 6 figures</td></tr>
-<tr><td style="white-space:nowrap">⑤ Build</td><td>Copies the template; writes the text by the writing rules and draws by explainer-figure</td><td>Of the 6 figures, 2 are pictorial, 1 is a set of summary cards, and 1 is a stepper; the page uses 4 icons</td></tr>
+<tr><td style="white-space:nowrap">⑤ Build</td><td>Copies the template; writes the text by the writing rules and draws by explainer-figure</td><td>Of the 6 figures, Figures 2–5 draw objects (Figure 4 and the lower half of Figure 5 show poses), and 1 is a set of summary cards; the page uses 4 icons</td></tr>
 <tr><td style="white-space:nowrap">⑥ Self-check</td><td>Runs the commands, then takes screenshots and looks at each figure</td><td>The payload layer was hidden under the rocket's outline; drawn in a different order and checked again</td></tr>
 <tr><td style="white-space:nowrap">⑦ Report</td><td>The path, the questions answered, the unit of each figure, what could not be verified</td><td>No source sentence gave the date of flight 15, so the page leaves it out and the report says so</td></tr>
 </table>
 <p class="src">Source: SKILL.md steps 1–7; rows ①–⑤ of the third column: <code>examples/starship-reusability/starship-reusability.html</code>; rows ⑥ and ⑦: the author's own test.</p>
-<p>The commands in step 6 check four things: no template placeholder is left, the page loads no external resources, the file is about 150 KB or smaller, and in topic mode every source has a grade and an access date. Then headless Chrome takes screenshots at 1280 px and 390 px; the 390 px check puts the page in an iframe, because a Chrome window is at least 500 px wide. A page with figures is then checked figure by figure with explainer-figure: no label crosses a line, every arrow ends at a box edge, and every text colour has a contrast of at least 4.5:1 on every background (WCAG AA, the lowest level of the Web Content Accessibility Guidelines).</p>
+<p>Step 6 checks a page at three levels:</p>
+<table class="kv">
+<tr><td>Commands</td><td>No template placeholder is left; the page loads no external resources; the file is about 150 KB or smaller; in topic mode every source has a grade and an access date</td></tr>
+<tr><td>Screenshots</td><td>Headless Chrome at 1280 px and 390 px; the 390 px check puts the page in an iframe, because a Chrome window is at least 500 px wide</td></tr>
+<tr><td>Each figure</td><td>With all text hidden, the concrete things and the structure are still clear (the intent check); an overlap script finds no text over text or lines through text in any frame; drawn objects match the parts sheet; every arrow ends at a box edge; every text colour has a contrast of at least 4.5:1 on every background (WCAG AA, the lowest level of the Web Content Accessibility Guidelines)</td></tr>
+</table>
 <p class="src">Source: SKILL.md § 6. Self-check; <code>explainer-figure/SKILL.md</code> § Self-check.</p>
 
 <h2 id="q1">What problem does the skill solve, and what does it produce?</h2>
@@ -233,7 +238,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 <tr><td>Structure</td><td>The conclusion first, then one spine through the page; every <code>h2</code> is a question the reader would ask</td></tr>
 <tr><td>Length</td><td>About 15 minutes of reading: at most about 1,800 words of prose, or about 3,500 CJK characters</td></tr>
 <tr><td>Language</td><td>English or Traditional Chinese; if you do not say, the language you write in</td></tr>
-<tr><td>Template</td><td><code>assets/template.html</code> (297 lines) with a sidebar table of contents, an optional page tree, a shared stepper component, and the styles for cards, concept colours, pictorial figures, and icons</td></tr>
+<tr><td>Template</td><td><code>assets/template.html</code> (303 lines) with a sidebar table of contents, an optional page tree, a shared stepper component, and the styles for cards, concept colours, formula symbols, drawn objects, and icons</td></tr>
 </table>
 <p class="src">Source: <code>README.md</code> § Inspiration, § What it produces; <code>references/writing-rules.md</code> § Length budget; <code>CLAUDE.md</code> § 架構 (architecture); template lines counted with <code>wc -l</code>.</p>
 
@@ -298,7 +303,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 <div class="card-grid">
   <div class="card"><p class="card-title"><svg class="icon" aria-hidden="true"><use href="#i-network"/></svg>Mechanism figure</p>
     <dl><dt>Answers</dt><dd>Why something happens; how one unit of work flows through the parts; a case without and with a technique</dd>
-        <dt>Examples in this repository</dt><dd>Figure 1 of this page; the causal chain (Figure 1) and the stepper (Figure 4) of the Starship page</dd></dl></div>
+        <dt>Examples in this repository</dt><dd>Figure 1 of this page; the causal chain (Figure 1) of the Starship page</dd></dl></div>
   <div class="card"><p class="card-title"><svg class="icon" aria-hidden="true"><use href="#i-chart-column"/></svg>Numeric figure</p>
     <dl><dt>Answers</dt><dd>How large measured values are and how they compare; every number has a unit, a reading, and a source</dd>
         <dt>Examples in this repository</dt><dd>The token bars in Figure 4 of this page; the energy per kilogram (Figure 5) of the Starship page</dd></dl></div>
@@ -306,60 +311,61 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     <dl><dt>Answers</dt><dd>4–6 parallel items with the same fields, such as layers, roles, or options</dd>
         <dt>Examples in this repository</dt><dd>This figure; the six capabilities (Figure 6) of the Starship page; the five use cases (Figure 3) of the LLM Wiki page</dd></dl></div>
   <div class="card"><p class="card-title"><svg class="icon" aria-hidden="true"><use href="#i-image"/></svg>Pictorial figure</p>
-    <dl><dt>Answers</dt><dd>Where things sit in an object, a body, or a container</dd>
-        <dt>Examples in this repository</dt><dd>The rocket cross-section (Figure 2) of the Starship page; the three-layer folder (Figure 4) of the LLM Wiki page</dd></dl></div>
+    <dl><dt>Answers</dt><dd>Where things sit in an object, a body, or a container; an object's poses along a path</dd>
+        <dt>Examples in this repository</dt><dd>The rocket cross-section (Figure 2) and the eight poses (Figure 4) of the Starship page; the three-layer folder (Figure 4) of the LLM Wiki page</dd></dl></div>
 </div>
 <figcaption>Figure 3. Cards and pictorial figures come first when they fit; for causes and processes, a mechanism figure stays the default.</figcaption>
 </figure>
 <p class="src">Source: <code>explainer-figure/SKILL.md</code> § Choosing the figure type; the captions of <code>examples/starship-reusability/</code> and <code>examples/llm-wiki/</code>.</p>
-<p>Two rules make the figures of a page read as one set. The first is concept colours: a key concept keeps one colour on every figure, and a chip in the text matches the word to the colour, as <span class="chip c1">explainer-page</span> and <span class="chip c2">explainer-figure</span> do on this page. Red, green, orange, and blue stay reserved for the problem, the fix, the consequence, and neutral parts; a concept never uses them, because the reader would read a red concept as a problem. The second is icons: the skill bundles a subset of 106 icons from the Lucide library, and a page copies in only the icons it uses, with the license notice. An icon sits next to a label that names the same thing; it never replaces the label.</p>
-<p class="src">Source: <code>explainer-figure/references/svg-recipes.md</code> § Colour meaning; <code>explainer-figure/references/icons.md</code>.</p>
+<p>Three rules make the figures of a page read as one set. The first is concept colours: a key concept keeps one colour on every figure, and a chip in the text matches the word to the colour (and so does its symbol in a formula), as <span class="chip c1">explainer-page</span> and <span class="chip c2">explainer-figure</span> do on this page. Red, green, orange, and blue stay reserved for the problem, the fix, the consequence, and neutral parts; a concept never uses them, because the reader would read a red concept as a problem. The second is icons: the skill bundles a subset of 106 icons from the Lucide library, and a page copies in only the icons it uses, with the license notice. An icon sits next to a label that names the same thing; it never replaces the label. The third is drawn objects: a thing with a familiar shape (a person, a robot, a rocket) is drawn as that thing, from the basic shapes of the parts library <code>parts.py</code>; an abstract idea stays a box.</p>
+<p class="src">Source: <code>explainer-figure/references/svg-recipes.md</code> § Colour meaning, § Symbols; <code>explainer-figure/references/icons.md</code>; <code>explainer-figure/SKILL.md</code> § Choosing the figure type; <code>explainer-figure/references/pictorial.md</code> § Drawn objects.</p>
 
 <h2 id="q5">Which file is read when, and why are there two skills?</h2>
 <p>An agent platform keeps only each skill's description (the <code>description</code> at the top of <code>SKILL.md</code>) in every session; the body loads only when the skill is called. So both <code>SKILL.md</code> files keep only the process and the criteria (each at most about 130 lines), and the details sit in reference files that the agent reads at the step that needs them (<a href="#fig-4">Figure 4</a>). The drawing rules are a skill of their own because the work splits: <span class="chip c1">explainer-page</span> decides what each figure must show, and <span class="chip c2">explainer-figure</span> decides how to draw it. explainer-figure is not triggered on its own; explainer-page reads it by a relative path, so the two skill folders must sit side by side.</p>
 <figure id="fig-4">
-<svg viewBox="0 0 720 490" role="img" aria-label="Token estimates and when each file is read. Always on: the explainer-page description, about 390; the explainer-figure description, about 140, listed only by Codex. When the skill is called: the explainer-page SKILL.md, about 4.2k. Read when needed: sources-and-research.md about 7.5k, page-types.md about 3.9k, the explainer-figure SKILL.md about 2.5k, writing-rules.md about 4.9k, template.html about 7.9k, svg-recipes.md about 7.0k, cards.md about 1.6k, pictorial.md about 7.3k, icons.md about 1.8k, extending-pages.md about 3.6k.">
+<svg viewBox="0 0 720 490" role="img" aria-label="Token estimates and when each file is read. Always on: the explainer-page description, about 390; the explainer-figure description, about 140, listed only by Codex. When the skill is called: the explainer-page SKILL.md, about 4.2k. Read when needed: sources-and-research.md about 7.8k, page-types.md about 4.0k, the explainer-figure SKILL.md about 3.4k, writing-rules.md about 5.2k, template.html about 8.6k, svg-recipes.md about 9.1k, cards.md about 1.7k, pictorial.md about 14.4k, icons.md about 2.0k, extending-pages.md about 3.7k.">
   <text x="710" y="20" text-anchor="end" class="sm">Unit: tokens (estimates)</text>
   <text x="10" y="20" class="b">Every session (always on)</text>
   <text x="310" y="44" text-anchor="end" class="sm">explainer-page description</text>
-  <rect class="box c1" x="320" y="32" width="15" height="16"/><text x="343" y="44" class="sm">~390</text>
+  <rect class="box c1" x="320" y="32" width="9" height="16"/><text x="337" y="44" class="sm">~390</text>
   <text x="310" y="70" text-anchor="end" class="sm">explainer-figure description (Codex)</text>
-  <rect class="box c2 dash" x="320" y="58" width="5" height="16"/><text x="333" y="70" class="sm">~140; Claude Code does not load it</text>
+  <rect class="box c2 dash" x="320" y="58" width="3" height="16"/><text x="331" y="70" class="sm">~140; Claude Code does not load it</text>
   <text x="10" y="102" class="b">When the skill is called</text>
   <text x="310" y="126" text-anchor="end" class="sm">explainer-page SKILL.md</text>
-  <rect class="box c1" x="320" y="114" width="158" height="16"/><text x="486" y="126" class="sm">~4.2k</text>
+  <rect class="box c1" x="320" y="114" width="92" height="16"/><text x="420" y="126" class="sm">~4.2k</text>
   <text x="10" y="158" class="b">Read when needed</text>
   <text x="310" y="182" text-anchor="end" class="sm">sources-and-research.md (step 1)</text>
-  <rect class="box c1" x="320" y="170" width="281" height="16"/><text x="609" y="182" class="sm">~7.5k</text>
+  <rect class="box c1" x="320" y="170" width="172" height="16"/><text x="500" y="182" class="sm">~7.8k</text>
   <text x="310" y="208" text-anchor="end" class="sm">page-types.md (step 2)</text>
-  <rect class="box c1" x="320" y="196" width="146" height="16"/><text x="474" y="208" class="sm">~3.9k</text>
+  <rect class="box c1" x="320" y="196" width="88" height="16"/><text x="416" y="208" class="sm">~4.0k</text>
   <text x="310" y="234" text-anchor="end" class="sm">explainer-figure SKILL.md (steps 2, 5)</text>
-  <rect class="box c2" x="320" y="222" width="94" height="16"/><text x="422" y="234" class="sm">~2.5k</text>
+  <rect class="box c2" x="320" y="222" width="75" height="16"/><text x="403" y="234" class="sm">~3.4k</text>
   <text x="310" y="260" text-anchor="end" class="sm">writing-rules.md (steps 4, 5)</text>
-  <rect class="box c1" x="320" y="248" width="184" height="16"/><text x="512" y="260" class="sm">~4.9k</text>
+  <rect class="box c1" x="320" y="248" width="114" height="16"/><text x="442" y="260" class="sm">~5.2k</text>
   <text x="310" y="286" text-anchor="end" class="sm">template.html (step 5)</text>
-  <rect class="box c1" x="320" y="274" width="296" height="16"/><text x="624" y="286" class="sm">~7.9k</text>
+  <rect class="box c1" x="320" y="274" width="189" height="16"/><text x="517" y="286" class="sm">~8.6k</text>
   <text x="310" y="312" text-anchor="end" class="sm">svg-recipes.md (step 5)</text>
-  <rect class="box c2" x="320" y="300" width="263" height="16"/><text x="591" y="312" class="sm">~7.0k</text>
+  <rect class="box c2" x="320" y="300" width="200" height="16"/><text x="528" y="312" class="sm">~9.1k</text>
   <text x="310" y="338" text-anchor="end" class="sm">cards.md (step 5, with cards)</text>
-  <rect class="box c2" x="320" y="326" width="60" height="16"/><text x="388" y="338" class="sm">~1.6k</text>
-  <text x="310" y="364" text-anchor="end" class="sm">pictorial.md (step 5, with pictorial)</text>
-  <rect class="box c2" x="320" y="352" width="274" height="16"/><text x="602" y="364" class="sm">~7.3k</text>
+  <rect class="box c2" x="320" y="326" width="37" height="16"/><text x="365" y="338" class="sm">~1.7k</text>
+  <text x="310" y="364" text-anchor="end" class="sm">pictorial.md (step 5, with pictorial or objects)</text>
+  <rect class="box c2" x="320" y="352" width="317" height="16"/><text x="645" y="364" class="sm">~14.4k</text>
   <text x="310" y="390" text-anchor="end" class="sm">icons.md (step 5, with icons)</text>
-  <rect class="box c2" x="320" y="378" width="68" height="16"/><text x="396" y="390" class="sm">~1.8k</text>
+  <rect class="box c2" x="320" y="378" width="44" height="16"/><text x="372" y="390" class="sm">~2.0k</text>
   <text x="310" y="416" text-anchor="end" class="sm">extending-pages.md (follow-ups)</text>
-  <rect class="box c1" x="320" y="404" width="135" height="16"/><text x="463" y="416" class="sm">~3.6k</text>
+  <rect class="box c1" x="320" y="404" width="81" height="16"/><text x="409" y="416" class="sm">~3.7k</text>
   <text x="10" y="444" class="sm">Bar length is proportional to the estimate. Purple: explainer-page; olive: explainer-figure.</text>
   <text x="10" y="462" class="sm">Dashed: always on only on some platforms. Numbers are estimates from claude plugin details.</text>
   <text x="10" y="480" class="sm">Each reference file and the template was wrapped as a test skill to get its estimate.</text>
 </svg>
 <figcaption>Figure 4. A session pays only for the descriptions. The two largest figure rules, pictorial figures and SVG recipes, are read only at the build step.</figcaption>
 </figure>
-<p class="src">The unit is tokens because this section asks about loading cost, and a model's context and its price are counted in tokens; file size is only a proxy. Source: estimates from <code>claude --plugin-dir . plugin details explain-as-webpage</code> (about 529 tokens always on in total; about 4.2k for explainer-page and 2.5k for explainer-figure per call). Each reference file and the template was wrapped as its own test skill (3 lines of frontmatter added) and estimated with the same command (2026-10-07). That Codex lists explainer-figure and Claude Code does not load its description is the author's own test; the split and the trigger settings: the frontmatter and § Overview of <code>explainer-figure/SKILL.md</code>; the line limit: <code>CLAUDE.md</code> § 架構 (architecture), last paragraph.</p>
-<p>Add up the estimates. A first build in project mode without cards, pictorial figures, or icons reads the explainer-page <code>SKILL.md</code>, <code>page-types.md</code>, <code>writing-rules.md</code>, and the template, plus the explainer-figure <code>SKILL.md</code> and <code>svg-recipes.md</code>: 4.2k + 3.9k + 4.9k + 7.9k + 2.5k + 7.0k ≈ 30.4k tokens. With all three new figure types, add <code>cards.md</code>, <code>pictorial.md</code>, and <code>icons.md</code>: about 41.1k. All files together are about 52.2k.</p>
+<p class="src">The unit is tokens because this section asks about loading cost, and a model's context and its price are counted in tokens; file size is only a proxy. Source: estimates from <code>claude --plugin-dir . plugin details explain-as-webpage</code> (about 529 tokens always on in total; about 4.2k for explainer-page and 3.4k for explainer-figure per call). Each reference file and the template was wrapped as its own test skill (3 lines of frontmatter added) and estimated with the same command (2026-10-16). That Codex lists explainer-figure and Claude Code does not load its description is the author's own test; the split and the trigger settings: the frontmatter and § Overview of <code>explainer-figure/SKILL.md</code>; the line limit: <code>CLAUDE.md</code> § 架構 (architecture), last paragraph.</p>
+<p>Add up the estimates. A first build in project mode without cards, pictorial figures, drawn objects, or icons reads the explainer-page <code>SKILL.md</code>, <code>page-types.md</code>, <code>writing-rules.md</code>, and the template, plus the explainer-figure <code>SKILL.md</code> and <code>svg-recipes.md</code>: 4.2k + 4.0k + 5.2k + 8.6k + 3.4k + 9.1k ≈ 34.5k tokens. With cards, pictorial figures or drawn objects, and icons, add <code>cards.md</code>, <code>pictorial.md</code>, and <code>icons.md</code>: about 52.6k. All files together are about 64.1k.</p>
+<p>The two scripts (the parts library and the overlap check) run outside the context, so Figure 4 leaves them out.</p>
 <p class="src">Source: the estimates in Figure 4 (the sums are computed on this page); when each file is read: SKILL.md steps 1, 2, 4, 5 and <code>explainer-figure/SKILL.md</code> § Process.</p>
 <div class="admonition warning"><p class="admonition-title">Inference</p>
-<p>The cost of this split is that the rules are spread over 2 <code>SKILL.md</code> files, 8 reference files, and the template, which refer to each other by section number and relative path (for example <code>../explainer-figure/SKILL.md</code> § Figure brief). When a section of one file changes, the files that refer to it must be checked too.</p></div>
+<p>The cost of this split is that the rules are spread over 2 <code>SKILL.md</code> files, 8 reference files, 2 scripts, and the template, which refer to each other by section number and relative path (for example <code>../explainer-figure/SKILL.md</code> § Figure brief). When a section of one file changes, the files that refer to it must be checked too.</p></div>
 
 <h2 id="q6">How does a page grow into a page tree with follow-up questions?</h2>
 <p>When you ask more about an existing page, the agent first reads <code>extending-pages.md</code> and decides where each new question goes (<a href="#fig-5">Figure 5</a>). The principle: every page keeps its own length budget, so the hub page does not keep growing.</p>
@@ -385,7 +391,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 <h2 id="limits">Status and limits</h2>
 <ul>
-<li>The current version is 0.4.0. It installs and runs in Claude Code and Codex.</li>
+<li>The current version is 0.5.0. It installs and runs in Claude Code and Codex.</li>
 <li>No video output: the highest tier is an in-browser step animation.</li>
 <li>No existing photos or screenshots yet: every figure is SVG or HTML cards that the agent draws.</li>
 <li>All token numbers in Figure 4 are estimates and may differ from actual use; the estimates for the reference files include the 3 lines of frontmatter added for the test skill.</li>
@@ -424,7 +430,7 @@ cp -r skills/explainer-page skills/explainer-figure ~/.codex/skills/    # Codex<
 <tr><td>tier (L0 / L1 / L2)</td><td>How interactive the page is: static figures, one slider, or a step animation (stepper)</td></tr>
 <tr><td>figure brief</td><td>The spec that step 2 writes for each figure: the question, the type, the facts with units, the concept colours</td></tr>
 <tr><td>summary cards</td><td>4–6 items with the same fields as HTML cards; one column on a narrow screen</td></tr>
-<tr><td>pictorial figure</td><td>A drawn object, body, or container that shows where the parts sit</td></tr>
+<tr><td>pictorial figure</td><td>A drawn object, body, or container that shows where the parts sit, or an object's poses along a path</td></tr>
 <tr><td>concept colour</td><td>One of five colours, <code>c1</code>–<code>c5</code>; a key concept keeps the same one in every figure and in the text</td></tr>
 <tr><td>page tree</td><td>A hub page plus linked child pages; every page lists the same tree in its sidebar</td></tr>
 <tr><td>source grade (g1–g4)</td><td>How reliable a source is, marked on every source in topic mode</td></tr>
@@ -438,11 +444,12 @@ cp -r skills/explainer-page skills/explainer-figure ~/.codex/skills/    # Codex<
 <li><code>skills/explainer-page/references/page-types.md</code> — the page type table</li>
 <li><code>skills/explainer-page/references/writing-rules.md</code> — § Length budget</li>
 <li><code>skills/explainer-page/references/extending-pages.md</code> — §2 where answers go, §4 building, §5 checks, §6 a page tree from the first build</li>
-<li><code>skills/explainer-page/assets/template.html</code> — the template (297 lines)</li>
+<li><code>skills/explainer-page/assets/template.html</code> — the template (303 lines)</li>
 <li><code>skills/explainer-figure/SKILL.md</code> — frontmatter, § Overview, § Choosing the figure type, § Process, § Self-check</li>
-<li><code>skills/explainer-figure/references/svg-recipes.md</code> — § Colour meaning; <code>icons.md</code> — the icon subset and its license</li>
+<li><code>skills/explainer-figure/references/svg-recipes.md</code> — § Colour meaning, § Symbols; <code>icons.md</code> — the icon subset and its license; <code>pictorial.md</code> — § Drawn objects</li>
+<li><code>skills/explainer-figure/scripts/parts.py</code>, <code>scripts/check-overlap.js</code> — the parts library and the overlap check</li>
 <li><code>README.md</code> — § Inspiration, § What it produces, § Examples, § Installation, § What it does not do; <code>CLAUDE.md</code> — § 架構 (architecture)</li>
-<li><code>.claude-plugin/plugin.json</code> — version 0.4.0; token estimates from <code>claude --plugin-dir . plugin details explain-as-webpage</code> (2026-10-07)</li>
+<li><code>.claude-plugin/plugin.json</code> — version 0.5.0; token estimates from <code>claude --plugin-dir . plugin details explain-as-webpage</code> (2026-10-16)</li>
 <li><code>examples/starship-reusability/starship-reusability.html</code>, <code>examples/llm-wiki/llm-wiki.html</code>, <code>examples/autoresearch/</code> — the running examples</li>
 </ul>
 </main></div>

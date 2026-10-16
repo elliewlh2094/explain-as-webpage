@@ -211,7 +211,7 @@ wc -l skills/*/SKILL.md                       # 各約 130 行以內
 
 ### 待驗證的假設
 
-沿用構想文件〈Key Assumptions to Validate〉的 6 項，並補充 3 項：
+沿用構想文件〈Key Assumptions to Validate〉的 6 項（結果已在構想文件中勾選，2026-10-16），並補充 3 項：
 
 - [x] SVG 文字中的組合字元（例如 x̂ 的 U+0302）在 Linux 的 Chrome 中能正確顯示。T5 截圖確認成立（2026-10-13），SVG 與 HTML 都正確。
 - [x] 改寫 R6 的原則與 Recipe 3 的範例後，代理會在架構類的圖中把具體元件畫成物件，不需要另列元件清單。T17 確認成立（2026-10-14）：Codex 把瀏覽器與資料庫畫成物件，API 伺服器與快取維持方框。

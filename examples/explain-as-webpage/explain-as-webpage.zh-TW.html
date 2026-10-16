@@ -214,15 +214,20 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 <table>
 <tr><th>步驟</th><th>做什麼</th><th>Starship 頁的實際情況</th></tr>
 <tr><td style="white-space:nowrap">① 收集材料</td><td>依材料分流；topic 模式先查證，並為來源分級</td><td>頁尾列出 8 筆來源，每筆有等級（g1 四筆、g2 兩筆、g3 兩筆）與存取日期</td></tr>
-<tr><td style="white-space:nowrap">② 學習摘要</td><td>3–5 個核心疑問、頁型與主軸、至多 5 個關鍵概念、每張圖一份圖說明單</td><td>機制頁型，圖 1 是因果鏈；助推器、飛船、載荷各有一個概念色</td></tr>
-<tr><td style="white-space:nowrap">③ 選層級</td><td>能回答所有疑問的最低層級</td><td>只有「助推器怎麼回來？」一節用逐步動畫（圖 4），其餘是靜態圖</td></tr>
+<tr><td style="white-space:nowrap">② 學習摘要</td><td>3–5 個核心疑問、頁型與主軸、至多 5 個關鍵概念、每張圖一份圖說明單</td><td>機制頁型，圖 1 是因果鏈；助推器、飛船、載荷、結構與引擎各有一個概念色</td></tr>
+<tr><td style="white-space:nowrap">③ 選層級</td><td>能回答所有疑問的最低層級</td><td>只有助推器返回（圖 4）與飛船回收（圖 5 下半）是逐步動畫，其餘是靜態圖</td></tr>
 <tr><td style="white-space:nowrap">④ 確認一次</td><td>至多 4 題：疑問、層級與每頁的圖、語言與讀者、路徑與查證深度</td><td>5 個疑問各成一節，標題就是問題；頁面是繁中、L2、6 張圖</td></tr>
-<tr><td style="white-space:nowrap">⑤ 產出</td><td>複製模板；依寫作規則寫文字，依 explainer-figure 畫圖</td><td>6 張圖中有 2 張具象插圖、1 組歸納卡、1 個逐步動畫，用到 4 個圖示</td></tr>
+<tr><td style="white-space:nowrap">⑤ 產出</td><td>複製模板；依寫作規則寫文字，依 explainer-figure 畫圖</td><td>6 張圖中，圖 2–5 畫了物件（圖 4 與圖 5 下半是姿態圖），另有 1 組歸納卡；用到 4 個圖示</td></tr>
 <tr><td style="white-space:nowrap">⑥ 自我檢查</td><td>指令檢查後，截圖並逐張看圖</td><td>截圖發現載荷那一層被火箭外框蓋住，改變繪製順序後重拍</td></tr>
 <tr><td style="white-space:nowrap">⑦ 回報</td><td>路徑、回答了哪些疑問、各圖的單位、哪些沒能查證</td><td>第 15 次試飛的日期找不到原句，頁面不寫，並在回報中說明</td></tr>
 </table>
 <p class="src">來源：<code>SKILL.md</code> 第 1–7 步；第 3 欄第 ①–⑤ 列取自 <code>examples/starship-reusability/starship-reusability.html</code>；第 ⑥、⑦ 列為作者實測</p>
-<p>第 6 步的指令檢查有四項：模板的待填標記必須全部清除、不可引用外部資源、檔案約 150 KB 以內、topic 模式的每個來源都要有等級與存取日期。接著用無頭 Chrome 在 1280 px 與 390 px 兩種寬度截圖；390 px 是把頁面放進 iframe 量測，因為 Chrome 視窗最窄 500 px。有圖的頁面再依 explainer-figure 逐張檢查：標籤不壓線、箭頭停在方框邊緣，而且每種文字顏色在每種背景上的對比至少 4.5:1（WCAG AA，網頁無障礙指南的最低等級）。</p>
+<p>第 6 步分三層檢查頁面：</p>
+<table class="kv">
+<tr><td>指令</td><td>模板的待填標記必須全部清除；不可引用外部資源；檔案約 150 KB 以內；topic 模式的每個來源都要有等級與存取日期</td></tr>
+<tr><td>截圖</td><td>用無頭 Chrome 在 1280 px 與 390 px 兩種寬度截圖；390 px 是把頁面放進 iframe 量測，因為 Chrome 視窗最窄 500 px</td></tr>
+<tr><td>逐張看圖</td><td>遮住所有文字後，具體的東西仍認得出、結構仍看得出圖要說的事（意圖檢查）；壓線檢查腳本在每一幀都找不到文字重疊或線穿過文字；畫了物件的圖與零件總覽圖一致；箭頭停在方框邊緣；每種文字顏色在每種背景上的對比至少 4.5:1（WCAG AA，網頁無障礙指南的最低等級）</td></tr>
+</table>
 <p class="src">來源：<code>SKILL.md</code> § 6. Self-check；<code>explainer-figure/SKILL.md</code> § Self-check</p>
 
 <h2 id="q1">這個 skill 解決什麼問題？產出長什麼樣子？</h2>
@@ -233,7 +238,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 <tr><td>結構</td><td>先給結論，再以一條主軸串起全頁；每個 <code>h2</code> 就是讀者會問的一個問題</td></tr>
 <tr><td>篇幅</td><td>約 15 分鐘讀完：正文至多約 1,800 個英文字或 3,500 個中文字</td></tr>
 <tr><td>語言</td><td>英文或繁體中文；沒有指定時，跟隨使用者提問的語言</td></tr>
-<tr><td>模板</td><td><code>assets/template.html</code>（297 行）內含側欄目錄、可選的頁面樹、通用的逐步動畫元件，以及卡片、概念色、具象插圖與圖示的樣式</td></tr>
+<tr><td>模板</td><td><code>assets/template.html</code>（303 行）內含側欄目錄、可選的頁面樹、通用的逐步動畫元件，以及卡片、概念色、公式符號、自繪物件與圖示的樣式</td></tr>
 </table>
 <p class="src">來源：<code>README.md</code> § Inspiration、§ What it produces；<code>references/writing-rules.md</code> § Length budget；<code>CLAUDE.md</code> § 架構；模板行數以 <code>wc -l</code> 量測</p>
 
@@ -298,7 +303,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 <div class="card-grid">
   <div class="card"><p class="card-title"><svg class="icon" aria-hidden="true"><use href="#i-network"/></svg>機制圖</p>
     <dl><dt>適用的問題</dt><dd>為什麼會發生；一件工作怎麼流過各部分；同一案例有無某技術的差別</dd>
-        <dt>本儲存庫的例子</dt><dd>本頁圖 1 的主流程；Starship 頁圖 1 的因果鏈與圖 4 的逐步動畫</dd></dl></div>
+        <dt>本儲存庫的例子</dt><dd>本頁圖 1 的主流程；Starship 頁圖 1 的因果鏈</dd></dl></div>
   <div class="card"><p class="card-title"><svg class="icon" aria-hidden="true"><use href="#i-chart-column"/></svg>數值圖</p>
     <dl><dt>適用的問題</dt><dd>量測值的大小與比較；每個數字都要有單位、讀法與來源</dd>
         <dt>本儲存庫的例子</dt><dd>本頁圖 4 的 token 長條；Starship 頁圖 5 的每公斤動能長條</dd></dl></div>
@@ -306,59 +311,60 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     <dl><dt>適用的問題</dt><dd>4–6 個欄位相同的平行項目，例如各層、各角色、各選項</dd>
         <dt>本儲存庫的例子</dt><dd>本圖；Starship 頁圖 6 的六項能力；LLM Wiki 頁圖 3 的五種情境</dd></dl></div>
   <div class="card"><p class="card-title"><svg class="icon" aria-hidden="true"><use href="#i-image"/></svg>具象插圖</p>
-    <dl><dt>適用的問題</dt><dd>東西位在一個物件、身體或容器的哪裡</dd>
-        <dt>本儲存庫的例子</dt><dd>Starship 頁圖 2 的火箭剖面；LLM Wiki 頁圖 4 的三層資料夾</dd></dl></div>
+    <dl><dt>適用的問題</dt><dd>東西位在一個物件、身體或容器的哪裡；物件沿路徑的姿態</dd>
+        <dt>本儲存庫的例子</dt><dd>Starship 頁圖 2 的火箭剖面與圖 4 的八步姿態圖；LLM Wiki 頁圖 4 的三層資料夾</dd></dl></div>
 </div>
 <figcaption>圖 3　能用歸納卡或具象插圖時優先使用；說明原因與過程時，機制圖仍是預設。</figcaption>
 </figure>
 <p class="src">來源：<code>explainer-figure/SKILL.md</code> § Choosing the figure type；<code>examples/starship-reusability/</code> 與 <code>examples/llm-wiki/</code> 各圖的圖說</p>
-<p>兩項規則讓多張圖讀起來像同一套。第一是概念色：一個關鍵概念在每張圖都用同一個顏色，並在內文以色塊標籤對應，例如本頁的 <span class="chip c1">explainer-page</span> 與 <span class="chip c2">explainer-figure</span>。紅、綠、橘、藍保留給問題、修正、後果與中性部件，不拿來標概念，否則讀者會把紅色的概念讀成問題。第二是圖示：skill 內附 Lucide 圖示庫的 106 個圖示子集，產頁時只把用到的幾個複製進頁面，並附上授權聲明；圖示只放在同名的文字旁，不取代文字。</p>
-<p class="src">來源：<code>explainer-figure/references/svg-recipes.md</code> § Colour meaning；<code>explainer-figure/references/icons.md</code></p>
+<p>三項規則讓多張圖讀起來像同一套。第一是概念色：一個關鍵概念在每張圖都用同一個顏色，並在內文以色塊標籤對應；有公式時，它的符號在公式、圖與符號表中也用同一個顏色。例如本頁的 <span class="chip c1">explainer-page</span> 與 <span class="chip c2">explainer-figure</span>。紅、綠、橘、藍保留給問題、修正、後果與中性部件，不拿來標概念，否則讀者會把紅色的概念讀成問題。第二是圖示：skill 內附 Lucide 圖示庫的 106 個圖示子集，產頁時只把用到的幾個複製進頁面，並附上授權聲明；圖示只放在同名的文字旁，不取代文字。第三是自繪物件：任何圖中，人、機器人、火箭這類有熟悉外形的東西都畫成物件，抽象概念維持方框。物件由零件函式庫 <code>parts.py</code> 以基本形組成，外框都是 3px、平塗色，所以不同圖中的同一個物件長得一樣。</p>
+<p class="src">來源：<code>explainer-figure/references/svg-recipes.md</code> § Colour meaning、§ Symbols；<code>explainer-figure/references/icons.md</code>；<code>explainer-figure/SKILL.md</code> § Choosing the figure type；<code>explainer-figure/references/pictorial.md</code> § Drawn objects</p>
 
 <h2 id="q5">哪個檔案在什麼時候被讀？為什麼拆成兩個 skill？</h2>
 <p>代理平台只把每個 skill 的描述（<code>SKILL.md</code> 開頭的 <code>description</code>）常駐在每次對話裡，本體要等 skill 被呼叫才載入。因此兩個 <code>SKILL.md</code> 都只放流程與判準（各約 130 行以內），細節拆進參考檔，到需要的步驟才讀（<a href="#fig-4">圖 4</a>）。繪圖規則另成一個 skill，依分工劃分：<span class="chip c1">explainer-page</span> 決定每張圖要呈現什麼，<span class="chip c2">explainer-figure</span> 決定怎麼畫。explainer-figure 設為不自動觸發，只由 explainer-page 以相對路徑讀取，所以兩個 skill 資料夾必須並列。</p>
 <figure id="fig-4">
-<svg viewBox="0 0 720 470" role="img" aria-label="各檔案的 token 估計值與讀取時機。常駐：explainer-page 描述約 390，explainer-figure 描述約 140（只有 Codex 列出）。呼叫時：explainer-page 的 SKILL.md 約 4.2k。需要時才讀：sources-and-research.md 約 7.5k、page-types.md 約 3.9k、explainer-figure 的 SKILL.md 約 2.5k、writing-rules.md 約 4.9k、template.html 約 7.9k、svg-recipes.md 約 7.0k、cards.md 約 1.6k、pictorial.md 約 7.3k、icons.md 約 1.8k、extending-pages.md 約 3.6k。">
+<svg viewBox="0 0 720 470" role="img" aria-label="各檔案的 token 估計值與讀取時機。常駐：explainer-page 描述約 390，explainer-figure 描述約 140（只有 Codex 列出）。呼叫時：explainer-page 的 SKILL.md 約 4.2k。需要時才讀：sources-and-research.md 約 7.8k、page-types.md 約 4.0k、explainer-figure 的 SKILL.md 約 3.4k、writing-rules.md 約 5.2k、template.html 約 8.6k、svg-recipes.md 約 9.1k、cards.md 約 1.7k、pictorial.md 約 14.4k、icons.md 約 2.0k、extending-pages.md 約 3.7k。">
   <text x="710" y="20" text-anchor="end" class="sm">單位：tokens（估計值）</text>
   <text x="10" y="20" class="b">每次對話（常駐）</text>
   <text x="310" y="44" text-anchor="end" class="sm">explainer-page 描述</text>
-  <rect class="box c1" x="320" y="32" width="15" height="16"/><text x="343" y="44" class="sm">約 390</text>
+  <rect class="box c1" x="320" y="32" width="9" height="16"/><text x="337" y="44" class="sm">約 390</text>
   <text x="310" y="70" text-anchor="end" class="sm">explainer-figure 描述（Codex）</text>
-  <rect class="box c2 dash" x="320" y="58" width="5" height="16"/><text x="333" y="70" class="sm">約 140；Claude Code 不載入</text>
+  <rect class="box c2 dash" x="320" y="58" width="3" height="16"/><text x="331" y="70" class="sm">約 140；Claude Code 不載入</text>
   <text x="10" y="102" class="b">呼叫 skill 時</text>
   <text x="310" y="126" text-anchor="end" class="sm">explainer-page 的 SKILL.md</text>
-  <rect class="box c1" x="320" y="114" width="158" height="16"/><text x="486" y="126" class="sm">約 4.2k</text>
+  <rect class="box c1" x="320" y="114" width="92" height="16"/><text x="420" y="126" class="sm">約 4.2k</text>
   <text x="10" y="158" class="b">需要時才讀</text>
   <text x="310" y="182" text-anchor="end" class="sm">sources-and-research.md（第 1 步）</text>
-  <rect class="box c1" x="320" y="170" width="281" height="16"/><text x="609" y="182" class="sm">約 7.5k</text>
+  <rect class="box c1" x="320" y="170" width="172" height="16"/><text x="500" y="182" class="sm">約 7.8k</text>
   <text x="310" y="208" text-anchor="end" class="sm">page-types.md（第 2 步）</text>
-  <rect class="box c1" x="320" y="196" width="146" height="16"/><text x="474" y="208" class="sm">約 3.9k</text>
+  <rect class="box c1" x="320" y="196" width="88" height="16"/><text x="416" y="208" class="sm">約 4.0k</text>
   <text x="310" y="234" text-anchor="end" class="sm">explainer-figure 的 SKILL.md（第 2、5 步）</text>
-  <rect class="box c2" x="320" y="222" width="94" height="16"/><text x="422" y="234" class="sm">約 2.5k</text>
+  <rect class="box c2" x="320" y="222" width="75" height="16"/><text x="403" y="234" class="sm">約 3.4k</text>
   <text x="310" y="260" text-anchor="end" class="sm">writing-rules.md（第 4、5 步）</text>
-  <rect class="box c1" x="320" y="248" width="184" height="16"/><text x="512" y="260" class="sm">約 4.9k</text>
+  <rect class="box c1" x="320" y="248" width="114" height="16"/><text x="442" y="260" class="sm">約 5.2k</text>
   <text x="310" y="286" text-anchor="end" class="sm">template.html（第 5 步）</text>
-  <rect class="box c1" x="320" y="274" width="296" height="16"/><text x="624" y="286" class="sm">約 7.9k</text>
+  <rect class="box c1" x="320" y="274" width="189" height="16"/><text x="517" y="286" class="sm">約 8.6k</text>
   <text x="310" y="312" text-anchor="end" class="sm">svg-recipes.md（第 5 步）</text>
-  <rect class="box c2" x="320" y="300" width="263" height="16"/><text x="591" y="312" class="sm">約 7.0k</text>
+  <rect class="box c2" x="320" y="300" width="200" height="16"/><text x="528" y="312" class="sm">約 9.1k</text>
   <text x="310" y="338" text-anchor="end" class="sm">cards.md（第 5 步，有卡片時）</text>
-  <rect class="box c2" x="320" y="326" width="60" height="16"/><text x="388" y="338" class="sm">約 1.6k</text>
-  <text x="310" y="364" text-anchor="end" class="sm">pictorial.md（第 5 步，有插圖時）</text>
-  <rect class="box c2" x="320" y="352" width="274" height="16"/><text x="602" y="364" class="sm">約 7.3k</text>
+  <rect class="box c2" x="320" y="326" width="37" height="16"/><text x="365" y="338" class="sm">約 1.7k</text>
+  <text x="310" y="364" text-anchor="end" class="sm">pictorial.md（第 5 步，有插圖或物件時）</text>
+  <rect class="box c2" x="320" y="352" width="317" height="16"/><text x="645" y="364" class="sm">約 14.4k</text>
   <text x="310" y="390" text-anchor="end" class="sm">icons.md（第 5 步，有圖示時）</text>
-  <rect class="box c2" x="320" y="378" width="68" height="16"/><text x="396" y="390" class="sm">約 1.8k</text>
+  <rect class="box c2" x="320" y="378" width="44" height="16"/><text x="372" y="390" class="sm">約 2.0k</text>
   <text x="310" y="416" text-anchor="end" class="sm">extending-pages.md（追問時）</text>
-  <rect class="box c1" x="320" y="404" width="135" height="16"/><text x="463" y="416" class="sm">約 3.6k</text>
+  <rect class="box c1" x="320" y="404" width="81" height="16"/><text x="409" y="416" class="sm">約 3.7k</text>
   <text x="10" y="444" class="sm">長條長度與 token 估計值成正比；紫色屬於 explainer-page，橄欖色屬於 explainer-figure，虛線表示只在部分平台常駐。</text>
   <text x="10" y="462" class="sm">數字是 claude plugin details 的估計，可能與實際用量不同；參考檔與模板是逐一包成測試用 skill 後估得。</text>
 </svg>
 <figcaption>圖 4　每次對話只付描述的成本；繪圖規則中最大的兩份（具象插圖與 SVG 配方）只在產出那一步才讀。</figcaption>
 </figure>
-<p class="src">單位選 token：本節問的是載入成本，而模型的上下文與費用以 token 計，檔案大小只是代理指標。來源：<code>claude --plugin-dir . plugin details explain-as-webpage</code> 的估計值（常駐合計約 529 tokens，呼叫時 explainer-page 約 4.2k、explainer-figure 約 2.5k）；參考檔與模板是把每個檔案各包成一個測試用 skill（只加 3 行 frontmatter），再以同一個指令估得（2026-10-07）。Codex 列出 explainer-figure、Claude Code 不載入它的描述，為作者實測；兩個 skill 的分工與觸發設定見 <code>explainer-figure/SKILL.md</code> 的 frontmatter 與 § Overview；行數上限見 <code>CLAUDE.md</code> §「架構」最後一段。</p>
-<p>用估計值算一次。專案模式的首次產出若不用卡片、插圖與圖示，會讀 explainer-page 的 <code>SKILL.md</code>、<code>page-types.md</code>、<code>writing-rules.md</code>、模板，加上 explainer-figure 的 <code>SKILL.md</code> 與 <code>svg-recipes.md</code>：4.2k＋3.9k＋4.9k＋7.9k＋2.5k＋7.0k ≈ 30.4k tokens。三種新圖型都用到時，再加 <code>cards.md</code>、<code>pictorial.md</code>、<code>icons.md</code>，約 41.1k；全部檔案約 52.2k。</p>
+<p class="src">單位選 token：本節問的是載入成本，而模型的上下文與費用以 token 計，檔案大小只是代理指標。來源：<code>claude --plugin-dir . plugin details explain-as-webpage</code> 的估計值（常駐合計約 529 tokens，呼叫時 explainer-page 約 4.2k、explainer-figure 約 3.4k）；參考檔與模板是把每個檔案各包成一個測試用 skill（只加 3 行 frontmatter），再以同一個指令估得（2026-10-16）。Codex 列出 explainer-figure、Claude Code 不載入它的描述，為作者實測；兩個 skill 的分工與觸發設定見 <code>explainer-figure/SKILL.md</code> 的 frontmatter 與 § Overview；行數上限見 <code>CLAUDE.md</code> §「架構」最後一段。</p>
+<p>用估計值算一次。專案模式的首次產出若不用卡片、插圖、物件與圖示，會讀 explainer-page 的 <code>SKILL.md</code>、<code>page-types.md</code>、<code>writing-rules.md</code>、模板，加上 explainer-figure 的 <code>SKILL.md</code> 與 <code>svg-recipes.md</code>：4.2k＋4.0k＋5.2k＋8.6k＋3.4k＋9.1k ≈ 34.5k tokens。卡片、插圖或物件、圖示都用到時，再加 <code>cards.md</code>、<code>pictorial.md</code>、<code>icons.md</code>，約 52.6k；全部檔案約 64.1k。</p>
+<p>零件函式庫與壓線檢查是兩個腳本，代理執行它們、讀取輸出，不把腳本本身讀進上下文，所以不在圖 4 中。</p>
 <p class="src">來源：圖 4 的估計值（加總為本頁計算）；讀取時機見 <code>SKILL.md</code> 第 1、2、4、5 步與 <code>explainer-figure/SKILL.md</code> § Process</p>
 <div class="admonition warning"><p class="admonition-title">推論</p>
-<p>這個拆法的代價是規則分散在 2 個 <code>SKILL.md</code>、8 個參考檔與模板，彼此以章節編號和相對路徑互相引用（例如 <code>../explainer-figure/SKILL.md</code> § Figure brief）。修改一個檔案的章節時，要一起檢查引用它的檔案。</p></div>
+<p>這個拆法的代價是規則分散在 2 個 <code>SKILL.md</code>、8 個參考檔、2 個腳本與模板，彼此以章節編號和相對路徑互相引用（例如 <code>../explainer-figure/SKILL.md</code> § Figure brief）。修改一個檔案的章節時，要一起檢查引用它的檔案。</p></div>
 
 <h2 id="q6">追問時，頁面怎麼延伸成頁面樹？</h2>
 <p>使用者對已有的頁面追問時，代理先讀 <code>extending-pages.md</code>，判斷每個新問題放在哪裡（<a href="#fig-5">圖 5</a>）。原則是每一頁都守住自己的篇幅預算，主頁不會越長越大。</p>
@@ -384,7 +390,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 <h2 id="limits">現況與限制</h2>
 <ul>
-<li>目前版本是 0.4.0，可在 Claude Code 與 Codex 上安裝使用。</li>
+<li>目前版本是 0.5.0，可在 Claude Code 與 Codex 上安裝使用。</li>
 <li>不做影片：最高層級是瀏覽器內的逐步動畫。</li>
 <li>還不能引用既有的照片或截圖：每張圖都是代理繪製的 SVG 或 HTML 卡片。</li>
 <li>圖 4 的 token 數都是估計值，可能與實際用量不同；參考檔的估計值包含測試用 skill 多出的 3 行 frontmatter。</li>
@@ -423,7 +429,7 @@ cp -r skills/explainer-page skills/explainer-figure ~/.codex/skills/    # Codex<
 <tr><td>層級（tier，L0／L1／L2）</td><td>頁面的互動程度：靜態圖、加一個滑桿、加上逐步動畫（stepper）</td></tr>
 <tr><td>圖說明單（figure brief）</td><td>第 2 步為每張圖寫的規格：回答的問題、圖型、事實與單位、概念色</td></tr>
 <tr><td>歸納卡（summary cards）</td><td>以 HTML 卡片並列 4–6 個欄位相同的項目，窄螢幕時疊成一欄</td></tr>
-<tr><td>具象插圖（pictorial figure）</td><td>畫出物件、身體或容器，說明各部分位在哪裡</td></tr>
+<tr><td>具象插圖（pictorial figure）</td><td>畫出物件、身體或容器，說明各部分位在哪裡，或物件沿路徑的姿態</td></tr>
 <tr><td>概念色（concept colour）</td><td>c1–c5 五個顏色，一個關鍵概念在每張圖與內文都用同一個</td></tr>
 <tr><td>頁面樹（page tree）</td><td>一個主頁（hub）加上連結的子頁，所有頁的側欄列出同一份清單</td></tr>
 <tr><td>來源等級（g1–g4）</td><td>topic 模式中標在每個來源上的可信度分級</td></tr>
@@ -437,11 +443,12 @@ cp -r skills/explainer-page skills/explainer-figure ~/.codex/skills/    # Codex<
 <li><code>skills/explainer-page/references/page-types.md</code> — 頁型表</li>
 <li><code>skills/explainer-page/references/writing-rules.md</code> — § Length budget</li>
 <li><code>skills/explainer-page/references/extending-pages.md</code> — §2 落點、§4 建置、§5 檢查、§6 首次就建頁面樹</li>
-<li><code>skills/explainer-page/assets/template.html</code> — 模板（297 行）</li>
+<li><code>skills/explainer-page/assets/template.html</code> — 模板（303 行）</li>
 <li><code>skills/explainer-figure/SKILL.md</code> — frontmatter、§ Overview、§ Choosing the figure type、§ Process、§ Self-check</li>
-<li><code>skills/explainer-figure/references/svg-recipes.md</code> — § Colour meaning；<code>icons.md</code> — 圖示子集與授權</li>
+<li><code>skills/explainer-figure/references/svg-recipes.md</code> — § Colour meaning、§ Symbols；<code>icons.md</code> — 圖示子集與授權；<code>pictorial.md</code> — § Drawn objects</li>
+<li><code>skills/explainer-figure/scripts/parts.py</code>、<code>scripts/check-overlap.js</code> — 零件函式庫與壓線檢查</li>
 <li><code>README.md</code> — § Inspiration、§ What it produces、§ Examples、§ Installation、§ What it does not do；<code>CLAUDE.md</code> — § 架構</li>
-<li><code>.claude-plugin/plugin.json</code> — 版本 0.4.0；<code>claude --plugin-dir . plugin details explain-as-webpage</code> 的 token 估計（2026-10-07）</li>
+<li><code>.claude-plugin/plugin.json</code> — 版本 0.5.0；<code>claude --plugin-dir . plugin details explain-as-webpage</code> 的 token 估計（2026-10-16）</li>
 <li><code>examples/starship-reusability/starship-reusability.html</code>、<code>examples/llm-wiki/llm-wiki.html</code>、<code>examples/autoresearch/</code> — 貫穿全頁的例子</li>
 </ul>
 </main></div>

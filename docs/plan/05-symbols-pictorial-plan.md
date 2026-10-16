@@ -45,7 +45,7 @@
 
 ### 第 4 階段：驗收與收尾
 - [x] T12 新主題頁（V7；使用者先指定主題）—— 2026-10-16：主題為差速機器人的路徑追蹤（PID、純追跡、LQR），topic 模式，主頁＋3 子頁；自檢全部通過，使用者判讀通過
-- [ ] T13 版本 0.5.0、`CLAUDE.md`、README、構想文件的假設、索引狀態
+- [x] T13 版本 0.5.0、`CLAUDE.md`、README、構想文件的假設、索引狀態 —— 2026-10-16：4 個 manifest 為 0.5.0；`CLAUDE.md` 的驗證指令全部通過；`plugin details` 顯示 Skills (2)
 
 #### 檢查點 D
 - [ ] 規格〈成功條件〉全部達成；提供最終提交建議
@@ -410,15 +410,15 @@
 **說明：** 升版並更新說明文件。
 
 **驗收條件：**
-- [ ] 四個 manifest 檔升為 0.5.0
-- [ ] `CLAUDE.md`〈架構〉加入 `scripts/check-overlap.js` 與 `scripts/parts.py`
-- [ ] `README.md`、`README.zh-TW.md` 提到符號對照、物件姿態圖與節點外觀（只寫現況，不引用計畫文件）
-- [ ] 構想文件〈Key Assumptions to Validate〉與規格〈待驗證的假設〉依結果勾選
-- [ ] `docs/plan/README.md` 第 05 列的版本與狀態
+- [x] 四個 manifest 檔升為 0.5.0
+- [x] `CLAUDE.md`〈架構〉加入 `scripts/check-overlap.js` 與 `scripts/parts.py`
+- [x] `README.md`、`README.zh-TW.md` 提到符號對照、物件姿態圖與節點外觀（只寫現況，不引用計畫文件）
+- [x] 構想文件〈Key Assumptions to Validate〉與規格〈待驗證的假設〉依結果勾選
+- [x] `docs/plan/README.md` 第 05 列的版本與狀態
 
 **驗證：**
-- [ ] `CLAUDE.md`〈驗證指令〉全部執行並通過
-- [ ] `claude --plugin-dir . plugin details explain-as-webpage` 確認兩個 skill 都載入
+- [x] `CLAUDE.md`〈驗證指令〉全部執行並通過
+- [x] `claude --plugin-dir . plugin details explain-as-webpage` 確認兩個 skill 都載入
 
 **相依：** T12　**檔案：** manifest（4 個）、`CLAUDE.md`、README（2 個）、構想與規格文件、索引　**規模：** M
 
@@ -1215,3 +1215,48 @@ Wikipedia 的 V3 數字有不一致：說明文字寫助推器 72.3 m，性能�
 | 與零件總覽圖並排（`side.png`） | 線寬與填色一致 |
 
 **判讀（2026-10-16）：** 使用者判讀 4 頁，通過。
+
+### T13 版本與文件（2026-10-16）
+
+**結論：版本升為 0.5.0，`CLAUDE.md`、兩份 README、構想文件的假設與索引都已同步；`CLAUDE.md` 的驗證指令全部通過。**
+
+**修改的檔案：**
+
+| 檔案 | 修改 |
+|---|---|
+| 4 個 manifest | `.claude-plugin/plugin.json`、`.claude-plugin/marketplace.json`、`.codex-plugin/plugin.json`、`.agents/plugins/marketplace.json` 的版本 0.4.0 → 0.5.0 |
+| `CLAUDE.md` | 專案現況改為 0.5.0；〈架構〉新增 `scripts/`（`parts.py`、`check-overlap.js`）；模板的 class 清單改為 `.sym` 與 `ink` 系列（舊的 `outline`、`edge`、`area` 已在 T18 移除）；explainer-figure 的 `SKILL.md`、`svg-recipes.md`、`pictorial.md` 的說明補上 Symbols 欄、節點外觀、意圖檢查、壓線檢查、P5；Starship 範例的說明補上姿態圖 |
+| `README.md`、`README.zh-TW.md` | 圖型清單加入「物件與姿態」；新增兩項：具體的東西畫成物件（含零件函式庫與符號對照）、每張圖都經過檢查（意圖檢查、壓線檢查）；目錄結構加入 `scripts/` 並更新三個檔案的說明。繁中版的 Starship 範例說明改為新的圖 3–5 |
+| 構想文件 | 〈Key Assumptions to Validate〉6 項依結果勾選：5 項成立（殘影一項改為 stepper 後成立），Noto Emoji 一項不成立 |
+| 規格 | 〈待驗證的假設〉補註構想文件的 6 項已勾選；原本的 3 項先前已勾選 |
+| 索引 | 第 05 列的版本 0.5.0 與狀態 |
+
+**驗證：**
+
+| 檢查 | 結果 |
+|---|---|
+| 4 個 manifest 的 `json.tool` | 都是 ok |
+| `claude plugin validate .` | 通過；只有根目錄 `CLAUDE.md` 的既有警告 |
+| `claude --plugin-dir . plugin details explain-as-webpage` | `explain-as-webpage 0.5.0`；Skills (2) `explainer-figure, explainer-page`；always-on ~529 tok；on-invoke 4.2k／3.4k |
+| 模板外部資源 | 無輸出 |
+| 模板 1280px 截圖、390px iframe | 截圖正常；`<title>ok` |
+| 模板 DOM 對比掃描（1280px、700px） | 兩次都是 `<title>none` |
+| `wc -l skills/*/SKILL.md` | 124、130 |
+
+**依使用者要求一併修正（2026-10-16）：** `examples/explain-as-webpage/` 的英文與繁中兩頁原本仍寫 0.4.0，token 估計也是 0.4.0 時的值，內容不含第 5 輪的規則。兩頁各修改下列項目，結論框、圖 1 與側欄目錄不變：
+
+| 項目 | 修改 |
+|---|---|
+| Starship 實例表第 ②、③、⑤ 列 | 依 T19 後的範例頁改寫：新增「結構與引擎」概念色；逐步動畫為圖 4 與圖 5 下半；圖 2–5 畫了物件 |
+| 第 6 步的檢查 | 段落改為三列的 `table.kv`（指令、截圖、逐張看圖），逐張看圖補上意圖檢查、壓線檢查與零件總覽圖比對 |
+| 圖 3 歸納卡 | 機制圖的例子移除 Starship 圖 4（已改為姿態圖）；具象插圖的適用問題加上「物件沿路徑的姿態」，例子加上 Starship 圖 4 |
+| 圖 3 後的段落 | 「兩項規則」改為三項：概念色（含公式符號）、圖示、自繪物件（零件函式庫） |
+| 圖 4 token 長條 | 依 2026-10-16 的估計重畫（量法同第 4 輪：每個檔案包成測試用 skill 後執行 `plugin details`）；比例改為每 1k tokens 22px，最長的 `pictorial.md` 約 14.4k |
+| 加總與推論 | 34.5k、52.6k、64.1k；新增一句說明兩個腳本在上下文之外執行；推論中的檔案數加上 2 個腳本 |
+| 其他 | 版本 0.5.0；模板 303 行；名詞表的具象插圖；來源加上 `pictorial.md` § Drawn objects、`svg-recipes.md` § Symbols 與兩個腳本 |
+
+token 估計（tokens）：explainer-figure `SKILL.md` 2.5k → 3.4k、`sources-and-research.md` 7.5k → 7.8k、`page-types.md` 3.9k → 4.0k、`writing-rules.md` 4.9k → 5.2k、`extending-pages.md` 3.6k → 3.7k、`template.html` 7.9k → 8.6k、`svg-recipes.md` 7.0k → 9.1k、`cards.md` 1.6k → 1.7k、`pictorial.md` 7.3k → 14.4k、`icons.md` 1.8k → 2.0k；描述與 explainer-page `SKILL.md` 不變。
+
+驗證：兩頁 `FILL` 0、外部資源無輸出、390px 都是 `<title>ok`、頁內錨點都存在；壓線檢查在 7 個範例頁都沒有輸出；正文篇幅：英文 1,793 → 1,785 字（第一版改寫為 2,007 字，超過約 1,800 字的預算，精簡句子並把檢查段落改為表格後降回），繁中 2,174 → 2,219 個漢字；以封面圖的截圖參數（`--force-device-scale-factor=1.5 --window-size=1247,900`）截取修改前後的開頭畫面，兩頁的 PNG 都相同，所以 README 封面圖不需要重截。
+
+**範圍外、未修改：** 兩頁仍內嵌第 4 輪的 CSS，沒有套用 T21 的對比修正；改用目前模板的 CSS 會改變側欄與提示框的顏色，README 封面圖就要重截。
