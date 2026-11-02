@@ -135,9 +135,9 @@
 ### R8 `ink-shade` 不再染到外框
 
 1. **問題**：`ink-shade` 是不加外框的同一形狀，畫在物件之後，會蓋住外框內側的一半。放大時，背光側的外框帶有概念色（`docs/plan/05-symbols-pictorial-plan.md`〈結果〉T19）。
-2. **修改**：`skills/explainer-figure/scripts/parts.py` 的 `group()` 改變陰影的畫法，讓陰影只落在外框以內。實際做法（例如陰影畫在外框之前、陰影之後重畫只有外框的形狀，或縮小陰影的裁切範圍）在 T4 實作時比較後決定。
-3. **同步**：`pictorial.md` 中由 `parts.py` 產生的片段重新產生，並與輸出逐字相同；`examples/starship-reusability/` 與 `examples/llm-wiki/` 中的物件重新產生。llm-wiki 圖 5 手寫的摺角陰影（`ink-shade` 加 `ink hollow`）一併檢查。
-4. **不變**：正常大小下的外觀、物件的尺寸與位置。
+2. **修改**（2026-10-16 T4 比較後決定，原寫法為修改 `parts.py` 的 `group()`）：只改 `template.html` 的 CSS。`.ink-shade` 改用 `fill-opacity`，並以 3px 的 `--text` 外框重畫它蓋住的那段外框；`.ink-fill ~ .ink-shade` 維持原本的畫法（群組透明度、無外框），讓單一外輪廓的物件（人體）不出現內部外框，重疊的部位也只染一次色。原因：這個做法不增加任何 SVG 元素，而且同時修好範例中手寫的陰影（Starship 助推器、llm-wiki 摺角）；在 `parts.py` 加重畫層則修不到手寫的陰影。
+3. **同步**：`parts.py` 不變，所以 `pictorial.md` 的片段不變；`pictorial.md` 的 class 表更新 `ink-shade` 的說明。4 個內嵌模板 CSS 的範例頁（llm-wiki、starship-reusability、explain-as-webpage 兩頁）同步同一條規則。
+4. **不變**：正常大小下的外觀、物件的尺寸與位置；人體等 `ink-edge`＋`ink-fill` 物件逐像素不變。
 
 ## 2. 技術組成與指令
 
@@ -173,10 +173,9 @@ command -v pdftoppm pdfimages google-chrome               # 必要：PDF 裁切�
 | `skills/explainer-page/SKILL.md` | R5 | 見 R5 第 1 點 |
 | `skills/explainer-page/references/extending-pages.md` | R5 | 共用資產與頁面樹檢查 |
 | `skills/explainer-page/references/writing-rules.md` | R5 | 圖片來源行、固定標籤 |
-| `skills/explainer-page/assets/template.html` | R5 | `figure img` 樣式 |
-| `skills/explainer-figure/scripts/parts.py` | R8 | `group()` 的陰影畫法 |
-| `skills/explainer-figure/references/pictorial.md` | R8 | 重新產生的片段 |
-| `examples/starship-reusability/starship-reusability.html`、`examples/llm-wiki/llm-wiki.html` | R8 | 重新產生的物件 |
+| `skills/explainer-page/assets/template.html` | R5、R8 | `figure img` 樣式；`.ink-shade` 規則 |
+| `skills/explainer-figure/references/pictorial.md` | R8 | class 表中 `ink-shade` 的說明 |
+| `examples/starship-reusability/starship-reusability.html`、`examples/llm-wiki/llm-wiki.html`、`examples/explain-as-webpage/*.html` | R8 | 內嵌 CSS 同步 `.ink-shade` 規則 |
 | `examples/autoresearch/*.html` | R7 | `<style>` 換成目前模板的版本 |
 | `docs/images/tier-l0-figure.png`、`tier-l1-slider.gif`、`tier-l2-stepper.gif` | R7 | 重截 |
 | `.claude-plugin/*.json`、`.codex-plugin/plugin.json`、`.agents/plugins/marketplace.json` | — | 版本升為 0.6.0 |
@@ -199,7 +198,7 @@ command -v pdftoppm pdfimages google-chrome               # 必要：PDF 裁切�
 | V3 | Wikimedia 主題頁（topic 模式；使用者在任務開始前指定主題） | R2–R5 | 授權欄位來自 API；圖說與 Sources 一致；由使用者判讀 |
 | V4 | 公開網頁截圖（使用者在任務開始前指定主題；可與 V3 同頁） | R2–R5 | 截圖逐張列在確認中；只截公開頁；由使用者判讀 |
 | V5 | EKF 差速運動學圖 | R6 | 遮住文字的截圖中可辨認機器人與它的朝向；x、y、θ、v、ω 與公式同色；通過壓線檢查 |
-| V6 | `ink-shade` 修正 | R8 | 4 倍放大截圖中，背光側的外框只有 `--text` 色；零件總覽圖中所有物件的外觀在正常大小下不變；`pictorial.md` 的片段與 `parts.py` 的輸出逐字相同；7 個範例頁的壓線檢查沒有輸出 |
+| V6 | `ink-shade` 修正 | R8 | 4 倍放大截圖中，背光側的外框只有 `--text` 色；零件總覽圖中所有物件的外觀在正常大小下不變；`pictorial.md` 中的 `parts.py` 指令都以 0 結束；7 個範例頁的壓線檢查沒有輸出 |
 | V7 | autoresearch 的 CSS | R7 | DOM 對比掃描兩種寬度都是 `<title>none`；新舊層級示意圖並排，由使用者判讀 |
 
 V1–V4 共同的檢查：資產檢查沒有輸出、`FILL` 為 0、沒有外部資源、390px 不溢出、壓線檢查沒有輸出、HTML ≤ ~150 KB、資產資料夾符合 R3 的大小上限。

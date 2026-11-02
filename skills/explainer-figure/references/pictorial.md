@@ -18,7 +18,7 @@ Every object drawn in a figure (a person, a robot, a backpack) has one style: a 
 | `ink glass` | windows, lenses, sensors, rotors |
 | `ink hollow` | the outline only: a cut-open container's outline, drawn over its clipped layers (Recipe P1) |
 | `ink-edge`, then `ink-fill` | several shapes with one outer outline (a person): the same shapes twice, first with a 6px outline, then filled without one |
-| `ink-shade` | at most one shade layer: the body again, clipped to the side away from the light (the light comes from the top left) |
+| `ink-shade` | at most one shade layer: the body again, clipped to the side away from the light (the light comes from the top left). It also redraws the 3px outline it covers, so the outline keeps its colour. Over an `ink` body, use one shape: overlapping shade shapes tint twice. After `ink-edge` + `ink-fill`, it stays inside the fill and may repeat every part |
 | `ink-track` | the faint dashed path of an object's poses (Recipe P5) |
 | `ink-level` | with `c1`–`c5`, on a second copy of an object clipped at a level: a deeper fill for the filled part (water in a body, fuel in a tank; Recipe P2) |
 

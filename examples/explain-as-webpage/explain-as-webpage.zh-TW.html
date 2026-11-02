@@ -98,7 +98,8 @@ svg .lead { fill: none; stroke: var(--muted); stroke-width: 1; } svg .pin { fill
 .ink { fill: var(--cb, var(--bg)); stroke: var(--text); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
 .ink.dark { fill: var(--text); } .ink.glass { fill: var(--blue-bg); } .ink.hollow { fill: none; } /* hollow: a cut-open container's outline, over its clipped layers */
 .ink-edge { fill: var(--text); stroke: var(--text); stroke-width: 6; stroke-linejoin: round; } .ink-fill { fill: var(--cb, var(--bg)); stroke: none; }
-.ink-shade { fill: var(--cc, var(--text)); opacity: .18; stroke: none; }
+.ink-shade { fill: var(--cc, var(--text)); fill-opacity: .18; stroke: var(--text); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; } /* shade: also redraws the outline it covers */
+.ink-fill ~ .ink-shade { opacity: .18; fill-opacity: 1; stroke: none; } /* after ink-edge + ink-fill: inside the fill already; overlapping parts tint once */
 .ink-track { fill: none; stroke: var(--muted); stroke-width: 2; stroke-dasharray: 6 6; }
 /* Concept colours: class c1-c5 on a box, line, dot, or text in SVG, or on a .chip or .sym in the text */
 .c1 { --cc: var(--c1); --cb: var(--c1-bg); } .c2 { --cc: var(--c2); --cb: var(--c2-bg); } .c3 { --cc: var(--c3); --cb: var(--c3-bg); }
