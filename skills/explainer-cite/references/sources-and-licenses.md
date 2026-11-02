@@ -70,6 +70,14 @@ For a figure's caption in a paper on PubMed Central, read the full-text XML from
 
 **A file in a project.** Copy it from the repository. The user's own project belongs to the user. For someone else's repository, read its `LICENSE`. An image with no license of its own falls under the repository's license, and the source line says so.
 
+**An SVG in a repository.** `prepare` reads raster files only, and a paper's SVG can pass 100 KB, too much for the HTML file. Render it with Chrome, then crop the white margin:
+
+```bash
+printf '<body style="margin:0;background:#fff"><img src="file://%s" style="display:block;width:1100px">' "$T/figure.svg" > "$T/svg.html"
+google-chrome --headless=new --disable-gpu --hide-scrollbars --allow-file-access-from-files --force-device-scale-factor=2 --window-size=1100,520 --screenshot="$T/figure.png" "file://$T/svg.html"
+python3 "$C" prepare "$T/figure.png" <hub>.assets/<name>.webp --kind flat --crop X,Y,W,H
+```
+
 ## 4. No Pillow
 
 `prepare` needs Pillow to write WebP. Without it, `prepare` prints commands that give a PNG, and the check for 200 KB can then fail. Say so in the confirmation. Installing Pillow is the user's decision.

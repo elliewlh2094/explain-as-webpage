@@ -64,7 +64,7 @@ Draw the figure when it shows structure, a mechanism, a cause, or how symbols ma
 
 - An ND image stays whole. Do not crop or annotate it. Shrink it only.
 - Treat an unknown license as all rights reserved.
-- An image in a repository with no license of its own falls under the repository's license. Write "under the repository's license" in the source line, because that is an inference.
+- An image in a repository with no license of its own falls under the repository's license. Write "under the repository's license" in the source line, because that is an inference. A photo from a dataset or another person may not fall under it, so the source line also says that its rights are unconfirmed.
 - NASA has no license field. An image is restricted when its `Credit:` names someone else; `cite.py` handles this.
 
 Stop at a login wall, paywall, or cookie wall. Use another source, or ask the user for the material (`../explainer-page/references/sources-and-research.md` § Material you cannot read).
