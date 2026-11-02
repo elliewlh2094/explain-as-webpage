@@ -1,6 +1,6 @@
 # 規格：引用既有圖片（explainer-cite）與第 5 輪留下的修正（第六輪）
 
-> 狀態：規格（2026-10-16；同日依檢查點 0 修訂 R2、R3、R4、R5、R7；2026-11-02 依 T6a 修訂 R2、R5）。構想見 `docs/plan/05-symbols-pictorial-idea.md`〈後續輪次〉的「第 6 輪候選：explainer-cite」與「第 5 輪留下的項目」；實作計畫與待辦見 `docs/plan/06-explainer-cite-plan.md`。需求有變動時，先更新本文件再實作。
+> 狀態：規格（2026-10-16；同日依檢查點 0 修訂 R2、R3、R4、R5、R7；2026-11-02 依 T6a、T6b 修訂 R2、R5）。構想見 `docs/plan/05-symbols-pictorial-idea.md`〈後續輪次〉的「第 6 輪候選：explainer-cite」與「第 5 輪留下的項目」；實作計畫與待辦見 `docs/plan/06-explainer-cite-plan.md`。需求有變動時，先更新本文件再實作。
 
 ## 0. 問題陳述與範圍
 
@@ -118,7 +118,7 @@
    - 圖放在 `<figure>` 中、位於 `<hub>.assets/` 內；單張、資料夾與顯示高度符合 R3 第 4 點。
 3. **`references/extending-pages.md`**：頁面樹的子頁共用 `<hub>.assets/`；§5 的頁面樹檢查加入資產檢查。
 4. **`references/writing-rules.md`**：圖片來源行的格式（作者、標題、授權、連結、本頁的修改），以及固定標籤的中英對照（例如 Image source／圖片來源、License／授權）。
-5. **`assets/template.html`**：新增 `figure img` 的樣式（`display: block; max-width: 100%; height: auto`），讓圖在 390px 寬時不溢出。不新增顏色。
+5. **`assets/template.html`**：新增 `figure img` 的樣式（`display: block; max-width: min(100%, 720px); height: auto; margin: 0 auto`），讓圖在 390px 寬時不溢出。內容欄實際寬 748px，上限 720px 讓 R3 第 4 點的 540 CSS px 成立；`margin` 與 `figure svg` 相同，讓兩種引用圖都置中（2026-11-02 T6b）。不新增顏色。
 
 ### R6 EKF 頁的機器人圖
 

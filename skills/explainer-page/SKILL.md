@@ -9,7 +9,7 @@ description: Builds one self-contained HTML explainer page (Read the Docs look, 
 
 Turn "I don't understand why the agent did X" (or "I can't get through this article") into one HTML page the user can read in 15 minutes and reopen later. The page is built from the user's own material: real file paths, numbers, and code from their project, or the sections and examples of a document they give, or graded sources found by research. It is organised around the questions the user is stuck on and one causal chain, not around a survey of the topic.
 
-Each page is a single `.html` file. No build step, no external URLs, no extra figure or script folders. When the user keeps asking about a topic, the topic grows into a hub page plus linked child pages, and each page keeps its own length budget.
+Each page is a single `.html` file. No build step, no external URLs, no extra folders, except `<hub>.assets/` for cited raster images. When the user keeps asking about a topic, the topic grows into a hub page plus linked child pages, and each page keeps its own length budget.
 
 ## When to Use
 
@@ -40,7 +40,7 @@ In document and topic modes, first read `references/sources-and-research.md`: ho
 - **Page type and spine**: pick the type in `references/page-types.md` (an argument, a roadmap, a practical guide, an evolution, code, or by default a mechanism). For a mechanism, the spine is the causal chain: cause → mechanism → consequence → fix → measured result. One line per link, each link backed by a fact or marked as inference.
 - **Counterfactual pairs**: the same project case without and with the technique, with real numbers. In document and topic modes, only if a source gives such a case.
 - **Key concepts**: at most 5 the reader must learn. Every other technical term still gets a one-clause definition at first use (see `writing-rules.md`).
-- **Figure briefs**: one per planned figure, in the format of `../explainer-figure/SKILL.md` § Figure brief: the question it answers, its type (mechanism, numeric, summary cards, pictorial), its facts with sources and units, and the concept colour of each key concept that appears in more than one figure.
+- **Figure briefs**: one per planned figure, in the format of `../explainer-figure/SKILL.md` § Figure brief: the question it answers, its type (mechanism, numeric, summary cards, pictorial, cited image: read `../explainer-cite/SKILL.md` before step 4), its facts with sources and units, and the concept colour of each key concept that appears in more than one figure.
 
 ### 3. Choose the presentation tier
 
@@ -59,7 +59,7 @@ Examples: a package's module responsibilities and data flow → L0. Real-time fa
 Send **one** message (use a structured question tool if the platform has one, e.g. `AskUserQuestion` in Claude Code, with at most 4 questions; otherwise a plain message) containing:
 
 1. The core questions — ask the user to add, remove, or reword. In document mode, also show the material's outline and 5–8 numbered candidate questions inside the question itself (text written before a question tool can go unseen), how to organise the page (in the material's own order, or by questions), and for a plan whether to expand units into steps (`sources-and-research.md` §3, §6).
-2. The proposed tier (and page count), the planned figures of each page with their type (mechanism, numeric, cards, pictorial), why, and the cheaper alternative with what it would lose.
+2. The proposed tier (and page count), the planned figures of each page with their type (mechanism, numeric, cards, pictorial, cited image), why, and the cheaper alternative with what it would lose. For a cited image, give its origin and license class; each restricted image gets its own row (`../explainer-cite/SKILL.md`).
 3. The page language (the language the user asks for, otherwise the one the user writes in; one language per topic) and the reader: general public, non-specialist student, or engineer, which is the default in project mode (`writing-rules.md` § Reader). For a high-risk topic (health, safety, law, finance), say so; research is then required (`sources-and-research.md` §9).
 4. The output path, the research depth in topic mode (light or deep, `sources-and-research.md` §7), and any helper skill you plan to use and for which step (§5). Default path in project mode: `~/Documents/explainers/<repo-name>/<topic-slug>.html`, where `<repo-name>` is the basename of the git top-level directory; offer "inside the project" as an alternative. Document mode: `~/Documents/explainers/<topic-slug>/<topic-slug>.html`.
 
@@ -68,7 +68,7 @@ Send **one** message (use a structured question tool if the platform has one, e.
 ### 5. Build the page
 
 1. Copy `assets/template.html` to the output path. Set `lang`, title, sidebar head, breadcrumb.
-2. Follow `references/writing-rules.md` for page structure and prose, and `../explainer-figure/SKILL.md` for every figure (grid, sizes, colours, stepper, slider). The two skills must sit side by side in the same `skills/` folder.
+2. Follow `references/writing-rules.md` for page structure and prose, `../explainer-figure/SKILL.md` for every drawn figure (grid, sizes, colours, stepper, slider), and `../explainer-cite/SKILL.md` for every cited image. The three skills must sit side by side in the same `skills/` folder.
 3. Delete all demo content and every `FILL` marker.
 
 ### 6. Self-check
@@ -80,6 +80,7 @@ F=<absolute output path>
 grep -c 'FILL' "$F"                 # must be 0
 grep -nE '(src=|url\()["'\'']?https?://' "$F"   # must print nothing (no external resources; <a href> links in Sources are fine)
 wc -c < "$F"                        # should be ≤ ~150 KB
+python3 <this skill's folder>/../explainer-cite/scripts/cite.py check "$F"   # must print nothing (images, their files, author and license)
 awk '/id="sources"/{f=1} f&&/<li>/&&!(/class="grade/&&/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]/)' "$F"   # topic mode: must print nothing (every source has a grade and an access date)
 ```
 
@@ -107,7 +108,7 @@ Content checklist:
 
 ### 7. Report
 
-Tell the user: the file path, how to open it (`xdg-open <path>` / `open <path>`), the questions the page answers, which helper skills you used (or which built-in method you fell back to), the unit of each figure with numbers and why you chose it, and anything you could not verify.
+Tell the user: the file path, how to open it (`xdg-open <path>` / `open <path>`), the questions the page answers, which helper skills you used (or which built-in method you fell back to), the unit of each figure with numbers and why you chose it, the origin and license of each cited image, and anything you could not verify.
 
 ## Red Flags
 
@@ -118,7 +119,7 @@ Tell the user: the file path, how to open it (`xdg-open <path>` / `open <path>`)
 - Prose that restates a long report section by section instead of following one causal chain.
 - Generic textbook examples where a project example exists.
 - Writing a document-mode page from a fetch tool's summary, or a topic-mode page from memory, without saying so.
-- Leaving helper scripts, image files, or extra folders next to the page.
+- Leaving helper scripts, image files, or extra folders next to the page (only `<hub>.assets/` stays, with images that a page uses).
 - Adding a new question to a page that is already at its length budget, instead of a child page.
 
 ## Common Rationalizations

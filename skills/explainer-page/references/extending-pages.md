@@ -50,6 +50,7 @@ Pages in one topic keep one language. Do not build until the user answers.
 - Breadcrumb: `project » <a href="<hub>.html">Hub title</a> » child topic`.
 - Do not repeat what the hub explains. Give a one-sentence reminder and link the hub section (`<hub>.html#q2`).
 - Each page stands alone: define every term at its first use on this page, even if the hub defines it too.
+- A cited image goes in the folder of the whole topic. A child page also writes `src="<hub>.assets/…"`, so two pages can share one file (`../explainer-cite/SKILL.md` § Asset folder).
 
 **Existing pages.** Change only what the placement needs:
 
@@ -70,6 +71,8 @@ for f in $H.html $H--*.html; do sed -n '/<div class="pages">/,/<\/div>/p' "$f" |
 for f in $H.html $H--*.html; do grep -qE "href=\"$f\"[^>]*aria-current=\"page\"" "$f" || echo "no current mark: $f"; done
 # Every linked page exists: must print nothing
 grep -oh 'href="[^"#:]*\.html' $H.html $H--*.html | sed 's/href="//' | sort -u | while read -r p; do [ -e "$p" ] || echo "missing: $p"; done
+# The images of the whole topic: must print nothing. A file that a removed page used shows up here
+python3 <the explainer-page skill's folder>/../explainer-cite/scripts/cite.py check $H.html
 ```
 
 Prose length of one page (only the `<main class="content">` part, without tables, code, figures, captions, and source lines; compare with the budget in `writing-rules.md`). Run it before and after the change:

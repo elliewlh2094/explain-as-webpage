@@ -13,7 +13,7 @@ explainer-page decides what each figure must show. This skill decides how to dra
 
 All styles come from that template: use its CSS classes and arrow markers. Do not add colours, fonts, or stylesheets of your own.
 
-Both skills must sit side by side in the same `skills/` folder, because each refers to the other by a relative path.
+The three skills must sit side by side in the same `skills/` folder, because they refer to each other by relative paths.
 
 ## Figure brief
 
@@ -47,6 +47,7 @@ If a field is missing, take it from the page's learning brief. Do not invent fac
 | a result that depends on a parameter | slider | § Slider |
 | 4–6 parallel items with the same fields (layers, roles, options) | summary cards (HTML) | `references/cards.md` instead |
 | where the parts sit in a real object, a body, or a container metaphor; an object's poses along a path | pictorial figure (P1–P5) | `references/pictorial.md` instead |
+| a real thing the reader must recognise, a place in a real interface, or an image the page discusses | cited image | `../explainer-cite/SKILL.md` instead |
 
 Go down the table for each brief and note every row that fits. When summary cards or a pictorial figure fits, use it: a reader takes in cards and drawn objects faster than boxes and arrows. For causes and processes, a mechanism figure (what happens and why) stays the default. Draw a numeric figure only after the mechanism is clear, and only if it proves a claim on the page.
 

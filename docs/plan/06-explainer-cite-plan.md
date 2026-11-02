@@ -21,10 +21,10 @@
 
 ### 第 2 階段：explainer-cite 規則（R1–R5）
 - [x] T6a `skills/explainer-cite/`：`SKILL.md`、references、scripts —— 2026-11-02：`SKILL.md` 114 行、2 個 references、`cite.py`（`license`、`prepare`、`check`），壓線檢查新增 `text-on-image`；Openverse 的搜尋端點逾時，尚未實際連線驗證（〈結果〉T6a）
-- [ ] T6b explainer-page 與 explainer-figure 的整合、模板的 `figure img` 樣式、示範截圖
+- [x] T6b explainer-page 與 explainer-figure 的整合、模板的 `figure img` 樣式、示範截圖 —— 2026-11-02：`explainer-page/SKILL.md` 131 行；示範主題（主頁＋子頁，CC BY-SA 4.0 的 Commons 照片）通過資產、壓線與 390px 檢查
 
 #### 檢查點 B
-- [ ] 使用者確認規則與示範截圖；提供提交建議
+- [x] 使用者確認規則與示範截圖；提供提交建議 —— 2026-11-02：判讀通過；always-on 的驗收條件改為比對 frontmatter 與安裝後的 skill 清單
 
 ### 第 3 階段：驗收案例
 - [ ] T7 EKF 頁 v3：論文照片加引線、差速運動學圖（V1、V5）
@@ -181,7 +181,7 @@ T3 層級示意圖 ┘           │                                           �
 
 **驗證：**
 - [x] `wc -l skills/explainer-cite/SKILL.md` 約 130 行以內。—— 114 行
-- [ ] `claude plugin validate .` 通過；`claude --plugin-dir . plugin details explain-as-webpage` 顯示 3 個 skill，explainer-cite 不在 always-on 的 token 成本中。—— 未完全達成：validate 通過、3 個 skill；估算表仍列 explainer-cite ~160 tok，隱藏設定相同的 explainer-figure 也列 ~130 tok（〈結果〉T6a），待檢查點 B 確認
+- [ ] `claude plugin validate .` 通過；`claude --plugin-dir . plugin details explain-as-webpage` 顯示 3 個 skill；explainer-cite 的 frontmatter 隱藏設定與 explainer-figure 相同，且安裝後的 skill 清單不列出 explainer-cite（檢查點 B 改寫，原條件為「不在 always-on 的 token 成本中」）。—— validate 通過、3 個 skill、隱藏設定相同；skill 清單要等安裝 0.6.0 才能確認，移到 T11
 
 **相依：** 檢查點 0、檢查點 A。**可能動到的檔案：** `skills/explainer-cite/SKILL.md`、`skills/explainer-cite/references/*.md`（2 個）、`skills/explainer-cite/scripts/*`（1–2 個）、`skills/explainer-figure/scripts/check-overlap.js`。**規模：** M。
 
@@ -190,21 +190,21 @@ T3 層級示意圖 ┘           │                                           �
 **說明：** 修改 explainer-page 的 6 處、兩個 references、模板，以及 explainer-figure 的圖型表。
 
 **驗收條件：**
-- [ ] `skills/explainer-page/SKILL.md` 依規格 R5 第 1 點修改 6 處，總行數 ≤ 132。
-- [ ] `extending-pages.md`、`writing-rules.md` 依 R5 第 3、4 點修改；`explainer-figure/SKILL.md` 圖型表新增一列。
-- [ ] `template.html` 新增 `figure img` 樣式；不新增顏色。
-- [ ] 以一張自由授權圖（T1 取得的 Commons 圖）做一個暫存示範頁：一張 `<img>`、一張標註的 `<svg><image>`，截圖存於 `temp/round-06/t6b/`。
+- [x] `skills/explainer-page/SKILL.md` 依規格 R5 第 1 點修改 6 處，總行數 ≤ 132。—— 131 行；另在第 5 步加入 explainer-cite 的引用，並把 skill 數改為 3
+- [x] `extending-pages.md`、`writing-rules.md` 依 R5 第 3、4 點修改；`explainer-figure/SKILL.md` 圖型表新增一列。
+- [x] `template.html` 新增 `figure img` 樣式；不新增顏色。
+- [x] 以一張自由授權圖（T1 取得的 Commons 圖）做一個暫存示範頁：一張 `<img>`、一張標註的 `<svg><image>`，截圖存於 `temp/round-06/t6b/`。—— 改用 `File:TurtleBot3 Burger.jpg`：它是直式 CC BY-SA 4.0 照片，可同時測試裁切、高度上限與相同方式分享的寫法
 
 **驗證：**
-- [ ] `CLAUDE.md`〈驗證指令〉的模板檢查全部通過（外部資源、兩種寬度、DOM 對比掃描）。
-- [ ] 示範頁通過資產檢查、壓線檢查與 390px 檢查。
-- [ ] `wc -l skills/*/SKILL.md` 三個都約 130 行以內。
+- [x] `CLAUDE.md`〈驗證指令〉的模板檢查全部通過（外部資源、兩種寬度、DOM 對比掃描）。
+- [x] 示範頁通過資產檢查、壓線檢查與 390px 檢查。
+- [x] `wc -l skills/*/SKILL.md` 三個都約 130 行以內。—— 114、125、131 行
 
 **相依：** T6a。**可能動到的檔案：** `skills/explainer-page/SKILL.md`、`skills/explainer-page/references/extending-pages.md`、`skills/explainer-page/references/writing-rules.md`、`skills/explainer-page/assets/template.html`、`skills/explainer-figure/SKILL.md`。**規模：** M。
 
 #### 檢查點 B
 
-- [ ] 使用者確認 T6a、T6b 的規則與示範截圖；提供 `git add` 範圍與提交訊息。
+- [x] 使用者確認 T6a、T6b 的規則與示範截圖；提供 `git add` 範圍與提交訊息。—— 2026-11-02：判讀通過；窄版標註圖的橫向捲動維持現狀
 
 ## 第 3 階段：驗收案例
 
@@ -264,6 +264,7 @@ V1–V4 共同的檢查（規格 §5）：資產檢查沒有輸出、`FILL` 為 
 
 **驗證：**
 - [ ] `CLAUDE.md`〈驗證指令〉全部通過；`plugin details` 顯示 3 個 skill。
+- [ ] 安裝 0.6.0 後，session 的 skill 清單列出 explainer-page，不列出 explainer-cite 與 explainer-figure。
 
 **相依：** 檢查點 C。**可能動到的檔案：** 4 個 manifest、`CLAUDE.md`、2 個 README、2 個 `docs/plan/` 文件。**規模：** M。
 
@@ -416,13 +417,13 @@ V1–V4 共同的檢查（規格 §5）：資產檢查沒有輸出、`FILL` 為 
 
 **結論：explainer-cite 的 `SKILL.md`、2 個 references 與 `cite.py` 完成，壓線檢查新增 `text-on-image`。兩項驗收條件未完全達成：Openverse 尚未實際連線驗證；`plugin details` 的估算表仍列出隱藏 skill 的 token。**
 
-- **檔案**：`SKILL.md` 114 行；`references/sources-and-licenses.md` 83 行；`references/annotated-image.md` 43 行；`scripts/cite.py` 258 行。腳本放在一個檔案中，有 3 個子指令，只用 Python 標準函式庫，`prepare` 的 Pillow 為選用。
+- **檔案**：`SKILL.md` 114 行；`references/sources-and-licenses.md` 83 行；`references/annotated-image.md` 43 行；`scripts/cite.py` 262 行（T6b 修正後）。腳本放在一個檔案中，有 3 個子指令，只用 Python 標準函式庫，`prepare` 的 Pillow 為選用。
 - **與規格不同的決定**（已寫回規格）：
   - arXiv 讀摘要頁。OAI-PMH 端點連續 25 秒沒有回應，摘要頁約 1 秒回應，而且規格的授權依據本來就是摘要頁。
   - 不解析 XML。只取 3 個欄位，以正規表示式讀 HTML 即可，避免 XML 解析器的外部實體與展開風險。
   - 資產檢查做成 `cite.py check`，不用規格原寫的 `grep`；另外檢查圖是否在 `<figure>` 中、在資料夾內，以及 R3 的 3 個上限。
 - **實作時發現的缺陷**：
-  - Commons 的 `thumbwidth` 在原圖比要求窄時仍回報要求的寬度（回報 1440，實際 596）。`image_size` 改取兩者較小值。
+  - Commons 的 `thumbwidth` 在原圖比要求窄時仍回報要求的寬度（回報 1440，實際 596）。`image_size` 改取兩者較小值。這個修法不完整，T6b 改為從網址讀真實寬度。
   - 配方片段第一版的引線穿過照片上的 “ASSEMBLED ROBOT”，底線切斷了文字。壓線檢查讀不到照片中的文字，所以改了片段，並在 `annotated-image.md` 寫明要看截圖。
 - **驗證**：
 
@@ -439,5 +440,36 @@ V1–V4 共同的檢查（規格 §5）：資產檢查沒有輸出、`FILL` 為 
 | `claude plugin validate .` | 通過；1 個警告是根目錄的 `CLAUDE.md`，屬預期 |
 | `plugin details` | `Skills (3)`；估算表的 always-on 為 explainer-cite ~160、explainer-page ~370、explainer-figure ~130 |
 
-- **`plugin details` 的估算**：`explainer-figure` 的 frontmatter 與 explainer-cite 相同，估算表一樣把它算進 always-on，所以這張表不反映 `disable-model-invocation`。實際上，session 的 skill 清單只列出 `explainer-page`，沒有 `explainer-figure`。這項驗收條件無法用這個指令證明，需要在檢查點 B 改寫條件。
+- **`plugin details` 的估算**：`explainer-figure` 的 frontmatter 與 explainer-cite 相同，估算表一樣把它算進 always-on，所以這張表不反映 `disable-model-invocation`。實際上，session 的 skill 清單只列出 `explainer-page`，沒有 `explainer-figure`。這項驗收條件無法用這個指令證明，檢查點 B 已改寫（見 T6a 的驗證項目）。
 - **截圖**：`temp/round-06/t6a/demo-wide.png`。示範頁的 `<img>` 寬版正常；390px 的 `<img>` 規則在 T6b 加入。
+
+### T6b explainer-page 與 explainer-figure 的整合（2026-11-02）
+
+**結論：explainer-page 的 6 處、2 個 references、explainer-figure 的圖型表與模板都已修改。依 skill 的步驟從查授權走到資產檢查，示範主題全部通過。**
+
+- **修改**：
+  - `explainer-page/SKILL.md`：Overview、第 2 步圖型、第 4 步第 2 項、第 5 步、第 6 步資產檢查、第 7 步、Red Flags。第 2 步寫明引用圖要在第 4 步之前讀 explainer-cite，否則確認時還沒有授權資訊。
+  - `extending-pages.md`：子頁共用資料夾；§5 加入資產檢查。
+  - `writing-rules.md`：引用圖來源行的規則；固定標籤兩列。
+  - `explainer-figure/SKILL.md`：圖型表一列；「三個 skill 並列」。
+  - `template.html`：`figure img` 一條規則。
+- **實作時發現的缺陷**：
+  - Commons 會把縮圖對齊到標準寬度：`thumbwidth` 回報 1440，實際檔案 1920。`--crop` 使用來源像素，這個差異會裁錯位置。`cite.py` 改從 `thumburl` 的 `1920px-` 讀寬度。
+  - 寬版的 `<img>` 顯示 748 × 561，超過 540 CSS px：內容欄實際寬 748px，不是規格假設的 720px。`figure img` 的 `max-width` 改為 `min(100%, 720px)`，修正後量得 720 × 540。
+  - `cite.py check` 在主頁不存在時（單頁名為 `a--b.html`）會丟出 traceback。第 6 步現在對每一頁執行，所以改為略過不存在的主頁。
+- **驗證**：
+
+| 項目 | 結果 |
+|---|---|
+| 模板：外部資源、390px、DOM 對比掃描 | 沒有輸出、`<title>ok`、兩種寬度都是 `<title>none` |
+| 示範流程 | `license commons` → `curl` → `prepare`：整張照片顯示高 983 CSS px，回報並以 1 結束；裁切後 1440 × 1080、59 KB |
+| 示範主題 2 頁（英文主頁、繁中子頁共用同一圖檔） | `FILL` 為 0、沒有外部資源、資產檢查與壓線檢查沒有輸出 |
+| 390px | 兩頁 `<title>ok`；`<img>` 為 343/343，`figure` 沒有內部捲軸（T2 時會被裁切） |
+| 文件中的 shell 範例 | 第 6 步、`extending-pages.md` §5 依原文執行，沒有輸出、以 0 結束 |
+| 沒有引用圖的頁面 | 7 個範例頁的資產檢查沒有輸出、以 0 結束 |
+| 外觀 | 寬版、窄版與遮住文字的截圖都看過：`temp/round-06/t6b/` |
+| `claude plugin validate .`、manifest | 通過；警告是根目錄 `CLAUDE.md`、沒有 icon 與 marketplace 同目錄，都與本輪無關 |
+
+- **窄版的標註圖**：`figure svg` 的 `min-width: 540px` 讓它在 390px 時橫向捲動，右側標籤要捲動才看得到。所有 SVG 圖都是這樣，本輪不改。
+- **範例頁的 CSS**：7 頁都沒有 `<img>`，所以不同步 `figure img` 這條規則。規格〈6. 邊界〉也把修改 R7、R8 以外的範例列為要先詢問的項目。
+- **Openverse**：第 4 次仍然逾時。

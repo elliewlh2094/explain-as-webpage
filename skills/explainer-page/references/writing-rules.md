@@ -26,6 +26,7 @@ Do not add: scope/authority tables, "how to read this document" guides, change h
 - Each figure has one message. If you need "and" to describe it, make two figures or a stepper.
 - **Do not repeat the figure in the text.** Words the figure already shows (notes on leader lines, card fields, labels inside layers) stay in the figure. The paragraph says what to look at and what to compare. If the paragraph needs one of those facts, point to it ("the middle layer of Figure 4") instead of restating it.
 - Prefer a mechanism figure (what happens and why) over a data plot (distribution, ROC). Use a data plot only after the mechanism is clear, and only if it proves a claim on the page.
+- **Cited images.** A `.src` line directly under the figure gives the author, the title with a link, the license with a link, and every change this page made. Sources lists the image with the same author and license. The format is in `../explainer-cite/SKILL.md` § Figure.
 - **Summary cards.** When the text describes 4–6 parallel items with the same fields (the layers of a system, the roles of a team), show them as one card figure instead of paragraphs or a list (`../explainer-figure/references/cards.md`). Items compared by numbers go in a table. The cards replace the prose; do not repeat their content in the text.
 - **Concept colours.** If two or more key concepts (SKILL.md step 2) appear in more than one figure, give each one a concept colour (`c1`–`c5`) in the learning brief and keep it on every figure and in the text as a chip (`../explainer-figure/references/svg-recipes.md` § Concept colours). Red, green, orange, and blue keep their semantic meaning (problem, fix, consequence, neutral part); never use them to mark a concept, because the reader would read a red concept as a problem.
 - **Every number in a figure tells the reader what it means.** This covers axes, bars, sliders, and a single number inside a box. Using only the figure, its caption, and its source line, the reader can answer four questions; do not leave them to guess:
@@ -74,6 +75,8 @@ Do not add: scope/authority tables, "how to read this document" guides, change h
 | Figure caption prefix | Figure 1. | 圖 1　(full-width space) |
 | Page tree label | Pages in this topic | 本主題頁面 |
 | Link to a child page | More: | 延伸閱讀： |
+| Cited image's source line (the asset check reads the first two) | Image source: / License: | 圖片來源：／授權： |
+| Changes to a cited image | Cropped by this page. / Annotations added by this page. | 本頁裁切。／標註為本頁加上。 |
 
 ## Reader
 

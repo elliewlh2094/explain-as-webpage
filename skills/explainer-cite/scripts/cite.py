@@ -69,10 +69,14 @@ def commons(q, limit):
         def field(key):  # Artist and others are HTML
             return html.unescape(re.sub(r"<[^>]+>", "", meta.get(key, {}).get("value", ""))).strip()
 
+        # Commons snaps a thumbnail to a standard width, and thumbwidth does not say so. The URL does:
+        # .../1920px-Name.jpg. A URL with no width is the original file.
+        url = i.get("thumburl", i["url"])
+        m = re.search(r"/(\d+)px-[^/]*$", url.split("?")[0])
+        w = int(m[1]) if m else i["width"]
         show(title=page["title"], author=field("Artist"), license=field("LicenseShortName") or "unknown",
-             license_url=field("LicenseUrl"), page=i["descriptionurl"],
-             # A file narrower than the request comes unscaled, while thumbwidth still says the requested width.
-             image=i.get("thumburl", i["url"]), image_size=f"{min(i.get('thumbwidth', i['width']), i['width'])}x{min(i.get('thumbheight', i['height']), i['height'])}")
+             license_url=field("LicenseUrl"), page=i["descriptionurl"], image=url,
+             image_size=f"{w}x{round(i['height'] * w / i['width'])}")
 
 
 def openverse(q, limit):
@@ -211,7 +215,7 @@ def check(a):
     os.chdir(os.path.dirname(os.path.abspath(a.page)))
     hub = os.path.basename(a.page).rsplit(".", 1)[0].split("--")[0]
     assets, used, lines = f"{hub}.assets", set(), []
-    for page in [f"{hub}.html"] + sorted(glob.glob(f"{hub}--*.html")):
+    for page in glob.glob(f"{hub}.html") + sorted(glob.glob(f"{hub}--*.html")):  # a page named a--b.html may have no hub
         with open(page, encoding="utf-8") as f:
             check_page(page, f.read(), assets, used, lines.append)
     if os.path.isdir(assets):

@@ -75,6 +75,7 @@ table.kv td:first-child { white-space: nowrap; } /* label column of a label-cont
 /* Figures. SVG keeps a readable minimum width; the figure scrolls sideways on phones, never the page. */
 figure { margin: 8px 0 24px; overflow-x: auto; }
 figure svg { display: block; width: 100%; min-width: 540px; height: auto; margin: 0 auto; }
+figure img { display: block; max-width: min(100%, 720px); height: auto; margin: 0 auto; }
 figcaption { font-size: .9rem; color: var(--muted); margin-top: 6px; }
 details { border: 1px solid var(--rule); padding: 8px 12px; margin: 0 0 20px; background: #fff; }
 details > summary { cursor: pointer; font-weight: 700; }
