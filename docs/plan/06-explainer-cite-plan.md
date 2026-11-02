@@ -17,10 +17,10 @@
 - [x] T5 autoresearch 3 頁改用目前模板的 CSS，重截層級示意圖 —— 2026-10-16：對比掃描兩種寬度都是 `none`；三張層級示意圖重截，寬度與幀設定不變，L1、L2 高 970、921px
 
 #### 檢查點 A
-- [ ] 使用者判讀放大截圖與新舊層級示意圖；提供提交建議
+- [x] 使用者判讀放大截圖與新舊層級示意圖；提供提交建議 —— 2026-11-02：判讀通過並提交（`8f524c0`）；L1 滑桿改為藍色，是 Chrome 的預設外觀，新舊 CSS 都沒有滑桿規則，接受
 
 ### 第 2 階段：explainer-cite 規則（R1–R5）
-- [ ] T6a `skills/explainer-cite/`：`SKILL.md`、references、scripts
+- [x] T6a `skills/explainer-cite/`：`SKILL.md`、references、scripts —— 2026-11-02：`SKILL.md` 114 行、2 個 references、`cite.py`（`license`、`prepare`、`check`），壓線檢查新增 `text-on-image`；Openverse 的搜尋端點逾時，尚未實際連線驗證（〈結果〉T6a）
 - [ ] T6b explainer-page 與 explainer-figure 的整合、模板的 `figure img` 樣式、示範截圖
 
 #### 檢查點 B
@@ -142,7 +142,7 @@ T3 層級示意圖 ┘           │                                           �
 
 **驗證：**
 - [x] 7 個範例頁的壓線檢查沒有輸出。
-- [x] 2 個修改的範例頁：`FILL` 為 0、沒有外部資源、390px 為 `<title>ok`、DOM 對比掃描兩種寬度都是 `<title>none`。
+- [x] 修改的範例頁（因改為只改 CSS，實際是 4 頁，見〈結果〉T4）：`FILL` 為 0、沒有外部資源、390px 為 `<title>ok`、DOM 對比掃描兩種寬度都是 `<title>none`。
 - [x] 放大截圖與並排截圖存於 `temp/round-06/t4/`。
 
 **相依：** 檢查點 0。**可能動到的檔案：** `skills/explainer-figure/scripts/parts.py`、`skills/explainer-figure/references/pictorial.md`、`examples/starship-reusability/starship-reusability.html`、`examples/llm-wiki/llm-wiki.html`。**規模：** M。
@@ -164,7 +164,7 @@ T3 層級示意圖 ┘           │                                           �
 
 #### 檢查點 A
 
-- [ ] 使用者判讀 T4 的放大截圖與 T5 的新舊層級示意圖；提供 `git add` 範圍與提交訊息。
+- [x] 使用者判讀 T4 的放大截圖與 T5 的新舊層級示意圖；提供 `git add` 範圍與提交訊息。—— 2026-11-02：提交 `8f524c0`
 
 ## 第 2 階段：explainer-cite 規則
 
@@ -173,15 +173,15 @@ T3 層級示意圖 ┘           │                                           �
 **說明：** 新增 skill 的 `SKILL.md`、references 與 scripts。
 
 **驗收條件：**
-- [ ] `SKILL.md`：frontmatter（隱藏設定與 description）、輸入輸出、引用與自繪的判準、3 種來源、授權分類與受限圖的處理、資產資料夾規則、資產檢查指令。約 130 行以內。
-- [ ] references：來源與授權的細節（各 API 的指令與欄位、PDF 與網頁的取得方式、CC BY-SA 的圖說寫法），以及標註引用圖的配方（附一段可直接複製的片段）。
-- [ ] scripts：授權查詢（Commons 檔名或 Openverse 查詢字串 → 作者、授權、連結）與裁切壓縮（原圖、裁切範圍、寬度 → 圖檔與大小）；只用 Python 標準函式庫，裁切壓縮在沒有 Pillow 時印出退路指令。
-- [ ] `check-overlap.js` 新增一類「文字落在 `<image>` 範圍內」（檢查點 0 決定）：T2 的示範頁中，壓在照片上的標籤被回報，外側標籤與引線沒有誤報；7 個範例頁仍沒有輸出。
-- [ ] 文件中的每個指令都實際執行一次並以 0 結束；資產檢查在乾淨的暫存主題上沒有輸出，故意刪掉一個圖檔或留下一個未引用的圖檔時各印出一行。
+- [x] `SKILL.md`：frontmatter（隱藏設定與 description）、輸入輸出、引用與自繪的判準、3 種來源、授權分類與受限圖的處理、資產資料夾規則、資產檢查指令。約 130 行以內。—— 114 行
+- [x] references：來源與授權的細節（各 API 的指令與欄位、PDF 與網頁的取得方式、CC BY-SA 的圖說寫法），以及標註引用圖的配方（附一段可直接複製的片段）。—— `sources-and-licenses.md`、`annotated-image.md`
+- [x] scripts：授權查詢（Commons 檔名或 Openverse 查詢字串 → 作者、授權、連結）與裁切壓縮（原圖、裁切範圍、寬度 → 圖檔與大小）；只用 Python 標準函式庫，裁切壓縮在沒有 Pillow 時印出退路指令。—— `cite.py`；另涵蓋 NASA、Crossref、arXiv 與資產檢查
+- [x] `check-overlap.js` 新增一類「文字落在 `<image>` 範圍內」（檢查點 0 決定）：T2 的示範頁中，壓在照片上的標籤被回報，外側標籤與引線沒有誤報；7 個範例頁仍沒有輸出。—— T2 的示範頁已不在，依相同內容重建
+- [ ] 文件中的每個指令都實際執行一次並以 0 結束；資產檢查在乾淨的暫存主題上沒有輸出，故意刪掉一個圖檔或留下一個未引用的圖檔時各印出一行。—— 未完全達成：`license openverse` 逾時，解析邏輯只以樣本測試；其餘指令與資產檢查都達成。T9 使用前再測一次
 
 **驗證：**
-- [ ] `wc -l skills/explainer-cite/SKILL.md` 約 130 行以內。
-- [ ] `claude plugin validate .` 通過；`claude --plugin-dir . plugin details explain-as-webpage` 顯示 3 個 skill，explainer-cite 不在 always-on 的 token 成本中。
+- [x] `wc -l skills/explainer-cite/SKILL.md` 約 130 行以內。—— 114 行
+- [ ] `claude plugin validate .` 通過；`claude --plugin-dir . plugin details explain-as-webpage` 顯示 3 個 skill，explainer-cite 不在 always-on 的 token 成本中。—— 未完全達成：validate 通過、3 個 skill；估算表仍列 explainer-cite ~160 tok，隱藏設定相同的 explainer-figure 也列 ~130 tok（〈結果〉T6a），待檢查點 B 確認
 
 **相依：** 檢查點 0、檢查點 A。**可能動到的檔案：** `skills/explainer-cite/SKILL.md`、`skills/explainer-cite/references/*.md`（2 個）、`skills/explainer-cite/scripts/*`（1–2 個）、`skills/explainer-figure/scripts/check-overlap.js`。**規模：** M。
 
@@ -287,8 +287,8 @@ V1–V4 共同的檢查（規格 §5）：資產檢查沒有輸出、`FILL` 為 
 ## Open Questions
 
 - V3、V4 的主題（使用者在 T9、T10 開始前指定）。
-- explainer-cite 的 references 檔名、scripts 的檔名與子指令（T6a 決定）。
-- `ink-shade` 的修正做法（T4 比較後決定）。
+- ~~explainer-cite 的 references 檔名、scripts 的檔名與子指令~~：T6a 決定（規格第 3 節）。
+- ~~`ink-shade` 的修正做法~~：T4 決定（規格 R8）。
 
 ## 結果
 
@@ -411,3 +411,33 @@ V1–V4 共同的檢查（規格 §5）：資產檢查沒有輸出、`FILL` 為 
 | `tier-l2-stepper.gif` | 1239 × 866，8 幀，275 KB | 1239 × 921，8 幀，334 KB |
 
   每幀時間（800 ms，最後一幀 1600 ms）、無限循環與 L1 的滑桿值都與舊檔相同。L2 變高，是因為圖 3 的圖說在 `3a9c515` 加了 val_bpb 的說明，變成兩行。README 以 `width="640"` 顯示，高度的差異不影響版面。
+
+### T6a `skills/explainer-cite/`（2026-11-02）
+
+**結論：explainer-cite 的 `SKILL.md`、2 個 references 與 `cite.py` 完成，壓線檢查新增 `text-on-image`。兩項驗收條件未完全達成：Openverse 尚未實際連線驗證；`plugin details` 的估算表仍列出隱藏 skill 的 token。**
+
+- **檔案**：`SKILL.md` 114 行；`references/sources-and-licenses.md` 83 行；`references/annotated-image.md` 43 行；`scripts/cite.py` 258 行。腳本放在一個檔案中，有 3 個子指令，只用 Python 標準函式庫，`prepare` 的 Pillow 為選用。
+- **與規格不同的決定**（已寫回規格）：
+  - arXiv 讀摘要頁。OAI-PMH 端點連續 25 秒沒有回應，摘要頁約 1 秒回應，而且規格的授權依據本來就是摘要頁。
+  - 不解析 XML。只取 3 個欄位，以正規表示式讀 HTML 即可，避免 XML 解析器的外部實體與展開風險。
+  - 資產檢查做成 `cite.py check`，不用規格原寫的 `grep`；另外檢查圖是否在 `<figure>` 中、在資料夾內，以及 R3 的 3 個上限。
+- **實作時發現的缺陷**：
+  - Commons 的 `thumbwidth` 在原圖比要求窄時仍回報要求的寬度（回報 1440，實際 596）。`image_size` 改取兩者較小值。
+  - 配方片段第一版的引線穿過照片上的 “ASSEMBLED ROBOT”，底線切斷了文字。壓線檢查讀不到照片中的文字，所以改了片段，並在 `annotated-image.md` 寫明要看截圖。
+- **驗證**：
+
+| 項目 | 結果 |
+|---|---|
+| `license commons`（檔名、搜尋）、`nasa`、`crossref`、`arxiv` | 欄位正確；MDPI 為 CC BY 4.0、LightGlue 為 arXiv 預設授權（`restricted`），與 T1 一致；查無資料時以 1 結束 |
+| 授權分類 13 個名稱 | CC0、公有領域、CC BY、CC BY-SA 為 `free`；NC、ND、GFDL、未知、arXiv 預設授權為 `restricted` |
+| `license openverse` | **3 次都逾時**（30–40 秒）；`/v1/` 根路徑回 200，換 User-Agent 無效，問題在服務端。解析邏輯以 T1 記錄的欄位組成樣本測試，輸出正確 |
+| `prepare` | 照片、`--kind flat`、裁切、超過上限時以 1 結束並印出原因；LightGlue 圖 1 為 18 KB，與 T2 相同 |
+| 沒有 Pillow（`python3 -S`） | 印出退路指令；實際執行 Chrome 指令，輸出 520 × 240 的 PNG |
+| 文件中的其他指令 | Commons 下載、NASA 尺寸清單、`pdftoppm` 兩段、`pdfimages` 兩段、網頁截圖、Europe PMC 全文 XML 都以 0 結束 |
+| 壓線檢查 | 配方片段沒有輸出；壓在照片上與跨過照片邊緣的標籤回報 `text-on-image`，外側標籤與 `data-touch` 不回報；引線穿過標籤照常回報；7 個範例頁與模板沒有輸出 |
+| 資產檢查 | 乾淨的主題沒有輸出；刪掉圖檔、未引用的檔案、缺少作者與授權、外部網址、資料夾外、`<figure>` 外、過高、過大各印出對應的行，以 1 結束 |
+| `claude plugin validate .` | 通過；1 個警告是根目錄的 `CLAUDE.md`，屬預期 |
+| `plugin details` | `Skills (3)`；估算表的 always-on 為 explainer-cite ~160、explainer-page ~370、explainer-figure ~130 |
+
+- **`plugin details` 的估算**：`explainer-figure` 的 frontmatter 與 explainer-cite 相同，估算表一樣把它算進 always-on，所以這張表不反映 `disable-model-invocation`。實際上，session 的 skill 清單只列出 `explainer-page`，沒有 `explainer-figure`。這項驗收條件無法用這個指令證明，需要在檢查點 B 改寫條件。
+- **截圖**：`temp/round-06/t6a/demo-wide.png`。示範頁的 `<img>` 寬版正常；390px 的 `<img>` 規則在 T6b 加入。

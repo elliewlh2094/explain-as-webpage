@@ -86,7 +86,7 @@ for f in ("text", "muted", "red", "green-text", "c1", "c2", "c3", "c4", "c5"):
 EOF
 ```
 
-The overlap check prints one line per text over text, line through text, or text across a shape's edge, in every stepper frame, and nothing when all figures pass. Add `data-touch` to a line that must touch a label (a leader's end). It does not see a line through an object or an object on an object: look for those in the screenshot.
+The overlap check prints one line per text over text, line through text, text across a shape's edge, or text on a cited image, in every stepper frame, and nothing when all figures pass. Add `data-touch` to a line that must touch a label (a leader's end). It does not see a line through an object or an object on an object: look for those in the screenshot.
 
 ```bash
 J=<this skill's folder>/scripts/check-overlap.js; T=$(mktemp --suffix=.html)

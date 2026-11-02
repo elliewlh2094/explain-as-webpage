@@ -1,6 +1,6 @@
 # 規格：引用既有圖片（explainer-cite）與第 5 輪留下的修正（第六輪）
 
-> 狀態：規格（2026-10-16；同日依檢查點 0 修訂 R2、R3、R4、R5、R7）。構想見 `docs/plan/05-symbols-pictorial-idea.md`〈後續輪次〉的「第 6 輪候選：explainer-cite」與「第 5 輪留下的項目」；實作計畫與待辦見 `docs/plan/06-explainer-cite-plan.md`。需求有變動時，先更新本文件再實作。
+> 狀態：規格（2026-10-16；同日依檢查點 0 修訂 R2、R3、R4、R5、R7；2026-11-02 依 T6a 修訂 R2、R5）。構想見 `docs/plan/05-symbols-pictorial-idea.md`〈後續輪次〉的「第 6 輪候選：explainer-cite」與「第 5 輪留下的項目」；實作計畫與待辦見 `docs/plan/06-explainer-cite-plan.md`。需求有變動時，先更新本文件再實作。
 
 ## 0. 問題陳述與範圍
 
@@ -62,9 +62,9 @@
 
 | 來源 | 取得方式 | 授權資訊從哪裡來 |
 |---|---|---|
-| 開放授權圖庫 | Wikimedia Commons API（`prop=imageinfo`、`iiprop=url|size|extmetadata`、`iiurlwidth`；下載 API 回傳的 `thumburl`，自組的寬度會回 HTTP 400）；Openverse API（`license=cc0,pdm,by,by-sa` 只取自由授權）；公有領域機構（例如 NASA Image and Video Library API） | API 回傳的作者、授權名稱與授權連結欄位。NASA 沒有授權欄位：`description` 的 `Credits:` 不是 NASA 時，視為授權不明 |
+| 開放授權圖庫 | Wikimedia Commons API（`prop=imageinfo`、`iiprop=url|size|extmetadata`、`iiurlwidth`；下載 API 回傳的 `thumburl`，自組的寬度會回 HTTP 400）；Openverse API（`license=cc0,pdm,by,by-sa` 只取自由授權；搜尋端點可能暫時沒有回應，此時改用 Commons）；公有領域機構（例如 NASA Image and Video Library API） | API 回傳的作者、授權名稱與授權連結欄位。NASA 沒有授權欄位：`description` 的 `Credits:` 不是 NASA 時，視為授權不明 |
 | 公開網頁截圖 | headless Chrome 截取指定的視窗大小與區域 | 網站的著作權聲明；沒有開放授權時視為受限 |
-| 使用者材料中的圖 | PDF：`pdftoppm -f N -l N -r <dpi> -x -y -W -H` 裁切，或 `pdfimages` 取出內嵌圖；專案：直接複製儲存庫中的圖檔 | PDF：材料本身或其出版頁面標示的授權（例如 arXiv 摘要頁、期刊文章頁）；有 DOI 的論文先查 Crossref API 的 `license`（期刊網頁常擋 `curl`）；專案：使用者自己的專案視為使用者擁有 |
+| 使用者材料中的圖 | PDF：`pdftoppm -f N -l N -r <dpi> -x -y -W -H` 裁切，或 `pdfimages` 取出內嵌圖；專案：直接複製儲存庫中的圖檔 | PDF：材料本身或其出版頁面標示的授權（例如 arXiv 摘要頁、期刊文章頁）；有 DOI 的論文先查 Crossref API 的 `license`（期刊網頁常擋 `curl`）；arXiv 讀摘要頁，不用 OAI-PMH（2026-11-02 連續逾時）；專案：使用者自己的專案視為使用者擁有 |
 
 2. **授權分兩類**：
    - **自由**：CC0、公有領域、CC BY、CC BY-SA，以及程式庫中依程式庫授權（MIT、Apache-2.0、BSD）散布的圖。可以裁切、縮放與標註。圖說與 Sources 寫出作者、授權與連結。程式庫沒有另外標示圖的授權時，圖說寫「依程式庫授權」，這是推論。
@@ -110,11 +110,12 @@
    - 第 6 步：加入資產檢查（指令放在 explainer-cite，第 6 步只寫一行引用）。
    - 第 7 步：回報每張引用圖的出處與授權。
    - Red Flags 第 121 行：「Leaving helper scripts, image files, or extra folders next to the page」改為排除 `<hub>.assets/` 中被引用的圖檔。
-2. **資產檢查**（全部通過時不印出任何內容）：
+2. **資產檢查**（`cite.py check`，全部通過時不印出任何內容，有問題時以 1 結束）：
    - 頁面中每個 `<img src>` 與 `<image href>` 指向的檔案都存在。
    - `<hub>.assets/` 中每個檔案都被主題中的某一頁引用。
-   - 頁面中沒有指向外部 URL 的 `src` 或 `<image href>`。既有的外部資源檢查不比對 `href`（T2），所以加上 `grep -nE '<image\b[^>]*href=["'\'']?https?://'`；它同時抓 `href` 與 `xlink:href`，不會抓到 Sources 的 `<a href>`。
-   - 每張引用圖的圖說或來源行都有作者與授權。
+   - 頁面中沒有指向外部 URL 的 `src` 或 `<image href>`。既有的外部資源檢查不比對 `href`（T2），這項由腳本比對 `<img>` 與 `<image>` 的網址，同時涵蓋 `href` 與 `xlink:href`，不會抓到 Sources 的 `<a href>`。
+   - 每張引用圖的圖說或來源行都有作者與授權：腳本比對固定標籤 `Image source:`、`License:`（繁中為 `圖片來源：`、`授權：`）與標籤後的內容。
+   - 圖放在 `<figure>` 中、位於 `<hub>.assets/` 內；單張、資料夾與顯示高度符合 R3 第 4 點。
 3. **`references/extending-pages.md`**：頁面樹的子頁共用 `<hub>.assets/`；§5 的頁面樹檢查加入資產檢查。
 4. **`references/writing-rules.md`**：圖片來源行的格式（作者、標題、授權、連結、本頁的修改），以及固定標籤的中英對照（例如 Image source／圖片來源、License／授權）。
 5. **`assets/template.html`**：新增 `figure img` 的樣式（`display: block; max-width: 100%; height: auto`），讓圖在 390px 寬時不溢出。不新增顏色。
@@ -166,9 +167,9 @@ command -v pdftoppm pdfimages google-chrome               # 必要：PDF 裁切�
 | 檔案 | 需求 | 變更 |
 |---|---|---|
 | `skills/explainer-cite/SKILL.md`（新增） | R1–R5 | 流程、輸入輸出、授權分類、資產檢查指令 |
-| `skills/explainer-cite/references/`（新增） | R2、R4 | 來源與授權的細節；標註引用圖的配方。檔名在 T6a 確定 |
-| `skills/explainer-cite/scripts/`（新增） | R2、R3 | 授權查詢與裁切壓縮。檔名與子指令在 T6a 確定 |
-| `skills/explainer-figure/SKILL.md` | R1 | 圖型表新增「引用圖」一列 |
+| `skills/explainer-cite/references/sources-and-licenses.md`、`annotated-image.md`（新增） | R2、R4 | 來源與授權的細節；標註引用圖的配方 |
+| `skills/explainer-cite/scripts/cite.py`（新增） | R2、R3、R5 | 子指令 `license`、`prepare`、`check` |
+| `skills/explainer-figure/SKILL.md` | R1、R4 | 圖型表新增「引用圖」一列；壓線檢查的說明加入新的一類 |
 | `skills/explainer-figure/scripts/check-overlap.js` | R4 | 新增一類「文字落在 `<image>` 範圍內」（檢查點 0 加入） |
 | `skills/explainer-page/SKILL.md` | R5 | 見 R5 第 1 點 |
 | `skills/explainer-page/references/extending-pages.md` | R5 | 共用資產與頁面樹檢查 |
@@ -261,6 +262,6 @@ V1–V4 共同的檢查：資產檢查沒有輸出、`FILL` 為 0、沒有外部
 
 - V3、V4 的主題（使用者在 T9、T10 開始前指定）。
 - ~~單張圖與資產資料夾的大小上限~~：檢查點 0 決定（R3 第 4 點）。
-- explainer-cite 的 references 檔名、scripts 的檔名與子指令（T6a 決定）。
-- `ink-shade` 的修正做法（T4 比較後決定）。
+- ~~explainer-cite 的 references 檔名、scripts 的檔名與子指令~~：T6a 決定（第 3 節）。
+- ~~`ink-shade` 的修正做法~~：T4 決定（R8）。
 - ~~層級示意圖的重製工具與參數~~：T3 決定（實作計畫〈結果〉T3）。

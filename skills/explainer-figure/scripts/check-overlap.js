@@ -5,7 +5,8 @@
 //   text-overlap       two text boxes overlap
 //   line-through-text  a stroked line or shape edge runs through a text box
 //   text-on-edge       a text box is partly inside and partly outside a filled shape (or a <use>)
-// data-touch on an element or an ancestor excludes it from the last two checks.
+//   text-on-image      a text box overlaps an <image>: a photo has no fixed background colour
+// data-touch on an element or an ancestor excludes it from the last three checks.
 (function () {
   var SKIP = 'defs, clipPath, marker, symbol, mask, pattern';
 
@@ -28,7 +29,7 @@
     if (tag === 'rect') return name + ' ' + [a('x'), a('y'), a('width'), a('height')].join(' ');
     if (tag === 'circle') return name + ' ' + [a('cx'), a('cy'), a('r')].join(' ');
     if (tag === 'ellipse') return name + ' ' + [a('cx'), a('cy'), a('rx'), a('ry')].join(' ');
-    if (tag === 'use') return name + ' ' + el.getAttribute('href');
+    if (tag === 'use' || tag === 'image') return name + ' ' + el.getAttribute('href');
     var d = el.getAttribute('d') || el.getAttribute('points') || '';
     return name + ' ' + (d.length > 24 ? d.slice(0, 24) + ' …' : d);
   }
@@ -51,6 +52,9 @@
     });
     var uses = [].filter.call(svg.querySelectorAll('use'), function (u) {
       return !u.closest(SKIP) && shown(u, svg) && !touch(u);
+    });
+    var images = [].filter.call(svg.querySelectorAll('image'), function (i) {
+      return !i.closest(SKIP) && shown(i, svg);
     });
 
     // 1. Text boxes that overlap. The same text redrawn in the same place (a later frame) is not a problem.
@@ -91,6 +95,11 @@
         var n = 0;
         pts.forEach(function (sp) { if (document.elementsFromPoint(sp[0], sp[1]).indexOf(u) >= 0) n++; });
         if (n > 0 && n < pts.length) out.push(['text-on-edge', t.s, describe(u)]);
+      });
+      // 4. Text on a cited image. The image's own box, so this holds only when the box has the image's shape.
+      images.forEach(function (im) {
+        var q = im.getBoundingClientRect();
+        if (box.l < q.right && q.left < box.r && box.t < q.bottom && q.top < box.b) out.push(['text-on-image', t.s, describe(im)]);
       });
     });
     return out;
