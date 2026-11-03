@@ -33,13 +33,13 @@
 - [x] T10 公開網頁截圖（V4；使用者先指定主題，可與 T9 同頁）—— 2026-11-02：與 T9 同頁；氣象署颱風資料庫 2 張截圖，共同檢查通過；待檢查點 C 判讀
 
 #### 檢查點 C
-- [ ] 使用者判讀 4 個案例；提供提交建議
+- [x] 使用者判讀 4 個案例；提供提交建議 —— 2026-11-02：EKF v3、LightGlue 通過；颱風頁依使用者的兩項意見修改（圖 2 新舊對照、圖 1 改為真實小圖）後通過；提交 `aa02f63`
 
 ### 第 4 階段：收尾
-- [ ] T11 版本 0.6.0、`CLAUDE.md`、README、構想文件的後續輪次、索引狀態
+- [x] T11 版本 0.6.0、`CLAUDE.md`、README、構想文件的後續輪次、索引狀態 —— 2026-11-03（〈結果〉T11）
 
 #### 檢查點 D
-- [ ] 規格〈7. 成功條件〉全部達成；提供最終提交建議
+- [x] 規格〈7. 成功條件〉全部達成；提供最終提交建議 —— 2026-11-03：見〈結果〉T11 的成功條件對照
 
 ## Overview
 
@@ -181,7 +181,7 @@ T3 層級示意圖 ┘           │                                           �
 
 **驗證：**
 - [x] `wc -l skills/explainer-cite/SKILL.md` 約 130 行以內。—— 114 行
-- [ ] `claude plugin validate .` 通過；`claude --plugin-dir . plugin details explain-as-webpage` 顯示 3 個 skill；explainer-cite 的 frontmatter 隱藏設定與 explainer-figure 相同，且安裝後的 skill 清單不列出 explainer-cite（檢查點 B 改寫，原條件為「不在 always-on 的 token 成本中」）。—— validate 通過、3 個 skill、隱藏設定相同；skill 清單要等安裝 0.6.0 才能確認，移到 T11
+- [x] `claude plugin validate .` 通過；`claude --plugin-dir . plugin details explain-as-webpage` 顯示 3 個 skill；explainer-cite 的 frontmatter 隱藏設定與 explainer-figure 相同，且安裝後的 skill 清單不列出 explainer-cite（檢查點 B 改寫，原條件為「不在 always-on 的 token 成本中」）。—— 2026-11-03：skill 清單在 T11 確認（〈結果〉T11）
 
 **相依：** 檢查點 0、檢查點 A。**可能動到的檔案：** `skills/explainer-cite/SKILL.md`、`skills/explainer-cite/references/*.md`（2 個）、`skills/explainer-cite/scripts/*`（1–2 個）、`skills/explainer-figure/scripts/check-overlap.js`。**規模：** M。
 
@@ -234,7 +234,7 @@ V1–V4 共同的檢查（規格 §5）：資產檢查沒有輸出、`FILL` 為 
 **驗收條件：**
 - [x] 使用者在任務開始前指定主題。—— 使用者請我建議方向，最後選定以歷史颱風說明颱風圖
 - [x] 以 Commons 或 Openverse API 查得候選圖，授權欄位來自 API；確認訊息列出候選圖與授權。—— `cite.py license commons`，公有領域
-- [ ] 圖說與 Sources 一致；通過共同檢查；由使用者判讀。—— 檢查通過；待檢查點 C 判讀
+- [x] 圖說與 Sources 一致；通過共同檢查；由使用者判讀。—— 2026-11-02：判讀通過
 
 **相依：** 檢查點 B。**規模：** M。
 
@@ -243,34 +243,34 @@ V1–V4 共同的檢查（規格 §5）：資產檢查沒有輸出、`FILL` 為 
 **驗收條件：**
 - [x] 使用者在任務開始前指定主題；可與 T9 同頁。
 - [x] 只截公開頁；遇到登入牆或 cookie 同意牆時停止並回報。—— 颱風資料庫的觀測資料不需要登入
-- [ ] 截圖逐張列在確認中（出處、授權、用途、修改）；通過共同檢查；由使用者判讀。—— 確認與檢查都完成；待檢查點 C 判讀
+- [x] 截圖逐張列在確認中（出處、授權、用途、修改）；通過共同檢查；由使用者判讀。—— 2026-11-02：判讀通過
 
 **相依：** 檢查點 B。**規模：** S–M。
 
 #### 檢查點 C
 
-- [ ] 使用者判讀 T7–T10；提供 `git add` 範圍與提交訊息（驗收頁不進版本控制，只提交文件與修正）。
+- [x] 使用者判讀 T7–T10；提供 `git add` 範圍與提交訊息（驗收頁不進版本控制，只提交文件與修正）。—— 2026-11-02
 
 ## 第 4 階段：收尾
 
 #### T11 版本與文件
 
 **驗收條件：**
-- [ ] 4 個 manifest 檔升為 0.6.0。
-- [ ] `CLAUDE.md`：〈專案現況〉的「兩個 agent skill」改為三個；〈架構〉加入 `skills/explainer-cite/` 與 `<hub>.assets/` 的例外。
-- [ ] `README.md`、`README.zh-TW.md`：skill 清單與「單一 HTML 檔」的說明加入資產資料夾的例外。
-- [ ] `docs/plan/05-symbols-pictorial-idea.md`〈後續輪次〉的第 6 輪候選與第 5 輪留下的項目標為已完成；〈跨輪驗證〉加入「Codex 是否依相對路徑讀取 explainer-cite」。
-- [ ] 規格〈待驗證的假設〉逐項勾選並附結果；`docs/plan/README.md` 第 06 列的狀態改為已完成。
+- [x] 4 個 manifest 檔升為 0.6.0。
+- [x] `CLAUDE.md`：〈專案現況〉的「兩個 agent skill」改為三個；〈架構〉加入 `skills/explainer-cite/` 與 `<hub>.assets/` 的例外。
+- [x] `README.md`、`README.zh-TW.md`：skill 清單與「單一 HTML 檔」的說明加入資產資料夾的例外。
+- [x] `docs/plan/05-symbols-pictorial-idea.md`〈後續輪次〉的第 6 輪候選與第 5 輪留下的項目標為已完成；〈跨輪驗證〉加入「Codex 是否依相對路徑讀取 explainer-cite」。
+- [x] 規格〈待驗證的假設〉逐項勾選並附結果；`docs/plan/README.md` 第 06 列的狀態改為已完成。
 
 **驗證：**
-- [ ] `CLAUDE.md`〈驗證指令〉全部通過；`plugin details` 顯示 3 個 skill。
-- [ ] 安裝 0.6.0 後，session 的 skill 清單列出 explainer-page，不列出 explainer-cite 與 explainer-figure。
+- [x] `CLAUDE.md`〈驗證指令〉全部通過；`plugin details` 顯示 3 個 skill。
+- [x] 安裝 0.6.0 後，session 的 skill 清單列出 explainer-page，不列出 explainer-cite 與 explainer-figure。—— 以 `--plugin-dir` 載入 0.6.0 開新 session 確認
 
 **相依：** 檢查點 C。**可能動到的檔案：** 4 個 manifest、`CLAUDE.md`、2 個 README、2 個 `docs/plan/` 文件。**規模：** M。
 
 #### 檢查點 D
 
-- [ ] 規格〈7. 成功條件〉全部達成；提供最終的 `git add` 範圍與提交訊息。
+- [x] 規格〈7. 成功條件〉全部達成；提供最終的 `git add` 範圍與提交訊息。—— 2026-11-03
 
 ## Risks and Mitigations
 
@@ -603,3 +603,35 @@ V1–V4 共同的檢查（規格 §5）：資產檢查沒有輸出、`FILL` 為 
 - **雨量預報圖的來源**：頁面原有的雨量圖都是已下的雨，不能當預報的例子，所以另外取得定量降水預報。這張圖的左下角有氣象署標誌，開放宣告不包含機關標誌，所以裁掉左側。
 
 EKF v3 與 LightGlue 頁判讀通過。颱風頁等使用者再次判讀。
+
+### T11 版本與文件（2026-11-03）
+
+**結論：版本升為 0.6.0，`CLAUDE.md`、兩份 README、第 5 輪構想文件與索引都已更新。規格〈7. 成功條件〉全部達成；本輪唯一未驗證的是 Codex 的行為，已移到〈跨輪驗證〉。**
+
+- **修改**：
+  - 4 個 manifest 的版本號。說明文字沒有提到 skill 數量，所以不修改。
+  - `CLAUDE.md`：三個 skill、`<hub>.assets/` 的例外、explainer-cite 的 3 個檔案、模板的 `figure img`、壓線檢查的新類別、「三個 `SKILL.md`」。
+  - 兩份 README：說明、「會產出什麼」新增引用圖、「刻意不做的事」新增生成或未經授權的圖片、複製安裝改為三個資料夾、目錄結構加入 `skills/explainer-cite/`。
+  - `docs/plan/05-symbols-pictorial-idea.md`：第 6 輪候選與第 5 輪留下的項目標為完成；〈跨輪驗證〉的 LightGlue 標為已驗證，新增 Codex 與 explainer-cite 一項。
+  - 規格〈待驗證的假設〉的 Codex 一項標明未驗證並移出；索引第 06 列改為已完成。
+- **驗證**：
+
+| 項目 | 結果 |
+|---|---|
+| manifest JSON | 4 個都通過，都是 0.6.0 |
+| `claude plugin validate .` | 通過；3 個警告（根目錄 `CLAUDE.md`、沒有 icon、marketplace 同目錄）與本輪無關 |
+| `plugin details` | `explain-as-webpage 0.6.0`、`Skills (3)` |
+| 安裝後的 skill 清單 | 以 `--plugin-dir` 載入後開新 session，只列出 `explain-as-webpage:explainer-page`。這是模型回報自己的清單，只抽樣一次 |
+| 模板：外部資源、390px、DOM 對比掃描 | 沒有輸出、`<title>ok`、兩種寬度都是 `<title>none` |
+| `SKILL.md` 行數 | 114、125、131 |
+
+- **成功條件對照（規格〈7〉）**：
+
+| 條件 | 結果 |
+|---|---|
+| V1–V7 完成，V1–V4 與 V7 經使用者判讀 | 達成：V7 在檢查點 A，V1–V4 在檢查點 C |
+| V1–V4 的頁面通過共同檢查 | 達成：見〈結果〉T7、T8、T9、T10 |
+| 三個 `SKILL.md` 約 130 行以內 | 達成 |
+| `validate` 通過、`plugin details` 顯示 3 個 skill、manifest 都是 0.6.0 | 達成 |
+
+- **留給之後的項目**：Codex 是否依相對路徑讀取 explainer-cite（〈跨輪驗證〉）；Openverse 的搜尋端點時常沒有回應；Commons 部分 NASA 檔案的授權欄位是空的，`cite.py` 會保守地印出 `unknown`。

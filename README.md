@@ -8,7 +8,7 @@ Let an AI coding agent turn a technique or design in your project that you do no
 
 ## Inspiration
 
-This repository is the plugin `explain-as-webpage`. It provides the skill `explainer-page`, with a companion skill, `explainer-figure`, that it reads to draw the figures. It was inspired by Andrej Karpathy's post: [x.com/karpathy/status/2105819303471976479](https://x.com/karpathy/status/2105819303471976479).
+This repository is the plugin `explain-as-webpage`. It provides the skill `explainer-page`, with two companion skills that it reads: `explainer-figure` draws the figures, and `explainer-cite` cites existing images. It was inspired by Andrej Karpathy's post: [x.com/karpathy/status/2105819303471976479](https://x.com/karpathy/status/2105819303471976479).
 
 <img src="docs/images/karpathy-x-post.png" width="640" alt="Andrej Karpathy's post">
 
@@ -16,7 +16,7 @@ This skill implements the first three suggestions in the post. Its writing rules
 
 ## What it produces
 
-- **One HTML file per page.** The page looks like Read the Docs (sphinx_rtd_theme). Figures are inline SVG or HTML, and the page loads no external resources, so it opens offline. There is no build step and no extra `figures/` or `scripts/` folder.
+- **One HTML file per page.** The page looks like Read the Docs (sphinx_rtd_theme). Figures are inline SVG or HTML, and the page loads no external resources, so it opens offline. There is no build step and no extra `figures/` or `scripts/` folder. The one exception is `<hub>.assets/`, which holds the raster images a topic cites.
 - **Sections that are questions.** The page gives the conclusion first, then one causal chain. Each section answers one question the reader is stuck on, with real files, numbers, and code from the project.
 - **The cheapest presentation tier that still answers the questions:**
 
@@ -48,6 +48,7 @@ Screenshots from the [autoresearch example](#examples).
 - **Figures beyond boxes and arrows.** Besides causal chains and step animations, a page can use summary cards (4–6 parallel items with the same fields), pictorial figures (a container cut open, a silhouette with notes, an object and its parts, a software window, one object in poses along a path), up to five concept colours that keep a key concept the same colour on every figure, and icons from a bundled Lucide subset (only the icons a page uses are copied into it). The Traditional Chinese examples in `examples/llm-wiki/` and `examples/starship-reusability/` use cards, pictorial figures, concept colours, and icons.
 - **Concrete things are drawn as objects.** In any figure, a node with a familiar shape (a person, a robot, a browser, a database, a rocket) is drawn as that thing; an abstract idea stays a box. Objects are built from basic shapes by the bundled parts library (`parts.py`), all with a 3px outline and flat fills. When the page has a formula, the symbol of each key concept has the same colour in the formula, the figure, and the symbol table, and is labelled next to the part it stands for.
 - **Every figure is checked.** First a screenshot with all text hidden: the objects must still be recognisable, and the structure must still show the figure's message. Then an overlap check finds, frame by frame, text over text, lines through text, and text across a shape's edge.
+- **Real images when the reader must see the real thing.** A photo of a machine, a screenshot of an interface, or a figure from a paper goes into `<hub>.assets/`, cropped and compressed. Its caption gives the author and the license. A free-license image (CC0, public domain, CC BY, CC BY-SA) is used directly; any other image needs your agreement in the confirmation first.
 - **Page language.** The page uses the language you ask for. If you do not ask, it uses the language you write in.
 - **Pages that grow with follow-up questions.** When you ask more about an existing page, the agent decides where each answer goes. A short answer to an existing question goes into a collapsible block on that page. A new question gets a child page, linked to and from the hub page. A finding that changes the main conclusion revises the hub page. Each page keeps its own length budget, so the hub page does not keep growing.
 
@@ -85,10 +86,10 @@ claude plugin marketplace add elliewlh2094/explain-as-webpage   # or a local pat
 claude plugin install explain-as-webpage@explain-as-webpage
 ```
 
-Or copy both skill folders and call it as `/explainer-page`. `explainer-figure` draws the figures; `explainer-page` reads it by a relative path, so the two folders must sit side by side:
+Or copy the three skill folders and call it as `/explainer-page`. `explainer-figure` draws the figures and `explainer-cite` cites images; `explainer-page` reads them by relative paths, so the three folders must sit side by side:
 
 ```bash
-cp -r skills/explainer-page skills/explainer-figure ~/.claude/skills/
+cp -r skills/explainer-page skills/explainer-figure skills/explainer-cite ~/.claude/skills/
 ```
 
 ### Codex
@@ -100,10 +101,10 @@ codex plugin marketplace add elliewlh2094/explain-as-webpage   # or a local path
 codex plugin add explain-as-webpage@explain-as-webpage
 ```
 
-Or copy both skill folders and call it as `@explainer-page`:
+Or copy the three skill folders and call it as `@explainer-page`:
 
 ```bash
-cp -r skills/explainer-page skills/explainer-figure ~/.codex/skills/
+cp -r skills/explainer-page skills/explainer-figure skills/explainer-cite ~/.codex/skills/
 ```
 
 After you install it, start a new session so that the tool loads the skill.
@@ -172,6 +173,13 @@ skills/explainer-figure/        # Draws the figures; read only by explainer-page
 └── assets/icons/
     ├── lucide.svg              # Lucide icon subset (106 icons)
     └── LICENSE                 # Lucide license (ISC; some icons MIT)
+skills/explainer-cite/          # Cites existing images; read only by explainer-page
+├── SKILL.md                    # Cite or draw, license classes, the asset folder, figure and source line, asset check
+├── references/
+│   ├── sources-and-licenses.md # Image libraries, web screenshots, PDF figures, paper and repository licenses
+│   └── annotated-image.md      # Labels and leaders on a cited image
+└── scripts/
+    └── cite.py                 # License lookup, crop and compress, asset check, screenshot after a click (Python 3 standard library; Pillow optional)
 examples/explain-as-webpage/    # Example: one page that explains this repository (English and Traditional Chinese)
 examples/autoresearch/          # Example: hub page + two code walkthrough pages
 examples/llm-wiki/              # Example (Traditional Chinese): a page from a document
@@ -189,6 +197,7 @@ docs/images/                    # README images: covers, the post screenshot, th
 - **Reading what it cannot reach.** The agent does not watch videos or get around paywalls and logins. For such material it proposes a way to get the text: the full text you can access, a transcript, or notes from a tool such as NotebookLM.
 - **External CDNs** such as MathJax, D3, or Mermaid. Formulas use HTML superscripts and subscripts.
 - **A Sphinx build.** Only the look is borrowed.
+- **Generated or unlicensed images.** The agent does not generate images, and it does not use a restricted image without your agreement. It does not get past a login or cookie wall to take a screenshot.
 - **A cross-topic index or knowledge base.** A page tree stays inside one topic (one hub page and its child pages), to keep maintenance low.
 
 ## License

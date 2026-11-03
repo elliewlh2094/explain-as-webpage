@@ -8,7 +8,7 @@
 
 ## 靈感來源
 
-本儲存庫是 plugin `explain-as-webpage`，提供 skill `explainer-page`，以及它在繪圖時讀取的輔助 skill `explainer-figure`。靈感來自 Andrej Karpathy 的貼文：[x.com/karpathy/status/2105819303471976479](https://x.com/karpathy/status/2105819303471976479)。
+本儲存庫是 plugin `explain-as-webpage`，提供 skill `explainer-page`，以及它讀取的兩個輔助 skill：負責繪圖的 `explainer-figure`，與負責引用既有圖片的 `explainer-cite`。靈感來自 Andrej Karpathy 的貼文：[x.com/karpathy/status/2105819303471976479](https://x.com/karpathy/status/2105819303471976479)。
 
 <img src="docs/images/karpathy-x-post.png" width="640" alt="Andrej Karpathy 的貼文">
 
@@ -16,7 +16,7 @@
 
 ## 它會產出什麼
 
-- **單一 HTML 檔**：外觀仿照 Read the Docs（sphinx_rtd_theme），圖片是內嵌 SVG 或 HTML，不連外部資源，可以離線開啟。不需要建置，也不會另外產生 `figures/` 或 `scripts/` 資料夾。
+- **單一 HTML 檔**：外觀仿照 Read the Docs（sphinx_rtd_theme），圖片是內嵌 SVG 或 HTML，不連外部資源，可以離線開啟。不需要建置，也不會另外產生 `figures/` 或 `scripts/` 資料夾。唯一的例外是 `<hub>.assets/`，放主題引用的點陣圖。
 - **以疑問為章節**：先給結論，再畫一條因果鏈。每一節回答一個讀者真正卡住的問題，並用專案的真實檔案、數據與程式碼舉例。
 - **依主題選擇成本最低、但仍足以說明的呈現層級**：
 
@@ -48,6 +48,7 @@
 - **不只方框與箭頭**：除了因果鏈與逐步動畫，頁面還可以用歸納卡（4–6 個欄位相同的平行項目）、具象插圖（剖開的容器、加上引線的剪影、物件與它的組成、軟體介面示意、同一個物件沿軌跡的逐步姿態）、最多 5 個概念色（同一個關鍵概念在每張圖都用同一個顏色），以及內附的 Lucide 圖示子集（只把頁面用到的圖示複製進去）。下方兩個繁中範例都用到了歸納卡、具象插圖、概念色與圖示。
 - **具體的東西畫成物件**：任何圖中，人、機器人、瀏覽器、資料庫、火箭這類有熟悉外形的節點都畫成物件，抽象概念維持方框。物件由內附的零件函式庫（`parts.py`）以基本形組成，外框都是 3px、平塗色。有公式時，關鍵概念的符號在公式、圖與符號表中用同一個顏色，並標在它代表的部位旁。
 - **每張圖都經過檢查**：先遮住所有文字截圖，確認物件仍認得出、結構仍看得出圖要說的事；再以壓線檢查逐幀找出文字重疊、線穿過文字、文字跨過形狀邊緣。
+- **需要看到真實物件時引用真實圖片**：機器的照片、介面截圖或論文中的圖，裁切壓縮後放進 `<hub>.assets/`，圖說寫明作者與授權。自由授權的圖（CC0、公有領域、CC BY、CC BY-SA）直接使用；其他的圖要先在確認時取得你的同意。
 - **頁面語言**：頁面語言依你的要求決定；沒有指定時，跟隨你提問使用的語言。
 - **可依追問延伸**：對既有頁面繼續追問時，代理會依判準決定落點。短答且屬於既有疑問，補進原頁的展開區塊；新的疑問，另開子頁並與主頁互相連結；會改變主結論，則修訂主頁。每一頁各自遵守篇幅預算，主頁不會越補越長。
 
@@ -80,10 +81,10 @@ claude plugin marketplace add elliewlh2094/explain-as-webpage   # 或本機路�
 claude plugin install explain-as-webpage@explain-as-webpage
 ```
 
-也可以直接複製兩個 skill 資料夾，之後用 `/explainer-page` 呼叫。`explainer-figure` 負責繪圖，`explainer-page` 以相對路徑讀取它，所以兩個資料夾必須並列：
+也可以直接複製三個 skill 資料夾，之後用 `/explainer-page` 呼叫。`explainer-figure` 負責繪圖，`explainer-cite` 負責引用圖片，`explainer-page` 以相對路徑讀取它們，所以三個資料夾必須並列：
 
 ```bash
-cp -r skills/explainer-page skills/explainer-figure ~/.claude/skills/
+cp -r skills/explainer-page skills/explainer-figure skills/explainer-cite ~/.claude/skills/
 ```
 
 ### Codex
@@ -95,10 +96,10 @@ codex plugin marketplace add elliewlh2094/explain-as-webpage   # 或本機路徑
 codex plugin add explain-as-webpage@explain-as-webpage
 ```
 
-也可以直接複製兩個 skill 資料夾，之後用 `@explainer-page` 呼叫：
+也可以直接複製三個 skill 資料夾，之後用 `@explainer-page` 呼叫：
 
 ```bash
-cp -r skills/explainer-page skills/explainer-figure ~/.codex/skills/
+cp -r skills/explainer-page skills/explainer-figure skills/explainer-cite ~/.codex/skills/
 ```
 
 安裝後請開新的 session，讓工具重新載入 skill。
@@ -167,6 +168,13 @@ skills/explainer-figure/        # 繪圖；只由 explainer-page 讀取
 └── assets/icons/
     ├── lucide.svg              # Lucide 圖示子集（106 個）
     └── LICENSE                 # Lucide 授權（ISC；部分圖示為 MIT）
+skills/explainer-cite/          # 引用既有圖片；只由 explainer-page 讀取
+├── SKILL.md                    # 引用或自繪的判準、授權分類、資產資料夾、圖與來源行、資產檢查
+├── references/
+│   ├── sources-and-licenses.md # 圖庫、網頁截圖、PDF 中的圖、論文與程式庫的授權
+│   └── annotated-image.md      # 在引用圖上加引線與標籤
+└── scripts/
+    └── cite.py                 # 授權查詢、裁切壓縮、資產檢查、點擊後截圖（Python 3 標準函式庫；Pillow 選用）
 examples/explain-as-webpage/    # 範例：說明本儲存庫的單頁網頁（英文與繁體中文）
 examples/autoresearch/          # 範例：主頁＋兩個程式導讀子頁
 examples/llm-wiki/              # 範例（繁中）：由文件產出的網頁
@@ -184,6 +192,7 @@ docs/images/                    # README 用圖：封面、貼文截圖、三個
 - **不直接讀取讀不到的材料**：代理不觀看影片，也不繞過付費牆或登入。遇到這類材料，它會提出取得文字的方式：你能取得的全文、逐字稿，或用 NotebookLM 這類工具整理的筆記。
 - **外部 CDN**：例如 MathJax、D3、Mermaid。公式改用 HTML 上下標表示。
 - **Sphinx 建置**：只仿照它的外觀。
+- **生成圖片或未經授權的圖片**：代理不生成圖片，未經你同意不使用受限的圖，也不會為了截圖而繞過登入牆或 cookie 同意牆。
 - **跨主題索引或知識庫**：頁面樹只限於同一主題（一個主頁加上它的子頁），避免增加管理負擔。
 
 ## 授權

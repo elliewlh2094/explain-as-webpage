@@ -92,7 +92,7 @@
 
 ### 第 6 輪候選：explainer-cite（引用既有圖片）
 
-已排入第 6 輪（2026-10-16），見 `docs/plan/06-explainer-cite-spec.md`。下列「待決」的資產資料夾已決定為整個主題共用 `<hub>.assets/`。
+已在第 6 輪完成（0.6.0，2026-11-03），見 `docs/plan/06-explainer-cite-spec.md`。下列「待決」的資產資料夾已決定為整個主題共用 `<hub>.assets/`。
 
 - 內容：查詢開放授權圖庫、以 headless Chrome 截取公開網頁、PIL 裁切壓縮、寫入 `<slug>.assets/`、圖說附作者與授權；受版權保護的圖在確認步驟逐張列出。需要登入的頁面由使用者自己截圖。
 - 已決定：只有引用點陣圖的頁面才允許 `<slug>.assets/`。
@@ -151,7 +151,7 @@
 
 ### 第 5 輪留下的項目（2026-10-16 檢查點 D）
 
-以下 3 項都已排入第 6 輪（2026-10-16），見 `docs/plan/06-explainer-cite-spec.md` R6–R8。
+以下 3 項都已在第 6 輪完成（0.6.0，2026-11-03），見 `docs/plan/06-explainer-cite-spec.md` R6–R8。
 
 - EKF 頁加一張機器人的圖：在〈本頁的例子〉段落以引線標出機器人的部位，或畫成差速運動學圖，把幾何符號連到機器人的部位。使用者的參考圖存於 `temp/round-05/`（`sensors-25-03553-g001-550.jpg`、`Differential_Drive_Kinematics_of_a_Wheeled_Mobile_Robot.png`、`differential-3582cb59.png`）。出處：`docs/plan/05-symbols-pictorial-plan.md`〈結果〉檢查點 C。
 - `examples/autoresearch/` 的 3 頁仍內嵌第 4 輪的 CSS，DOM 對比掃描有低於 4.5:1 的組合（提示框標題 1.83、2.41，側欄頁面樹標籤 3.73，`code` 3.82，連結 4.19，側欄標題 4.30）。改用目前模板的 CSS 後，README 的三張層級示意圖（`docs/images/tier-*.png`、`tier-*.gif`）取自這些頁面，需要重截。出處：`docs/plan/05-symbols-pictorial-plan.md`〈結果〉檢查點 D。
@@ -168,6 +168,7 @@
 - Codex 不指定 skill 名稱時能否觸發 explainer-page。出處：`docs/plan/03-material-modes-plan.md` T16。
 - 代理在第 7 步是否主動列出每張數值圖的單位與理由（讀圖四問）。出處：`docs/plan/03-material-modes-figure-values.md`。
 - 第 7 步的回報缺項：第 5 輪 T14 (b) 與 T17 的 Codex 回報都沒有開啟指令（`xdg-open`）、頁面回答的問題與使用的輔助 skill。若再次出現，檢查第 7 步的寫法是否需要改成逐項清單。出處：`docs/plan/05-symbols-pictorial-plan.md`〈結果〉T17。
-- 第 3 輪未驗證的情境：Paul Graham 長文、Harness Engineering 的演進、LightGlue。出處：`docs/plan/03-material-modes-spec.md` §10。
+- 第 3 輪未驗證的情境：Paul Graham 長文、Harness Engineering 的演進。LightGlue 已在第 6 輪 T8 以 document 模式驗證（`docs/plan/06-explainer-cite-plan.md`〈結果〉T8）。出處：`docs/plan/03-material-modes-spec.md` §10。
+- Codex 是否依相對路徑讀取 `explainer-cite/SKILL.md`，以及確認訊息是否逐張列出受限圖。出處：`docs/plan/06-explainer-cite-spec.md`〈待驗證的假設〉。
 - 輔助 skill 自帶的提問或輸出檔是否破壞「只確認一次、只輸出一個檔案」。出處：`docs/plan/03-material-modes-spec.md` §6。
 - 沒有網路工具時的退路（使用者在第 3 輪決定不測，列出備查）。出處：`docs/plan/03-material-modes-plan.md` T16。
