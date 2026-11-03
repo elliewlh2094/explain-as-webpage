@@ -26,7 +26,7 @@ curl -sSL -A 'explainer-cite (explain-as-webpage plugin)' -o "$T/source.png" '<i
 | Library | Query | What to know |
 |---|---|---|
 | Wikimedia Commons | `commons "File:Name.jpg"`, or search words | Use the printed `image` URL. A thumbnail URL you build yourself returns HTTP 400, because Commons accepts only standard widths. The file can be wider than 1440px; `prepare` shrinks it. |
-| Openverse | `openverse "<words>"` | The query asks only for CC0, public domain, CC BY, and CC BY-SA. The search endpoint can stop answering for a while. The command then exits with a timeout: use Commons instead. |
+| Openverse | `openverse "<words>"` | The query asks only for CC0, public domain, CC BY, and CC BY-SA. The search endpoint can stop answering for hours. The command then exits with a timeout: use Commons instead. |
 | NASA Image and Video Library | `nasa "<words>"` | NASA has no license field. The record is `Public domain` unless the description's `Credit:` names someone else; then it is `unknown`. `image` is a medium size. `sizes` is a JSON list of the file's sizes (`~orig`, `~large`, `~medium`). |
 
 ## 2. Public web pages
@@ -34,12 +34,23 @@ curl -sSL -A 'explainer-cite (explain-as-webpage plugin)' -o "$T/source.png" '<i
 Capture only a page that anyone can open. The site's copyright notice gives the license. With no open license, the screenshot is restricted, so it needs its own row in the confirmation.
 
 ```bash
-google-chrome --headless=new --disable-gpu --hide-scrollbars --force-device-scale-factor=2 --window-size=720,900 --virtual-time-budget=5000 --screenshot="$T/page.png" "<URL>"
+google-chrome --headless=new --disable-gpu --hide-scrollbars --force-device-scale-factor=2 --window-size=720,900 --timeout=20000 --screenshot="$T/page.png" "<URL>"
 python3 "$C" prepare "$T/page.png" <hub>.assets/<name>.webp --kind flat --crop X,Y,W,H
 ```
 
 - The scale factor 2 gives a file 1440px wide. `--crop` values are pixels of that file.
 - Look at the screenshot before you crop. A cookie wall or a login form in it means stop. Do not crop it away.
+- HTTP 200 does not prove that the page works: a site can return 200 with an error page, or a map frame that shows 404. Only the screenshot does. Check this before you name a page in the confirmation.
+- `--timeout` stops the wait. If the content area is still empty, add `--virtual-time-budget=30000`. Without `--timeout`, the budget can hang on a page that keeps loading.
+
+The reader sometimes needs a part that opens only after a click: a filtered list or a collapsed section. `cite.py shot` opens the page, selects and clicks in the order given, and saves the screenshot. Use it only on a public page, and never to pass a login form or a consent wall.
+
+```bash
+python3 "$C" shot "<URL>" "$T/list.png" --select "select=2009" --wait-text "<a word in the result>"
+python3 "$C" shot "<URL>" "$T/open.png" --click '[data-target="#summary"]' --scale 2
+```
+
+In an accordion, opening one section closes the one before it, so take one screenshot per section.
 - A screenshot can show private data or the names of other people. Crop to the interface the page discusses.
 
 ## 3. Images in the user's material

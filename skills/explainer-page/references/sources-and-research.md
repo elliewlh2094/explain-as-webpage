@@ -56,6 +56,7 @@ wc -w "$T"/*.txt                 # material length
 - Fetch tools that answer through a model (e.g. WebFetch in Claude Code) return a summary, not the text, and may refuse to reproduce a long article. Use them only for a quick outline, or when `curl` is blocked. If the page then rests on a summary, say so in the report.
 - Check that the text is complete: its last paragraph matches the end of the article, and the word count is plausible.
 - `pdftotext` can turn rare glyphs into `�` (e.g. the `@` in a handle). Check every quote against the PDF.
+- In a two-column paper, `-layout` keeps the columns side by side and cuts every sentence. Read the text without `-layout`, and use `-layout` only for tables.
 
 ### Material you cannot read
 

@@ -4,16 +4,24 @@
   license SOURCE QUERY  who made an image and under which license
   prepare SRC OUT.webp  crop, shrink, and compress one image
   check HUB.html        the asset check of one topic; prints nothing when it passes
+  shot URL OUT.png      a screenshot of a public page after selecting or clicking in it
 
 Standard library only. prepare uses Pillow when it is installed, and prints fallback commands when not.
 """
 import argparse
+import base64
 import glob
 import html
 import json
 import os
 import re
+import shutil
+import socket
+import struct
+import subprocess
 import sys
+import tempfile
+import time
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -233,6 +241,102 @@ def check(a):
     return 1 if lines else 0
 
 
+# ---- shot ----
+
+class DevTools:
+    """A small WebSocket client for Chrome's DevTools protocol: the standard library has none."""
+
+    def __init__(self, url):
+        host, port, path = re.match(r"ws://([^:]+):(\d+)(/.*)", url).groups()
+        self.s = socket.create_connection((host, int(port)), timeout=60)
+        key = base64.b64encode(os.urandom(16)).decode()
+        self.s.sendall(f"GET {path} HTTP/1.1\r\nHost: {host}:{port}\r\nUpgrade: websocket\r\nConnection: Upgrade\r\n"
+                       f"Sec-WebSocket-Key: {key}\r\nSec-WebSocket-Version: 13\r\n\r\n".encode())
+        reply = b""
+        while b"\r\n\r\n" not in reply:
+            reply += self.s.recv(4096)
+        self.id = 0
+
+    def read(self, n):
+        data = b""
+        while len(data) < n:
+            data += self.s.recv(n - len(data))
+        return data
+
+    def frame(self):
+        final, body = False, b""
+        while not final:
+            head = self.read(2)
+            final, size = bool(head[0] & 0x80), head[1] & 0x7f
+            if size >= 126:
+                size = struct.unpack(">H" if size == 126 else ">Q", self.read(2 if size == 126 else 8))[0]
+            body += self.read(size)
+        return body
+
+    def call(self, method, **params):
+        self.id += 1
+        data = json.dumps({"id": self.id, "method": method, "params": params}).encode()
+        mask = os.urandom(4)  # a client must mask what it sends
+        size = bytes([0x80 | len(data)]) if len(data) < 126 else b"\xfe" + struct.pack(">H", len(data))
+        self.s.sendall(b"\x81" + size + mask + bytes(c ^ mask[i % 4] for i, c in enumerate(data)))
+        while True:
+            reply = json.loads(self.frame())
+            if reply.get("id") == self.id:
+                return reply.get("result", {})
+
+    def run(self, js):
+        return self.call("Runtime.evaluate", expression=js, returnByValue=True).get("result", {}).get("value")
+
+
+def shot(a):
+    chrome = shutil.which("google-chrome") or shutil.which("chromium") or shutil.which("chromium-browser")
+    if not chrome:
+        sys.exit("no Chrome or Chromium found")
+    profile = tempfile.mkdtemp()
+    p = None
+    try:
+        p = subprocess.Popen([chrome, "--headless=new", "--disable-gpu", "--hide-scrollbars", "--remote-debugging-port=0",
+                              f"--user-data-dir={profile}", f"--window-size={a.width},{a.height}", "about:blank"],
+                             stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        port_file = os.path.join(profile, "DevToolsActivePort")
+        while not os.path.exists(port_file) or not open(port_file).read().strip():
+            time.sleep(0.1)
+        port = open(port_file).read().split()[0]
+        pages = json.loads(urllib.request.urlopen(f"http://127.0.0.1:{port}/json", timeout=10).read())
+        d = DevTools(next(t for t in pages if t["type"] == "page")["webSocketDebuggerUrl"])
+        d.call("Emulation.setDeviceMetricsOverride", width=a.width, height=a.height, deviceScaleFactor=a.scale, mobile=False)
+        d.call("Page.enable")
+        d.call("Page.navigate", url=a.url)
+        time.sleep(a.wait)
+        for item in a.select:
+            sel, value = item.rsplit("=", 1)
+            d.run(f"""(() => {{ const e = document.querySelector({json.dumps(sel)});
+                e.value = [...e.options].find(o => o.text.trim() === {json.dumps(value)}).value;
+                if (window.jQuery) jQuery(e).trigger("change");  // not both: two events load the list twice
+                else e.dispatchEvent(new Event("change", {{bubbles: true}})); }})()""")
+            time.sleep(a.wait)
+        for sel in a.click:
+            if not d.run(f"(() => {{ const e = document.querySelector({json.dumps(sel)}); if (e) e.click(); return !!e; }})()"):
+                sys.exit(f"nothing matches {sel}")
+            time.sleep(a.wait)
+        if a.wait_text:
+            end = time.time() + 30
+            while a.wait_text not in (d.run("document.body.innerText") or ""):
+                if time.time() > end:
+                    sys.exit(f"text not found: {a.wait_text}")
+                time.sleep(0.5)
+        image = d.call("Page.captureScreenshot", format="png", captureBeyondViewport=True)["data"]
+        with open(a.out, "wb") as f:
+            f.write(base64.b64decode(image))
+    finally:
+        if p:  # Chrome must exit first: it writes to the profile until it does
+            p.terminate()
+            p.wait(timeout=15)
+        shutil.rmtree(profile, ignore_errors=True)
+    print(f"{a.out}: look at it before you crop; HTTP 200 does not prove that the page works")
+    return 0
+
+
 def main():
     ap = argparse.ArgumentParser(description="Cited images of explainer pages (explainer-cite SKILL.md).")
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -248,6 +352,16 @@ def main():
     s.add_argument("--width", type=int, default=MAX_WIDTH, help=f"largest width (default {MAX_WIDTH})")
     s = sub.add_parser("check", help="the asset check of the topic of one page")
     s.add_argument("page")
+    s = sub.add_parser("shot", help="screenshot a public page after selecting or clicking in it")
+    s.add_argument("url")
+    s.add_argument("out")
+    s.add_argument("--select", action="append", default=[], help="CSS selector=option text; runs before --click")
+    s.add_argument("--click", action="append", default=[], help="CSS selector, in the order given")
+    s.add_argument("--wait-text", help="wait until the page shows this text")
+    s.add_argument("--wait", type=float, default=6, help="seconds after loading and after each step (default 6)")
+    s.add_argument("--width", type=int, default=1200)
+    s.add_argument("--height", type=int, default=900)
+    s.add_argument("--scale", type=float, default=1, help="pixels per CSS pixel")
     a = ap.parse_args()
     if a.cmd == "license":
         try:
@@ -255,7 +369,7 @@ def main():
         except (urllib.error.URLError, TimeoutError) as e:
             sys.exit(f"{a.source}: {e}")
         return 0
-    return prepare(a) if a.cmd == "prepare" else check(a)
+    return {"prepare": prepare, "check": check, "shot": shot}[a.cmd](a)
 
 
 if __name__ == "__main__":

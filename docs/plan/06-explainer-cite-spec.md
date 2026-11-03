@@ -168,12 +168,13 @@ command -v pdftoppm pdfimages google-chrome               # 必要：PDF 裁切�
 |---|---|---|
 | `skills/explainer-cite/SKILL.md`（新增） | R1–R5 | 流程、輸入輸出、授權分類、資產檢查指令 |
 | `skills/explainer-cite/references/sources-and-licenses.md`、`annotated-image.md`（新增） | R2、R4 | 來源與授權的細節；標註引用圖的配方 |
-| `skills/explainer-cite/scripts/cite.py`（新增） | R2、R3、R5 | 子指令 `license`、`prepare`、`check` |
+| `skills/explainer-cite/scripts/cite.py`（新增） | R2、R3、R5 | 子指令 `license`、`prepare`、`check`、`shot`（2026-11-02 使用者同意新增：需要點擊才顯示的公開頁面截圖；只用標準函式庫） |
 | `skills/explainer-figure/SKILL.md` | R1、R4 | 圖型表新增「引用圖」一列；壓線檢查的說明加入新的一類 |
 | `skills/explainer-figure/scripts/check-overlap.js` | R4 | 新增一類「文字落在 `<image>` 範圍內」（檢查點 0 加入） |
 | `skills/explainer-page/SKILL.md` | R5 | 見 R5 第 1 點 |
 | `skills/explainer-page/references/extending-pages.md` | R5 | 共用資產與頁面樹檢查 |
 | `skills/explainer-page/references/writing-rules.md` | R5 | 圖片來源行、固定標籤 |
+| `skills/explainer-page/references/sources-and-research.md` | — | 雙欄 PDF 的 `pdftotext` 用法（2026-11-02 使用者同意） |
 | `skills/explainer-page/assets/template.html` | R5、R8 | `figure img` 樣式；`.ink-shade` 規則 |
 | `skills/explainer-figure/references/pictorial.md` | R8 | class 表中 `ink-shade` 的說明 |
 | `examples/starship-reusability/starship-reusability.html`、`examples/llm-wiki/llm-wiki.html`、`examples/explain-as-webpage/*.html` | R8 | 內嵌 CSS 同步 `.ink-shade` 規則 |

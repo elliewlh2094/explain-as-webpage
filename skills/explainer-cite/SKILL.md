@@ -34,7 +34,7 @@ Draw the figure when it shows structure, a mechanism, a cause, or how symbols ma
    | Source | Get the license from |
    |---|---|
    | free-license library | `python3 "$C" license commons\|openverse\|nasa "<file or search words>"` |
-   | public web page | the site's copyright notice; no open license means restricted |
+   | public web page | the site's copyright notice; no open license means restricted. `references/sources-and-licenses.md` § 2 has the screenshot commands |
    | the user's material | PDF: `python3 "$C" license crossref <doi>`, or `arxiv <id>`; a project of the user's own: the user owns it |
 
 2. Propose candidates for the user to choose from. Do not download images in bulk before the confirmation.
